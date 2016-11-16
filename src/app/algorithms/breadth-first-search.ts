@@ -1,5 +1,5 @@
 import {Graph} from "graphlib";
-import * as Collections from 'typescript-collections';
+import {Queue} from "../data-structures/queue";
 
 interface State {
     nodes?: string[],
@@ -20,12 +20,12 @@ export function breadthFirstSearch(graph: Graph, root: string): State[] {
 
     let solution: string[] = [];
     let nodes = graph.nodes().map(node => ({label: node, distance: Infinity, parent: null}));
-    let queue = new Collections.Queue();
+    let queue = new Queue<string>();
     queue.enqueue(root);
     let visited: string[] = [root];
 
-    while (!queue.isEmpty()) {
-        const currentNode: string = <string>queue.dequeue();
+    while (!queue.isEmpty) {
+        const currentNode: string = queue.deque();
         const neighbors: string[] = graph.neighbors(currentNode);
 
         neighbors
@@ -36,9 +36,6 @@ export function breadthFirstSearch(graph: Graph, root: string): State[] {
             });
         solution.push(currentNode);
 
-        let queueArray: string[] = [];
-        queue.forEach(<any>(el => queueArray.push(<string>el)));
-
         states.push({
             currentNode: currentNode,
             currentNodeNeighbors: neighbors,
@@ -46,7 +43,7 @@ export function breadthFirstSearch(graph: Graph, root: string): State[] {
             //edges: graph.edges().map(edge => ({from: edge.v, to: edge.w, label: edge.name})),
             //nodes: graph.nodes(),
             visitedNodes: [...visited],
-            currentQueue: queueArray,
+            currentQueue: [...queue.toArray()],
         });
     }
 
