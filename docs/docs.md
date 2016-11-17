@@ -68,3 +68,8 @@ Ova osnovna načela omogućavaju pravljenje komponenti koje mogu da koriste stra
 
 Reaktivne ekstenzije za Javaskript (RxJS) su skup biblioteka za izgradnju asinhronih i događajima vođenih programa korišćenjem sekvenci posmatranih promenljivih i lančanih operatora upita koje većina programera već zna kroz ["sedam veličanstvenih"](https://code.tutsplus.com/tutorials/what-they-didnt-tell-you-about-es5s-array-extras--net-28263) iterativnih funkcija u Javaskriptu.
 Korišćenjem RxJS-a, programeri mogu da predstave asinhrone tokove podataka preko posmatranih promenljivih, da vrše upite nad asinhronim tokovima podataka korišćenjem raznih operatora, i da parametrizuju konkurentan pristup asinhronim tokovima podataka korišćenjem raspoređivačā (eng. *scheduler*).
+
+### Zaduženja članova tima
+
+Što se tiče samih zaduženja, obojica ćemo se truditi da radimo i frontend i backend deo.
+Jedino što će biti striktno podeljeno je da će Lazar raditi sve stvari vezane za dizajn, dok će Mihajlo imati autonomiju u radu sa bazom.
