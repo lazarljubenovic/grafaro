@@ -25,7 +25,6 @@ export class AppComponent {
 
     ngOnInit() {
         this.solution = breadthFirstSearch(this.graph, 'A');
-        console.log(this.solution);
     }
 
 }

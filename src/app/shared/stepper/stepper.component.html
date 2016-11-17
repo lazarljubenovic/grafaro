@@ -1,0 +1,7 @@
+<div #stepOutlet></div>
+<ng-content select="grf-stepper-step"></ng-content>
+<div class="controls" #controls>
+  <button (click)="goToPrev()">Previous</button>
+  <span>Current: {{currentStepNumber + 1}}</span>
+  <button (click)="goToNext()">Next</button>
+</div>
