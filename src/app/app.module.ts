@@ -5,10 +5,14 @@ import {HttpModule} from "@angular/http";
 import {AppComponent} from "./app.component";
 import {VisGraphModule} from "@lazarljubenovic/vis-ng/core";
 import {StepperModule} from "./shared/stepper/stepper.module";
+import {BreadthFirstSearchComponent} from "./breadth-first-search/breadth-first-search.component";
+import {BreadthFirstSearchService} from "./breadth-first-search/breadth-first-search.service";
+import {StoreModule} from "@ngrx/store";
 
 @NgModule({
     declarations: [
         AppComponent,
+        BreadthFirstSearchComponent,
     ],
     imports: [
         BrowserModule,
@@ -16,8 +20,11 @@ import {StepperModule} from "./shared/stepper/stepper.module";
         HttpModule,
         VisGraphModule,
         StepperModule,
+        //StoreModule.provideStore(reducer),
     ],
-    providers: [],
+    providers: [
+        BreadthFirstSearchService,
+    ],
     bootstrap: [
         AppComponent,
     ],

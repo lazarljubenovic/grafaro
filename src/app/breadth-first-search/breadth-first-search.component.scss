@@ -1,0 +1,14 @@
+:host {
+  display: block;
+
+  div {
+    position: fixed;
+    z-index: 10;
+    top: 10px;
+    left: 10px;
+  }
+
+  vgl-vis-graph {
+    height: 100%;
+  }
+}

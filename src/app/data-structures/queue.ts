@@ -28,4 +28,8 @@ export class Queue<DataType> {
         return this._array;
     }
 
+    public contains(element: DataType): boolean {
+        return this._array.indexOf(element) !== -1;
+    }
+
 }

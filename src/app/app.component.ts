@@ -1,6 +1,6 @@
 import {Component} from "@angular/core";
 import {Graph} from "graphlib";
-import {breadthFirstSearch} from "./algorithms/breadth-first-search";
+import {breadthFirstSearch, BreadthFirstSearchState} from "./algorithms/breadth-first-search";
 
 @Component({
     selector: 'app-root',
@@ -10,21 +10,21 @@ import {breadthFirstSearch} from "./algorithms/breadth-first-search";
 export class AppComponent {
 
     public graph = new Graph({directed: false})
-        .setEdge('A', 'B')
-        .setEdge('A', 'C')
-        .setEdge('A', 'D')
-        .setEdge('B', 'E')
-        .setEdge('C', 'F')
-        .setEdge('C', 'G')
-        .setEdge('G', 'H')
-        .setEdge('E', 'J')
-        .setEdge('J', 'I')
-        .setEdge('D', 'I');
+        .setEdge('A', 'B', '1')
+        .setEdge('A', 'C', '2')
+        .setEdge('A', 'D', '3')
+        .setEdge('B', 'E', '4')
+        .setEdge('C', 'F', '5')
+        .setEdge('C', 'G', '6')
+        .setEdge('G', 'H', '7')
+        .setEdge('E', 'J', '8')
+        .setEdge('J', 'I', '9')
+        .setEdge('D', 'I', '10')
+        .setEdge('G', 'I', '11');
 
-    public solution;
+    public root: string = 'A';
 
     ngOnInit() {
-        this.solution = breadthFirstSearch(this.graph, 'A');
     }
 
 }

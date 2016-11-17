@@ -40,8 +40,10 @@ export class StepperComponent implements OnInit, AfterContentInit {
     }
 
     private updateVisible(): void {
-        this.renderer.detachView(this.stepperSteps.map(el => el.elementRef.nativeElement));
-        this.renderer.attachViewAfter(this.controls.nativeElement, [this.stepperSteps.map(el => el.elementRef.nativeElement)[this.currentStepNumber]]);
+        const nativeElements = this.stepperSteps.map(el => el.elementRef.nativeElement);
+        const currentStepNativeElement = nativeElements[this.currentStepNumber];
+        this.renderer.detachView(nativeElements);
+        this.renderer.attachViewAfter(this.controls.nativeElement, [currentStepNativeElement]);
     }
 
     constructor(private renderer: Renderer) {
