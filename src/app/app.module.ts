@@ -8,6 +8,7 @@ import {StepperModule} from "./shared/stepper/stepper.module";
 import {BreadthFirstSearchComponent} from "./breadth-first-search/breadth-first-search.component";
 import {BreadthFirstSearchService} from "./breadth-first-search/breadth-first-search.service";
 import {StoreModule} from "@ngrx/store";
+import {GraphModule} from "./graph/graph.module";
 
 @NgModule({
     declarations: [
@@ -20,6 +21,7 @@ import {StoreModule} from "@ngrx/store";
         HttpModule,
         VisGraphModule,
         StepperModule,
+        GraphModule,
         //StoreModule.provideStore(reducer),
     ],
     providers: [

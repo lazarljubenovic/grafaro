@@ -32,7 +32,6 @@ export class BreadthFirstSearchComponent implements OnInit {
             return;
         }
         const nonNormalizedStates = this.algorithm.getStates(this._graph, this._root);
-        console.log(nonNormalizedStates);
         this.states = nonNormalizedStates.map(s => this.algorithm.getNormalizedState(s));
     }
 

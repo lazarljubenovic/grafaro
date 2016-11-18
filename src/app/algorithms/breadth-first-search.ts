@@ -13,6 +13,7 @@ export interface BreadthFirstSearchState {
     visitedNodes: string[],
     currentSolution: string[],
     currentQueue: string[],
+    rootNode: string,
 }
 
 export function breadthFirstSearch(graph: Graph, root: string): BreadthFirstSearchState[] {
@@ -51,6 +52,7 @@ export function breadthFirstSearch(graph: Graph, root: string): BreadthFirstSear
             nodes: graph.nodes(),
             visitedNodes: [...visited],
             currentQueue: [...queue.toArray()],
+            rootNode: root,
         });
     }
 

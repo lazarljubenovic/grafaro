@@ -1,0 +1,12 @@
+<vgl-vis-graph [options]="options">
+    <vgl-node *ngFor="let node of nodes"
+              [options]="node  | graphNodeOptionsTransform"
+    ></vgl-node>
+
+    <vgl-edge *ngFor="let edge of edges"
+              [id]="edge.id"
+              [label]="edge.label"
+              [from]="edge.from"
+              [to]="edge.to"
+    ></vgl-edge>
+</vgl-vis-graph>
