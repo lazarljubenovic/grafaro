@@ -1,6 +1,6 @@
-export class Queue<DataType> {
+export class Stack<DataType> {
 
-    // Tail is left, head is right
+    // Top of the stack is right
     private _array: DataType[] = [];
 
     public get length(): number {
@@ -11,17 +11,17 @@ export class Queue<DataType> {
         return this._array.length == 0;
     }
 
-    public enqueue(newElement: DataType): this {
+    public push(newElement: DataType): this {
         this._array.push(newElement);
         return this;
     }
 
-    public deque(): DataType {
-        return this._array.shift();
+    public pop(): DataType {
+        return this._array.pop();
     }
 
     public peek(): DataType {
-        return this._array[0];
+        return this._array[this.length - 1];
     }
 
     public toArray(): DataType[] {
