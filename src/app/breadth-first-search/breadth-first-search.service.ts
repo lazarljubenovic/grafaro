@@ -1,18 +1,12 @@
 import {Injectable} from "@angular/core";
 import {Graph} from "graphlib";
-import {
-    BreadthFirstSearchState,
-    breadthFirstSearch
-} from "../algorithms/breadth-first-search";
-import {
-    VisNgOptionsNodes,
-    VisNgOptionsEdges
-} from "@lazarljubenovic/vis-ng/esm/core/vis-graph/options.interface";
+import {BreadthFirstSearchState, breadthFirstSearch} from "../algorithms/breadth-first-search";
+import {VisNgNetworkOptionsEdges} from "@lazarljubenovic/vis-ng/core";
 import {GrfGraphNodeOptions} from "../graph/graph.module";
 
 export interface NormalizedState {
     nodes: GrfGraphNodeOptions[];
-    edges: VisNgOptionsEdges[];
+    edges: VisNgNetworkOptionsEdges[];
 }
 
 @Injectable()
@@ -35,7 +29,7 @@ export class BreadthFirstSearchService {
                 state: state.currentNode == node ? 'current' : state.visitedNodes.indexOf(node) != -1 ? 'visited' : 'default',
             }
         });
-        const edges: VisNgOptionsEdges[] = state.edges;
+        const edges: VisNgNetworkOptionsEdges[] = state.edges;
         return {nodes, edges};
     }
 

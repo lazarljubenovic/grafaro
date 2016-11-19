@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {GraphComponent} from './graph.component';
-import {VisGraphModule} from '@lazarljubenovic/vis-ng/core';
+import {VisNetworkModule} from '@lazarljubenovic/vis-ng/core';
 import {GraphNodeOptionsTransformPipe} from './graph-node-options-transform.pipe';
 import {GraphEdgeOptionsTransformPipe} from './graph-edge-options-transform.pipe';
 
@@ -21,7 +21,7 @@ export interface GrfGraphEdgeOptions {
 @NgModule({
     imports: [
         CommonModule,
-        VisGraphModule,
+        VisNetworkModule,
     ],
     declarations: [
         GraphComponent,

@@ -1,5 +1,4 @@
 import {Graph} from "graphlib";
-import {breadthFirstSearch} from "./breadth-first-search";
 
 describe(`Algorithm: Breadth-First Search`, () => {
 

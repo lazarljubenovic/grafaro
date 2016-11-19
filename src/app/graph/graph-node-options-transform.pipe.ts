@@ -1,5 +1,5 @@
 import {Pipe, PipeTransform} from '@angular/core';
-import {VisNgOptionsNodes} from '@lazarljubenovic/vis-ng/core/vis-graph/options.interface';
+import {VisNgNetworkOptionsNodes} from '@lazarljubenovic/vis-ng/core';
 import {GrfGraphNodeOptions} from "./graph.module";
 
 @Pipe({

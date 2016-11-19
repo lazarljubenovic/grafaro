@@ -1,5 +1,5 @@
 import {Pipe, PipeTransform} from '@angular/core';
-import {VisNgOptionsEdges} from "@lazarljubenovic/vis-ng/esm/core/vis-graph/options.interface";
+import {VisNgNetworkOptionsEdges} from "@lazarljubenovic/vis-ng/core";
 import {GrfGraphEdgeOptions} from "./graph.module";
 
 @Pipe({
@@ -7,8 +7,13 @@ import {GrfGraphEdgeOptions} from "./graph.module";
 })
 export class GraphEdgeOptionsTransformPipe implements PipeTransform {
 
-    transform(value: GrfGraphEdgeOptions): VisNgOptionsEdges {
-        return value;
+    transform(value: GrfGraphEdgeOptions): VisNgNetworkOptionsEdges {
+        return {
+            id: value.label,
+            from: value.from,
+            to: value.to,
+            label: value.label,
+        };
     }
 
 }
