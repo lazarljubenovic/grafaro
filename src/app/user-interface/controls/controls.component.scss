@@ -1,0 +1,27 @@
+@import '../../global';
+
+:host {
+  border-radius: 6px;
+  background-color: get-color('foreground');
+  box-shadow: 0 2px 4px 1px rgba(black, .1);
+  padding: 16px 24px;
+  display: flex;
+}
+
+button {
+  outline: none;
+  border: none;
+  background-color: transparent;
+  text-transform: uppercase;
+  color: $white;
+  font-weight: 700;
+  cursor: pointer;
+
+  &:not(:last-child) {
+    margin-right: 12px;
+  }
+
+  &:hover {
+    color: get-color('accent');
+  }
+}

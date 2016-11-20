@@ -1,0 +1,44 @@
+@import "../../global";
+
+$toolbar-margin: 16px;
+$toolbar-usable-space: $toolbar-width - 2 * $toolbar-margin;
+
+:host {
+  display: block;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  padding: $toolbar-margin;
+  background-color: get-color('secondary');
+  box-shadow: 4px 0 10px 4px rgba(black, .08);
+}
+
+ul {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+
+  li {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: $toolbar-usable-space;
+    margin-bottom: $toolbar-margin;
+    border-radius: 50%;
+    color: $white;
+    cursor: pointer;
+
+    &:hover {
+      background-color: rgba(white, .1);
+    }
+
+    &.current {
+      color: get-color('accent');
+    }
+
+    i {
+      font-size: $toolbar-usable-space * .4;
+    }
+  }
+}

@@ -35,20 +35,22 @@ export class BreadthFirstSearchComponent implements OnInit {
         this.states = nonNormalizedStates.map(s => this.algorithm.getNormalizedState(s));
     }
 
-    private currentStateNumber: number = 0;
+    public stateNumber: number = 0;
 
-    public incCurrentStateNumber(): void {
-        if (this.currentStateNumber != this.states.length - 1) {
-            this.currentStateNumber++;
-            this.update();
+    public updateStateNumber(action: 'next' | 'prev'): void {
+        switch (action) {
+            case 'next':
+                if (this.stateNumber != this.states.length - 1) {
+                    this.stateNumber++;
+                }
+                break;
+            case 'prev':
+                if (this.stateNumber != 0) {
+                    this.stateNumber--;
+                }
+                break;
         }
-    }
-
-    public decCurrentStateNumber(): void {
-        if (this.currentStateNumber != 0) {
-            this.currentStateNumber--;
-            this.update();
-        }
+        this.update();
     }
 
     constructor(private algorithm: BreadthFirstSearchService) {

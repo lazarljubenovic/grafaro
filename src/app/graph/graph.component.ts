@@ -10,7 +10,23 @@ import {GrfGraphEdgeOptions, GrfGraphNodeOptions} from "./graph.module";
 export class GraphComponent implements OnInit {
 
     @Input()
-    public options: VisNgNetworkOptions = {};
+    public options: VisNgNetworkOptions = {
+        nodes: {
+            shadow: {
+                enabled: true,
+                color: 'rgba(0, 0, 0, .3)',
+                size: 5,
+                x: 0,
+                y: 2,
+            }
+        },
+        edges: {
+            smooth: false,
+            font: {
+                align: 'top',
+            }
+        }
+    };
 
     @Input()
     public nodes: GrfGraphNodeOptions[] = [];

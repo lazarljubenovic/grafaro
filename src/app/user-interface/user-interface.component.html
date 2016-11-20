@@ -1,0 +1,17 @@
+<grf-header></grf-header>
+
+<main>
+
+  <grf-toolbar [currentSelected]="1"></grf-toolbar>
+
+  <div id="graph">
+    <grf-controls (stateNumberChange)="search.updateStateNumber($event)"></grf-controls>
+    <grf-breadth-first-search #search
+                              [graph]="graph"
+                              [root]="root"
+    ></grf-breadth-first-search>
+  </div>
+
+  <grf-sidebar></grf-sidebar>
+
+</main>

@@ -1,24 +1,4 @@
-<!--<vgl-vis-graph [options]="{}">-->
-  <!--<vgl-node *ngFor="let node of states[currentStateNumber].nodes"-->
-            <!--[options]="node"-->
-  <!--&gt;</vgl-node>-->
-  <!--<vgl-edge *ngFor="let edge of states[currentStateNumber].edges"-->
-            <!--[id]="edge.label"-->
-            <!--[from]="edge.from"-->
-            <!--[to]="edge.to"-->
-  <!--&gt;</vgl-edge>-->
-<!--</vgl-vis-graph>-->
-
-<div>
-  <button (click)="decCurrentStateNumber()">Prev</button>
-  <span>{{currentStateNumber}}</span>
-  <button (click)="incCurrentStateNumber()">Next</button>
-</div>
-
-<!--<pre>{{states | json}}</pre>-->
-
-<grf-graph [options]="{}"
-           [nodes]="states[currentStateNumber].nodes"
-           [edges]="states[currentStateNumber].edges"
+<grf-graph [nodes]="states[stateNumber].nodes"
+           [edges]="states[stateNumber].edges"
 >
 </grf-graph>

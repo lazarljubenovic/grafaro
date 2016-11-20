@@ -1,0 +1,43 @@
+$header-height: 80px;
+$toolbar-width: $header-height;
+$sidebar-width: 30%;
+
+$font: Roboto;
+
+$color-scheme-1: (
+        "primary": #76bed0,
+        "secondary": #f7cb15,
+        "accent": #f55d3e,
+        "foreground": #878e88,
+        "background": #ffffff,
+);
+$color-scheme-2: (
+        'primary': #4ecdc4,
+        'secondary': #134074,
+        'accent': #ff6b6b,
+        'foreground': #292f36,
+        'background': #ffffff,
+);
+
+$color-scheme: $color-scheme-2;
+
+@function get-color($key: 'primary', $color-scheme: $color-scheme) {
+  @if (index(('primary' 'secondary' 'accent' 'foreground' 'background'), $key)) {
+    @return map-get($color-scheme, $key);
+  } @else {
+    @error 'No such key #{$key}. Maybe a typo?';
+  }
+}
+
+@function tint($color, $percentage: 0.2) {
+  @return mix(white, $color, $percentage);
+}
+
+@function shade($color, $percentage: 0.2) {
+  @return mix(black, $color, $percentage);
+}
+
+$white: rgba(white, .86);
+$black: rgba(black, .86);
+
+$header-color: get-color('secondary');

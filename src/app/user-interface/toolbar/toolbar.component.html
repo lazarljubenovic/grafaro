@@ -1,0 +1,7 @@
+<ul>
+  <li *ngFor="let tool of tools; let i = index"
+      [class.current]="i == currentSelected"
+  >
+    <i class="fa {{tool.icon}}"></i>
+  </li>
+</ul>
