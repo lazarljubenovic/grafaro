@@ -1,0 +1,41 @@
+:host {
+  display: block;
+  margin-bottom: 1.8ex;
+  font-family: Roboto, sans-serif;
+  font-size: .94em;
+}
+
+.info {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: .5ex;
+
+  .name {
+    font-weight: bold;
+    margin-right: .6em;
+  }
+
+  .handle {
+    color: rgba(black, .66);
+    font-weight: 300;
+  }
+
+  .flex-spacer {
+    flex: 1 0 0;
+  }
+
+  .time-stamp {
+    color: rgba(black, .2);
+    font-size: .82em;
+    transition: color .2s ease;
+    cursor: pointer;
+
+    &:hover {
+      color: rgba(black, .5);
+    }
+  }
+}
+
+.message {
+
+}

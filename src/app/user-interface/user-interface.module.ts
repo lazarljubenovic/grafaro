@@ -8,12 +8,14 @@ import {ToolbarComponent} from "./toolbar/toolbar.component";
 import {SidebarComponent} from "./sidebar/sidebar.component";
 import {ControlsComponent} from "./controls/controls.component";
 import {TabsModule} from "../shared/tabs/tabs.module";
+import {ChatModule} from "../shared/chat/chat.module";
 
 @NgModule({
     imports: [
         CommonModule,
         GraphModule,
-        TabsModule
+        TabsModule,
+        ChatModule,
     ],
     declarations: [
         UserInterfaceComponent,
