@@ -1,4 +1,5 @@
 import {Component, OnInit, Input} from "@angular/core";
+import {MarkdownService} from "../../markdown.service";
 
 export interface ChatMessageInfo {
     timeStamp: Date;
@@ -15,10 +16,25 @@ export interface ChatMessageInfo {
 })
 export class ChatMessageComponent implements OnInit {
 
-    @Input()
-    public info: ChatMessageInfo;
+    private _info: ChatMessageInfo;
 
-    constructor() {
+    @Input()
+    public set info(info: ChatMessageInfo) {
+        this._info = info;
+        this.updateParsed();
+    }
+
+    public get info() {
+        return this._info;
+    }
+
+    public parsedMessageHtml: string;
+
+    private updateParsed() {
+        this.parsedMessageHtml = this.markdownService.transform(this.info.message);
+    }
+
+    constructor(private markdownService: MarkdownService) {
     }
 
     ngOnInit() {

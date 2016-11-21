@@ -4,6 +4,4 @@
   <div class="flex-spacer"></div>
   <div class="time-stamp">{{info.timeStamp | date : 'shortTime'}}</div>
 </div>
-<div class="message">
-  {{info.message}}
-</div>
+<div class="message" [innerHTML]="parsedMessageHtml"></div>
