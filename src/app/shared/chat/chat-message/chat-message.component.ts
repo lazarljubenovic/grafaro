@@ -1,5 +1,6 @@
 import {Component, OnInit, Input} from "@angular/core";
 import {MarkdownService} from "../../markdown.service";
+import {EmojiService} from "../../emoji.service";
 
 export interface ChatMessageInfo {
     timeStamp: Date;
@@ -31,10 +32,16 @@ export class ChatMessageComponent implements OnInit {
     public parsedMessageHtml: string;
 
     private updateParsed() {
-        this.parsedMessageHtml = this.markdownService.transform(this.info.message);
+
+        this.parsedMessageHtml = this.emojiService.transformUtf8(
+            this.emojiService.transformTextLike(
+                this.markdownService.transform(this.info.message)
+            )
+        );
     }
 
-    constructor(private markdownService: MarkdownService) {
+    constructor(private markdownService: MarkdownService,
+                private emojiService: EmojiService,) {
     }
 
     ngOnInit() {
