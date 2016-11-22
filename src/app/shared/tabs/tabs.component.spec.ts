@@ -1,17 +1,27 @@
 /* tslint:disable:no-unused-variable */
-
-import {TestBed, async} from '@angular/core/testing';
-import {TabsComponent} from './tabs.component';
+import {TestBed, ComponentFixture} from "@angular/core/testing";
+import {TabsComponent} from "./tabs.component";
 import {Renderer} from "@angular/core";
+import {TabsModule} from "./tabs.module";
 
 describe('Component: Tabs', () => {
-	beforeEach(() => {
-		TestBed.configureTestingModule({
-			providers: [Renderer]
-		})
-	});
-	it('should create an instance', () => {
-		let component = new TabsComponent(new Renderer);
-		expect(component).toBeTruthy();
-	});
+    let component: TabsComponent;
+    let fixture: ComponentFixture<TabsComponent>;
+
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [TabsModule],
+            providers: [Renderer]
+        })
+            .compileComponents();
+    });
+
+    beforeEach(() => {
+        fixture = TestBed.createComponent(TabsComponent);
+        component = fixture.componentInstance;
+    });
+
+    it('should create an instance', () => {
+        expect(component).toBeTruthy();
+    });
 });

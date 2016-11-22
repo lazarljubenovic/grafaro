@@ -1,11 +1,25 @@
 /* tslint:disable:no-unused-variable */
-
-import { TestBed, async } from '@angular/core/testing';
-import { TabComponent } from './tab.component';
+import {TestBed, ComponentFixture} from "@angular/core/testing";
+import {TabComponent} from "./tab.component";
+import {ElementRef} from "@angular/core";
 
 describe('Component: Tab', () => {
-  it('should create an instance', () => {
-    let component = new TabComponent();
-    expect(component).toBeTruthy();
-  });
+    let component: TabComponent;
+    let fixture: ComponentFixture<TabComponent>;
+
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            declarations: [TabComponent]
+        })
+            .compileComponents();
+    });
+
+    beforeEach(() => {
+        fixture = TestBed.createComponent(TabComponent);
+        component = fixture.componentInstance;
+    });
+
+    it('should create an instance', () => {
+        expect(component).toBeTruthy();
+    });
 });

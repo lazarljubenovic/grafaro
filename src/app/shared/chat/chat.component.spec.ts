@@ -1,11 +1,24 @@
 /* tslint:disable:no-unused-variable */
-
-import { TestBed, async } from '@angular/core/testing';
-import { ChatComponent } from './chat.component';
+import {ChatComponent} from "./chat.component";
+import {ComponentFixture, TestBed} from "@angular/core/testing";
+import {ChatModule} from "./chat.module";
 
 describe('Component: Chat', () => {
-  it('should create an instance', () => {
-    let component = new ChatComponent();
-    expect(component).toBeTruthy();
-  });
+    let component: ChatComponent;
+    let fixture: ComponentFixture<ChatComponent>;
+
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [ChatModule]
+        })
+    });
+
+    beforeEach(() => {
+        fixture = TestBed.createComponent(ChatComponent);
+        component = fixture.componentInstance;
+    });
+
+    it('should create an instance', () => {
+        expect(component).toBeTruthy();
+    });
 });

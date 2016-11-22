@@ -1,11 +1,26 @@
 /* tslint:disable:no-unused-variable */
-
-import { TestBed, async } from '@angular/core/testing';
-import { StepperComponent } from './stepper.component';
+import {TestBed, ComponentFixture} from "@angular/core/testing";
+import {StepperComponent} from "./stepper.component";
+import {Renderer} from "@angular/core";
 
 describe('Component: Stepper', () => {
-  it('should create an instance', () => {
-    let component = new StepperComponent();
-    expect(component).toBeTruthy();
-  });
+    let component: StepperComponent;
+    let fixture: ComponentFixture<StepperComponent>;
+
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            declarations: [StepperComponent],
+            providers: [Renderer]
+        })
+            .compileComponents();
+    });
+
+    beforeEach(() => {
+        fixture = TestBed.createComponent(StepperComponent);
+        component = fixture.componentInstance;
+    });
+
+    it('should create an instance', () => {
+        expect(component).toBeTruthy();
+    });
 });
