@@ -51,7 +51,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
     private chatWebSocket: Observable<any>;
 
     constructor(private webSocketService: WebSocketService) {
-        console.log("Chat cons");
         this.chatWebSocket = this.webSocketService.create("ws://localhost:4000");
         this.chatWebSocket.subscribe(msg => {
             this.dummyMessages.push(msg);
