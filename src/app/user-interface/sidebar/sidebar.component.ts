@@ -1,12 +1,14 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, OnInit, OnDestroy} from "@angular/core";
 import {ChatMessageInfo} from "../../shared/chat/chat-message/chat-message.component";
+import {Observable, Subject} from "rxjs";
+import {WebSocketService} from "../../shared/websocket.service";
 
 @Component({
     selector: 'grf-sidebar',
     templateUrl: './sidebar.component.html',
     styleUrls: ['./sidebar.component.scss']
 })
-export class SidebarComponent implements OnInit {
+export class SidebarComponent implements OnInit, OnDestroy {
 
     public dummyMessages: ChatMessageInfo[] = [
         {
@@ -46,10 +48,21 @@ export class SidebarComponent implements OnInit {
         },
     ];
 
-    constructor() {
+    private chatWebSocket: Observable<any>;
+
+    constructor(private webSocketService: WebSocketService) {
+        console.log("Chat cons");
+        this.chatWebSocket = this.webSocketService.create("ws://localhost:4000");
+        this.chatWebSocket.subscribe(msg => {
+            this.dummyMessages.push(msg);
+        });
+        this.webSocketService.send("Helou");
     }
 
     ngOnInit() {
+    }
+
+    ngOnDestroy() {
     }
 
 }

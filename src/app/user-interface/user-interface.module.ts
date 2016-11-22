@@ -9,6 +9,7 @@ import {SidebarComponent} from "./sidebar/sidebar.component";
 import {ControlsComponent} from "./controls/controls.component";
 import {TabsModule} from "../shared/tabs/tabs.module";
 import {ChatModule} from "../shared/chat/chat.module";
+import {WebSocketService} from "../shared/websocket.service";
 
 @NgModule({
     imports: [
@@ -24,6 +25,9 @@ import {ChatModule} from "../shared/chat/chat.module";
         ToolbarComponent,
         SidebarComponent,
         ControlsComponent,
+    ],
+    providers: [
+        WebSocketService,
     ],
     exports: [
         UserInterfaceComponent,

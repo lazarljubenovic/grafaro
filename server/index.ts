@@ -1,8 +1,3 @@
-const express = require('express');
-const app = express();
-const webSocketServer = require('ws').Server;
-const wsServer = new webSocketServer({port: 8080});
-
 /*
 Ideja (jer me EasyFind ubio psihicki): https://github.com/websockets/ws#sending-and-receiving-text-data
 Cuvamo 2D niz konekcija i kada se klijent konektuje, prosledimo, na osnovu URL-a ili neceg slicnog,
@@ -19,25 +14,46 @@ Treba da vidim da li ima neka fora da svi klijenti imaju neko isto polje, pa da 
 // 		client.send(data);
 // 	})
 // };
+const server = require('http').createServer();
+const url = require('url');
+const WebSocketServer = require('ws').Server;
+const wss = new WebSocketServer({ server: server });
+const express = require('express');
+const app = express();
+const port = 4000;
 
-wsServer.on('connection', (ws) => {
-	ws.on('message', (message) => {
-		// console.log("Evo je poruka", message);
-		// ws.send(message);
-		wsServer.clients.forEach((client) => {
-			console.log(client);
-			if (client != ws) {
-				client.send(message);
-			}
-		})
+app.use(function (req, res) {
+	res.send({ msg: "hello" });
+});
+
+wss.on('connection', ws => {
+	let location = url.parse(ws.upgradeReq.url, true);
+	// you might use location.query.access_token to authenticate or share sessions
+	// or ws.upgradeReq.headers.cookie (see http://stackoverflow.com/a/16395220/151312)
+	console.log(location);
+
+	ws.on('message', message => {
+		console.log('received: %s', message);
 	});
-	ws.send('Connected');
+
+	ws.on('error', (error) => {
+		console.log(error);
+	});
+
+	ws.on('close', () => {
+		//console.log(ws.address);
+	});
+
+	ws.send(JSON.stringify({
+		timeStamp: new Date(),
+		senderHandle: `lazarljubenovic`,
+		senderName: `Lazar Ljubenović`,
+		senderHash: `ff8adece0631821959f443c9d956fc39`,
+		message: `Ohaio!`,
+	}));
 });
 
-app.get('/', (req, res) => {
-	res.send("ojha");
-});
-
-app.listen(3000, () => {
-	console.log("Server je na portu 3000");
+server.on('request', app);
+server.listen(port, () => {
+	console.log('Listening on ' + server.address().port);
 });
