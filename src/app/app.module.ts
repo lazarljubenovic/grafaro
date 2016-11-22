@@ -6,6 +6,8 @@ import {AppComponent} from "./app.component";
 import {StepperModule} from "./shared/stepper/stepper.module";
 import {BreadthFirstSearchService} from "./breadth-first-search/breadth-first-search.service";
 import {UserInterfaceModule} from "./user-interface/user-interface.module";
+import {MarkdownService} from "./shared/markdown.service";
+import {EmojiService} from "./shared/emoji.service";
 
 @NgModule({
     declarations: [
@@ -21,6 +23,8 @@ import {UserInterfaceModule} from "./user-interface/user-interface.module";
     ],
     providers: [
         BreadthFirstSearchService,
+        MarkdownService,
+        EmojiService,
     ],
     bootstrap: [
         AppComponent,
