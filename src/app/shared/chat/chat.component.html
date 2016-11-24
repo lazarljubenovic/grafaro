@@ -1,1 +1,12 @@
 <ng-content></ng-content>
+
+<div class="flex-spacer"></div>
+
+<div class="input-message">
+    <textarea (keyup)="onKeyUp($event.key)"
+              [(ngModel)]="currentTypedMessage"
+              placeholder="Type a message. GitHub flavored Markdown supported. Press enter to send."></textarea>
+    <div class="controls">
+        <button type="submit">Send</button>
+    </div>
+</div>
