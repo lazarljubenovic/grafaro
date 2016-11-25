@@ -1,5 +1,10 @@
 <ul>
-  <li *ngFor="let item of array" [@flyInOut]="true">
+  <li *ngFor="let item of array"
+      [@flyInOut]="true"
+      [class.accent]="accentColor | contains : item"
+      [class.primary]="primaryColor | contains : item"
+      [class.secondary]="secondaryColor | contains : item"
+  >
     <span>{{item}}</span>
   </li>
 </ul>

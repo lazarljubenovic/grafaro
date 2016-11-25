@@ -5,7 +5,8 @@ import {WebSocketService} from "../../shared/websocket.service";
 import {ChatModule} from "../../shared/chat/chat.module";
 import {TabsModule} from "../../shared/tabs/tabs.module";
 
-describe('Component: Sidebar', () => {
+// TODO
+xdescribe('Component: Sidebar', () => {
     let component: SidebarComponent;
     let fixture: ComponentFixture<SidebarComponent>;
 

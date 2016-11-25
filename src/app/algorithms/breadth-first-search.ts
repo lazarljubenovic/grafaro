@@ -14,6 +14,25 @@ export interface BreadthFirstSearchState {
     currentSolution: string[],
     currentQueue: string[],
     rootNode: string,
+    currentNeighbor?: string,
+}
+
+function createNewState(currentNode, neighbors, solution, graph, visited, queue, root, currentNeighbor?) {
+    return {
+        currentNode: currentNode,
+        currentNodeNeighbors: neighbors,
+        currentNeighbor: currentNeighbor,
+        currentSolution: [...solution],
+        edges: graph.edges().map(edge => ({
+            from: edge.v,
+            to: edge.w,
+            label: graph.edge({v: edge.v, w: edge.w}),
+        })),
+        nodes: graph.nodes(),
+        visitedNodes: [...visited],
+        currentQueue: [currentNode, ...queue.toArray()],
+        rootNode: root,
+    }
 }
 
 export function breadthFirstSearch(graph: Graph, root: string): BreadthFirstSearchState[] {
@@ -25,7 +44,9 @@ export function breadthFirstSearch(graph: Graph, root: string): BreadthFirstSear
     queue.enqueue(root);
     let visited: string[] = [root];
 
-    while (!queue.isEmpty) {
+    let i = 100;
+
+    while (!queue.isEmpty && --i) {
         const currentNode: string = queue.deque();
         const neighbors: string[] = graph.neighbors(currentNode);
 
@@ -36,24 +57,12 @@ export function breadthFirstSearch(graph: Graph, root: string): BreadthFirstSear
             .filter(neighbor => !queue.contains(neighbor))
             .forEach(neighbor => {
                 queue.enqueue(neighbor);
+                states.push(createNewState(currentNode, neighbors, solution, graph, visited, queue, root, neighbor));
             });
 
         solution.push(currentNode);
 
-        states.push({
-            currentNode: currentNode,
-            currentNodeNeighbors: neighbors,
-            currentSolution: [...solution],
-            edges: graph.edges().map(edge => ({
-                from: edge.v,
-                to: edge.w,
-                label: graph.edge({v: edge.v, w: edge.w}),
-            })),
-            nodes: graph.nodes(),
-            visitedNodes: [...visited],
-            currentQueue: [...queue.toArray()],
-            rootNode: root,
-        });
+        states.push(createNewState(currentNode, neighbors, solution, graph, visited, queue, root));
     }
 
     return states;

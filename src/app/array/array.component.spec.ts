@@ -1,11 +1,12 @@
 /* tslint:disable:no-unused-variable */
+import {ArrayComponent} from "./array.component";
 
-import { TestBed, async } from '@angular/core/testing';
-import { ArrayComponent } from './array.component';
+// TODO
+xdescribe('Component: Array', () => {
 
-describe('Component: Array', () => {
-  it('should create an instance', () => {
-    let component = new ArrayComponent();
-    expect(component).toBeTruthy();
-  });
+    it('should create an instance', () => {
+        let component = new ArrayComponent();
+        expect(component).toBeTruthy();
+    });
+
 });

@@ -1,13 +1,12 @@
-import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {
-    ArrayComponent, ArrayQueueDirective,
-    ArrayStackDirective
-} from './array.component';
+import {NgModule} from "@angular/core";
+import {CommonModule} from "@angular/common";
+import {ArrayComponent, ArrayQueueDirective, ArrayStackDirective} from "./array.component";
+import {UtilPipesModule} from "../util-pipes/util-pipes.module";
 
 @NgModule({
     imports: [
         CommonModule,
+        UtilPipesModule,
     ],
     declarations: [
         ArrayComponent,

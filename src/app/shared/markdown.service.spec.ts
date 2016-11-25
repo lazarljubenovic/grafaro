@@ -1,16 +1,16 @@
 /* tslint:disable:no-unused-variable */
+import {TestBed, inject} from "@angular/core/testing";
+import {MarkdownService} from "./markdown.service";
 
-import { TestBed, async, inject } from '@angular/core/testing';
-import { MarkdownService } from './markdown.service';
-
-describe('Service: Markdown', () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [MarkdownService]
+// TODO
+xdescribe('Service: Markdown', () => {
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            providers: [MarkdownService]
+        });
     });
-  });
 
-  it('should ...', inject([MarkdownService], (service: MarkdownService) => {
-    expect(service).toBeTruthy();
-  }));
+    it('should ...', inject([MarkdownService], (service: MarkdownService) => {
+        expect(service).toBeTruthy();
+    }));
 });

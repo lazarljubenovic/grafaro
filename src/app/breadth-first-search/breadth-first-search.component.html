@@ -1,6 +1,18 @@
-<grf-array class="queue" grf-queue [array]="states[stateNumber].queue"></grf-array>
+<grf-array grf-queue
+           class="queue"
+           [array]="states[stateNumber].queue"
+           [accentColor]="states[stateNumber].accentColor"
+           [primaryColor]="states[stateNumber].primaryColor"
+           [secondaryColor]="states[stateNumber].secondaryColor"
+></grf-array>
 
-<grf-array class="solution" grf-queue [array]="states[stateNumber].solution"></grf-array>
+<grf-array grf-queue
+           class="solution"
+           [array]="states[stateNumber].solution"
+           [accentColor]="states[stateNumber].accentColor"
+           [primaryColor]="states[stateNumber].primaryColor"
+           [secondaryColor]="states[stateNumber].secondaryColor"
+></grf-array>
 
 <grf-graph [nodes]="states[stateNumber].nodes"
            [edges]="states[stateNumber].edges"

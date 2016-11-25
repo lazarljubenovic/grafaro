@@ -2,7 +2,8 @@
 import {TestBed, ComponentFixture} from "@angular/core/testing";
 import {StepperStepComponent} from "./stepper-step.component";
 
-describe('Component: StepperStep', () => {
+// TODO
+xdescribe('Component: StepperStep', () => {
     let component: StepperStepComponent;
     let fixture: ComponentFixture<StepperStepComponent>;
 

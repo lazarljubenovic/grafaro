@@ -24,7 +24,6 @@ export class ArrayStackDirective implements OnInit {
 })
 export class ArrayQueueDirective {
 
-
     constructor (private elementRef: ElementRef,
                  private renderer: Renderer) {
     }
@@ -63,7 +62,16 @@ export class ArrayQueueDirective {
 export class ArrayComponent implements OnInit {
 
     @Input()
-    public array: any[] = ['A', 'B', 'C', 'D'];
+    public array: any[] = [];
+
+    @Input()
+    public accentColor: any[] = [];
+
+    @Input()
+    public primaryColor: any[] = [];
+
+    @Input()
+    public secondaryColor: any[] = [];
 
     constructor() {
     }

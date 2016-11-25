@@ -24,13 +24,22 @@ ul {
       display: inline-flex;
       justify-content: center;
       align-items: center;
-      width: $size;
-      height: $size;
-      box-shadow: 0 0 0 1px #AFAFAF, 0 3px 3px 0 rgba(black, .12);
+      width: $size - 2px; // because of border
+      height: $size - 2px; // because of border
+      border: solid 1px #AFAFAF;
+      box-shadow: 0 3px 3px 0 rgba(black, .12);
       background-color: #F7F7F7;
       border-radius: 50%;
       position: absolute;
       right: 0;
+      transition: all .4s ease;
+    }
+
+    @each $color in ('accent' 'primary' 'secondary') {
+      &.#{unquote($color)} span {
+        background-color: get-color($color);
+        border: solid 1px mix(black, get-color($color), 40%);
+      }
     }
   }
 }

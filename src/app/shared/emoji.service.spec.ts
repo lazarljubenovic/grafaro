@@ -1,16 +1,16 @@
 /* tslint:disable:no-unused-variable */
+import {TestBed, inject} from "@angular/core/testing";
+import {EmojiService} from "./emoji.service";
 
-import { TestBed, async, inject } from '@angular/core/testing';
-import { EmojiService } from './emoji.service';
-
-describe('Service: Emoji', () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [EmojiService]
+// TODO
+xdescribe('Service: Emoji', () => {
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            providers: [EmojiService]
+        });
     });
-  });
 
-  it('should ...', inject([EmojiService], (service: EmojiService) => {
-    expect(service).toBeTruthy();
-  }));
+    it('should ...', inject([EmojiService], (service: EmojiService) => {
+        expect(service).toBeTruthy();
+    }));
 });

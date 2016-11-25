@@ -17,6 +17,11 @@ button {
   font-weight: 700;
   cursor: pointer;
 
+  &:hover,
+  &:focus {
+    color: white;
+  }
+
   &:not(:last-child) {
     margin-right: 12px;
   }
