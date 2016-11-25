@@ -1,5 +1,5 @@
-import {Component, OnInit} from "@angular/core";
-import {ChatMessageInfo} from "./chat-message/chat-message.component";
+import {Component, OnInit, ViewContainerRef, ViewChild, ComponentFactoryResolver, ComponentRef} from "@angular/core";
+import {ChatMessageInfo, ChatMessageComponent} from "./chat-message/chat-message.component";
 import {ChatService} from "./chat.service";
 import {Observable} from "rxjs";
 
@@ -10,45 +10,12 @@ import {Observable} from "rxjs";
 })
 export class ChatComponent implements OnInit {
 
-    public dummyMessages: ChatMessageInfo[] = [
-        {
-            timeStamp: new Date(),
-            senderHandle: `lazarljubenovic`,
-            senderName: `Lazar Ljubenović`,
-            senderHash: `ff8adece0631821959f443c9d956fc39`,
-            message: `Hello World!`,
-        },
-        {
-            timeStamp: new Date(),
-            senderHandle: `pritilender`,
-            senderName: `Mihajlo Ilijić`,
-            senderHash: `ff8adece0631821959f443c9d956fc39`,
-            message: `Hello World! **bold** _italic_ ~~strike~~`,
-        },
-        {
-            timeStamp: new Date(),
-            senderHandle: `lazarljubenovic`,
-            senderName: `Lazar Ljubenović`,
-            senderHash: `ff8adece0631821959f443c9d956fc39`,
-            message: `Hello World! [link](www.google.com)`,
-        },
-        {
-            timeStamp: new Date(),
-            senderHandle: `pritilender`,
-            senderName: `Mihajlo Ilijić`,
-            senderHash: `ff8adece0631821959f443c9d956fc39`,
-            message: `Hello World! :) :* ;) :(`,
-        },
-        {
-            timeStamp: new Date(),
-            senderHandle: `lazarljubenovic`,
-            senderName: `Lazar Ljubenović`,
-            senderHash: `ff8adece0631821959f443c9d956fc39`,
-            message: `Hello World! :joy: :heart: :sob: :+1:`,
-        },
-    ];
+    @ViewChild('message', {read: ViewContainerRef})
+    private viewContainerRef: any;
 
-    public chatMessages: Observable<any>;
+    private messageFactory;
+
+    public chatMessages$: Observable<any>;
 
     public currentTypedMessage: string;
 
@@ -71,11 +38,14 @@ export class ChatComponent implements OnInit {
         this.chatService.send(message);
     }
 
-    constructor(private chatService: ChatService) {
-        this.chatMessages = this.chatService.create("ws://localhost:4000");
-        this.chatMessages.subscribe(msg => {
-            this.dummyMessages.push(msg);
-        });
+    constructor(private chatService: ChatService,
+                private componentFactoryResolver: ComponentFactoryResolver) {
+    }
+
+    ngOnInit() {
+        this.messageFactory =  this.componentFactoryResolver.resolveComponentFactory(ChatMessageComponent);
+        this.chatMessages$ = this.chatService.create("ws://localhost:4000");
+
         this.chatService.send({
             message: "init",
             senderHandle: "lazar",
@@ -83,9 +53,16 @@ export class ChatComponent implements OnInit {
             senderName: "Lazar Ljubenovic",
             timeStamp: new Date()
         });
-    }
 
-    ngOnInit() {
+        this.chatMessages$.subscribe(msg => {
+            //this.dummyMessages.push(msg);
+            if (msg) {
+                console.log(msg);
+                let cmp: ComponentRef<ChatMessageComponent> = this.viewContainerRef.createComponent(this.messageFactory);
+                cmp.instance.info = msg;
+                console.log("blacmpins", cmp.instance);
+            }
+        });
     }
 
 }
