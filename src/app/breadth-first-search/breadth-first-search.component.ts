@@ -37,20 +37,42 @@ export class BreadthFirstSearchComponent implements OnInit {
 
     public stateNumber: number = 0;
 
-    public updateStateNumber(action: 'next' | 'prev'): void {
+    public updateStateNumber(action: string): void {
         switch (action) {
             case 'next':
-                if (this.stateNumber != this.states.length - 1) {
-                    this.stateNumber++;
-                }
+                this.goToNext();
                 break;
             case 'prev':
-                if (this.stateNumber != 0) {
-                    this.stateNumber--;
-                }
+                this.goToPrev();
+                break;
+            case 'first':
+                this.goToFirst();
+                break;
+            case 'last':
+                this.goToLast();
                 break;
         }
         this.update();
+    }
+
+    private goToNext(): void {
+        if (this.stateNumber != this.states.length - 1) {
+            this.stateNumber++;
+        }
+    }
+
+    private  goToPrev(): void {
+        if (this.stateNumber != 0) {
+            this.stateNumber--;
+        }
+    }
+
+    private goToLast(): void {
+        this.stateNumber = 0;
+    }
+
+    private goToFirst(): void {
+        this.stateNumber = this.states.length - 1;
     }
 
     constructor(private algorithm: BreadthFirstSearchService) {

@@ -9,6 +9,7 @@ export interface NormalizedState {
     edges: VisNgNetworkOptionsEdges[];
     stack?: string[];
     queue?: string[];
+    solution: string[];
 }
 
 @Injectable()
@@ -33,7 +34,8 @@ export class BreadthFirstSearchService {
         });
         const edges: VisNgNetworkOptionsEdges[] = state.edges;
         const queue: string[] = state.currentQueue;
-        return {nodes, edges, queue};
+        const solution: string[] = state.currentSolution;
+        return {nodes, edges, queue, solution};
     }
 
     constructor() {
