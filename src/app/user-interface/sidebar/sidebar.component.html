@@ -1,4 +1,4 @@
-<grf-tabs>
+<grf-tabs [initialTabIndex]="1">
   <grf-tab title="Chat" icon="comments">
     <grf-chat>
       <grf-chat-message *ngFor="let message of dummyMessages"
@@ -7,7 +7,10 @@
     </grf-chat>
   </grf-tab>
   <grf-tab title="Matrix" icon="table">
-    matrix here
+    <grf-matrix [data]="matrixData"
+                [colLabels]="letters"
+                [rowLabels]="letters"
+    ></grf-matrix>
   </grf-tab>
   <grf-tab title="Algorithm" icon="cogs">
     algo settings here

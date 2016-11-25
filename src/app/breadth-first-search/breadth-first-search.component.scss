@@ -8,6 +8,19 @@
     left: 10px;
   }
 
+  .queue {
+    position: absolute;
+    bottom: 36px;
+    right: 36px;
+  }
+
+  .solution {
+    position: absolute;
+    top: 36px;
+    left: 36px;
+    bottom: auto;
+  }
+
   grf-graph {
     height: 100%;
   }

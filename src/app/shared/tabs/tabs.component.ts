@@ -1,6 +1,6 @@
 import {
     Component, OnInit, ContentChildren, AfterContentInit, QueryList, ViewChild,
-    ElementRef, Renderer
+    ElementRef, Renderer, Input
 } from "@angular/core";
 import {TabComponent} from "./tab/tab.component";
 
@@ -23,6 +23,9 @@ export class TabsComponent implements OnInit, AfterContentInit {
 
     @ViewChild('tabOutlet')
     public tabOutletRef: ElementRef;
+
+    @Input()
+    public initialTabIndex: number = 1;
 
     public currentTab: Tab;
 
@@ -53,7 +56,7 @@ export class TabsComponent implements OnInit, AfterContentInit {
             index: index,
             ref: ref,
         }));
-        this.setCurrentTab(this.tabs[0]);
+        this.setCurrentTab(this.tabs[this.initialTabIndex]);
     }
 
 }
