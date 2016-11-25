@@ -1,9 +1,6 @@
 <grf-tabs [initialTabIndex]="1">
   <grf-tab title="Chat" icon="comments">
     <grf-chat>
-      <grf-chat-message *ngFor="let message of dummyMessages"
-                        [info]="message"
-      ></grf-chat-message>
     </grf-chat>
   </grf-tab>
   <grf-tab title="Matrix" icon="table">

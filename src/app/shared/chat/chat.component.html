@@ -1,4 +1,6 @@
-<ng-content></ng-content>
+<grf-chat-message *ngFor="let message of dummyMessages"
+                  [info]="message"
+></grf-chat-message>
 
 <div class="flex-spacer"></div>
 
