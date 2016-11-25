@@ -8,6 +8,7 @@ import {BreadthFirstSearchService} from "./breadth-first-search/breadth-first-se
 import {UserInterfaceModule} from "./user-interface/user-interface.module";
 import {MarkdownService} from "./shared/markdown.service";
 import {EmojiService} from "./shared/emoji.service";
+import {GraphOptionsService} from "./graph-options.service";
 
 @NgModule({
     declarations: [
@@ -25,6 +26,7 @@ import {EmojiService} from "./shared/emoji.service";
         BreadthFirstSearchService,
         MarkdownService,
         EmojiService,
+        GraphOptionsService,
     ],
     bootstrap: [
         AppComponent,

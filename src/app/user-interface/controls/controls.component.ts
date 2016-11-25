@@ -18,6 +18,14 @@ export class ControlsComponent implements OnInit {
         this.stateNumberChange.emit('prev');
     }
 
+    public onFirst(): void {
+        this.stateNumberChange.emit('first');
+    }
+
+    public onLast(): void {
+        this.stateNumberChange.emit('last');
+    }
+
     constructor() {
     }
 

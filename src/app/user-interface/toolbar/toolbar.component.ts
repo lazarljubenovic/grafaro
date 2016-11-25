@@ -1,4 +1,16 @@
-import {Component, OnInit, Input} from "@angular/core";
+import {Component, OnInit, Input, Output, EventEmitter} from "@angular/core";
+
+export interface ClickPosition {
+    x: number;
+    y: number;
+}
+
+export enum Actions {
+    select,
+    add,
+    remove,
+    connect,
+}
 
 @Component({
     selector: 'grf-toolbar',
@@ -10,26 +22,29 @@ export class ToolbarComponent implements OnInit {
     @Input()
     public currentSelected: number = 0;
 
+    @Output()
+    public currentSelectedChange = new EventEmitter<Actions>();
+
     public tools = [
         {
             icon: 'fa-mouse-pointer',
             name: 'Pointer',
+            action: Actions.select,
         },
         {
             icon: 'fa-plus',
             name: 'Add',
+            action: Actions.add,
         },
         {
             icon: 'fa-minus',
             name: 'Remove',
-        },
-        {
-            icon: 'fa-trash',
-            name: 'Delete All',
+            action: Actions.remove,
         },
         {
             icon: 'fa-chain',
-            name: 'Whatever',
+            name: 'Connect',
+            action: Actions.connect,
         },
     ];
 
