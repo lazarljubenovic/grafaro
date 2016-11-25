@@ -11,6 +11,7 @@ import {TabsModule} from "../shared/tabs/tabs.module";
 import {ChatModule} from "../shared/chat/chat.module";
 import {WebSocketService} from "../shared/websocket.service";
 import {MatrixModule} from "../matrix/matrix.module";
+import {ArrayModule} from "../array/array.module";
 
 @NgModule({
     imports: [
@@ -19,6 +20,7 @@ import {MatrixModule} from "../matrix/matrix.module";
         TabsModule,
         ChatModule,
         MatrixModule,
+        ArrayModule,
     ],
     declarations: [
         UserInterfaceComponent,

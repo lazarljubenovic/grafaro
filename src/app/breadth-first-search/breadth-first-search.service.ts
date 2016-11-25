@@ -7,6 +7,8 @@ import {GrfGraphNodeOptions} from "../graph/graph.module";
 export interface NormalizedState {
     nodes: GrfGraphNodeOptions[];
     edges: VisNgNetworkOptionsEdges[];
+    stack?: string[];
+    queue?: string[];
 }
 
 @Injectable()
@@ -30,7 +32,8 @@ export class BreadthFirstSearchService {
             }
         });
         const edges: VisNgNetworkOptionsEdges[] = state.edges;
-        return {nodes, edges};
+        const queue: string[] = state.currentQueue;
+        return {nodes, edges, queue};
     }
 
     constructor() {
