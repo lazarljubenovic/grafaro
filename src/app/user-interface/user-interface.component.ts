@@ -51,6 +51,7 @@ export class UserInterfaceComponent implements OnInit {
                     {name: 'interaction.dragView', value: true},
                     {name: 'interaction.selectable', value: true},
                     {name: 'interaction.dragNodes', value: true},
+                    {name: 'nodes.shape', value: 'square'},
                 ]);
             });
 

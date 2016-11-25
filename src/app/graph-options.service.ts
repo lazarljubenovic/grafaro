@@ -1,10 +1,12 @@
-import {Injectable} from "@angular/core";
-import {VisNgNetworkOptions} from "@lazarljubenovic/vis-ng/core";
+import {Injectable, Inject} from "@angular/core";
+import {VisNgNetworkOptions, VisNgNetwork} from "@lazarljubenovic/vis-ng/core";
 import * as NestedProperty from "nested-property";
 import {Subject} from "rxjs";
 
 @Injectable()
 export class GraphOptionsService {
+
+    public network: VisNgNetwork;
 
     private _options: VisNgNetworkOptions = {};
 

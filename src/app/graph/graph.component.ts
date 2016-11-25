@@ -1,4 +1,4 @@
-import {Component, OnInit, Input} from "@angular/core";
+import {Component, OnInit, Input, ViewChild, AfterViewInit} from "@angular/core";
 import {VisNgNetworkOptions} from "@lazarljubenovic/vis-ng/core";
 import {GrfGraphEdgeOptions, GrfGraphNodeOptions} from "./graph.module";
 import * as deepAssign from 'deep-assign';
@@ -38,6 +38,7 @@ export class GraphComponent implements OnInit {
             this._defaultOptions,
             this._globalOptions,
         );
+        this.resultingOptions = Object.assign({}, this.resultingOptions);
     }
 
     @Input()

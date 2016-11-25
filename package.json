@@ -20,7 +20,7 @@
     "@angular/platform-browser": "~2.0.0",
     "@angular/platform-browser-dynamic": "~2.0.0",
     "@angular/router": "~3.0.0",
-    "@lazarljubenovic/vis-ng": "^0.1.5",
+    "@lazarljubenovic/vis-ng": "^0.1.6",
     "@ngrx/core": "^1.2.0",
     "@ngrx/store": "^2.2.1",
     "@types/graphlib": "^2.1.2",
