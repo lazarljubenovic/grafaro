@@ -1,0 +1,33 @@
+@import "../global";
+
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+%td-label {
+  color: rgba(black, .5);
+  font-weight: 100;
+  font-size: .8em;
+}
+
+$size: 24px;
+
+table {
+  font-family: $font;
+  color: rgba(black, .87);
+
+  td {
+    width: $size;
+    height: $size;
+    text-align: center;
+  }
+
+  tr:first-child,
+  tr > td:first-child {
+    @extend %td-label;
+  }
+}
