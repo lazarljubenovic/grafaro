@@ -1,5 +1,8 @@
 import {Component, OnInit} from "@angular/core";
 import {Graph} from "graphlib";
+import {Subject, Observable} from "rxjs";
+import {Actions, ClickPosition} from "./toolbar/toolbar.component";
+import {GraphOptionsService} from "../graph-options.service";
 
 @Component({
     selector: 'grf-user-interface',
@@ -23,10 +26,51 @@ export class UserInterfaceComponent implements OnInit {
 
     public root: string = 'A';
 
-    constructor() {
+    public chooseTool$: Subject<Actions> = new Subject<Actions>();
+    public click$: Subject<ClickPosition> = new Subject<ClickPosition>();
+
+    public actions$: Observable<[ClickPosition, Actions]> = this.click$.withLatestFrom(this.chooseTool$);
+
+    constructor(private graphOptionsService: GraphOptionsService) {
     }
 
     ngOnInit() {
+
+        // Initial settings
+        this.graphOptionsService.setOptions([
+            {name: 'physics.enabled', value: false},
+        ]);
+
+        // We need timeout so the subscriptions below are triggered properly.
+        setTimeout(() => this.chooseTool$.next(Actions.select));
+
+        this.chooseTool$
+            .filter(tool => tool === Actions.select)
+            .subscribe(tool => {
+                this.graphOptionsService.setOptions([
+                    {name: 'interaction.dragView', value: true},
+                    {name: 'interaction.selectable', value: true},
+                    {name: 'interaction.dragNodes', value: true},
+                ]);
+            });
+
+        this.chooseTool$
+            .filter(tool => tool !== Actions.select)
+            .subscribe(tool => {
+                this.graphOptionsService.setOptions([
+                    {name: 'interaction.dragView', value: false},
+                    {name: 'interaction.selectable', value: false},
+                    {name: 'interaction.dragNodes', value: false},
+                ]);
+            });
+
+        this.actions$
+            .subscribe(values => {
+                const position: ClickPosition = values[0];
+                const tool: number = values[1];
+                console.log(`Position: (${position.x}, ${position.y}); tool: ${tool}`);
+            });
+
     }
 
 }

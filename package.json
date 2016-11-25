@@ -25,9 +25,11 @@
     "@ngrx/store": "^2.2.1",
     "@types/graphlib": "^2.1.2",
     "core-js": "^2.4.1",
+    "deep-assign": "^2.0.0",
     "express": "^4.14.0",
     "graphlib": "^2.1.1",
     "marked": "^0.3.6",
+    "nested-property": "^0.0.7",
     "rxjs": "5.0.0-beta.12",
     "ts-helpers": "^1.1.1",
     "vis": "^4.16.1",
@@ -35,6 +37,7 @@
     "zone.js": "^0.6.23"
   },
   "devDependencies": {
+    "@types/deep-assign": "^0.1.0",
     "@types/jasmine": "^2.2.30",
     "@types/marked": "^0.0.28",
     "@types/node": "^6.0.42",

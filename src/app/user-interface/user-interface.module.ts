@@ -10,6 +10,7 @@ import {ControlsComponent} from "./controls/controls.component";
 import {TabsModule} from "../shared/tabs/tabs.module";
 import {ChatModule} from "../shared/chat/chat.module";
 import {WebSocketService} from "../shared/websocket.service";
+import {ActionsService} from "../actions.service";
 
 @NgModule({
     imports: [
@@ -28,6 +29,7 @@ import {WebSocketService} from "../shared/websocket.service";
     ],
     providers: [
         WebSocketService,
+        ActionsService,
     ],
     exports: [
         UserInterfaceComponent,
