@@ -4,12 +4,16 @@ import {GraphComponent} from "./graph.component";
 import {VisNetworkModule} from "@lazarljubenovic/vis-ng/core";
 import {GraphNodeOptionsTransformPipe} from "./graph-node-options-transform.pipe";
 import {GraphEdgeOptionsTransformPipe} from "./graph-edge-options-transform.pipe";
+import {ColorThemeService} from "../color-theme.service";
 
 export interface GrfGraphNodeOptions {
     label: string;
-    state: string;
     isStart: boolean;
     isEnd: boolean;
+    isAccentColor: boolean;
+    isPrimaryColor: boolean;
+    isSecondaryColor: boolean;
+    isDimmedColor: boolean;
 }
 
 export interface GrfGraphEdgeOptions {
@@ -30,6 +34,9 @@ export interface GrfGraphEdgeOptions {
     ],
     exports: [
         GraphComponent,
+    ],
+    providers: [
+        ColorThemeService,
     ],
 })
 export class GraphModule {

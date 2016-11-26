@@ -32,11 +32,10 @@ export class BreadthFirstSearchService {
                 weight: undefined,
                 isStart: state.rootNode == node,
                 isEnd: false,
-                state: state.currentNode == node ?
-                    'current' :
-                    state.visitedNodes.indexOf(node) != -1 ?
-                        'visited' :
-                        'default',
+                isAccentColor: state.currentNode == node,
+                isPrimaryColor: state.currentNeighbor == node,
+                isSecondaryColor: false,
+                isDimmedColor: state.visitedNodes.indexOf(node) != -1,
             };
         });
         const edges: VisNgNetworkOptionsEdges[] = state.edges;

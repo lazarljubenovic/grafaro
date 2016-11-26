@@ -1,14 +1,15 @@
 import {Pipe, PipeTransform} from "@angular/core";
 import {GrfGraphNodeOptions} from "./graph.module";
+import {ColorThemeService} from "../color-theme.service";
 
 @Pipe({
     name: 'graphNodeOptionsTransform',
 })
 export class GraphNodeOptionsTransformPipe implements PipeTransform {
 
-    transform(options: GrfGraphNodeOptions): any {
-        const colorCurrent = '#FF6B6B';
+    constructor(private theme: ColorThemeService) {}
 
+    transform(options: GrfGraphNodeOptions): any {
         const colorVisited = {
             background: '#afafaf',
             border: '#6f6f6f',
@@ -35,13 +36,11 @@ export class GraphNodeOptionsTransformPipe implements PipeTransform {
             },
         };
 
-        const color = options.state === 'current' ?
-            colorCurrent :
-            options.state === 'visited' ?
-                colorVisited :
-                colorDefault;
+        const color = options.isAccentColor ? this.theme.palette.accent :
+            options.isPrimaryColor ? this.theme.palette.primary :
+                options.isSecondaryColor ? this.theme.palette.second :
+                    options.isDimmedColor ? colorVisited : colorDefault;
 
-        // const shape = options.isStart ? 'box' : options.isEnd ? 'triangle' : 'circle';
         const shape = 'circle';
 
         return {
