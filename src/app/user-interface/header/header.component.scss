@@ -42,10 +42,22 @@ $header-usable-space: $header-height - 2 * $header-margin;
 
   #project-name {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    justify-content: center;
 
     span {
-      display: inline-block;
+
+      &#project-title {
+        font-weight: 300;
+        font-size: 1em;
+        margin-left: -.08em;
+      }
+
+      &#project-description {
+        font-size: 0.6em;
+        font-weight: 500;
+        font-style: italic;
+      }
     }
   }
 }

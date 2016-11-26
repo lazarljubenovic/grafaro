@@ -8,7 +8,10 @@ import {Component, OnInit, Input} from "@angular/core";
 export class HeaderComponent implements OnInit {
 
     @Input()
-    public projectName: string = 'Untitled';
+    public projectTitle: string = 'Untitled';
+
+    @Input()
+    public projectDescription: string = `Project Untitled doesn't have a description.`;
 
     constructor() {
     }
