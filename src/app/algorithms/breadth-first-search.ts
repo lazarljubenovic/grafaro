@@ -51,6 +51,7 @@ export function breadthFirstSearch(graph: Graph, root: string): BreadthFirstSear
         const neighbors: string[] = graph.neighbors(currentNode);
 
         visited.push(currentNode);
+        states.push(createNewState(currentNode, neighbors, solution, graph, visited, queue, root));
 
         neighbors
             .filter(neighbor => visited.indexOf(neighbor) == -1)
