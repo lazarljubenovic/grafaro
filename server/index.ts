@@ -1,11 +1,13 @@
-import {ChatMessageInfo} from "../src/app/shared/chat/chat-message/chat-message.component";
-import {Message} from "../src/app/message";
+import {ChatMessageInfo, Message} from "./interfaces";
 
-const server = require('http').createServer();
-const url = require('url');
-const WebSocketServer = require('ws').Server;
+import * as http from 'http';
+import * as url from 'url';
+import * as ws from 'ws';
+import * as express from 'express';
+
+const server = http.createServer();
+const WebSocketServer = ws.Server;
 const wss = new WebSocketServer({server: server});
-const express = require('express');
 const app = express();
 const port = 4000;
 

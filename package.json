@@ -9,9 +9,13 @@
     "test": "ng test",
     "pree2e": "webdriver-manager update",
     "e2e": "protractor",
-    "ts:build": "tsc"
+    "ts:build": "tsc -p ./server",
+    "ts:watch": "tsc -p ./server -w",
+    "serve": "nodemon ./server/index.js"
   },
-  "pre-commit": ["lint"],
+  "pre-commit": [
+    "lint"
+  ],
   "dependencies": {
     "@angular/common": "~2.0.0",
     "@angular/compiler": "~2.0.0",
@@ -41,9 +45,11 @@
   },
   "devDependencies": {
     "@types/deep-assign": "^0.1.0",
+    "@types/express": "^4.0.34",
     "@types/jasmine": "^2.2.30",
     "@types/marked": "^0.0.28",
     "@types/node": "^6.0.42",
+    "@types/ws": "0.0.37",
     "angular-cli": "1.0.0-beta.17",
     "codelyzer": "~0.0.26",
     "jasmine-core": "2.4.1",
