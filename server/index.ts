@@ -14,6 +14,8 @@
 // 		client.send(data);
 // 	})
 // };
+import {ChatMessageInfo} from "../src/app/shared/chat/chat-message/chat-message.component";
+
 const server = require('http').createServer();
 const url = require('url');
 const WebSocketServer = require('ws').Server;
@@ -23,41 +25,77 @@ const app = express();
 const port = 4000;
 const util = require('util');
 
+const dummyMessages: ChatMessageInfo[] = [
+	{
+		timeStamp: new Date(),
+		senderHandle: `lazarljubenovic`,
+		senderName: `Lazar Ljubenović`,
+		senderHash: `ff8adece0631821959f443c9d956fc39`,
+		message: `Hello World!`,
+	},
+	{
+		timeStamp: new Date(),
+		senderHandle: `pritilender`,
+		senderName: `Mihajlo Ilijić`,
+		senderHash: `ff8adece0631821959f443c9d956fc39`,
+		message: `Hello World! **bold** _italic_ ~~strike~~`,
+	},
+	{
+		timeStamp: new Date(),
+		senderHandle: `lazarljubenovic`,
+		senderName: `Lazar Ljubenović`,
+		senderHash: `ff8adece0631821959f443c9d956fc39`,
+		message: `Hello World! [link](www.google.com)`,
+	},
+	{
+		timeStamp: new Date(),
+		senderHandle: `pritilender`,
+		senderName: `Mihajlo Ilijić`,
+		senderHash: `ff8adece0631821959f443c9d956fc39`,
+		message: `Hello World! :) :* ;) :(`,
+	},
+	{
+		timeStamp: new Date(),
+		senderHandle: `lazarljubenovic`,
+		senderName: `Lazar Ljubenović`,
+		senderHash: `ff8adece0631821959f443c9d956fc39`,
+		message: `Hello World! :joy: :heart: :sob: :+1:`,
+	},
+];
+
 app.use(function (req, res) {
-    res.send({msg: "hello"});
+	res.send({msg: "hello"});
 });
 
 wss.on('connection', ws => {
-    let location = url.parse(ws.upgradeReq.url, true);
-    // you might use location.query.access_token to authenticate or share sessions
-    // or ws.upgradeReq.headers.cookie (see http://stackoverflow.com/a/16395220/151312)
-    console.log(location);
+	let location = url.parse(ws.upgradeReq.url, true);
+	// you might use location.query.access_token to authenticate or share sessions
+	// or ws.upgradeReq.headers.cookie (see http://stackoverflow.com/a/16395220/151312)
+	console.log(location);
 
-    ws.on('message', message => {
-        console.log(util.inspect(JSON.parse(message), false, null));
-    });
+	ws.on('message', message => {
+		console.log(util.inspect(JSON.parse(message), false, null));
+	});
 
-    ws.on('error', (error) => {
-        console.log(error);
-    });
+	ws.on('error', (error) => {
+		console.log(error);
+	});
 
-    ws.on('close', () => {
-        //console.log(ws.address);
-    });
+	ws.on('close', () => {
+		//console.log(ws.address);
+	});
 
-    ws.send(JSON.stringify({
-        payload: {
-            timeStamp: new Date(),
-            senderHandle: `lazarljubenovic`,
-            senderName: `Lazar Ljubenović`,
-            senderHash: `ff8adece0631821959f443c9d956fc39`,
-            message: `Ohaio!`
-        },
-        type: 'chat'
-    }))
+	setTimeout(() => {
+		dummyMessages.forEach(dummyMessage => {
+			ws.send(JSON.stringify({
+				payload: dummyMessage,
+				type: 'chat'
+			}));
+		})
+	}, 1000)
 });
 
 server.on('request', app);
 server.listen(port, () => {
-    console.log('Listening on ' + server.address().port);
+	console.log('Listening on ' + server.address().port);
 });
