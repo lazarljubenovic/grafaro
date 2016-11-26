@@ -1,1 +1,28 @@
-/* You can add global styles to this file, and also import other style files */
+#grf-app-pre-load {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #4ecdc4;
+}
+
+#grf-app-pre-load > #logo {
+  width: 500px;
+  height: 500px;
+  min-height: 500px;
+  max-height: 500px;
+  background-image: url('./assets/logo.svg');
+  background-size: cover;
+}
+
+#grf-app-pre-load > #loading {
+  display: inline-block;
+  font-size: 3.6em;
+  margin-top: 1em;
+  color: white;
+  height: 100px;
+  font-family: Roboto, sans-serif;
+  font-weight: 100;
+}
