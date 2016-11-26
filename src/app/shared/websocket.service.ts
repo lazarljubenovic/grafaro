@@ -20,6 +20,8 @@ export class WebSocketService {
     public create(url: string): Observable<Message<any>> {
         this.wsSubject = Observable.webSocket(url);
 
+        this.wsSubject.subscribe(msg => console.log("recieved", msg));
+
         return this.wsSubject;
     }
 

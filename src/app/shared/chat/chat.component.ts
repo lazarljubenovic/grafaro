@@ -36,7 +36,7 @@ export class ChatComponent implements OnInit {
 		if (key == 'Enter') {
 			let chatMessage: ChatMessageInfo = {
 				senderHandle: 'lazar',
-				senderHash: '34536545432545432',
+				senderHash: '231230213412',
 				senderName: 'Lazar Ljubenović',
 				timeStamp: new Date(),
 				message: this.currentTypedMessage
@@ -65,7 +65,7 @@ export class ChatComponent implements OnInit {
 		this.chatService.send({
 			message: "init",
 			senderHandle: "lazar",
-			senderHash: "231230213412412",
+			senderHash: "231230213412",
 			senderName: "Lazar Ljubenovic",
 			timeStamp: new Date(),
 		});

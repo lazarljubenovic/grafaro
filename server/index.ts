@@ -1,20 +1,5 @@
-/*
- Ideja (jer me EasyFind ubio psihicki): https://github.com/websockets/ws#sending-and-receiving-text-data
- Cuvamo 2D niz konekcija i kada se klijent konektuje, prosledimo, na osnovu URL-a ili neceg slicnog,
- neki hash ili sta vec. Potrazimo u matrici da li postoji vec otvorena konecija sa tim hashom ili ne.
- Ako postoji, samo ga dodamo u konekcije[hash], a ako ne, napravimo konekcije[hash] i dodamo ga.
- Cao zdravo poz.
- Posle toga "samo" iziteriramo taj niz da nadjemo tog klijenta kako bismo znali kojoj konekciji da prosledimo tu poruku.
- Treba da vidim da li ima neka fora da svi klijenti imaju neko isto polje, pa da taj hash piggybackujemo.
- */
-
-// wsServer.broadcast = (data) => {
-// 	wsServer.clients.forEach((client) => {
-// 		console.log(client);
-// 		client.send(data);
-// 	})
-// };
 import {ChatMessageInfo} from "../src/app/shared/chat/chat-message/chat-message.component";
+import {Message} from "../src/app/message";
 
 const server = require('http').createServer();
 const url = require('url');
@@ -23,7 +8,6 @@ const wss = new WebSocketServer({server: server});
 const express = require('express');
 const app = express();
 const port = 4000;
-const util = require('util');
 
 const dummyMessages: ChatMessageInfo[] = [
 	{
@@ -63,18 +47,39 @@ const dummyMessages: ChatMessageInfo[] = [
 	},
 ];
 
+let messageRooms = {}; //associative array where each member holds an array of websocket clients
+
 app.use(function (req, res) {
 	res.send({msg: "hello"});
 });
 
 wss.on('connection', ws => {
-	let location = url.parse(ws.upgradeReq.url, true);
-	// you might use location.query.access_token to authenticate or share sessions
-	// or ws.upgradeReq.headers.cookie (see http://stackoverflow.com/a/16395220/151312)
-	console.log(location);
+	//let location = url.parse(ws.upgradeReq.url, true);
 
-	ws.on('message', message => {
-		console.log(util.inspect(JSON.parse(message), false, null));
+	ws.on('message', (message: string) => {
+		let messageObj: Message<any> = JSON.parse(message);
+
+		if (messageObj.type == 'chat') {
+			var parsedMessage: ChatMessageInfo = messageObj.payload; //todo fix type
+		}
+		console.log(parsedMessage);
+
+		// Create room if it doesn't exists
+		if (messageRooms[parsedMessage.senderHash] == undefined) {
+			messageRooms[parsedMessage.senderHash] = [];
+		}
+
+
+		if (parsedMessage.message == 'init') {
+			// Add user if the message is "init"
+			//todo should have special type for init messages
+			messageRooms[parsedMessage.senderHash].push(ws);
+			console.log("New user joined the room", parsedMessage.senderHash);
+		} else {
+			// Broadcast message to other users in the same room
+			wss.clients.filter(client => (messageRooms[parsedMessage.senderHash].indexOf(client) > -1) && client != ws)
+				.forEach(client => client.send(JSON.stringify(messageObj)));
+		}
 	});
 
 	ws.on('error', (error) => {
@@ -82,7 +87,15 @@ wss.on('connection', ws => {
 	});
 
 	ws.on('close', () => {
-		//console.log(ws.address);
+		let rooms = Object.keys(messageRooms);
+		rooms.forEach(room => {
+			let ind = messageRooms[room].indexOf(ws);
+
+			if (ind > -1) {
+				messageRooms[room].splice(ind, 1);
+				console.log("User has left the room", room);
+			}
+		})
 	});
 
 	setTimeout(() => {

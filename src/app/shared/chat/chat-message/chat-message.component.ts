@@ -2,6 +2,7 @@ import {Component, OnInit, Input} from "@angular/core";
 import {MarkdownService} from "../../markdown.service";
 import {EmojiService} from "../../emoji.service";
 
+
 export interface ChatMessageInfo {
     timeStamp: Date;
     senderName: string;
