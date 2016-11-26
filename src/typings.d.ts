@@ -9,3 +9,12 @@ declare module 'nested-property' {
     export let set: (object: any, path: string, value: any) => any;
     export let has: (object: any, path: string) => boolean;
 }
+
+declare module 'sha1' {
+    let sha1: (plaintext: string) => string;
+    export = sha1;
+}
+
+declare module 'jdenticon' {
+    export let update: (element: HTMLElement, hash: string, padding: number) => void;
+}

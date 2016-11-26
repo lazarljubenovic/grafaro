@@ -13,6 +13,7 @@ import {WebSocketService} from "../shared/websocket.service";
 import {MatrixModule} from "../matrix/matrix.module";
 import {ArrayModule} from "../array/array.module";
 import {ActionsService} from "../actions.service";
+import {JdenticonModule} from "../jdenticon/jdenticon.module";
 
 @NgModule({
     imports: [
@@ -22,6 +23,7 @@ import {ActionsService} from "../actions.service";
         ChatModule,
         MatrixModule,
         ArrayModule,
+        JdenticonModule,
     ],
     declarations: [
         UserInterfaceComponent,
