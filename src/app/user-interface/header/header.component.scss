@@ -21,8 +21,9 @@ $header-usable-space: $header-height - 2 * $header-margin;
 #logo {
   height: $header-usable-space;
   width: $header-usable-space;
-  box-shadow: 0 0 0 1px rgba(white, .3);
   margin-right: 2 * $header-margin;
+  background-image: url('./assets/logo.svg');
+  background-size: cover;
 }
 
 #current-project-info {
