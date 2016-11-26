@@ -2,6 +2,7 @@ import {Graph} from "graphlib";
 import {Queue} from "../data-structures/queue";
 
 export interface BreadthFirstSearchState {
+    nodeIds: string[];
     nodes: string[];
     edges: {
         from: string;
@@ -18,21 +19,22 @@ export interface BreadthFirstSearchState {
 }
 
 function createNewState(currentNode, neighbors, solution, graph, visited, queue, root,
-                        currentNeighbor?) {
+                        currentNeighbor?): BreadthFirstSearchState {
     return {
-        currentNode: currentNode,
-        currentNodeNeighbors: neighbors,
-        currentNeighbor: currentNeighbor,
-        currentSolution: [...solution],
+        currentNode: graph.node(currentNode),
+        currentNodeNeighbors: graph.node(neighbors),
+        currentNeighbor: graph.node(currentNeighbor),
+        currentSolution: [...solution].map(node => graph.node(node)),
         edges: graph.edges().map(edge => ({
             from: edge.v,
             to: edge.w,
             label: graph.edge({v: edge.v, w: edge.w}),
         })),
-        nodes: graph.nodes(),
-        visitedNodes: [...visited],
-        currentQueue: [currentNode, ...queue.toArray()],
-        rootNode: root,
+        nodes: graph.nodes().map(node => graph.node(node)),
+        nodeIds: graph.nodes(),
+        visitedNodes: [...visited].map(node => graph.node(node)),
+        currentQueue: [currentNode, ...queue.toArray()].map(node => graph.node(node)),
+        rootNode: graph.node(root),
     };
 }
 

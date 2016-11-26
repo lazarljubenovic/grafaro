@@ -14,10 +14,14 @@ import {MatrixModule} from "../matrix/matrix.module";
 import {ArrayModule} from "../array/array.module";
 import {ActionsService} from "../actions.service";
 import {JdenticonModule} from "../jdenticon/jdenticon.module";
+import {PopupRenameComponent} from "./popup-rename/popup-rename.component";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 
 @NgModule({
     imports: [
         CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
         GraphModule,
         TabsModule,
         ChatModule,
@@ -32,6 +36,7 @@ import {JdenticonModule} from "../jdenticon/jdenticon.module";
         ToolbarComponent,
         SidebarComponent,
         ControlsComponent,
+        PopupRenameComponent,
     ],
     providers: [
         WebSocketService,
@@ -39,6 +44,9 @@ import {JdenticonModule} from "../jdenticon/jdenticon.module";
     ],
     exports: [
         UserInterfaceComponent,
+    ],
+    entryComponents: [
+        PopupRenameComponent,
     ]
 })
 export class UserInterfaceModule {

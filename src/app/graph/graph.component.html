@@ -1,4 +1,4 @@
-<vis-network [options]="resultingOptions">
+<vis-network [options]="resultingOptions" (graphClick)="onGraphClick($event)">
   <vis-network-node *ngFor="let node of nodes"
                     [options]="node | graphNodeOptionsTransform"
   ></vis-network-node>

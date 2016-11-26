@@ -44,7 +44,7 @@ export class GraphNodeOptionsTransformPipe implements PipeTransform {
         const shape = 'circle';
 
         return {
-            id: options.label,
+            id: options.id,
             label: options.label,
             color,
             shape,

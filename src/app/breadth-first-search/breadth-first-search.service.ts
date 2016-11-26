@@ -25,9 +25,9 @@ export class BreadthFirstSearchService {
     }
 
     public getNormalizedState(state: BreadthFirstSearchState): NormalizedState {
-        const nodes: GrfGraphNodeOptions[] = state.nodes.map(node => {
+        const nodes: GrfGraphNodeOptions[] = state.nodes.map((node, i) => {
             return {
-                id: node,
+                id: state.nodeIds[i],
                 label: node,
                 weight: undefined,
                 isStart: state.rootNode == node,

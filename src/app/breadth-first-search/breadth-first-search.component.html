@@ -16,5 +16,6 @@
 
 <grf-graph [nodes]="states[stateNumber].nodes"
            [edges]="states[stateNumber].edges"
+           (graphClick)="onGraphClick($event)"
 >
 </grf-graph>

@@ -7,6 +7,7 @@ import {GraphEdgeOptionsTransformPipe} from "./graph-edge-options-transform.pipe
 import {ColorThemeService} from "../color-theme.service";
 
 export interface GrfGraphNodeOptions {
+    id: string;
     label: string;
     isStart: boolean;
     isEnd: boolean;

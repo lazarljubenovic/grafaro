@@ -10,6 +10,7 @@ export enum Actions {
     add,
     remove,
     connect,
+    rename,
 }
 
 @Component({
@@ -45,6 +46,11 @@ export class ToolbarComponent implements OnInit {
             icon: 'fa-chain',
             name: 'Connect',
             action: Actions.connect,
+        },
+        {
+            icon: 'fa-font',
+            name: 'Rename',
+            action: Actions.rename,
         },
     ];
 

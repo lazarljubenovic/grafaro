@@ -2,16 +2,18 @@
 
 <main>
 
+  <template #renamePopupOutlet></template>
+
   <grf-toolbar [currentSelected]="chooseTool$ | async"
                (currentSelectedChange)="chooseTool$.next($event)"
   ></grf-toolbar>
 
   <div id="graph">
-    <grf-controls (stateNumberChange)="search.updateStateNumber($event)"></grf-controls>
-    <grf-breadth-first-search #search
+    <grf-controls (stateNumberChange)="breadthFirstSearch.updateStateNumber($event)"></grf-controls>
+    <grf-breadth-first-search #breadthFirstSearch
                               [graph]="graph"
                               [root]="root"
-                              (click)="click$.next({x: $event.offsetX, y: $event.offsetY})"
+                              (graphClick)="click$.next($event)"
     ></grf-breadth-first-search>
   </div>
 

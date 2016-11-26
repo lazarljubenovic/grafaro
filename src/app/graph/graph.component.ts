@@ -1,5 +1,5 @@
-import {Component, OnInit, Input} from "@angular/core";
-import {VisNgNetworkOptions} from "@lazarljubenovic/vis-ng/core";
+import {Component, OnInit, Input, Output, EventEmitter} from "@angular/core";
+import {VisNgNetworkOptions, VisNgNetworkEventArgument} from "@lazarljubenovic/vis-ng/core";
 import {GrfGraphEdgeOptions, GrfGraphNodeOptions} from "./graph.module";
 import * as deepAssign from "deep-assign";
 import {GraphOptionsService} from "../graph-options.service";
@@ -11,11 +11,11 @@ import {GraphOptionsService} from "../graph-options.service";
 })
 export class GraphComponent implements OnInit {
 
-    @Input()
-    public nodes: GrfGraphNodeOptions[] = [];
+    @Input() public nodes: GrfGraphNodeOptions[] = [];
 
-    @Input()
-    public edges: GrfGraphEdgeOptions[] = [];
+    @Input() public edges: GrfGraphEdgeOptions[] = [];
+
+    @Output() public graphClick = new EventEmitter<VisNgNetworkEventArgument>();
 
     private _defaultOptions: VisNgNetworkOptions = {
         nodes: {
@@ -45,6 +45,10 @@ export class GraphComponent implements OnInit {
             this._globalOptions,
         );
         this.resultingOptions = Object.assign({}, this.resultingOptions);
+    }
+
+    public onGraphClick(event: VisNgNetworkEventArgument): void {
+        this.graphClick.next(event);
     }
 
     constructor(private graphOptionsService: GraphOptionsService) {

@@ -1,6 +1,7 @@
-import {Component, OnInit, Input} from "@angular/core";
+import {Component, OnInit, Input, Output, EventEmitter, ChangeDetectorRef} from "@angular/core";
 import {BreadthFirstSearchService, NormalizedState} from "./breadth-first-search.service";
 import {Graph} from "graphlib";
+import {VisNgNetworkEventArgument} from "@lazarljubenovic/vis-ng/core";
 
 @Component({
     selector: 'grf-breadth-first-search',
@@ -10,7 +11,6 @@ import {Graph} from "graphlib";
 export class BreadthFirstSearchComponent implements OnInit {
 
     private _graph: Graph;
-
     @Input()
     public set graph(graph: Graph) {
         this._graph = graph;
@@ -18,18 +18,19 @@ export class BreadthFirstSearchComponent implements OnInit {
     }
 
     private _root: string;
-
     @Input()
     public set root(root: string) {
         this._root = root;
         this.update();
     }
 
+    @Output() public graphClick = new EventEmitter<VisNgNetworkEventArgument>();
+
     public states: NormalizedState[] = [];
 
     public stateNumber: number = 0;
 
-    private update(): void {
+    public update(): void {
         if (this._root == null || this._graph == null) {
             return;
         }
@@ -75,7 +76,12 @@ export class BreadthFirstSearchComponent implements OnInit {
         this.stateNumber = this.states.length - 1;
     }
 
-    constructor(private algorithm: BreadthFirstSearchService) {
+    public onGraphClick(event: VisNgNetworkEventArgument): void {
+        this.graphClick.emit(event);
+    }
+
+    constructor(private algorithm: BreadthFirstSearchService,
+                public changeDetectorRef: ChangeDetectorRef) {
     }
 
     ngOnInit() {
