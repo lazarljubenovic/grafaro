@@ -18,4 +18,5 @@ import {ChatMessageComponent} from "./chat-message.component";
         ChatMessageComponent,
     ],
 })
-export class ChatMessageModule{}
+export class ChatMessageModule {
+}

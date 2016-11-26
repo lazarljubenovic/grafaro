@@ -41,7 +41,7 @@ export class ChatMessageComponent implements OnInit {
     }
 
     constructor(private markdownService: MarkdownService,
-                private emojiService: EmojiService,) {
+                private emojiService: EmojiService) {
     }
 
     ngOnInit() {

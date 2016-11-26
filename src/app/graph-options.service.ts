@@ -1,14 +1,14 @@
-import {Injectable, Inject} from "@angular/core";
-import {VisNgNetworkOptions, VisNgNetwork} from "@lazarljubenovic/vis-ng/core";
+import {Injectable} from "@angular/core";
+import {VisNgNetworkOptions} from "@lazarljubenovic/vis-ng/core";
 import * as NestedProperty from "nested-property";
 import {Subject} from "rxjs";
 
 @Injectable()
 export class GraphOptionsService {
 
-    public network: VisNgNetwork;
-
     private _options: VisNgNetworkOptions = {};
+
+    public optionsChange$ = new Subject<VisNgNetworkOptions>();
 
     public get options(): VisNgNetworkOptions {
         return this._options;
@@ -40,8 +40,6 @@ export class GraphOptionsService {
         this.optionsChange$.next(this._options);
         return NestedProperty.has(this._options, optionName);
     }
-
-    public optionsChange$ = new Subject<VisNgNetworkOptions>();
 
     constructor() {
     }

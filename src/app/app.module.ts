@@ -20,7 +20,6 @@ import {GraphOptionsService} from "./graph-options.service";
         HttpModule,
         StepperModule,
         UserInterfaceModule,
-        //StoreModule.provideStore(reducer),
     ],
     providers: [
         BreadthFirstSearchService,

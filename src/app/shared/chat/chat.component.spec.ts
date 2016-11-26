@@ -10,8 +10,8 @@ xdescribe('Component: Chat', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            imports: [ChatModule]
-        })
+            imports: [ChatModule],
+        });
     });
 
     beforeEach(() => {

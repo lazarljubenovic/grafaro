@@ -27,6 +27,8 @@ export class BreadthFirstSearchComponent implements OnInit {
 
     public states: NormalizedState[] = [];
 
+    public stateNumber: number = 0;
+
     private update(): void {
         if (this._root == null || this._graph == null) {
             return;
@@ -34,8 +36,6 @@ export class BreadthFirstSearchComponent implements OnInit {
         const nonNormalizedStates = this.algorithm.getStates(this._graph, this._root);
         this.states = nonNormalizedStates.map(s => this.algorithm.getNormalizedState(s));
     }
-
-    public stateNumber: number = 0;
 
     public updateStateNumber(action: string): void {
         switch (action) {

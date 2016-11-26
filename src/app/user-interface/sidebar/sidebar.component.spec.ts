@@ -22,7 +22,7 @@ xdescribe('Component: Sidebar', () => {
     beforeEach(() => {
         fixture = TestBed.createComponent(SidebarComponent);
         component = fixture.componentInstance;
-        //fixture.detectChanges();
+        // fixture.detectChanges();
     });
 
 

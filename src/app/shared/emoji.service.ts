@@ -893,7 +893,7 @@ export class EmojiService {
             .replace(':*', '😙')
             .replace('<3', '❤')
             .replace(';)', '😉')
-            .replace(':(', '😟')
+            .replace(':(', '😟');
     }
 
     // todo: don't blindly remove all :'s
@@ -905,7 +905,6 @@ export class EmojiService {
     }
 
     constructor() {
-
     }
 
 }

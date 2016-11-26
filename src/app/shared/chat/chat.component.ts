@@ -1,4 +1,11 @@
-import {Component, OnInit, ViewContainerRef, ViewChild, ComponentFactoryResolver, ComponentRef} from "@angular/core";
+import {
+    Component,
+    OnInit,
+    ViewContainerRef,
+    ViewChild,
+    ComponentFactoryResolver,
+    ComponentRef
+} from "@angular/core";
 import {ChatMessageInfo, ChatMessageComponent} from "./chat-message/chat-message.component";
 import {ChatService} from "./chat.service";
 import {Observable} from "rxjs";
@@ -39,11 +46,11 @@ export class ChatComponent implements OnInit {
     }
 
     constructor(private chatService: ChatService,
-                private componentFactoryResolver: ComponentFactoryResolver) {
+                private cfr: ComponentFactoryResolver) {
     }
 
     ngOnInit() {
-        this.messageFactory =  this.componentFactoryResolver.resolveComponentFactory(ChatMessageComponent);
+        this.messageFactory = this.cfr.resolveComponentFactory(ChatMessageComponent);
         this.chatMessages$ = this.chatService.create("ws://localhost:4000");
 
         this.chatService.send({
@@ -51,14 +58,15 @@ export class ChatComponent implements OnInit {
             senderHandle: "lazar",
             senderHash: "231230213412412",
             senderName: "Lazar Ljubenovic",
-            timeStamp: new Date()
+            timeStamp: new Date(),
         });
 
         this.chatMessages$.subscribe(msg => {
-            //this.dummyMessages.push(msg);
+            // this.dummyMessages.push(msg);
             if (msg) {
                 console.log(msg);
-                let cmp: ComponentRef<ChatMessageComponent> = this.viewContainerRef.createComponent(this.messageFactory);
+                let cmp: ComponentRef<ChatMessageComponent> =
+                    this.viewContainerRef.createComponent(this.messageFactory);
                 cmp.instance.info = msg;
                 console.log("blacmpins", cmp.instance);
             }

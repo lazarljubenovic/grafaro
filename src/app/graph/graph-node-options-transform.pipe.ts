@@ -35,14 +35,20 @@ export class GraphNodeOptionsTransformPipe implements PipeTransform {
             },
         };
 
-        const color = options.state === 'current' ? colorCurrent : options.state === 'visited' ? colorVisited : colorDefault;
-        const shape = options.isStart ? 'box' : options.isEnd ? 'triangle' : 'circle';
+        const color = options.state === 'current' ?
+            colorCurrent :
+            options.state === 'visited' ?
+                colorVisited :
+                colorDefault;
+
+        // const shape = options.isStart ? 'box' : options.isEnd ? 'triangle' : 'circle';
+        const shape = 'circle';
 
         return {
             id: options.label,
             label: options.label,
             color,
-            shape: 'circle', // everything is ugly jesus christ
+            shape,
         };
     }
 

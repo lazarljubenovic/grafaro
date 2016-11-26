@@ -1,36 +1,45 @@
 import {
-    Component, OnInit, Input, Directive, ElementRef,
-    Renderer, trigger, state, style, transition, animate
-} from '@angular/core';
+    Component,
+    OnInit,
+    Input,
+    Directive,
+    ElementRef,
+    Renderer,
+    trigger,
+    state,
+    style,
+    transition,
+    animate
+} from "@angular/core";
 
 @Directive({
-    selector: 'grf-array[grf-stack]',
+    selector: '[grfStack]',
 })
 export class ArrayStackDirective implements OnInit {
 
-    constructor (private elementRef: ElementRef,
-                 private renderer: Renderer) {
+    constructor(private elementRef: ElementRef,
+                private renderer: Renderer) {
     }
 
     ngOnInit() {
         const nativeElement: HTMLElement = this.elementRef.nativeElement;
-        this.renderer.setElementClass(nativeElement,'stack', true);
+        this.renderer.setElementClass(nativeElement, 'stack', true);
     }
 
 }
 
 @Directive({
-    selector: 'grf-array[grf-queue]',
+    selector: '[grfQueue]',
 })
-export class ArrayQueueDirective {
+export class ArrayQueueDirective implements OnInit {
 
-    constructor (private elementRef: ElementRef,
-                 private renderer: Renderer) {
+    constructor(private elementRef: ElementRef,
+                private renderer: Renderer) {
     }
 
     ngOnInit() {
         const nativeElement: HTMLElement = this.elementRef.nativeElement;
-        this.renderer.setElementClass(nativeElement,'queue', true);
+        this.renderer.setElementClass(nativeElement, 'queue', true);
     }
 
 }

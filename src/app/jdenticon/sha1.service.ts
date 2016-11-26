@@ -1,5 +1,4 @@
 import {Injectable} from "@angular/core";
-
 import * as sha1 from "sha1";
 
 @Injectable()

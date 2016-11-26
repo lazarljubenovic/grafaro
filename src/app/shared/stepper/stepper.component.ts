@@ -1,6 +1,12 @@
 import {
-    Component, OnInit, ContentChildren, QueryList, Renderer, ElementRef,
-    AfterContentInit, ViewChild
+    Component,
+    OnInit,
+    ContentChildren,
+    QueryList,
+    Renderer,
+    ElementRef,
+    AfterContentInit,
+    ViewChild
 } from "@angular/core";
 import {StepperStepComponent} from "./stepper-step/stepper-step.component";
 

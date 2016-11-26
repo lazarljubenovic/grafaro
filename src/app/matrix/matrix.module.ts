@@ -1,7 +1,7 @@
-import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {MatrixComponent} from './matrix.component';
-import {MatrixWithLabelsPipe} from './matrix-with-labels.pipe';
+import {NgModule} from "@angular/core";
+import {CommonModule} from "@angular/common";
+import {MatrixComponent} from "./matrix.component";
+import {MatrixWithLabelsPipe} from "./matrix-with-labels.pipe";
 
 @NgModule({
     imports: [

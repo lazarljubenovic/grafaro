@@ -1,7 +1,7 @@
-import {Component, OnInit, Input, ViewChild, AfterViewInit} from "@angular/core";
+import {Component, OnInit, Input} from "@angular/core";
 import {VisNgNetworkOptions} from "@lazarljubenovic/vis-ng/core";
 import {GrfGraphEdgeOptions, GrfGraphNodeOptions} from "./graph.module";
-import * as deepAssign from 'deep-assign';
+import * as deepAssign from "deep-assign";
 import {GraphOptionsService} from "../graph-options.service";
 
 @Component({
@@ -11,6 +11,12 @@ import {GraphOptionsService} from "../graph-options.service";
 })
 export class GraphComponent implements OnInit {
 
+    @Input()
+    public nodes: GrfGraphNodeOptions[] = [];
+
+    @Input()
+    public edges: GrfGraphEdgeOptions[] = [];
+
     private _defaultOptions: VisNgNetworkOptions = {
         nodes: {
             shadow: {
@@ -19,13 +25,13 @@ export class GraphComponent implements OnInit {
                 size: 5,
                 x: 0,
                 y: 2,
-            }
+            },
         },
         edges: {
             smooth: false,
             font: {
                 align: 'top',
-            }
+            },
         },
     };
 
@@ -41,12 +47,6 @@ export class GraphComponent implements OnInit {
         this.resultingOptions = Object.assign({}, this.resultingOptions);
     }
 
-    @Input()
-    public nodes: GrfGraphNodeOptions[] = [];
-
-    @Input()
-    public edges: GrfGraphEdgeOptions[] = [];
-
     constructor(private graphOptionsService: GraphOptionsService) {
     }
 
@@ -54,7 +54,7 @@ export class GraphComponent implements OnInit {
         this.graphOptionsService.optionsChange$.subscribe(options => {
             this._globalOptions = options;
             this.updateResultingOptions();
-        })
+        });
     }
 
 }

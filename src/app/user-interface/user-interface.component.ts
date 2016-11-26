@@ -29,7 +29,8 @@ export class UserInterfaceComponent implements OnInit {
     public chooseTool$: Subject<Actions> = new Subject<Actions>();
     public click$: Subject<ClickPosition> = new Subject<ClickPosition>();
 
-    public actions$: Observable<[ClickPosition, Actions]> = this.click$.withLatestFrom(this.chooseTool$);
+    public actions$: Observable<[ClickPosition, Actions]> =
+        this.click$.withLatestFrom(this.chooseTool$);
 
     constructor(private graphOptionsService: GraphOptionsService) {
     }

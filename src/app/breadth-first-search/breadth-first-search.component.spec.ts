@@ -8,7 +8,7 @@ xdescribe('Component: BreadthFirstSearch', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             providers: [BreadthFirstSearchService]
-        })
+        });
     });
 
     it('should create an instance', () => {

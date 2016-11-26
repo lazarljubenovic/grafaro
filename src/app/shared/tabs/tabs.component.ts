@@ -1,6 +1,12 @@
 import {
-    Component, OnInit, ContentChildren, AfterContentInit, QueryList, ViewChild,
-    ElementRef, Renderer, Input
+    Component,
+    ContentChildren,
+    AfterContentInit,
+    QueryList,
+    ViewChild,
+    ElementRef,
+    Renderer,
+    Input
 } from "@angular/core";
 import {TabComponent} from "./tab/tab.component";
 
@@ -16,7 +22,7 @@ interface Tab {
     templateUrl: './tabs.component.html',
     styleUrls: ['./tabs.component.scss']
 })
-export class TabsComponent implements OnInit, AfterContentInit {
+export class TabsComponent implements AfterContentInit {
 
     @ContentChildren(TabComponent)
     public tabReferences: QueryList<TabComponent>;
@@ -28,6 +34,8 @@ export class TabsComponent implements OnInit, AfterContentInit {
     public initialTabIndex: number = 1;
 
     public currentTab: Tab;
+
+    public tabs: Tab[] = [];
 
     public setCurrentTab(tab: Tab) {
         this.currentTab = tab;
@@ -41,12 +49,7 @@ export class TabsComponent implements OnInit, AfterContentInit {
         this.renderer.attachViewAfter(this.tabOutletRef.nativeElement, [currentStepNativeElement]);
     }
 
-    public tabs: Tab[] = [];
-
     constructor(private renderer: Renderer) {
-    }
-
-    ngOnInit() {
     }
 
     ngAfterContentInit() {

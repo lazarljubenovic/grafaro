@@ -14,5 +14,5 @@ describe('Pipe: Contains', () => {
 
     it(`should return true when element is in the array`, () => {
         expect(transform([1, 2, 3], 1)).toBe(true);
-    })
+    });
 });

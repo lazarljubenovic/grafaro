@@ -32,8 +32,12 @@ export class BreadthFirstSearchService {
                 weight: undefined,
                 isStart: state.rootNode == node,
                 isEnd: false,
-                state: state.currentNode == node ? 'current' : state.visitedNodes.indexOf(node) != -1 ? 'visited' : 'default',
-            }
+                state: state.currentNode == node ?
+                    'current' :
+                    state.visitedNodes.indexOf(node) != -1 ?
+                        'visited' :
+                        'default',
+            };
         });
         const edges: VisNgNetworkOptionsEdges[] = state.edges;
         const queue: string[] = state.currentQueue;

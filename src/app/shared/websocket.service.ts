@@ -4,7 +4,7 @@ import {Message} from "../message";
 
 @Injectable()
 export class WebSocketService {
-    private wsSubject: Subject<any>; //todo type
+    private wsSubject: Subject<any>; // todo type
 
     public send(message: any, type: string) {
         let messageToSend: Message<any> = {

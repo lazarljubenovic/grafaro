@@ -9,8 +9,8 @@ describe(`Queue`, () => {
     });
 
     it(`should create empty queue`, () => {
-       expect(queue.isEmpty).toBeTruthy();
-       expect(queue.length).toBe(0);
+        expect(queue.isEmpty).toBeTruthy();
+        expect(queue.length).toBe(0);
     });
 
     it(`should add and remove a single element`, () => {
