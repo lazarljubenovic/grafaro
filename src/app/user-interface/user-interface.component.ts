@@ -12,7 +12,7 @@ import {Actions, ClickPosition} from "./toolbar/toolbar.component";
 import {GraphOptionsService} from "../graph-options.service";
 import {VisNgNetworkEventArgument} from "@lazarljubenovic/vis-ng/core";
 import {PopupRenameComponent} from "./popup-rename/popup-rename.component";
-import {BreadthFirstSearchComponent} from "../breadth-first-search/breadth-first-search.component";
+import {BreadthFirstSearchService} from "../breadth-first-search/breadth-first-search.service";
 
 @Component({
     selector: 'grf-user-interface',
@@ -68,16 +68,20 @@ export class UserInterfaceComponent implements OnInit {
             position: values.event.pointer.DOM,
         }));
 
-    @ViewChild(BreadthFirstSearchComponent)
-    public breadthFirstSearchComponent: BreadthFirstSearchComponent;
+    public updateStateNumber(action: string) {
+        this.service.updateStateNumber(action);
+    }
 
     constructor(private graphOptionsService: GraphOptionsService,
-                componentFactoryResolver: ComponentFactoryResolver) {
+                componentFactoryResolver: ComponentFactoryResolver,
+                public service: BreadthFirstSearchService) {
         this.popupRenameComponentFactory =
             componentFactoryResolver.resolveComponentFactory(PopupRenameComponent);
     }
 
     ngOnInit() {
+
+        this.service.setGraph(this.graph, this.root);
 
         // Initial settings
         this.graphOptionsService.setOptions([
@@ -89,21 +93,18 @@ export class UserInterfaceComponent implements OnInit {
 
         this.chooseTool$
             .filter(tool => tool === Actions.select)
-            .subscribe(tool => {
+            .subscribe(() => {
                 this.graphOptionsService.setOptions([
                     {name: 'interaction.dragView', value: true},
-                    // {name: 'interaction.selectable', value: true},
                     {name: 'interaction.dragNodes', value: true},
-                    {name: 'nodes.shape', value: 'square'},
                 ]);
             });
 
         this.chooseTool$
             .filter(tool => tool !== Actions.select)
-            .subscribe(tool => {
+            .subscribe(() => {
                 this.graphOptionsService.setOptions([
                     {name: 'interaction.dragView', value: false},
-                    // {name: 'interaction.selectable', value: false},
                     {name: 'interaction.dragNodes', value: false},
                 ]);
             });
@@ -128,7 +129,7 @@ export class UserInterfaceComponent implements OnInit {
                     newName = oldName;
                 }
                 this.graph.setNode(id, newName);
-                this.breadthFirstSearchComponent.update();
+                this.service.setGraph(this.graph, this.root);
                 popupRenameComponent.destroy();
             });
         });

@@ -9,12 +9,33 @@
   ></grf-toolbar>
 
   <div id="graph">
-    <grf-controls (stateNumberChange)="breadthFirstSearch.updateStateNumber($event)"></grf-controls>
-    <grf-breadth-first-search #breadthFirstSearch
-                              [graph]="graph"
-                              [root]="root"
-                              (graphClick)="click$.next($event)"
-    ></grf-breadth-first-search>
+    <grf-controls
+      (stateNumberChange)="updateStateNumber($event)"></grf-controls>
+
+    <div class="bfs">
+      <grf-array grfQueue
+                 class="queue"
+                 [array]="(service.currentState$ | async)?.queue"
+                 [accentColor]="(service.currentState$ | async)?.accentColor"
+                 [primaryColor]="(service.currentState$ | async)?.primaryColor"
+                 [secondaryColor]="(service.currentState$ | async)?.secondaryColor"
+      ></grf-array>
+
+      <grf-array grfQueue
+                 class="solution"
+                 [array]="(service.currentState$ | async)?.solution"
+                 [accentColor]="(service.currentState$ | async)?.accentColor"
+                 [primaryColor]="(service.currentState$ | async)?.primaryColor"
+                 [secondaryColor]="(service.currentState$ | async)?.secondaryColor"
+      ></grf-array>
+
+      <grf-graph [nodes]="(service.currentState$ | async)?.nodes"
+                 [edges]="(service.currentState$ | async)?.edges"
+                 (graphClick)="click$.next($event)"
+      >
+      </grf-graph>
+    </div>
+
   </div>
 
   <grf-sidebar></grf-sidebar>

@@ -1,8 +1,12 @@
 import {Injectable} from "@angular/core";
 import {Graph} from "graphlib";
-import {BreadthFirstSearchState, breadthFirstSearch} from "../algorithms/breadth-first-search";
+import {
+    BreadthFirstSearchState,
+    breadthFirstSearch
+} from "../algorithms/breadth-first-search";
 import {VisNgNetworkOptionsEdges} from "@lazarljubenovic/vis-ng/core";
 import {GrfGraphNodeOptions} from "../graph/graph.module";
+import {ReplaySubject} from "rxjs";
 
 export interface NormalizedState {
     nodes: GrfGraphNodeOptions[];
@@ -18,13 +22,56 @@ export interface NormalizedState {
 @Injectable()
 export class BreadthFirstSearchService {
 
-    public algorithm: Function = breadthFirstSearch;
+    private graph: Graph;
+    private root: string;
+    private algorithm: Function = breadthFirstSearch;
+    private normalizedStates: NormalizedState[];
 
-    public getStates(graph: Graph, root: string): BreadthFirstSearchState[] {
-        return this.algorithm(graph, root);
+    private _currentStateIndex: number = 0;
+    private set currentStateIndex(currentStateIndex: number) {
+        this._currentStateIndex = currentStateIndex;
+        this.onCurrentStateChange();
     }
 
-    public getNormalizedState(state: BreadthFirstSearchState): NormalizedState {
+    private get currentStateIndex(): number {
+        return this._currentStateIndex;
+    }
+
+    public currentState$ = new ReplaySubject<NormalizedState>(1);
+
+    public setGraph(graph: Graph, root: string) {
+        if (root == null || graph == null) {
+            return;
+        }
+        this.graph = graph;
+        this.root = root;
+        this.normalizedStates = this.algorithm(this.graph, this.root)
+            .map(state => this.getNormalizedState(state));
+        this.onCurrentStateChange();
+    }
+
+    private onCurrentStateChange(): void {
+        this.currentState$.next(this.normalizedStates[this.currentStateIndex]);
+    }
+
+    public updateStateNumber(action: string): void {
+        switch (action) {
+            case 'next':
+                this.currentStateIndex++;
+                break;
+            case 'prev':
+                this.currentStateIndex--;
+                break;
+            case 'first':
+                this.currentStateIndex = 0;
+                break;
+            case 'last':
+                this.currentStateIndex = this.normalizedStates.length - 1;
+                break;
+        }
+    }
+
+    private getNormalizedState(state: BreadthFirstSearchState): NormalizedState {
         const nodes: GrfGraphNodeOptions[] = state.nodes.map((node, i) => {
             return {
                 id: state.nodeIds[i],
@@ -45,7 +92,15 @@ export class BreadthFirstSearchService {
         const primaryColor: string[] = [state.currentNeighbor];
         const secondaryColor: string[] = [];
 
-        return {nodes, edges, queue, solution, accentColor, primaryColor, secondaryColor};
+        return {
+            nodes,
+            edges,
+            queue,
+            solution,
+            accentColor,
+            primaryColor,
+            secondaryColor,
+        };
     }
 
     constructor() {
