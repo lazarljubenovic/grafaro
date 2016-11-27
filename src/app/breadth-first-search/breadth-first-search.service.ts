@@ -58,9 +58,15 @@ export class BreadthFirstSearchService {
         switch (action) {
             case 'next':
                 this.currentStateIndex++;
+                if (this.currentStateIndex > this.normalizedStates.length - 1) {
+                    this.currentStateIndex = this.normalizedStates.length - 1;
+                }
                 break;
             case 'prev':
                 this.currentStateIndex--;
+                if (this.currentStateIndex < 0) {
+                    this.currentStateIndex = 0;
+                }
                 break;
             case 'first':
                 this.currentStateIndex = 0;
