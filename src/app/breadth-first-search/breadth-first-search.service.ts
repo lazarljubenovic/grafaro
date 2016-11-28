@@ -101,12 +101,11 @@ export class BreadthFirstSearchService {
         return this.graph.node(nodeId);
     }
 
-    // TODO Use to disallow renaming
-    // private existsNodeWithLabel(label: string): boolean {
-    //     return this.graph.nodes()
-    //         .map(nodeId => this.graph.node(nodeId))
-    //         .find(nodeLabel => nodeLabel === label) != null;
-    // }
+    private existsNodeWithLabel(label: string): boolean {
+        return this.graph.nodes()
+            .map(nodeId => this.graph.node(nodeId))
+            .find(nodeLabel => nodeLabel === label) != null;
+    }
 
     private suggestNewNodeName(): string {
         const labels: string[] = this.graph.nodes()
@@ -133,6 +132,9 @@ export class BreadthFirstSearchService {
     public renameNode(oldNodeLabel: string, newNodeLabel: string): void {
         if (newNodeLabel === '' || newNodeLabel == oldNodeLabel) {
             return;
+        }
+        if (this.existsNodeWithLabel(newNodeLabel)) {
+            throw new Error(`Node with label ${newNodeLabel} already exists.`);
         }
         const id: string = this.getNodeId(oldNodeLabel);
         this.graph.setNode(id, newNodeLabel);

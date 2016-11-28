@@ -112,7 +112,11 @@ export class UserInterfaceComponent implements OnInit {
             popupRenameComponent.instance.previousValue = oldLabel;
             popupRenameComponent.changeDetectorRef.detectChanges();
             popupRenameComponent.instance.name.subscribe(newLabel => {
-                this.service.renameNode(oldLabel, newLabel);
+                try {
+                    this.service.renameNode(oldLabel, newLabel);
+                } catch (e) {
+                    console.error(`Rename unsuccessful. Reason: ${e}`);
+                }
                 popupRenameComponent.destroy();
             });
         });
