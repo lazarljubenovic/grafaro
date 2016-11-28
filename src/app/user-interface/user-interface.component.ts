@@ -57,6 +57,17 @@ export class UserInterfaceComponent implements OnInit {
             position: values.event.pointer.DOM,
         }));
 
+    private selectedNode: string;
+    private linkNodesNode$: Observable<string> = this.actions$
+        .filter(values => values.action == Actions.connect && values.event.nodes.length != 0)
+        .map(values => values.event.nodes[0].toString());
+    private linkNodesBackground$: Observable<any> = this.actions$
+        .filter(values => values.action == Actions.connect && values.event.nodes.length == 0);
+
+    private linkTwoNodes(first: string, second: string): void {
+        this.service.linkNodes(first, second);
+    }
+
     public updateStateNumber(action: string) {
         this.service.updateStateNumber(action);
     }
@@ -124,6 +135,19 @@ export class UserInterfaceComponent implements OnInit {
                 }
                 popupRenameComponent.destroy();
             });
+        });
+
+        this.linkNodesBackground$.subscribe(() => {
+            this.selectedNode = null;
+        });
+
+        this.linkNodesNode$.subscribe(node => {
+            if (this.selectedNode == null) {
+                this.selectedNode = node;
+            } else if (this.selectedNode) {
+                this.linkTwoNodes(this.selectedNode, node);
+                this.selectedNode = null;
+            }
         });
 
     }
