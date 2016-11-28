@@ -6,7 +6,6 @@ import {
     ViewContainerRef,
     ComponentFactory
 } from "@angular/core";
-import {Graph} from "graphlib";
 import {Subject, Observable} from "rxjs";
 import {Actions, ClickPosition} from "./toolbar/toolbar.component";
 import {GraphOptionsService} from "../graph-options.service";
@@ -20,31 +19,6 @@ import {BreadthFirstSearchService} from "../breadth-first-search/breadth-first-s
     styleUrls: ['./user-interface.component.scss']
 })
 export class UserInterfaceComponent implements OnInit {
-
-    public graph = new Graph({directed: false})
-        .setNode('A', 'A')
-        .setNode('B', 'B')
-        .setNode('C', 'C')
-        .setNode('D', 'D')
-        .setNode('E', 'E')
-        .setNode('F', 'F')
-        .setNode('G', 'G')
-        .setNode('H', 'H')
-        .setNode('I', 'I')
-        .setNode('J', 'J')
-        .setEdge('A', 'B', '1')
-        .setEdge('A', 'C', '2')
-        .setEdge('A', 'D', '3')
-        .setEdge('B', 'E', '4')
-        .setEdge('C', 'F', '5')
-        .setEdge('C', 'G', '6')
-        .setEdge('G', 'H', '7')
-        .setEdge('E', 'J', '8')
-        .setEdge('J', 'I', '9')
-        .setEdge('D', 'I', '10')
-        .setEdge('G', 'I', '11');
-
-    public root: string = 'A';
 
     public chooseTool$ = new Subject<Actions>();
     public click$ = new Subject<VisNgNetworkEventArgument>();
@@ -92,8 +66,6 @@ export class UserInterfaceComponent implements OnInit {
 
     ngOnInit() {
 
-        this.service.setGraph(this.graph, this.root);
-
         // Initial settings
         this.graphOptionsService.setOptions([
             {name: 'physics.enabled', value: false},
@@ -126,28 +98,21 @@ export class UserInterfaceComponent implements OnInit {
             });
 
         this.addNode$.subscribe(action => {
-            const id = (Math.random() + 1.5).toString(36).slice(0, 5);
-            this.graph.setNode(id, action.suggestedName);
-            this.service.setGraph(this.graph, this.root);
-            this.service.setPosition(id, action.position);
+            this.service.addNode(action.position);
         });
 
         this.renameNode$.subscribe(action => {
             const id: string = action.node;
-            const oldName: string = this.graph.node(id);
+            const oldLabel: string = this.service.getNodeLabel(id);
             const popupRenameComponent =
                 this.viewContainerRef.createComponent(this.popupRenameComponentFactory);
             popupRenameComponent.instance.x = 80 + action.position.x + 'px';
             popupRenameComponent.instance.y = 80 + action.position.y + 'px';
             popupRenameComponent.instance.direction = 'up';
-            popupRenameComponent.instance.previousValue = oldName;
+            popupRenameComponent.instance.previousValue = oldLabel;
             popupRenameComponent.changeDetectorRef.detectChanges();
-            popupRenameComponent.instance.name.subscribe(newName => {
-                if (newName === '') {
-                    newName = oldName;
-                }
-                this.graph.setNode(id, newName);
-                this.service.setGraph(this.graph, this.root);
+            popupRenameComponent.instance.name.subscribe(newLabel => {
+                this.service.renameNode(oldLabel, newLabel);
                 popupRenameComponent.destroy();
             });
         });

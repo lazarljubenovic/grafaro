@@ -23,15 +23,40 @@ export interface NormalizedState {
 @Injectable()
 export class BreadthFirstSearchService {
 
-    private graph: Graph;
-    private root: string;
+    private id: number = 1000;
+
+    public graph = new Graph({directed: false})
+        .setNode('100', 'A')
+        .setNode('101', 'B')
+        .setNode('102', 'C')
+        .setNode('103', 'D')
+        .setNode('104', 'E')
+        .setNode('105', 'F')
+        .setNode('106', 'G')
+        .setNode('107', 'H')
+        .setNode('108', 'I')
+        .setNode('109', 'J')
+        .setEdge('100', '101', '1')
+        .setEdge('100', '102', '2')
+        .setEdge('100', '103', '3')
+        .setEdge('101', '104', '4')
+        .setEdge('102', '105', '5')
+        .setEdge('102', '106', '6')
+        .setEdge('106', '107', '7')
+        .setEdge('104', '109', '8')
+        .setEdge('109', '108', '9')
+        .setEdge('103', '108', '10')
+        .setEdge('106', '108', '11');
+
+    public root: string = '100';
+
     private algorithm: Function = breadthFirstSearch;
     private normalizedStates: NormalizedState[];
 
     private _currentStateIndex: number = 0;
     private set currentStateIndex(currentStateIndex: number) {
         this._currentStateIndex = currentStateIndex;
-        this.onCurrentStateChange();
+        this.onGraphChange();
     }
 
     private get currentStateIndex(): number {
@@ -40,18 +65,13 @@ export class BreadthFirstSearchService {
 
     public currentState$ = new ReplaySubject<NormalizedState>(1);
 
-    public setGraph(graph: Graph, root: string) {
-        if (root == null || graph == null) {
-            return;
-        }
-        this.graph = graph;
-        this.root = root;
+    public setGraph() {
         this.normalizedStates = this.algorithm(this.graph, this.root)
             .map(state => this.getNormalizedState(state));
-        this.onCurrentStateChange();
+        this.onGraphChange();
     }
 
-    private onCurrentStateChange(): void {
+    private onGraphChange(): void {
         this.currentState$.next(this.normalizedStates[this.currentStateIndex]);
     }
 
@@ -72,10 +92,57 @@ export class BreadthFirstSearchService {
         }
     }
 
-    public setPosition(nodeId: string, position: ClickPosition): void {
+    private getNodeId(nodeLabel: string): string {
+        return this.graph.nodes()
+            .find(nodeId => this.graph.node(nodeId) == nodeLabel);
+    }
+
+    public getNodeLabel(nodeId: string): string {
+        return this.graph.node(nodeId);
+    }
+
+    // TODO Use to disallow renaming
+    // private existsNodeWithLabel(label: string): boolean {
+    //     return this.graph.nodes()
+    //         .map(nodeId => this.graph.node(nodeId))
+    //         .find(nodeLabel => nodeLabel === label) != null;
+    // }
+
+    private suggestNewNodeName(): string {
+        const labels: string[] = this.graph.nodes()
+            .map(nodeId => this.graph.node(nodeId))
+            .sort();
+        const lastLabel: string = labels[labels.length - 1];
+        if (!Number.isNaN(Number.parseInt(lastLabel))) {
+            return lastLabel + 1;
+        } else {
+            const lastCharCode: number = lastLabel.slice(-1).charCodeAt(0);
+            const newLastChar: string = String.fromCharCode(lastCharCode + 1);
+            return lastLabel.slice(0, -1).concat(newLastChar);
+        }
+    }
+
+    public addNode(position: ClickPosition): void {
+        const id: string = (++this.id).toString();
+        const label: string = this.suggestNewNodeName();
+        this.graph.setNode(id, label);
+        this.setGraph();
+        this.setPosition(label, position);
+    }
+
+    public renameNode(oldNodeLabel: string, newNodeLabel: string): void {
+        if (newNodeLabel === '' || newNodeLabel == oldNodeLabel) {
+            return;
+        }
+        const id: string = this.getNodeId(oldNodeLabel);
+        this.graph.setNode(id, newNodeLabel);
+        this.setGraph();
+    }
+
+    private setPosition(nodeLabel: string, position: ClickPosition): void {
         this.normalizedStates[this.currentStateIndex].nodes
-            .find(node => node.id == nodeId).position = position;
-        this.currentState$.next(this.normalizedStates[this.currentStateIndex]);
+            .find(node => node.label == nodeLabel).position = position;
+        this.onGraphChange();
     }
 
     private getNormalizedState(state: BreadthFirstSearchState): NormalizedState {
@@ -111,6 +178,7 @@ export class BreadthFirstSearchService {
     }
 
     constructor() {
+        this.setGraph();
     }
 
 }
