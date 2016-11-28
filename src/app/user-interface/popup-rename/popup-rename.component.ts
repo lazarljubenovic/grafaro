@@ -25,8 +25,14 @@ export class PopupRenameComponent implements OnInit {
 
     public name = new Subject<string>();
 
-    public onKeyPress(event: KeyboardEvent): void {
-        if (event.key == 'Enter') {
+    public onKeyDown(eventKey: string): void {
+        if (eventKey == 'Escape') {
+            this.onRename();
+        }
+    }
+
+    public onKeyPress(eventKey: string): void {
+        if (eventKey == 'Enter') {
             this.onRename();
         }
     }
