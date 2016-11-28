@@ -135,6 +135,11 @@ export class BreadthFirstSearchService {
         this.setPosition(label, position);
     }
 
+    public removeNode(nodeId: string): void {
+        this.graph.removeNode(nodeId);
+        this.setGraph();
+    }
+
     public renameNode(oldNodeLabel: string, newNodeLabel: string): void {
         if (newNodeLabel === '' || newNodeLabel == oldNodeLabel) {
             return;
