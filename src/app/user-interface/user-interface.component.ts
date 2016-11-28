@@ -12,6 +12,7 @@ import {GraphOptionsService} from "../graph-options.service";
 import {VisNgNetworkEventArgument} from "@lazarljubenovic/vis-ng/core";
 import {PopupRenameComponent} from "./popup-rename/popup-rename.component";
 import {BreadthFirstSearchService} from "../breadth-first-search/breadth-first-search.service";
+import {ToastService} from "../toast/toast.service";
 
 @Component({
     selector: 'grf-user-interface',
@@ -32,6 +33,9 @@ export class UserInterfaceComponent implements OnInit {
 
     @ViewChild('renamePopupOutlet', {read: ViewContainerRef})
     public viewContainerRef: ViewContainerRef;
+
+    @ViewChild('toastOutlet', {read: ViewContainerRef})
+    public toastOutlet: ViewContainerRef;
 
     public popupRenameComponentFactory: ComponentFactory<PopupRenameComponent>;
 
@@ -59,7 +63,8 @@ export class UserInterfaceComponent implements OnInit {
 
     constructor(private graphOptionsService: GraphOptionsService,
                 componentFactoryResolver: ComponentFactoryResolver,
-                public service: BreadthFirstSearchService) {
+                public service: BreadthFirstSearchService,
+                private toastService: ToastService) {
         this.popupRenameComponentFactory =
             componentFactoryResolver.resolveComponentFactory(PopupRenameComponent);
     }
@@ -115,7 +120,7 @@ export class UserInterfaceComponent implements OnInit {
                 try {
                     this.service.renameNode(oldLabel, newLabel);
                 } catch (e) {
-                    console.error(`Rename unsuccessful. Reason: ${e}`);
+                    this.toastService.display(`Rename unsuccessful. ${e}`, this.toastOutlet);
                 }
                 popupRenameComponent.destroy();
             });

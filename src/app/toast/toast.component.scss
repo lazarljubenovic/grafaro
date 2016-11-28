@@ -1,0 +1,21 @@
+@import "../global";
+
+$bottom-margin: 36px;
+$padding: 2ex 2em;
+
+:host {
+  display: flex;
+  justify-content: center;
+  position: fixed;
+  width: 100vw;
+  bottom: $bottom-margin;
+
+  div {
+    display: block;
+    padding: $padding;
+    background-color: mix(black, white, 86%);
+    border-radius: 4px;
+    font-family: $font;
+    color: $white;
+  }
+}

@@ -14,6 +14,7 @@ import {ArrayModule} from "../array/array.module";
 import {JdenticonModule} from "../jdenticon/jdenticon.module";
 import {PopupRenameComponent} from "./popup-rename/popup-rename.component";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {ToastModule} from "../toast/toast.module";
 
 @NgModule({
     imports: [
@@ -26,6 +27,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
         MatrixModule,
         ArrayModule,
         JdenticonModule,
+        ToastModule,
     ],
     declarations: [
         UserInterfaceComponent,
