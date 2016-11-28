@@ -9,6 +9,10 @@ import {ColorThemeService} from "../color-theme.service";
 export interface GrfGraphNodeOptions {
     id: string;
     label: string;
+    position?: {
+        x: number;
+        y: number;
+    };
     isStart: boolean;
     isEnd: boolean;
     isAccentColor: boolean;

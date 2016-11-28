@@ -61,6 +61,17 @@ export class UserInterfaceComponent implements OnInit {
 
     public popupRenameComponentFactory: ComponentFactory<PopupRenameComponent>;
 
+    public addNode$: Observable<{suggestedName: string, position: ClickPosition}> = this.actions$
+        .filter(values => {
+            return values.action == Actions.add
+                && values.event.nodes.length == 0
+                && values.event.edges.length == 0;
+        })
+        .map(values => ({
+            suggestedName: 'X', // TODO
+            position: values.event.pointer.canvas,
+        }));
+
     public renameNode$: Observable<{node: string, position: ClickPosition}> = this.actions$
         .filter(values => values.action == Actions.rename && values.event.nodes.length != 0)
         .map(values => ({
@@ -113,6 +124,13 @@ export class UserInterfaceComponent implements OnInit {
             .subscribe(values => {
                 console.log(values);
             });
+
+        this.addNode$.subscribe(action => {
+            const id = (Math.random() + 1.5).toString(36).slice(0, 5);
+            this.graph.setNode(id, action.suggestedName);
+            this.service.setGraph(this.graph, this.root);
+            this.service.setPosition(id, action.position);
+        });
 
         this.renameNode$.subscribe(action => {
             const id: string = action.node;

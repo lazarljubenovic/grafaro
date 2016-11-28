@@ -7,6 +7,7 @@ import {
 import {VisNgNetworkOptionsEdges} from "@lazarljubenovic/vis-ng/core";
 import {GrfGraphNodeOptions} from "../graph/graph.module";
 import {ReplaySubject} from "rxjs";
+import {ClickPosition} from "../user-interface/toolbar/toolbar.component";
 
 export interface NormalizedState {
     nodes: GrfGraphNodeOptions[];
@@ -69,6 +70,12 @@ export class BreadthFirstSearchService {
                 this.currentStateIndex = this.normalizedStates.length - 1;
                 break;
         }
+    }
+
+    public setPosition(nodeId: string, position: ClickPosition): void {
+        this.normalizedStates[this.currentStateIndex].nodes
+            .find(node => node.id == nodeId).position = position;
+        this.currentState$.next(this.normalizedStates[this.currentStateIndex]);
     }
 
     private getNormalizedState(state: BreadthFirstSearchState): NormalizedState {

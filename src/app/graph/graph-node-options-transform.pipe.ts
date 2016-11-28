@@ -43,12 +43,12 @@ export class GraphNodeOptionsTransformPipe implements PipeTransform {
 
         const shape = 'circle';
 
-        return {
+        return Object.assign({
             id: options.id,
             label: options.label,
             color,
             shape,
-        };
+        }, options.position);
     }
 
 }
