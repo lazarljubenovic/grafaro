@@ -50,6 +50,10 @@ export class UserInterfaceComponent implements OnInit {
             position: values.event.pointer.canvas,
         }));
 
+    private removeNode$: Observable<string> = this.actions$
+        .filter(values => values.action == Actions.remove && values.event.nodes.length != 0)
+        .map(values => values.event.nodes[0].toString());
+
     public renameNode$: Observable<{node: string, position: ClickPosition}> = this.actions$
         .filter(values => values.action == Actions.rename && values.event.nodes.length != 0)
         .map(values => ({
@@ -115,6 +119,10 @@ export class UserInterfaceComponent implements OnInit {
 
         this.addNode$.subscribe(action => {
             this.service.addNode(action.position);
+        });
+
+        this.removeNode$.subscribe(nodeId => {
+            this.service.removeNode(nodeId);
         });
 
         this.renameNode$.subscribe(action => {

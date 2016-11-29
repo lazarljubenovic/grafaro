@@ -68,6 +68,7 @@ export class BreadthFirstSearchService {
     public setGraph() {
         this.normalizedStates = this.algorithm(this.graph, this.root)
             .map(state => this.getNormalizedState(state));
+        this.fixCurrentStateIndex();
         this.onGraphChange();
     }
 
@@ -79,15 +80,9 @@ export class BreadthFirstSearchService {
         switch (action) {
             case 'next':
                 this.currentStateIndex++;
-                if (this.currentStateIndex > this.normalizedStates.length - 1) {
-                    this.currentStateIndex = this.normalizedStates.length - 1;
-                }
                 break;
             case 'prev':
                 this.currentStateIndex--;
-                if (this.currentStateIndex < 0) {
-                    this.currentStateIndex = 0;
-                }
                 break;
             case 'first':
                 this.currentStateIndex = 0;
@@ -95,6 +90,16 @@ export class BreadthFirstSearchService {
             case 'last':
                 this.currentStateIndex = this.normalizedStates.length - 1;
                 break;
+        }
+        this.fixCurrentStateIndex();
+    }
+
+    private fixCurrentStateIndex(): void {
+        if (this.currentStateIndex > this.normalizedStates.length - 1) {
+            this.currentStateIndex = this.normalizedStates.length - 1;
+        }
+        if (this.currentStateIndex < 0) {
+            this.currentStateIndex = 0;
         }
     }
 
@@ -133,6 +138,14 @@ export class BreadthFirstSearchService {
         this.graph.setNode(id, label);
         this.setGraph();
         this.setPosition(label, position);
+    }
+
+    public removeNode(nodeId: string): void {
+        this.graph.removeNode(nodeId);
+        if (nodeId == this.root) {
+            this.root = this.graph.nodes()[0];
+        }
+        this.setGraph();
     }
 
     public renameNode(oldNodeLabel: string, newNodeLabel: string): void {
