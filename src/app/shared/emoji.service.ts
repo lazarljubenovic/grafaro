@@ -1,5 +1,7 @@
 import {Injectable} from "@angular/core";
 
+const delimiterRegex = /(\:[\w\-\+]+\:)/g;
+
 @Injectable()
 export class EmojiService {
 
@@ -884,6 +886,14 @@ export class EmojiService {
         , "zzz": "💤"
     };
 
+    private existsEmoji(emojiName: string): boolean {
+        return this.emojiList[emojiName] != null;
+    }
+
+    private getEmoji(emojiName: string): string {
+        return this.emojiList[emojiName];
+    }
+
     public transformTextLike(text: string): string {
         return [' ', ' '].join(text)
             .replace(':)', '😊')
@@ -898,10 +908,21 @@ export class EmojiService {
 
     // todo: don't blindly remove all :'s
     public transformUtf8(text: string): string {
-        return text
-            .split(':')
-            .map(s => this.emojiList[s] == null ? s : this.emojiList[s])
-            .join(' ');
+        let output = '';
+
+        output += text.replace(delimiterRegex, match => {
+            const emojiName = match.replace(/:/g, '');
+            if (!this.existsEmoji(emojiName)) {
+                return match;
+            }
+            return this.getEmoji(emojiName);
+        });
+
+        return output;
+    }
+
+    public transform(text: string): string {
+        return this.transformTextLike(this.transformUtf8(text));
     }
 
     constructor() {

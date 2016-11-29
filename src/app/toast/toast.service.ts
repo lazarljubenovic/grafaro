@@ -2,7 +2,8 @@ import {
     Injectable,
     ComponentFactoryResolver,
     ViewContainerRef,
-    Inject, ComponentRef
+    Inject,
+    ComponentRef
 } from "@angular/core";
 import {ReplaySubject, Subscription} from "rxjs";
 import {ToastComponent} from "./toast.component";

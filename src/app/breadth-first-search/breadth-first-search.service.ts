@@ -109,8 +109,8 @@ export class BreadthFirstSearchService {
 
     private existsNodeWithLabel(label: string): boolean {
         return this.graph.nodes()
-            .map(nodeId => this.graph.node(nodeId))
-            .find(nodeLabel => nodeLabel === label) != null;
+                .map(nodeId => this.graph.node(nodeId))
+                .find(nodeLabel => nodeLabel === label) != null;
     }
 
     private suggestNewNodeName(): string {

@@ -7,7 +7,8 @@ import {ColorThemeService} from "../color-theme.service";
 })
 export class GraphNodeOptionsTransformPipe implements PipeTransform {
 
-    constructor(private theme: ColorThemeService) {}
+    constructor(private theme: ColorThemeService) {
+    }
 
     transform(options: GrfGraphNodeOptions): any {
         const colorVisited = {

@@ -6,7 +6,10 @@ import {
     ComponentFactoryResolver,
     ComponentRef
 } from "@angular/core";
-import {ChatMessageInfo, ChatMessageComponent} from "./chat-message/chat-message.component";
+import {
+    ChatMessageInfo,
+    ChatMessageComponent
+} from "./chat-message/chat-message.component";
 import {ChatService} from "./chat.service";
 import {Observable} from "rxjs";
 
@@ -35,7 +38,7 @@ export class ChatComponent implements OnInit {
     public onKeyUp(key: string) {
         if (key == 'Enter') {
             let chatMessage: ChatMessageInfo = {
-            senderHandle: 'lazar',
+                senderHandle: 'lazar',
                 senderHash: '231230213412',
                 senderName: 'Lazar Ljubenović',
                 timeStamp: new Date(),
