@@ -55,4 +55,43 @@ describe('Service: Emoji', () => {
 
     });
 
+    describe(`Transform Text-Like repersentation of emojis`, () => {
+
+        it(`should work for simple emoji`,
+            inject([EmojiService], (service: EmojiService) => {
+                const plainText = `:)`;
+                const emojiText = `😊`;
+                expect(service.transformTextLike(plainText)).toBe(emojiText);
+            }));
+
+        it(`should work for two emojis`,
+            inject([EmojiService], (service: EmojiService) => {
+                const plainText = `:) :)`;
+                const emojiText = `😊 😊`;
+                expect(service.transformTextLike(plainText)).toBe(emojiText);
+            }));
+
+        it(`should work text and emoji`,
+            inject([EmojiService], (service: EmojiService) => {
+                const plainText = `some text (parans :) to confuse) :)`;
+                const emojiText = `some text (parans 😊 to confuse) 😊`;
+                expect(service.transformTextLike(plainText)).toBe(emojiText);
+            }));
+
+        it(`should work for the unescaped heart`,
+            inject([EmojiService], (service: EmojiService) => {
+                const plainText = `<3`;
+                const emojiText = `❤`;
+                expect(service.transformTextLike(plainText)).toBe(emojiText);
+            }));
+
+        it(`should work for the escaped heart`,
+            inject([EmojiService], (service: EmojiService) => {
+                const plainText = `&lt;3`;
+                const emojiText = `❤`;
+                expect(service.transformTextLike(plainText)).toBe(emojiText);
+            }));
+
+    });
+
 });

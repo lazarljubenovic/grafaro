@@ -895,15 +895,16 @@ export class EmojiService {
     }
 
     public transformTextLike(text: string): string {
-        return [' ', ' '].join(text)
-            .replace(':)', '😊')
-            .replace(':D', '😁')
-            .replace('xD', '😆')
-            .replace(':P', '😜')
-            .replace(':*', '😙')
-            .replace('<3', '❤')
-            .replace(';)', '😉')
-            .replace(':(', '😟');
+        return text
+            .replace(/:\)/g, '😊')
+            .replace(/:D/g, '😁')
+            .replace(/xD/g, '😆')
+            .replace(/:P/g, '😜')
+            .replace(/:\*/g, '😙')
+            .replace(/<3/g, '❤')
+            .replace(/&lt;3/g, '❤')
+            .replace(/;\)/g, '😉')
+            .replace(/:\(/g, '😟');
     }
 
     // todo: don't blindly remove all :'s

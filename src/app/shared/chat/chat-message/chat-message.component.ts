@@ -33,12 +33,9 @@ export class ChatMessageComponent implements OnInit {
     public parsedMessageHtml: string;
 
     private updateParsed() {
-
-        this.parsedMessageHtml = this.emojiService.transformUtf8(
-            this.emojiService.transformTextLike(
-                this.markdownService.transform(this.info.message)
-            )
-        );
+        const message: string = this.info.message;
+        const markdown: string = this.markdownService.transform(message);
+        this.parsedMessageHtml = this.emojiService.transform(markdown);
     }
 
     constructor(private markdownService: MarkdownService,
