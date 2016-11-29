@@ -45,4 +45,10 @@ describe(`Stack`, () => {
         expect(stack.toArray()).toEqual(['H', 'E', 'A', 'D']);
     });
 
+    it(`should check if stack contains an element`, () => {
+        stack.push('H').push('E').push('A').push('D');
+        expect(stack.contains('H')).toBe(true);
+        expect(stack.contains('X')).toBe(false);
+    });
+
 });

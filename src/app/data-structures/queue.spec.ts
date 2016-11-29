@@ -38,12 +38,17 @@ describe(`Queue`, () => {
         expect(queue.length).toBe(4);
         expect(queue.deque()).toBe('H');
         expect(queue.length).toBe(3);
-
     });
 
     it(`should convert to array`, () => {
         queue.enqueue('H').enqueue('E').enqueue('A').enqueue('D');
         expect(queue.toArray()).toEqual(['H', 'E', 'A', 'D']);
+    });
+
+    it(`should check if queue contains an element`, () => {
+        queue.enqueue('H').enqueue('E').enqueue('A').enqueue('D');
+        expect(queue.contains('H')).toBe(true);
+        expect(queue.contains('X')).toBe(false);
     });
 
 });
