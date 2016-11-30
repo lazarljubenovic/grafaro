@@ -15,6 +15,7 @@ import {JdenticonModule} from "../jdenticon/jdenticon.module";
 import {PopupRenameComponent} from "./popup-rename/popup-rename.component";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {ToastModule} from "../toast/toast.module";
+import {AlgorithmModule} from "../algorithm/algorithm.module";
 
 @NgModule({
     imports: [
@@ -28,6 +29,7 @@ import {ToastModule} from "../toast/toast.module";
         ArrayModule,
         JdenticonModule,
         ToastModule,
+        AlgorithmModule,
     ],
     declarations: [
         UserInterfaceComponent,

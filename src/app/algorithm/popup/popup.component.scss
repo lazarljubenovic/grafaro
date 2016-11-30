@@ -1,0 +1,32 @@
+@import '../../global';
+
+$background-color: mix(black, white, 86%);
+
+:host {
+  position: fixed;
+  width: 0;
+  height: 0;
+  overflow: visible;
+  font-family: $font;
+  top: 500px;
+  right: 300px;
+
+  div {
+    position: absolute;
+    background-color: $background-color;
+    border-radius: 6px;
+    padding: .8em 1em;
+    color: $white;
+
+    &:after {
+      position: absolute;
+      content: '';
+      width: 0;
+      height: 4px;
+      border: solid 4px transparent;
+      border-top-color: $background-color;
+      bottom: -12px;
+      left: calc(50% - #{4px});
+    }
+  }
+}

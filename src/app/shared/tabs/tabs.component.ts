@@ -31,7 +31,7 @@ export class TabsComponent implements AfterContentInit {
     public tabOutletRef: ElementRef;
 
     @Input()
-    public initialTabIndex: number = 1;
+    public initialTabIndex: number = 0;
 
     public currentTab: Tab;
 
