@@ -2,6 +2,17 @@
 
 .algorithm-with-line-numbers {
   display: flex;
+  position: relative;
+
+  .line-number-indicator {
+    width: 3ex;
+    height: 3ex;
+    border-radius: 50%;
+    background-color: rgba(get-color('accent'), .5);
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
 
   .line-numbers {
     display: flex;
@@ -11,8 +22,10 @@
     font-family: monospace;
     font-weight: bold;
     line-height: 3ex;
+    height: 3ex;
+    width: 3ex;
     padding-right: .5em;
-    text-align: right;
+    text-align: center;
   }
 
   pre {

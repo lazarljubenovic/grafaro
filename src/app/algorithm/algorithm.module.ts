@@ -5,6 +5,7 @@ import {PopupComponent} from "./popup/popup.component";
 import {ArrayComponent} from "./array/array.component";
 import {UtilPipesModule} from "../util-pipes/util-pipes.module";
 import {PopupPositionPipe} from "./popup-position.pipe";
+import {LineNumberStylePipe} from "./line-number-style.pipe";
 
 @NgModule({
     imports: [
@@ -16,6 +17,7 @@ import {PopupPositionPipe} from "./popup-position.pipe";
         PopupComponent,
         ArrayComponent,
         PopupPositionPipe,
+        LineNumberStylePipe,
     ],
     exports: [
         AlgorithmComponent,
