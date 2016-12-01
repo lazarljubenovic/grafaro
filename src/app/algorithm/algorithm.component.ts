@@ -20,6 +20,15 @@ export class AlgorithmComponent implements OnInit {
   return visited;
 }`;
 
+    public isTooltipVisible: boolean = true;
+
+    public mockArray = ['A', 'B', 'C', 'D'];
+    public highlights = ['B', 'C'];
+
+    public removeFromArray(item: string): void {
+        this.mockArray = this.mockArray.filter(e => e != item);
+    }
+
     constructor() {
     }
 

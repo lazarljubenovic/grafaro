@@ -1,0 +1,52 @@
+@import '../../global';
+
+$marble-size: 27px;
+
+@function get-border-color($color) {
+  @return mix(white, $color, 80%);
+}
+
+@mixin marble-colors($color) {
+  background-color: $color;
+  border: solid 1px get-border-color($color);
+}
+
+:host {
+  display: block;
+  font-family: $font;
+
+  ul {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    list-style-type: none;
+    margin-right: -$marble-size / 3; // emulates last item having no margin
+
+    li {
+      width: $marble-size;
+      height: $marble-size;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding-right: $marble-size / 3;
+
+      &.highlighted .outer {
+        @include marble-colors(get-color('primary'));
+      }
+
+      .outer {
+        @include force-square($marble-size);
+        @include marble-colors(mix(white, black, 86%));
+        border-radius: 50%;
+        color: $black;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .inner {
+          display: inline-block;
+        }
+      }
+    }
+  }
+}

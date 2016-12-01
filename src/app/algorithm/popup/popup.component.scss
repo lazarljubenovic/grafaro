@@ -3,6 +3,7 @@
 $background-color: mix(black, white, 86%);
 
 :host {
+  display: block;
   position: fixed;
   width: 0;
   height: 0;
@@ -17,6 +18,7 @@ $background-color: mix(black, white, 86%);
     border-radius: 6px;
     padding: .8em 1em;
     color: $white;
+    transform: translate(-50%, -100%);
 
     &:after {
       position: absolute;

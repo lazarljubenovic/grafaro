@@ -1,3 +1,14 @@
-<grf-popup></grf-popup>
+<grf-popup *ngIf="isTooltipVisible">
+  <grf-array [array]="mockArray"
+             [highlightedLetters]="highlights"
+  ></grf-array>
+</grf-popup>
 
 <pre><code>{{code}}</code></pre>
+
+<button (click)="isTooltipVisible = !isTooltipVisible">Toggle</button>
+<hr>
+<button (click)="removeFromArray('A')">Remove A</button>
+<button (click)="removeFromArray('B')">Remove B</button>
+<button (click)="removeFromArray('C')">Remove C</button>
+<button (click)="removeFromArray('D')">Remove D</button>

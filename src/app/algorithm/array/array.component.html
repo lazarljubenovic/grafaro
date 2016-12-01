@@ -1,0 +1,10 @@
+<ul>
+  <li *ngFor="let item of array"
+      [class.highlighted]="highlightedLetters | contains : item"
+      [@element]="true"
+  >
+    <span class="outer">
+      <span class="inner">{{item}}</span>
+    </span>
+  </li>
+</ul>
