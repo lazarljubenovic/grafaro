@@ -6,7 +6,8 @@ import {
     style,
     state,
     trigger,
-    HostBinding
+    HostBinding,
+    Input
 } from "@angular/core";
 
 @Component({
@@ -30,6 +31,14 @@ import {
 export class PopupComponent implements OnInit {
 
     @HostBinding('@component') public componentAnimation = true;
+
+    @Input() public set position(position: {x: number, y: number}) {
+        this.x = position.x + 'px';
+        this.y = position.y + 'px';
+    }
+
+    @HostBinding('style.left') public x: string = '0px';
+    @HostBinding('style.top') public y: string = '0px';
 
     constructor() {
     }

@@ -4,6 +4,7 @@ import {AlgorithmComponent} from "./algorithm.component";
 import {PopupComponent} from "./popup/popup.component";
 import {ArrayComponent} from "./array/array.component";
 import {UtilPipesModule} from "../util-pipes/util-pipes.module";
+import {PopupPositionPipe} from "./popup-position.pipe";
 
 @NgModule({
     imports: [
@@ -14,6 +15,7 @@ import {UtilPipesModule} from "../util-pipes/util-pipes.module";
         AlgorithmComponent,
         PopupComponent,
         ArrayComponent,
+        PopupPositionPipe,
     ],
     exports: [
         AlgorithmComponent,

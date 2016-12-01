@@ -1,4 +1,5 @@
 import {Component, OnInit} from "@angular/core";
+import {BehaviorSubject} from "rxjs";
 
 @Component({
     selector: 'grf-algorithm',
@@ -7,23 +8,10 @@ import {Component, OnInit} from "@angular/core";
 })
 export class AlgorithmComponent implements OnInit {
 
-    public code = `function FakeAlgorithm(graph, root) {
-  let visited = new Set();
-  let currentNode = root;
-  if (visited.contains(root)) {
-    visited.add(currentNode);
-    const temp = nodes
-      .filter(node => node.weight > 50)
-      .filter(node => node.neighbors.length < 1);
-    neighbors.push(temp);
-  }
-  return visited;
-}`;
-
-    public isTooltipVisible: boolean = true;
-
     public mockArray = ['A', 'B', 'C', 'D'];
     public highlights = ['B', 'C'];
+
+    public visitedOpen = new BehaviorSubject<boolean>(false);
 
     public removeFromArray(item: string): void {
         this.mockArray = this.mockArray.filter(e => e != item);

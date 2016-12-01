@@ -1,12 +1,22 @@
-<grf-popup *ngIf="isTooltipVisible">
+<grf-popup *ngIf="visitedOpen | async" [position]="visited | popupPosition">
   <grf-array [array]="mockArray"
              [highlightedLetters]="highlights"
   ></grf-array>
 </grf-popup>
 
-<pre><code>{{code}}</code></pre>
+<pre><code>function FakeAlgorithm(graph, root) {{'{'}}
+  let <span #visited (click)="visitedOpen.next(!visitedOpen.getValue())">visited</span> = new Set();
+  let <span #currentNode>currentNode</span> = root;
+  if (visited.contains(root)) {{'{'}}
+    visited.add(currentNode);
+    const temp = nodes
+      .filter(node => node.weight > 50)
+      .filter(node => node.neighbors.length < 1);
+    neighbors.push(temp);
+  {{'}'}}
+  return visited;
+{{'}'}}</code></pre>
 
-<button (click)="isTooltipVisible = !isTooltipVisible">Toggle</button>
 <hr>
 <button (click)="removeFromArray('A')">Remove A</button>
 <button (click)="removeFromArray('B')">Remove B</button>
