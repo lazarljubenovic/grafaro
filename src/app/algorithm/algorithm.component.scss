@@ -1,18 +1,36 @@
 @import '../_global.scss';
 
-pre {
+.algorithm-with-line-numbers {
+  display: flex;
 
-  code {
+  .line-numbers {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: rgba(black, .2);
+    font-family: monospace;
+    font-weight: bold;
     line-height: 3ex;
-    color: $black;
+    padding-right: .5em;
+    text-align: right;
+  }
 
-    span {
-      border-bottom: dotted 2px rgba(get-color('primary'), .8);
-      cursor: pointer;
+  pre {
+    margin: 0;
+    padding: 0;
 
-      &:hover {
-        color: get-color('accent');
-        border-bottom: dotted 2px rgba(get-color('accent'), .95);
+    code {
+      line-height: 3ex;
+      color: $black;
+
+      span {
+        border-bottom: dotted 2px rgba(get-color('primary'), .8);
+        cursor: pointer;
+
+        &:hover {
+          color: get-color('accent');
+          border-bottom: dotted 2px rgba(get-color('accent'), .95);
+        }
       }
     }
   }

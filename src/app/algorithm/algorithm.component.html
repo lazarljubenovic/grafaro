@@ -4,6 +4,10 @@
   ></grf-array>
 </grf-popup>
 
+<div class="algorithm-with-line-numbers">
+<div class="line-numbers">
+  <span *ngFor="let i of 13 | orderedArray | slice : 1">{{i}}</span>
+</div>
 <pre><code>function FakeAlgorithm(graph, root) {{'{'}}
   let <span #visited (click)="visitedOpen.next(!visitedOpen.getValue())">visited</span> = new Set();
   let <span #currentNode>currentNode</span> = root;
@@ -16,6 +20,7 @@
   {{'}'}}
   return visited;
 {{'}'}}</code></pre>
+</div>
 
 <hr>
 <button (click)="removeFromArray('A')">Remove A</button>
