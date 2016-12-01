@@ -28,5 +28,13 @@ $background-color: mix(black, white, 86%);
       bottom: -12px;
       left: calc(50% - #{4px});
     }
+
+    .popup-name {
+      position: absolute;
+      color: rgba(mix(black, white, 66%), .8);
+      font-weight: 300;
+      transform: translate(-1em, calc(-100% - #{.8em}));
+      white-space: nowrap;
+    }
   }
 }

@@ -40,6 +40,8 @@ export class PopupComponent implements OnInit {
     @HostBinding('style.left') public x: string = '0px';
     @HostBinding('style.top') public y: string = '0px';
 
+    @Input() public name: string = 'Popup name';
+
     constructor() {
     }
 
