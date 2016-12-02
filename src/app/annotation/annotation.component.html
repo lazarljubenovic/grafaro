@@ -1,3 +1,9 @@
-<div #handle (mousedown)="onHandleMouseDown()">
+<div #handle #movable (mousedown)="onHandleMouseDown()" [style.top]="y + 'px'" [style.left]="x + 'px'">
   <ng-content></ng-content>
 </div>
+
+<grf-line [pointA]="{x: 100, y: 100}"
+          [pointB]="{x: x, y: y}"
+          [color]="'rgba(0, 0, 0, .4)'"
+          [width]="1"
+></grf-line>

@@ -17,13 +17,11 @@ export class AnnotationComponent implements OnInit {
     private grabbedX = 0;
     private grabbedY = 0;
 
-    @ViewChild('handle')
-    public handleRef: ElementRef;
+    @ViewChild('handle') public handleRef: ElementRef;
+    @ViewChild('movable') public movableRef: ElementRef;
 
-    private moveDraggableTo(x: number, y: number): void {
-        this.elementRef.nativeElement.style.left = x + 'px';
-        this.elementRef.nativeElement.style.top = y + 'px';
-    }
+    public x: number;
+    public y: number;
 
     @HostListener('window:mouseup')
     public onWindowMouseUp(): void {
@@ -50,7 +48,8 @@ export class AnnotationComponent implements OnInit {
             const handleY = this.handleRef.nativeElement.getBoundingClientRect().top;
             const dx = event.clientX - handleX - this.grabbedX;
             const dy = event.clientY - handleY - this.grabbedY;
-            this.moveDraggableTo(handleX + dx, handleY + dy);
+            this.x = handleX + dx;
+            this.y = handleY + dy;
         }
     }
 

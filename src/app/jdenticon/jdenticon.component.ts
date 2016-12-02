@@ -37,11 +37,15 @@ export class JdenticonComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges() {
-        if (this.hash) {
-            jdenticon.update(this.elementRef.nativeElement, this.hash, this.padding);
-        } else {
-            const hash: string = this.hashService.convert(this.plaintext);
-            jdenticon.update(this.elementRef.nativeElement, hash, this.padding);
+        try {
+            if (this.hash) {
+                jdenticon.update(this.elementRef.nativeElement, this.hash, this.padding);
+            } else {
+                const hash: string = this.hashService.convert(this.plaintext);
+                jdenticon.update(this.elementRef.nativeElement, hash, this.padding);
+            }
+        } catch (e) {
+            // TODO It tries to load identicons at the moment when they are hidden from the screen.
         }
     }
 
