@@ -1,0 +1,17 @@
+@import '../global';
+
+$color: mix(black, white, 86%);
+
+:host {
+  display: block;
+  position: fixed;
+  z-index: 9999;
+  user-select: none;
+
+  > div {
+    background-color: $color;
+    padding: 1ex 1em;
+    font-family: $font;
+    color: $white;
+  }
+}
