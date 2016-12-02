@@ -1,4 +1,4 @@
-import {Component, OnInit, Input} from "@angular/core";
+import {Component, OnInit, Input, ViewEncapsulation} from "@angular/core";
 import {MarkdownService} from "../../markdown.service";
 import {EmojiService} from "../../emoji.service";
 
@@ -14,7 +14,8 @@ export interface ChatMessageInfo {
 @Component({
     selector: 'grf-chat-message',
     templateUrl: './chat-message.component.html',
-    styleUrls: ['./chat-message.component.scss']
+    styleUrls: ['./chat-message.component.scss'],
+    encapsulation: ViewEncapsulation.None,
 })
 export class ChatMessageComponent implements OnInit {
 

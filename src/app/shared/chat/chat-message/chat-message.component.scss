@@ -1,61 +1,66 @@
-:host {
+$picture-size: 50px;
+$padding: 12px;
+
+grf-chat-message {
   display: flex;
   margin-bottom: 1.8ex;
   font-family: Roboto, sans-serif;
   font-size: .94em;
   width: 100%;
-}
 
-$picture-size: 50px;
-$padding: 12px;
-
-.picture-column {
-  width: $picture-size;
-  padding-right: $padding;
-
-  .picture {
+  .picture-column {
     width: $picture-size;
-    height: $picture-size;
+    padding-right: $padding;
+
+    .picture {
+      width: $picture-size;
+      height: $picture-size;
+    }
   }
-}
 
-.message-column {
-  width: calc(100% - #{$picture-size + $padding});
+  .message-column {
+    width: calc(100% - #{$picture-size + $padding});
 
-  .info {
-    width: 100%;
-    display: flex;
-    align-items: baseline;
-    margin-bottom: .5ex;
+    .info {
+      width: 100%;
+      display: flex;
+      align-items: baseline;
+      margin-bottom: .5ex;
 
-    .name {
-      font-weight: bold;
-      margin-right: .6em;
-    }
+      .name {
+        font-weight: bold;
+        margin-right: .6em;
+      }
 
-    .handle {
-      color: rgba(black, .66);
-      font-weight: 300;
-    }
+      .handle {
+        color: rgba(black, .66);
+        font-weight: 300;
+      }
 
-    .flex-spacer {
-      flex: 1 0 0;
-    }
+      .flex-spacer {
+        flex: 1 0 0;
+      }
 
-    .time-stamp {
-      color: rgba(black, .2);
-      font-size: .82em;
-      transition: color .2s ease;
-      cursor: pointer;
+      .time-stamp {
+        color: rgba(black, .2);
+        font-size: .82em;
+        transition: color .2s ease;
+        cursor: pointer;
 
-      &:hover {
-        color: rgba(black, .5);
+        &:hover {
+          color: rgba(black, .5);
+        }
       }
     }
   }
-}
 
-.message {
-  color: rgba(black, .87);
-  overflow-wrap: break-word;
+  .message {
+    color: rgba(black, .87);
+    overflow-wrap: break-word;
+
+    img {
+      max-width: 100%;
+    }
+  }
+
 }
