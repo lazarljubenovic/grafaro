@@ -54,7 +54,7 @@ export class TabsComponent implements AfterContentInit {
 
     ngAfterContentInit() {
         this.tabs = this.tabReferences.map((ref, index) => ({
-            title: ref.title,
+            title: ref.tabTitle,
             icon: ref.icon,
             index: index,
             ref: ref,

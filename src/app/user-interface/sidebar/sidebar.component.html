@@ -1,15 +1,15 @@
 <grf-tabs [initialTabIndex]="0">
-  <grf-tab title="Chat" icon="comments">
+  <grf-tab [tabTitle]="'Chat'" [icon]="'comments'">
     <grf-chat>
     </grf-chat>
   </grf-tab>
-  <grf-tab title="Matrix" icon="table">
+  <grf-tab [tabTitle]="'Matrix'" [icon]="'table'">
     <grf-matrix [data]="matrixData"
                 [colLabels]="letters"
                 [rowLabels]="letters"
     ></grf-matrix>
   </grf-tab>
-  <grf-tab title="Algorithm" icon="cogs">
+  <grf-tab [tabTitle]="'Algorithm'" [icon]="'cogs'">
     <grf-algorithm></grf-algorithm>
   </grf-tab>
 </grf-tabs>

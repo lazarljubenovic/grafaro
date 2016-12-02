@@ -5,7 +5,7 @@
   <div class="line-numbers">
     <span *ngFor="let i of 13 | orderedArray | slice : 1">{{i}}</span>
   </div>
-  <pre><code>function FakeAlgorithm(graph, root) {{'{'}}
+  <pre><code><b>function</b> FakeAlgorithm(graph, root) {{'{'}}
   let <span #visited
             (click)="visitedOpen.next(!visitedOpen.getValue())">visited</span> = new Set();
   let <span #currentNode>currentNode</span> = root;

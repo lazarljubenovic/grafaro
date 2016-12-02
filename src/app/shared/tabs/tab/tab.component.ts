@@ -8,7 +8,7 @@ import {Component, OnInit, Input, ElementRef} from "@angular/core";
 export class TabComponent implements OnInit {
 
     @Input()
-    public title: string;
+    public tabTitle: string;
 
     @Input()
     public icon: string;
