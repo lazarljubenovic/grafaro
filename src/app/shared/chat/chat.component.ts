@@ -4,7 +4,8 @@ import {
     ViewContainerRef,
     ViewChild,
     ComponentFactoryResolver,
-    ComponentRef
+    ComponentRef,
+    ElementRef
 } from "@angular/core";
 import {
     ChatMessageInfo,
@@ -20,8 +21,11 @@ import {Observable} from "rxjs";
 })
 export class ChatComponent implements OnInit {
 
-    @ViewChild('message', {read: ViewContainerRef})
-    private chatMessageRef: any;
+    @ViewChild('messageOutlet', {read: ViewContainerRef})
+    public messageOutlet: any;
+
+    @ViewChild('messages')
+    public messagesContainer: ElementRef;
 
     private chatMessageFactory;
 
@@ -29,10 +33,16 @@ export class ChatComponent implements OnInit {
 
     public currentTypedMessage: string;
 
+    private scrollToBottom() {
+        setTimeout(() => this.messagesContainer.nativeElement.scrollTop =
+            this.messagesContainer.nativeElement.scrollHeight);
+    }
+
     private createChatMessage(content: ChatMessageInfo): void {
         let cmp: ComponentRef<ChatMessageComponent> =
-            this.chatMessageRef.createComponent(this.chatMessageFactory);
+            this.messageOutlet.createComponent(this.chatMessageFactory);
         cmp.instance.info = content;
+        this.scrollToBottom();
     }
 
     public onKeyUp(key: string) {

@@ -1,16 +1,13 @@
-<grf-popup *ngIf="visitedOpen | async" [position]="visited | popupPosition">
-  <grf-array [array]="mockArray"
-             [highlightedLetters]="highlights"
-  ></grf-array>
-</grf-popup>
-
 <div #box class="algorithm-with-line-numbers">
-<div class="line-number-indicator" [style.top]="lineNumber | lineNumberStyle : box : 12">➡</div>
-<div class="line-numbers">
-  <span *ngFor="let i of 13 | orderedArray | slice : 1">{{i}}</span>
-</div>
-<pre><code>function FakeAlgorithm(graph, root) {{'{'}}
-  let <span #visited (click)="visitedOpen.next(!visitedOpen.getValue())">visited</span> = new Set();
+  <div class="line-number-indicator"
+       [style.top]="lineNumber | lineNumberStyle : box : 12">➡
+  </div>
+  <div class="line-numbers">
+    <span *ngFor="let i of 13 | orderedArray | slice : 1">{{i}}</span>
+  </div>
+  <pre><code>function FakeAlgorithm(graph, root) {{'{'}}
+  let <span #visited
+            (click)="visitedOpen.next(!visitedOpen.getValue())">visited</span> = new Set();
   let <span #currentNode>currentNode</span> = root;
   if (visited.contains(root)) {{'{'}}
     visited.add(currentNode);
@@ -23,10 +20,18 @@
 {{'}'}}</code></pre>
 </div>
 
+<grf-popup *ngIf="visitedOpen | async" [position]="visited | popupPosition">
+  <grf-array [array]="mockArray"
+             [highlightedLetters]="highlights"
+  ></grf-array>
+</grf-popup>
+
 <hr>
 <button (click)="removeFromArray('A')">Remove A</button>
 <button (click)="removeFromArray('B')">Remove B</button>
 <button (click)="removeFromArray('C')">Remove C</button>
 <button (click)="removeFromArray('D')">Remove D</button>
 <hr>
-<button (click)="randomLineNumber()">Random Line Number (current {{lineNumber}})</button>
+<button (click)="randomLineNumber()">Random Line Number (current
+  {{lineNumber}})
+</button>
