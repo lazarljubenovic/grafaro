@@ -1,37 +1,55 @@
 :host {
-  display: block;
+  display: flex;
   margin-bottom: 1.8ex;
   font-family: Roboto, sans-serif;
   font-size: .94em;
+  width: 100%;
 }
 
-.info {
-  display: flex;
-  align-items: baseline;
-  margin-bottom: .5ex;
+$picture-size: 50px;
 
-  .name {
-    font-weight: bold;
-    margin-right: .6em;
+.picture-column {
+  width: $picture-size;
+  padding-right: .5em;
+
+  .picture {
+    width: $picture-size;
+    height: $picture-size;
   }
+}
 
-  .handle {
-    color: rgba(black, .66);
-    font-weight: 300;
-  }
+.message-column {
+  width: 100%;
 
-  .flex-spacer {
-    flex: 1 0 0;
-  }
+  .info {
+    width: 100%;
+    display: flex;
+    align-items: baseline;
+    margin-bottom: .5ex;
 
-  .time-stamp {
-    color: rgba(black, .2);
-    font-size: .82em;
-    transition: color .2s ease;
-    cursor: pointer;
+    .name {
+      font-weight: bold;
+      margin-right: .6em;
+    }
 
-    &:hover {
-      color: rgba(black, .5);
+    .handle {
+      color: rgba(black, .66);
+      font-weight: 300;
+    }
+
+    .flex-spacer {
+      flex: 1 0 0;
+    }
+
+    .time-stamp {
+      color: rgba(black, .2);
+      font-size: .82em;
+      transition: color .2s ease;
+      cursor: pointer;
+
+      &:hover {
+        color: rgba(black, .5);
+      }
     }
   }
 }

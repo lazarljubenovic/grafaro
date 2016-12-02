@@ -1,7 +1,14 @@
-<div class="info">
-  <div class="name">{{info.senderName}}</div>
-  <div class="handle">@{{info.senderHandle}}</div>
-  <div class="flex-spacer"></div>
-  <div class="time-stamp">{{info.timeStamp | date : 'shortTime'}}</div>
+<div class="picture-column">
+  <div class="picture">
+    <grf-jdenticon [plaintext]="info.senderHandle"></grf-jdenticon>
+  </div>
 </div>
-<div class="message" [innerHTML]="parsedMessageHtml"></div>
+<div class="message-column">
+  <div class="info">
+    <div class="name">{{info.senderName}}</div>
+    <div class="handle">@{{info.senderHandle}}</div>
+    <div class="flex-spacer"></div>
+    <div class="time-stamp">{{info.timeStamp | date : 'shortTime'}}</div>
+  </div>
+  <div class="message" [innerHTML]="parsedMessageHtml"></div>
+</div>
