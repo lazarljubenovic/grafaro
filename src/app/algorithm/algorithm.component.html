@@ -5,7 +5,7 @@
 </grf-popup>
 
 <div #box class="algorithm-with-line-numbers">
-<div class="line-number-indicator" [style.top]="lineNumber | lineNumberStyle : box : 12"></div>
+<div class="line-number-indicator" [style.top]="lineNumber | lineNumberStyle : box : 12">➡</div>
 <div class="line-numbers">
   <span *ngFor="let i of 13 | orderedArray | slice : 1">{{i}}</span>
 </div>
