@@ -31,7 +31,7 @@ export class ChatComponent implements OnInit {
 
     public chatMessages$: Observable<any>;
 
-    public currentTypedMessage: string;
+    public currentTypedMessage: string = '';
 
     private scrollToBottom() {
         setTimeout(() => this.messagesContainer.nativeElement.scrollTop =
@@ -45,7 +45,24 @@ export class ChatComponent implements OnInit {
         this.scrollToBottom();
     }
 
+    private isEmptyMessage(): boolean {
+        return this.currentTypedMessage.trim() === '';
+    }
+
+    public onKeyDown(event: KeyboardEvent) {
+        const key: string = event.key;
+        if (key == 'Enter') {
+            if (this.isEmptyMessage()) {
+                setTimeout(() => this.currentTypedMessage = '');
+            }
+            return false;
+        }
+    }
+
     public onKeyUp(key: string) {
+        if (this.isEmptyMessage()) {
+            return false;
+        }
         if (key == 'Enter') {
             let chatMessage: ChatMessageInfo = {
                 senderHandle: 'lazar',
@@ -54,11 +71,8 @@ export class ChatComponent implements OnInit {
                 timeStamp: new Date(),
                 message: this.currentTypedMessage
             };
-
             this.sendMessage(chatMessage);
-
             this.createChatMessage(chatMessage);
-
             this.currentTypedMessage = '';
         }
     }

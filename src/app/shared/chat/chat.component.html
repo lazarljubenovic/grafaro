@@ -6,6 +6,7 @@
 
 <div class="input-message">
     <textarea (keyup)="onKeyUp($event.key)"
+              (keydown)="onKeyDown($event)"
               [(ngModel)]="currentTypedMessage"
               placeholder="Type a message. GitHub flavored Markdown supported. Press enter to send."></textarea>
   <div class="controls">
