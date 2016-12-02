@@ -7,10 +7,11 @@
 }
 
 $picture-size: 50px;
+$padding: 12px;
 
 .picture-column {
   width: $picture-size;
-  padding-right: .5em;
+  padding-right: $padding;
 
   .picture {
     width: $picture-size;
@@ -19,7 +20,7 @@ $picture-size: 50px;
 }
 
 .message-column {
-  width: 100%;
+  width: calc(100% - #{$picture-size + $padding});
 
   .info {
     width: 100%;
@@ -56,4 +57,5 @@ $picture-size: 50px;
 
 .message {
   color: rgba(black, .87);
+  overflow-wrap: break-word;
 }
