@@ -45,19 +45,6 @@ export class BreadthFirstSearchService {
     // .setEdge('103', '108', '10')
     // .setEdge('106', '108', '11');
 
-    public graphMatrix: number[][] = [[0, 1], [1, 0]];
-    //     [0, 1, 1, 1, 0, 0, 0, 0, 0, 0],
-    //     [1, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-    //     [1, 0, 1, 0, 0, 1, 1, 0, 0, 0],
-    //     [1, 0, 0, 0, 0, 0, 0, 0, 1, 0],
-    //     [0, 1, 0, 0, 0, 0, 0, 0, 0, 1],
-    //     [0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
-    //     [0, 0, 1, 0, 0, 0, 0, 1, 1, 0],
-    //     [0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
-    //     [0, 0, 0, 1, 0, 0, 1, 0, 0, 1],
-    //     [0, 0, 0, 0, 1, 0, 0, 0, 1, 0],
-    // ];
-
     public root: string = '100';
 
     private algorithm: Function = breadthFirstSearch;
@@ -75,20 +62,18 @@ export class BreadthFirstSearchService {
 
     public currentState$ = new ReplaySubject<NormalizedState>(1);
 
-    public matrixState$ = new ReplaySubject<number[][]>(1);
-    public labelsState$ = new ReplaySubject<string[]>(1);
+    public graphState$ = new ReplaySubject<Graph>(1);
 
     public setGraph() {
         this.normalizedStates = this.algorithm(this.graph, this.root)
             .map(state => this.getNormalizedState(state));
         this.fixCurrentStateIndex();
         this.onGraphChange();
-
-        this.graphToMatrix();
     }
 
     private onGraphChange(): void {
         this.currentState$.next(this.normalizedStates[this.currentStateIndex]);
+        this.graphState$.next(this.graph);
     }
 
     public updateStateNumber(action: string): void {
@@ -118,28 +103,7 @@ export class BreadthFirstSearchService {
         }
     }
 
-    private graphToMatrix(): void {
-        const nodes = this.graph.nodes();
-        const matrix: number[][] = Array(nodes.length).fill(null)
-            .map(row => Array(nodes.length).fill(0));
-        const labels: string[] = nodes.map(node => this.graph.node(node));
-
-        nodes.forEach(node => {
-            const nodeInd: number = labels.indexOf(this.getNodeLabel(node));
-            this.graph.nodeEdges(node)
-            .forEach(edge => {
-                const nodeB = node == edge.v ? edge.w : edge.v;
-                const nodeBInd: number = labels.indexOf(this.getNodeLabel(nodeB));
-                matrix[nodeInd][nodeBInd] = 1;
-            });
-
-        });
-
-        this.labelsState$.next(nodes.map(node => this.graph.node(node)));
-        this.matrixState$.next(matrix);
-    }
-
-    private getNodeId(nodeLabel: string): string {
+    public getNodeId(nodeLabel: string): string {
         return this.graph.nodes()
             .find(nodeId => this.graph.node(nodeId) == nodeLabel);
     }
