@@ -9,7 +9,7 @@ export class GraphEdgeOptionsTransformPipe implements PipeTransform {
 
     transform(value: GrfGraphEdgeOptions): VisNgNetworkOptionsEdges {
         return {
-            id: value.label,
+            id: value.id,
             from: value.from,
             to: value.to,
             label: value.label,

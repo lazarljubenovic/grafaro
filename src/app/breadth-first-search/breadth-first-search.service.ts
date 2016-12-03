@@ -1,9 +1,6 @@
 import {Injectable} from "@angular/core";
 import {Graph} from "graphlib";
-import {
-    BreadthFirstSearchState,
-    breadthFirstSearch
-} from "../algorithms/breadth-first-search";
+import {BreadthFirstSearchState, breadthFirstSearch} from "../algorithms/breadth-first-search";
 import {VisNgNetworkOptionsEdges} from "@lazarljubenovic/vis-ng/core";
 import {GrfGraphNodeOptions} from "../graph/graph.module";
 import {ReplaySubject} from "rxjs";
@@ -28,25 +25,38 @@ export class BreadthFirstSearchService {
     public graph = new Graph({directed: false})
         .setNode('100', 'A')
         .setNode('101', 'B')
-        .setNode('102', 'C')
-        .setNode('103', 'D')
-        .setNode('104', 'E')
-        .setNode('105', 'F')
-        .setNode('106', 'G')
-        .setNode('107', 'H')
-        .setNode('108', 'I')
-        .setNode('109', 'J')
-        .setEdge('100', '101', '1')
-        .setEdge('100', '102', '2')
-        .setEdge('100', '103', '3')
-        .setEdge('101', '104', '4')
-        .setEdge('102', '105', '5')
-        .setEdge('102', '106', '6')
-        .setEdge('106', '107', '7')
-        .setEdge('104', '109', '8')
-        .setEdge('109', '108', '9')
-        .setEdge('103', '108', '10')
-        .setEdge('106', '108', '11');
+        // .setNode('102', 'C')
+        // .setNode('103', 'D')
+        // .setNode('104', 'E')
+        // .setNode('105', 'F')
+        // .setNode('106', 'G')
+        // .setNode('107', 'H')
+        // .setNode('108', 'I')
+        // .setNode('109', 'J')
+        .setEdge('100', '101', '1');
+    // .setEdge('100', '102', '2')
+    // .setEdge('100', '103', '3')
+    // .setEdge('101', '104', '4')
+    // .setEdge('102', '105', '5')
+    // .setEdge('102', '106', '6')
+    // .setEdge('106', '107', '7')
+    // .setEdge('104', '109', '8')
+    // .setEdge('109', '108', '9')
+    // .setEdge('103', '108', '10')
+    // .setEdge('106', '108', '11');
+
+    public graphMatrix: number[][] = [[0, 1], [1, 0]];
+    //     [0, 1, 1, 1, 0, 0, 0, 0, 0, 0],
+    //     [1, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+    //     [1, 0, 1, 0, 0, 1, 1, 0, 0, 0],
+    //     [1, 0, 0, 0, 0, 0, 0, 0, 1, 0],
+    //     [0, 1, 0, 0, 0, 0, 0, 0, 0, 1],
+    //     [0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+    //     [0, 0, 1, 0, 0, 0, 0, 1, 1, 0],
+    //     [0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+    //     [0, 0, 0, 1, 0, 0, 1, 0, 0, 1],
+    //     [0, 0, 0, 0, 1, 0, 0, 0, 1, 0],
+    // ];
 
     public root: string = '100';
 
@@ -65,11 +75,16 @@ export class BreadthFirstSearchService {
 
     public currentState$ = new ReplaySubject<NormalizedState>(1);
 
+    public matrixState$ = new ReplaySubject<number[][]>(1);
+    public labelsState$ = new ReplaySubject<string[]>(1);
+
     public setGraph() {
         this.normalizedStates = this.algorithm(this.graph, this.root)
             .map(state => this.getNormalizedState(state));
         this.fixCurrentStateIndex();
         this.onGraphChange();
+
+        this.graphToMatrix();
     }
 
     private onGraphChange(): void {
@@ -101,6 +116,27 @@ export class BreadthFirstSearchService {
         if (this.currentStateIndex < 0) {
             this.currentStateIndex = 0;
         }
+    }
+
+    private graphToMatrix(): void {
+        const nodes = this.graph.nodes();
+        const matrix: number[][] = Array(nodes.length).fill(null)
+            .map(row => Array(nodes.length).fill(0));
+        const labels: string[] = nodes.map(node => this.graph.node(node));
+
+        nodes.forEach(node => {
+            const nodeInd: number = labels.indexOf(this.getNodeLabel(node));
+            this.graph.nodeEdges(node)
+            .forEach(edge => {
+                const nodeB = node == edge.v ? edge.w : edge.v;
+                const nodeBInd: number = labels.indexOf(this.getNodeLabel(nodeB));
+                matrix[nodeInd][nodeBInd] = 1;
+            });
+
+        });
+
+        this.labelsState$.next(nodes.map(node => this.graph.node(node)));
+        this.matrixState$.next(matrix);
     }
 
     private getNodeId(nodeLabel: string): string {
@@ -192,12 +228,7 @@ export class BreadthFirstSearchService {
     }
 
     public removeEdge(edge: string) {
-        const graphEdgeIndex = this.graph.edges()
-            .map(gEdge => this.graph.edge(gEdge))
-            .indexOf(edge);
-
-        const graphEdge = this.graph.edges()[graphEdgeIndex];
-
+        const graphEdge = JSON.parse(edge);
         this.unlinkNodes(graphEdge.v, graphEdge.w);
     }
 

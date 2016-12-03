@@ -22,6 +22,7 @@ export interface GrfGraphNodeOptions {
 }
 
 export interface GrfGraphEdgeOptions {
+    id: string;
     label: string;
     from: string;
     to: string;
