@@ -1,4 +1,4 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, OnInit, AfterViewInit} from "@angular/core";
 import {BehaviorSubject, Observable} from "rxjs";
 import {BreadthFirstSearchService} from "../breadth-first-search/breadth-first-search.service";
 
@@ -7,7 +7,7 @@ import {BreadthFirstSearchService} from "../breadth-first-search/breadth-first-s
     templateUrl: './algorithm.component.html',
     styleUrls: ['./algorithm.component.scss']
 })
-export class AlgorithmComponent implements OnInit {
+export class AlgorithmComponent implements OnInit, AfterViewInit {
 
     private currentState$: Observable<any>;
 
@@ -41,6 +41,18 @@ export class AlgorithmComponent implements OnInit {
         this.varCurrentNode$ = this.currentState$.map(state => state.currentNode);
         this.varCurrentNeighbor$ = this.currentState$.map(state => state.currentNeighbor);
         this.lineNumber$ = this.currentState$.map(state => state.lineNumber);
+    }
+
+    ngAfterViewInit() {
+        setTimeout(() => {
+            this.isOpenSolution$.next(true);
+            this.isOpenQueue$.next(true);
+            this.isOpenRoot$.next(true);
+            this.isOpenVisited$.next(true);
+            this.isOpenNeighbors$.next(true);
+            this.isOpenCurrentNode$.next(true);
+            this.isOpenCurrentNeighbor$.next(true);
+        });
     }
 
 }
