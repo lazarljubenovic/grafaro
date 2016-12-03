@@ -11,7 +11,7 @@ export class AlgorithmComponent implements OnInit {
 
     public varSolution$: Observable<string[]>;
 
-    public lineNumber = 0;
+    public lineNumber$: Observable<number>;
 
     public mockArray = ['A', 'B', 'C', 'D'];
     public highlights = ['B', 'C'];
@@ -22,16 +22,14 @@ export class AlgorithmComponent implements OnInit {
         this.mockArray = this.mockArray.filter(e => e != item);
     }
 
-    public randomLineNumber() {
-        this.lineNumber = Math.floor(Math.random() * 12 + 1);
-    }
-
     constructor(public graphService: BreadthFirstSearchService) {
     }
 
     ngOnInit() {
         this.varSolution$ = this.graphService.currentState$
             .map(state => state.solution);
+        this.lineNumber$ = this.graphService.currentState$
+            .map(state => state.lineNumber);
     }
 
 }

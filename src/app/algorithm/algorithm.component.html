@@ -1,9 +1,11 @@
 <div #box class="algorithm-with-line-numbers">
   <div class="line-number-indicator"
-       [style.top]="lineNumber | lineNumberStyle : box : 12">➡
+       [style.top]="lineNumber$ | async | lineNumberStyle : box : 18"
+  >
+    ➡
   </div>
   <div class="line-numbers">
-    <span *ngFor="let i of 13 | orderedArray | slice : 1">{{i}}</span>
+    <span *ngFor="let i of 19 | orderedArray | slice : 1">{{i}}</span>
   </div>
   <pre><code>function <b>BreadthFirst</b>(graph, root) {{'{'}}
   let <span #visited
@@ -16,11 +18,11 @@
     let currentNode = queue.deque();
     let neighbors = graph.neighbors(currentNode);
     visited.push(currentNode);
-      neighbors
-        .filter(neighbor => !visited.has(neighbor))
-        .filter(neighbor => !queue.has(neighbor))
-        .forEach(neighbor => queue.enqueue(neighbor));
-      solution.push(currentNode);
+    neighbors
+      .filter(neighbor => !visited.has(neighbor))
+      .filter(neighbor => !queue.has(neighbor))
+      .forEach(neighbor => queue.enqueue(neighbor));
+    solution.push(currentNode);
   {{'}'}}
   return solution;
 {{'}'}}</code></pre>
@@ -29,14 +31,3 @@
 <grf-annotation *ngIf="visitedOpen | async" [algorithm]="box" [snippet]="visited">
   <grf-array [array]="varSolution$ | async" [highlightedLetters]="['C']"></grf-array>
 </grf-annotation>
-
-<hr>
-<button (click)="removeFromArray('A')">Remove A</button>
-<button (click)="removeFromArray('B')">Remove B</button>
-<button (click)="removeFromArray('C')">Remove C</button>
-<button (click)="removeFromArray('D')">Remove D</button>
-<hr>
-<button (click)="randomLineNumber()">Random Line Number (current
-  {{lineNumber}})
-</button>
-<!---->

@@ -1,3 +1,5 @@
+/* tslint:disable */
+
 import {Graph} from "graphlib";
 import {Queue} from "../data-structures/queue";
 
@@ -17,12 +19,13 @@ export interface BreadthFirstSearchState {
     currentQueue: string[];
     rootNode: string;
     currentNeighbor?: string;
+    lineNumber: number;
 }
 
-function createNewState(currentNode, neighbors, solution, graph, visited, queue, root,
+function createNewState(currentNode, neighbors, solution, graph, visited, queue, root, lineNumber: number,
                         currentNeighbor?): BreadthFirstSearchState {
     return {
-        currentNode: graph.node(currentNode),
+        currentNode: currentNode ? graph.node(currentNode) : null,
         currentNodeNeighbors: graph.node(neighbors),
         currentNeighbor: graph.node(currentNeighbor),
         currentSolution: [...solution].map(node => graph.node(node)),
@@ -37,40 +40,59 @@ function createNewState(currentNode, neighbors, solution, graph, visited, queue,
         visitedNodes: [...visited].map(node => graph.node(node)),
         currentQueue: [currentNode, ...queue.toArray()].map(node => graph.node(node)),
         rootNode: graph.node(root),
+        lineNumber: lineNumber,
     };
 }
 
 export function breadthFirstSearch(graph: Graph, root: string): BreadthFirstSearchState[] {
     let states: BreadthFirstSearchState[] = [];
 
+    states.push(createNewState(null, null, [], graph, [], new Queue<string>(), root, 1));
+    states.push(createNewState(null, null, [], graph, [], new Queue<string>(), root, 2));
+
     let solution: string[] = [];
+    states.push(createNewState('', [], [], graph, [], new Queue<string>(), root, 3));
+
     let queue = new Queue<string>();
+    states.push(createNewState('', [], solution, graph, [], queue, root, 4));
+
     queue.enqueue(root);
+    states.push(createNewState('', [], solution, graph, [], queue, root, 6));
+
     let visited: string[] = [root];
+    states.push(createNewState('', [], solution, graph, visited, queue, root, 7));
 
-    let i = 100;
+    while (!queue.isEmpty) {
+        states.push(createNewState('', [], solution, graph, visited, queue, root, 8));
 
-    while (!queue.isEmpty && --i) {
-        const currentNode: string = queue.deque();
-        const neighbors: string[] = graph.neighbors(currentNode);
+        let currentNode: string = queue.deque();
+        states.push(createNewState(currentNode, [], solution, graph, visited, queue, root, 9));
+
+        let neighbors: string[] = graph.neighbors(currentNode);
+        states.push(createNewState(currentNode, neighbors, solution, graph, visited, queue, root, 10));
 
         visited.push(currentNode);
-        states.push(createNewState(currentNode, neighbors, solution, graph, visited, queue, root));
+        states.push(createNewState(currentNode, neighbors, solution, graph, visited, queue, root, 12));
 
-        neighbors
-            .filter(neighbor => visited.indexOf(neighbor) == -1)
-            .filter(neighbor => !queue.contains(neighbor))
-            .forEach(neighbor => {
-                queue.enqueue(neighbor);
-                states.push(createNewState(
-                    currentNode, neighbors, solution, graph, visited, queue, root, neighbor
-                ));
-            });
+        neighbors = neighbors.filter(neighbor => visited.indexOf(neighbor) == -1);
+        states.push(createNewState(currentNode, neighbors, solution, graph, visited, queue, root, 13));
+
+        neighbors = neighbors.filter(neighbor => !queue.contains(neighbor));
+        states.push(createNewState(currentNode, neighbors, solution, graph, visited, queue, root, 14));
+
+        neighbors.forEach((neighbor, i) => {
+            queue.enqueue(neighbor);
+            states.push(createNewState(
+                currentNode, neighbors, solution, graph, visited, queue, root, 14, neighbor
+            ));
+        });
+        states.push(createNewState(currentNode, neighbors, solution, graph, visited, queue, root, 15));
 
         solution.push(currentNode);
+        states.push(createNewState(currentNode, neighbors, solution, graph, visited, queue, root, 7));
 
-        states.push(createNewState(currentNode, neighbors, solution, graph, visited, queue, root));
     }
 
+    states.push(createNewState('', [], solution, graph, visited, queue, root, 17));
     return states;
 }
