@@ -39,14 +39,18 @@ export class MatrixComponent implements OnInit {
         const columnLabel: string = this.labels[column];
 
         this.data[row][column] = (this.data[row][column] + 1) % 2;
+
         if (row != column) {
             this.data[column][row] = (this.data[column][row] + 1) % 2;
         }
 
+        if (this.data[row][column] == 1) {
+            this.graphService.linkNodesByLabel(rowLabel, columnLabel);
+        } else {
+            this.graphService.unlinkNodesByLabel(rowLabel, columnLabel);
+        }
+
         this.data = [...this.data];
-
-        this.graphService.linkNodesByLabel(rowLabel, columnLabel);
-
     }
 
     constructor(private graphService: BreadthFirstSearchService) {

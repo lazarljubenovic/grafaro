@@ -179,6 +179,18 @@ export class BreadthFirstSearchService {
         this.linkNodes(nodeA, nodeB);
     }
 
+    public unlinkNodes(nodeA: string, nodeB: string) {
+        (<any>this.graph).removeEdge(nodeA, nodeB);
+        this.setGraph();
+    }
+
+    public unlinkNodesByLabel(labelA: string, labelB: string) {
+        const nodeA: string = this.getNodeId(labelA);
+        const nodeB: string = this.getNodeId(labelB);
+
+        this.unlinkNodes(nodeA, nodeB);
+    }
+
     private setPosition(nodeLabel: string, position: ClickPosition): void {
         this.normalizedStates[this.currentStateIndex].nodes
             .find(node => node.label == nodeLabel).position = position;
