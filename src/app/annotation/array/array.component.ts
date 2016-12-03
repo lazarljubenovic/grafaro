@@ -1,13 +1,4 @@
-import {
-    Component,
-    OnInit,
-    Input,
-    trigger,
-    state,
-    style,
-    transition,
-    animate
-} from "@angular/core";
+import {Component, OnInit, Input, trigger, state, style, transition, animate} from "@angular/core";
 
 @Component({
     selector: 'grf-array',

@@ -26,7 +26,7 @@ function createNewState(currentNode, neighbors, solution, graph, visited, queue,
                         currentNeighbor?): BreadthFirstSearchState {
     return {
         currentNode: currentNode ? graph.node(currentNode) : null,
-        currentNodeNeighbors: graph.node(neighbors),
+        currentNodeNeighbors: neighbors ? neighbors.map(neighbor => graph.node(neighbor)) : [],
         currentNeighbor: graph.node(currentNeighbor),
         currentSolution: [...solution].map(node => graph.node(node)),
         edges: graph.edges().map(edge => ({
