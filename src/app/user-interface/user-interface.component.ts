@@ -68,6 +68,13 @@ export class UserInterfaceComponent implements OnInit {
     private linkNodesBackground$: Observable<any> = this.actions$
         .filter(values => values.action == Actions.connect && values.event.nodes.length == 0);
 
+    private removeEdge$: Observable<string> = this.actions$
+        .filter(values => values.action == Actions.disconnect
+            && values.event.nodes.length == 0
+            && values.event.edges.length == 1
+        )
+        .map(values => values.event.edges[0].toString());
+
     private linkTwoNodes(first: string, second: string): void {
         this.service.linkNodes(first, second);
     }
@@ -156,6 +163,10 @@ export class UserInterfaceComponent implements OnInit {
                 this.linkTwoNodes(this.selectedNode, node);
                 this.selectedNode = null;
             }
+        });
+
+        this.removeEdge$.subscribe((edge: string) => {
+            this.service.removeEdge(edge);
         });
 
     }

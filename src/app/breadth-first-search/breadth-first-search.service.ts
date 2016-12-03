@@ -191,6 +191,16 @@ export class BreadthFirstSearchService {
         this.unlinkNodes(nodeA, nodeB);
     }
 
+    public removeEdge(edge: string) {
+        const graphEdgeIndex = this.graph.edges()
+            .map(gEdge => this.graph.edge(gEdge))
+            .indexOf(edge);
+
+        const graphEdge = this.graph.edges()[graphEdgeIndex];
+
+        this.unlinkNodes(graphEdge.v, graphEdge.w);
+    }
+
     private setPosition(nodeLabel: string, position: ClickPosition): void {
         this.normalizedStates[this.currentStateIndex].nodes
             .find(node => node.label == nodeLabel).position = position;
