@@ -15,22 +15,22 @@
     <div class="bfs">
       <grf-array grfQueue
                  class="queue"
-                 [array]="(service.currentState$ | async)?.queue"
-                 [accentColor]="(service.currentState$ | async)?.accentColor"
-                 [primaryColor]="(service.currentState$ | async)?.primaryColor"
-                 [secondaryColor]="(service.currentState$ | async)?.secondaryColor"
+                 [array]="(service.currentNormalizedState$ | async)?.queue"
+                 [accentColor]="(service.currentNormalizedState$ | async)?.accentColor"
+                 [primaryColor]="(service.currentNormalizedState$ | async)?.primaryColor"
+                 [secondaryColor]="(service.currentNormalizedState$ | async)?.secondaryColor"
       ></grf-array>
 
       <grf-array grfQueue
                  class="solution"
-                 [array]="(service.currentState$ | async)?.solution"
-                 [accentColor]="(service.currentState$ | async)?.accentColor"
-                 [primaryColor]="(service.currentState$ | async)?.primaryColor"
-                 [secondaryColor]="(service.currentState$ | async)?.secondaryColor"
+                 [array]="(service.currentNormalizedState$ | async)?.solution"
+                 [accentColor]="(service.currentNormalizedState$ | async)?.accentColor"
+                 [primaryColor]="(service.currentNormalizedState$ | async)?.primaryColor"
+                 [secondaryColor]="(service.currentNormalizedState$ | async)?.secondaryColor"
       ></grf-array>
 
-      <grf-graph [nodes]="(service.currentState$ | async)?.nodes"
-                 [edges]="(service.currentState$ | async)?.edges"
+      <grf-graph [nodes]="(service.currentNormalizedState$ | async)?.nodes"
+                 [edges]="(service.currentNormalizedState$ | async)?.edges"
                  (graphClick)="click$.next($event)"
       >
       </grf-graph>

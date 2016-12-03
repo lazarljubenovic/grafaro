@@ -15,7 +15,6 @@ export interface NormalizedState {
     accentColor?: string[];
     primaryColor?: string[];
     secondaryColor?: string[];
-    lineNumber: number;
 }
 
 @Injectable()
@@ -49,6 +48,7 @@ export class BreadthFirstSearchService {
     public root: string = '100';
 
     private algorithm: Function = breadthFirstSearch;
+    private states: BreadthFirstSearchState[];
     private normalizedStates: NormalizedState[];
 
     private _currentStateIndex: number = 0;
@@ -61,19 +61,21 @@ export class BreadthFirstSearchService {
         return this._currentStateIndex;
     }
 
-    public currentState$ = new ReplaySubject<NormalizedState>(1);
+    public currentNormalizedState$ = new ReplaySubject<NormalizedState>(1);
+    public currentState$ = new ReplaySubject<BreadthFirstSearchState>(1);
 
     public graphState$ = new ReplaySubject<Graph>(1);
 
     public setGraph() {
-        this.normalizedStates = this.algorithm(this.graph, this.root)
-            .map(state => this.getNormalizedState(state));
+        this.states = this.algorithm(this.graph, this.root);
+        this.normalizedStates = this.states.map(state => this.getNormalizedState(state));
         this.fixCurrentStateIndex();
         this.onGraphChange();
     }
 
     private onGraphChange(): void {
-        this.currentState$.next(this.normalizedStates[this.currentStateIndex]);
+        this.currentState$.next(this.states[this.currentStateIndex]);
+        this.currentNormalizedState$.next(this.normalizedStates[this.currentStateIndex]);
         this.graphState$.next(this.graph);
     }
 
@@ -243,7 +245,6 @@ export class BreadthFirstSearchService {
         const accentColor: string[] = [state.currentNode];
         const primaryColor: string[] = [state.currentNeighbor];
         const secondaryColor: string[] = [];
-        const lineNumber: number = state.lineNumber;
 
         return {
             nodes,
@@ -253,7 +254,6 @@ export class BreadthFirstSearchService {
             accentColor,
             primaryColor,
             secondaryColor,
-            lineNumber,
         };
     }
 

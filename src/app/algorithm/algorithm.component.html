@@ -7,27 +7,50 @@
   <div class="line-numbers">
     <span *ngFor="let i of 19 | orderedArray | slice : 1">{{i}}</span>
   </div>
-  <pre><code>function <b>BreadthFirst</b>(graph, root) {{'{'}}
-  let <span #visited
-            (click)="visitedOpen.next(!visitedOpen.getValue())">solution</span> = [];
-  let <span #currentNode>queue</span> = new Queue();
-  queue.enqueue(root);
+  <pre><code>function <b>BreadthFirst</b>(graph, <span #root (click)="isOpenRoot$.next(!isOpenRoot$.getValue())">root</span>) {{'{'}}
+  let <span #solution (click)="isOpenSolution$.next(!isOpenSolution$.getValue())">solution</span> = [];
+  let queue = new Queue();
+  <span #queue (click)="isOpenQueue$.next(!isOpenQueue$.getValue())">queue</span>.enqueue(root);
   let visited = new Set();
-  visited.add(root);
+  <span #visited (click)="isOpenVisited$.next(!isOpenVisited$.getValue())">visited</span>.add(root);
   while(!queue.isEmpty) {{'{'}}
-    let currentNode = queue.deque();
-    let neighbors = graph.neighbors(currentNode);
+    let <span #currentNode (click)="isOpenCurrentNode$.next(!isOpenCurrentNode$.getValue())">currentNode</span> = queue.deque();
+    let <span #neighbors (click)="isOpenNeighbors$.next(!isOpenNeighbors$.getValue())">neighbors</span> = graph.neighbors(currentNode);
     visited.push(currentNode);
     neighbors
       .filter(neighbor => !visited.has(neighbor))
       .filter(neighbor => !queue.has(neighbor))
-      .forEach(neighbor => queue.enqueue(neighbor));
-    solution.push(currentNode);
+      .forEach(<span #neighbor (click)="isOpenCurrentNeighbor$.next(!isOpenCurrentNeighbor$.getValue())">neighbor</span> => queue.enqueue(neighbor));
+    <span #solution (click)="isOpenSolution$.next(!isOpenSolution$.getValue())">solution</span>.push(currentNode);
   {{'}'}}
   return solution;
 {{'}'}}</code></pre>
 </div>
 
-<grf-annotation *ngIf="visitedOpen | async" [algorithm]="box" [snippet]="visited">
-  <grf-array [array]="varSolution$ | async" [highlightedLetters]="['C']"></grf-array>
+<grf-annotation *ngIf="isOpenSolution$ | async" [algorithm]="box" [snippet]="solution">
+  <grf-array [array]="varSolution$ | async"></grf-array>
+</grf-annotation>
+
+<grf-annotation *ngIf="isOpenQueue$ | async" [algorithm]="box" [snippet]="queue">
+  <grf-array [array]="varQueue$ | async"></grf-array>
+</grf-annotation>
+
+<grf-annotation *ngIf="isOpenRoot$ | async" [algorithm]="box" [snippet]="root">
+  <grf-array [array]="[varRoot$ | async]"></grf-array>
+</grf-annotation>
+
+<grf-annotation *ngIf="isOpenVisited$ | async" [algorithm]="box" [snippet]="visited">
+  <grf-array [array]="varVisited$ | async"></grf-array>
+</grf-annotation>
+
+<grf-annotation *ngIf="isOpenNeighbors$ | async" [algorithm]="box" [snippet]="neighbors">
+  <grf-array [array]="varNeighbors$ | async"></grf-array>
+</grf-annotation>
+
+<grf-annotation *ngIf="isOpenCurrentNode$ | async" [algorithm]="box" [snippet]="currentNode">
+  <grf-array [array]="[varCurrentNode$ | async]"></grf-array>
+</grf-annotation>
+
+<grf-annotation *ngIf="isOpenCurrentNeighbor$ | async" [algorithm]="box" [snippet]="neighbor">
+  <grf-array [array]="[varCurrentNeighbor$ | async]"></grf-array>
 </grf-annotation>
