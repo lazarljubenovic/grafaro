@@ -55,17 +55,17 @@ export class CalloutLineService {
                      dangerZone: Rectangle,
                      margin: number = 12): Point[] {
         const expandedDangerZone: Rectangle = this.expandRectangle(dangerZone, margin);
-        const exitPoint: Point = this.getClosestExitPoint(from, expandedDangerZone);
+        const exitPoint: Point = this.getClosestExitPoint(to, expandedDangerZone);
 
-        const midPoint1: Point = {x: exitPoint.x, y: to.y};
-        const midPoint2: Point = {x: to.x, y: exitPoint.y};
+        const midPoint1: Point = {x: exitPoint.x, y: from.y};
+        const midPoint2: Point = {x: from.x, y: exitPoint.y};
 
         const midPoint: Point =
-            this.geometryService.isInRectangle(midPoint1, expandedDangerZone) ?
-                midPoint2 :
-                midPoint1;
+            this.geometryService.isInRectangle(midPoint2, expandedDangerZone) ?
+                midPoint1 :
+                midPoint2;
 
-        return [from, exitPoint, midPoint, to];
+        return [from, midPoint, exitPoint, to];
     }
 
     constructor(@Inject(GeometryService) public geometryService: GeometryService) {
