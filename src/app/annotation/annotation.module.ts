@@ -9,6 +9,7 @@ import {CalloutLineService} from "./callout-line/callout-line.service";
 import {ElementPositionPipe} from "./element-position.pipe";
 import {ArrayComponent} from "./array/array.component";
 import {UtilPipesModule} from "../util-pipes/util-pipes.module";
+import {ElementPositionService} from "./element-position.service";
 
 @NgModule({
     imports: [
@@ -30,6 +31,7 @@ import {UtilPipesModule} from "../util-pipes/util-pipes.module";
     providers: [
         GeometryService,
         CalloutLineService,
+        ElementPositionService,
     ],
 })
 export class AnnotationModule {

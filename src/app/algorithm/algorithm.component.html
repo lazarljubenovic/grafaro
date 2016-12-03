@@ -27,7 +27,10 @@
 {{'}'}}</code></pre>
 </div>
 
-<grf-annotation *ngIf="isOpenSolution$ | async" [algorithm]="box" [snippet]="solution">
+<grf-annotation *ngIf="isOpenSolution$ | async"
+                [algorithm]="box"
+                [snippet]="solution"
+>
   <grf-array [array]="varSolution$ | async"></grf-array>
 </grf-annotation>
 

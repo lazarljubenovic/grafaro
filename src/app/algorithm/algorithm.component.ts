@@ -18,11 +18,7 @@ export class AlgorithmComponent implements OnInit {
     public varNeighbors$;
     public varCurrentNode$;
     public varCurrentNeighbor$;
-
     public lineNumber$: Observable<number>;
-
-    public mockArray = ['A', 'B', 'C', 'D'];
-    public highlights = ['B', 'C'];
 
     public isOpenSolution$ = new BehaviorSubject<boolean>(false);
     public isOpenQueue$ = new BehaviorSubject<boolean>(false);
@@ -31,10 +27,6 @@ export class AlgorithmComponent implements OnInit {
     public isOpenNeighbors$ = new BehaviorSubject<boolean>(false);
     public isOpenCurrentNode$ = new BehaviorSubject<boolean>(false);
     public isOpenCurrentNeighbor$ = new BehaviorSubject<boolean>(false);
-
-    public removeFromArray(item: string): void {
-        this.mockArray = this.mockArray.filter(e => e != item);
-    }
 
     constructor(graphService: BreadthFirstSearchService) {
         this.currentState$ = graphService.currentState$;

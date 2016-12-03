@@ -38,6 +38,42 @@ export class GeometryService {
         return conditions.every(condition => condition);
     }
 
+    public expandRectangle(rectangle: Rectangle, margin: number): Rectangle {
+        return {
+            topLeft: {
+                x: rectangle.topLeft.x - margin,
+                y: rectangle.topLeft.y - margin
+            },
+            bottomRight: {
+                x: rectangle.bottomRight.x + margin,
+                y: rectangle.bottomRight.y + margin,
+            },
+        };
+    }
+
+    public getAllExitPoints(point: Point, rectangle: Rectangle): Point[] {
+        return [
+            {x: point.x, y: rectangle.topLeft.y},
+            {x: rectangle.bottomRight.x, y: point.y},
+            {x: point.x, y: rectangle.bottomRight.y},
+            {x: rectangle.topLeft.x, y: point.y},
+        ];
+    }
+
+    public getClosestExitPoint(point: Point, rectangle: Rectangle): Point {
+        const exitPoints: Point[] = this.getAllExitPoints(point, rectangle);
+        let closestPoint = exitPoints[0];
+        let minDistance = this.getDistanceBetween(closestPoint, point);
+        for (const exitPoint of exitPoints.slice(1)) {
+            const thisDistance: number = this.getDistanceBetween(exitPoint, point);
+            if (thisDistance < minDistance) {
+                minDistance = thisDistance;
+                closestPoint = exitPoint;
+            }
+        }
+        return closestPoint;
+    }
+
     constructor() {
     }
 

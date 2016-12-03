@@ -3,6 +3,7 @@
 $color: mix(black, white, 86%);
 
 :host {
+  display: block;
 
   > div {
     display: block;
