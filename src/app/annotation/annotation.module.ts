@@ -10,6 +10,7 @@ import {ElementPositionPipe} from "./element-position.pipe";
 import {ArrayComponent} from "./array/array.component";
 import {UtilPipesModule} from "../util-pipes/util-pipes.module";
 import {ElementPositionService} from "./element-position.service";
+import {EmptyComponent} from "./empty/empty.component";
 
 @NgModule({
     imports: [
@@ -23,6 +24,7 @@ import {ElementPositionService} from "./element-position.service";
         CalloutLineComponent,
         ElementPositionPipe,
         ArrayComponent,
+        EmptyComponent,
     ],
     exports: [
         AnnotationComponent,

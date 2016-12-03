@@ -1,4 +1,5 @@
-<ul>
+<grf-empty *ngIf="!array.length"></grf-empty>
+<ul *ngIf="array.length">
   <li *ngFor="let item of array"
       [class.highlighted]="highlightedLetters | contains : item"
       [@element]="true"
