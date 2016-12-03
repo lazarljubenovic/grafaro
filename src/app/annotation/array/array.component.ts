@@ -1,4 +1,7 @@
-import {Component, OnInit, Input, trigger, state, style, transition, animate} from "@angular/core";
+import {
+    Component, OnInit, Input, trigger, state, style, transition, animate,
+    ChangeDetectionStrategy
+} from "@angular/core";
 
 @Component({
     selector: 'grf-array',
@@ -21,6 +24,7 @@ import {Component, OnInit, Input, trigger, state, style, transition, animate} fr
             transition('* <=> void', animate('360ms ease-out')),
         ])
     ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ArrayComponent implements OnInit {
 

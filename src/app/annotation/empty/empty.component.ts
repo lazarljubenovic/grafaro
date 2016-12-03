@@ -1,9 +1,10 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, OnInit, ChangeDetectionStrategy} from "@angular/core";
 
 @Component({
     selector: 'grf-empty',
     template: `<span class="icon">×</span><span>(empty)</span>`,
-    styleUrls: ['./empty.component.scss']
+    styleUrls: ['./empty.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmptyComponent implements OnInit {
 

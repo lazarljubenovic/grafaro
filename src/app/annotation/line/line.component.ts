@@ -20,7 +20,7 @@ interface EulerPoint {
 
 @Component({
     selector: 'grf-line',
-    templateUrl: './line.component.html',
+    template: ``,
     styleUrls: ['./line.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -28,7 +28,10 @@ export class LineComponent implements OnInit, OnChanges {
 
     @HostBinding('style.background-color')
     @Input() public color: string;
+
+    @HostBinding('style.height.px')
     @Input() public width: number;
+
     @Input() public pointA: EuclideanPoint;
     @Input() public pointB: EuclideanPoint;
 
@@ -39,9 +42,6 @@ export class LineComponent implements OnInit, OnChanges {
 
     @HostBinding('style.top')
     public y: string;
-
-    @HostBinding('style.height')
-    public lineWidth: string;
 
     @HostBinding('style.width')
     public lineLength: string;
@@ -63,7 +63,6 @@ export class LineComponent implements OnInit, OnChanges {
     private calculateParameters(): void {
         this.x = `${this.pointA.x}px`;
         this.y = `${this.pointA.y}px`;
-        this.lineWidth = `${this.width}px`;
         this.lineLength = `${this.vector.r}px`;
         this.rotation = `rotate(${this.geometry.toDegrees(this.vector.φ)}deg)`;
     }
