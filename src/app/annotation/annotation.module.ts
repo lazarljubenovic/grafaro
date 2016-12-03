@@ -7,10 +7,13 @@ import {PolylineComponent} from "./polyline/polyline.component";
 import {CalloutLineComponent} from "./callout-line/callout-line.component";
 import {CalloutLineService} from "./callout-line/callout-line.service";
 import {ElementPositionPipe} from "./element-position.pipe";
+import {ArrayComponent} from "./array/array.component";
+import {UtilPipesModule} from "../util-pipes/util-pipes.module";
 
 @NgModule({
     imports: [
-        CommonModule
+        CommonModule,
+        UtilPipesModule,
     ],
     declarations: [
         AnnotationComponent,
@@ -18,9 +21,11 @@ import {ElementPositionPipe} from "./element-position.pipe";
         PolylineComponent,
         CalloutLineComponent,
         ElementPositionPipe,
+        ArrayComponent,
     ],
     exports: [
         AnnotationComponent,
+        ArrayComponent,
     ],
     providers: [
         GeometryService,

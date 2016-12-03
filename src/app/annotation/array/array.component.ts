@@ -11,8 +11,8 @@ import {
 
 @Component({
     selector: 'grf-array',
-    templateUrl: './array.component.html',
-    styleUrls: ['./array.component.scss'],
+    templateUrl: 'array.component.html',
+    styleUrls: ['array.component.scss'],
     animations: [
         trigger('element', [
             state('void', style({

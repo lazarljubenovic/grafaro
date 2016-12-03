@@ -76,22 +76,42 @@ export class BreadthFirstSearchService {
         this.graphState$.next(this.graph);
     }
 
+    private currentStateIndexInc() {
+        if (this.currentStateIndex < this.normalizedStates.length - 1) {
+            this.currentStateIndex++;
+        }
+    }
+
+    private currentStateIndexDec() {
+        if (this.currentStateIndex > 0) {
+            this.currentStateIndex--;
+        }
+    }
+
+    private currentStateIndexFirst() {
+        this.currentStateIndex = 0;
+    }
+
+    private currentStateIndexLast() {
+        this.currentStateIndex = this.normalizedStates.length - 1;
+
+    }
+
     public updateStateNumber(action: string): void {
         switch (action) {
             case 'next':
-                this.currentStateIndex++;
+                this.currentStateIndexInc();
                 break;
             case 'prev':
-                this.currentStateIndex--;
+                this.currentStateIndexDec();
                 break;
             case 'first':
-                this.currentStateIndex = 0;
+                this.currentStateIndexFirst();
                 break;
             case 'last':
-                this.currentStateIndex = this.normalizedStates.length - 1;
+                this.currentStateIndexLast();
                 break;
         }
-        this.fixCurrentStateIndex();
     }
 
     private fixCurrentStateIndex(): void {

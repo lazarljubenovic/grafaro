@@ -1,5 +1,6 @@
 import {Component, OnInit} from "@angular/core";
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject, Observable} from "rxjs";
+import {BreadthFirstSearchService} from "../breadth-first-search/breadth-first-search.service";
 
 @Component({
     selector: 'grf-algorithm',
@@ -7,6 +8,8 @@ import {BehaviorSubject} from "rxjs";
     styleUrls: ['./algorithm.component.scss']
 })
 export class AlgorithmComponent implements OnInit {
+
+    public varSolution$: Observable<string[]>;
 
     public lineNumber = 0;
 
@@ -23,10 +26,12 @@ export class AlgorithmComponent implements OnInit {
         this.lineNumber = Math.floor(Math.random() * 12 + 1);
     }
 
-    constructor() {
+    constructor(public graphService: BreadthFirstSearchService) {
     }
 
     ngOnInit() {
+        this.varSolution$ = this.graphService.currentState$
+            .map(state => state.solution);
     }
 
 }
