@@ -118,7 +118,7 @@ export class BreadthFirstSearchService {
                 .find(nodeLabel => nodeLabel === label) != null;
     }
 
-    private suggestNewNodeName(): string {
+    public suggestNewNodeName(): string {
         const labels: string[] = this.graph.nodes()
             .map(nodeId => this.graph.node(nodeId))
             .sort();
@@ -138,6 +138,13 @@ export class BreadthFirstSearchService {
         this.graph.setNode(id, label);
         this.setGraph();
         this.setPosition(label, position);
+    }
+
+    public addNodeOnRandomPlace(): void {
+        const x: number = Math.random() * 100;
+        const y: number = Math.random() * 100;
+
+        this.addNode({y, x});
     }
 
     public removeNode(nodeId: string): void {
