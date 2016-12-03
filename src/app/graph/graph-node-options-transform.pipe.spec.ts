@@ -1,5 +1,4 @@
 /* tslint:disable:no-unused-variable */
-import {GraphNodeOptionsTransformPipe} from "./graph-node-options-transform.pipe";
 
 // TODO
 xdescribe('Pipe: GraphNodeOptionsTransform', () => {

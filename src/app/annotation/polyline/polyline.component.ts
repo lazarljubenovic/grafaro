@@ -1,9 +1,10 @@
-import {Component, OnInit, Input} from "@angular/core";
+import {Component, OnInit, Input, ChangeDetectionStrategy} from "@angular/core";
 
 @Component({
     selector: 'grf-polyline',
     templateUrl: './polyline.component.html',
-    styleUrls: ['./polyline.component.scss']
+    styleUrls: ['./polyline.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PolylineComponent implements OnInit {
 

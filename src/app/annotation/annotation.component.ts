@@ -3,7 +3,8 @@ import {
     OnInit,
     ElementRef,
     HostListener,
-    ViewChild
+    ViewChild,
+    Input
 } from "@angular/core";
 
 @Component({
@@ -12,6 +13,9 @@ import {
     styleUrls: ['./annotation.component.scss']
 })
 export class AnnotationComponent implements OnInit {
+
+    @Input() public algorithm: ElementRef;
+    @Input() public snippet: HTMLElement;
 
     private movingIsInProgress = false;
     private grabbedX = 0;
@@ -22,6 +26,9 @@ export class AnnotationComponent implements OnInit {
 
     public x: number;
     public y: number;
+
+    public annotationX: number;
+    public annotationY: number;
 
     @HostListener('window:mouseup')
     public onWindowMouseUp(): void {
@@ -44,12 +51,17 @@ export class AnnotationComponent implements OnInit {
     @HostListener('window:mousemove', ['$event'])
     public onWindowsMouseMove(event: MouseEvent): void {
         if (this.movingIsInProgress) {
-            const handleX = this.handleRef.nativeElement.getBoundingClientRect().left;
-            const handleY = this.handleRef.nativeElement.getBoundingClientRect().top;
+            const rect = this.handleRef.nativeElement.getBoundingClientRect();
+            const handleX = rect.left;
+            const handleY = rect.top;
+            const height = rect.bottom - rect.top;
+            const width = rect.right - rect.left;
             const dx = event.clientX - handleX - this.grabbedX;
             const dy = event.clientY - handleY - this.grabbedY;
             this.x = handleX + dx;
             this.y = handleY + dy;
+            this.annotationX = this.x + width / 2;
+            this.annotationY = this.y + height / 2;
         }
     }
 

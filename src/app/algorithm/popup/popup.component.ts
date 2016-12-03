@@ -32,7 +32,8 @@ export class PopupComponent implements OnInit {
 
     @HostBinding('@component') public componentAnimation = true;
 
-    @Input() public set position(position: {x: number, y: number}) {
+    @Input()
+    public set position(position: {x: number, y: number}) {
         this.x = position.x + 'px';
         this.y = position.y + 'px';
     }

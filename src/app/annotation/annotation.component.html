@@ -6,7 +6,7 @@
   <ng-content></ng-content>
 </div>
 
-<grf-polyline [points]="[{x: 100, y: 100}, {x: 200, y: 100}, {x: 500, y: 300}]"
-              [color]="'rgba(0, 0, 0, .4)'"
-              [width]="1"
-></grf-polyline>
+<grf-callout-line [from]="{x: annotationX, y: annotationY}"
+                  [to]="snippet | elementPosition"
+                  [dangerZone]="algorithm"
+></grf-callout-line>

@@ -1,4 +1,5 @@
 import {Injectable} from "@angular/core";
+import {Rectangle} from "./callout-line/callout-line.service";
 
 interface Point {
     x: number;
@@ -26,6 +27,15 @@ export class GeometryService {
 
     public toRadians(degrees: number): number {
         return degrees * Math.PI / 180;
+    }
+
+    public isInRectangle(point: Point, rectangle: Rectangle) {
+        const isRightOfLeft = rectangle.topLeft.x < point.x;
+        const isLeftOfRight = point.x < rectangle.bottomRight.x;
+        const isBelowTop = rectangle.topLeft.y < point.y;
+        const isAboveBottom = point.y < rectangle.bottomRight.y;
+        const conditions = [isRightOfLeft, isLeftOfRight, isBelowTop, isAboveBottom];
+        return conditions.every(condition => condition);
     }
 
     constructor() {

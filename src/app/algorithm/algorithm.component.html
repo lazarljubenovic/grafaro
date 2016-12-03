@@ -20,20 +20,22 @@
 {{'}'}}</code></pre>
 </div>
 
-<grf-annotation>Drag me!</grf-annotation>,
+<grf-annotation [algorithm]="box" [snippet]="visited">Visited's annotation
+</grf-annotation>
+<!--<grf-annotation [algorithm]="box" [snippet]="currentNode">Visited's annotation</grf-annotation>-->
 
-<grf-popup *ngIf="visitedOpen | async" [position]="visited | popupPosition">
-  <grf-array [array]="mockArray"
-             [highlightedLetters]="highlights"
-  ></grf-array>
-</grf-popup>
-
-<hr>
-<button (click)="removeFromArray('A')">Remove A</button>
-<button (click)="removeFromArray('B')">Remove B</button>
-<button (click)="removeFromArray('C')">Remove C</button>
-<button (click)="removeFromArray('D')">Remove D</button>
-<hr>
-<button (click)="randomLineNumber()">Random Line Number (current
-  {{lineNumber}})
-</button>
+<!--<grf-popup *ngIf="visitedOpen | async" [position]="visited | popupPosition">-->
+<!--<grf-array [array]="mockArray"-->
+<!--[highlightedLetters]="highlights"-->
+<!--&gt;</grf-array>-->
+<!--</grf-popup>-->
+<!---->
+<!--<hr>-->
+<!--<button (click)="removeFromArray('A')">Remove A</button>-->
+<!--<button (click)="removeFromArray('B')">Remove B</button>-->
+<!--<button (click)="removeFromArray('C')">Remove C</button>-->
+<!--<button (click)="removeFromArray('D')">Remove D</button>-->
+<!--<hr>-->
+<!--<button (click)="randomLineNumber()">Random Line Number (current-->
+<!--{{lineNumber}})-->
+<!--</button>-->
