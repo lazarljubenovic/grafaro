@@ -70,6 +70,8 @@ export class AnnotationComponent implements OnInit, AfterContentInit {
         const size = this.elementPositionService.getSize(this.handleRef.nativeElement);
         this.x = exitPoint.x - size.w / 2;
         this.y = exitPoint.y - size.h / 2;
+        this.annotationX = this.x;
+        this.annotationY = this.y + size.h / 2;
     }
 
     private recalculatePosition(clientX: number, clientY: number): void {
