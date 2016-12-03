@@ -34,6 +34,14 @@ export class MatrixComponent implements OnInit {
         this.graphService.addNodeOnRandomPlace();
     }
 
+    public connectNode(row: number, column: number) {
+        const rowLabel: string = this.labels[row - 1];
+        const columnLabel: string = this.labels[column - 1];
+
+        this.graphService.linkNodesByLabel(rowLabel, columnLabel);
+
+    }
+
     constructor(private graphService: BreadthFirstSearchService) {
     }
 

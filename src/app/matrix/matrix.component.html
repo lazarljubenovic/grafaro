@@ -1,6 +1,7 @@
 <table>
-  <tr *ngFor="let row of data | matrixWithLabels : labels : labels">
-    <td *ngFor="let cell of row">{{cell}}</td>
+  <tr *ngFor="let row of data | matrixWithLabels : labels : labels; let rowInd = index">
+    <td *ngFor="let cell of row; let colInd = index"
+        (click)="connectNode(rowInd, colInd)">{{cell}}</td>
   </tr>
 </table>
 

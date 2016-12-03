@@ -172,6 +172,13 @@ export class BreadthFirstSearchService {
         this.setGraph();
     }
 
+    public linkNodesByLabel(labelA: string, labelB: string) {
+        const nodeA: string = this.getNodeId(labelA);
+        const nodeB: string = this.getNodeId(labelB);
+
+        this.linkNodes(nodeA, nodeB);
+    }
+
     private setPosition(nodeLabel: string, position: ClickPosition): void {
         this.normalizedStates[this.currentStateIndex].nodes
             .find(node => node.label == nodeLabel).position = position;
