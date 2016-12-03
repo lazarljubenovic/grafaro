@@ -35,8 +35,15 @@ export class MatrixComponent implements OnInit {
     }
 
     public connectNode(row: number, column: number) {
-        const rowLabel: string = this.labels[row - 1];
-        const columnLabel: string = this.labels[column - 1];
+        const rowLabel: string = this.labels[row];
+        const columnLabel: string = this.labels[column];
+
+        this.data[row][column] = (this.data[row][column] + 1) % 2;
+        if (row != column) {
+            this.data[column][row] = (this.data[column][row] + 1) % 2;
+        }
+
+        this.data = [...this.data];
 
         this.graphService.linkNodesByLabel(rowLabel, columnLabel);
 

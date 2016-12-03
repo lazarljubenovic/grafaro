@@ -1,7 +1,7 @@
 <table>
   <tr *ngFor="let row of data | matrixWithLabels : labels : labels; let rowInd = index">
     <td *ngFor="let cell of row; let colInd = index"
-        (click)="connectNode(rowInd, colInd)">{{cell}}</td>
+        (click)="connectNode(rowInd - 1, colInd - 1)">{{cell}}</td>
   </tr>
 </table>
 
