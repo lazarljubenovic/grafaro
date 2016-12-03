@@ -1,5 +1,7 @@
 <table>
-  <tr *ngFor="let row of data | matrixWithLabels : rowLabels : colLabels">
+  <tr *ngFor="let row of data | matrixWithLabels : labels : labels">
     <td *ngFor="let cell of row">{{cell}}</td>
   </tr>
 </table>
+
+<button (click)="addNode()">Add me</button>
