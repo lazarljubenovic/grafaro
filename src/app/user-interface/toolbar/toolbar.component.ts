@@ -10,6 +10,7 @@ export enum Actions {
     add,
     remove,
     connect,
+    disconnect,
     rename,
 }
 
@@ -46,6 +47,11 @@ export class ToolbarComponent implements OnInit {
             icon: 'fa-chain',
             name: 'Connect',
             action: Actions.connect,
+        },
+        {
+            icon: 'fa-chain-broken',
+            name: 'Disconnect',
+            action: Actions.disconnect,
         },
         {
             icon: 'fa-font',

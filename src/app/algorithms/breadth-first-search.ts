@@ -8,6 +8,7 @@ export interface BreadthFirstSearchState {
         from: string;
         to: string;
         label: string;
+        id: string;
     }[];
     currentNode: string;
     currentNodeNeighbors: string[];
@@ -29,6 +30,7 @@ function createNewState(currentNode, neighbors, solution, graph, visited, queue,
             from: edge.v,
             to: edge.w,
             label: graph.edge({v: edge.v, w: edge.w}),
+            id: JSON.stringify({v: edge.v, w: edge.w}),
         })),
         nodes: graph.nodes().map(node => graph.node(node)),
         nodeIds: graph.nodes(),

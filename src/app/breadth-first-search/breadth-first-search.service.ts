@@ -1,9 +1,6 @@
 import {Injectable} from "@angular/core";
 import {Graph} from "graphlib";
-import {
-    BreadthFirstSearchState,
-    breadthFirstSearch
-} from "../algorithms/breadth-first-search";
+import {BreadthFirstSearchState, breadthFirstSearch} from "../algorithms/breadth-first-search";
 import {VisNgNetworkOptionsEdges} from "@lazarljubenovic/vis-ng/core";
 import {GrfGraphNodeOptions} from "../graph/graph.module";
 import {ReplaySubject} from "rxjs";
@@ -28,25 +25,25 @@ export class BreadthFirstSearchService {
     public graph = new Graph({directed: false})
         .setNode('100', 'A')
         .setNode('101', 'B')
-        .setNode('102', 'C')
-        .setNode('103', 'D')
-        .setNode('104', 'E')
-        .setNode('105', 'F')
-        .setNode('106', 'G')
-        .setNode('107', 'H')
-        .setNode('108', 'I')
-        .setNode('109', 'J')
-        .setEdge('100', '101', '1')
-        .setEdge('100', '102', '2')
-        .setEdge('100', '103', '3')
-        .setEdge('101', '104', '4')
-        .setEdge('102', '105', '5')
-        .setEdge('102', '106', '6')
-        .setEdge('106', '107', '7')
-        .setEdge('104', '109', '8')
-        .setEdge('109', '108', '9')
-        .setEdge('103', '108', '10')
-        .setEdge('106', '108', '11');
+        // .setNode('102', 'C')
+        // .setNode('103', 'D')
+        // .setNode('104', 'E')
+        // .setNode('105', 'F')
+        // .setNode('106', 'G')
+        // .setNode('107', 'H')
+        // .setNode('108', 'I')
+        // .setNode('109', 'J')
+        .setEdge('100', '101', '1');
+    // .setEdge('100', '102', '2')
+    // .setEdge('100', '103', '3')
+    // .setEdge('101', '104', '4')
+    // .setEdge('102', '105', '5')
+    // .setEdge('102', '106', '6')
+    // .setEdge('106', '107', '7')
+    // .setEdge('104', '109', '8')
+    // .setEdge('109', '108', '9')
+    // .setEdge('103', '108', '10')
+    // .setEdge('106', '108', '11');
 
     public root: string = '100';
 
@@ -65,6 +62,8 @@ export class BreadthFirstSearchService {
 
     public currentState$ = new ReplaySubject<NormalizedState>(1);
 
+    public graphState$ = new ReplaySubject<Graph>(1);
+
     public setGraph() {
         this.normalizedStates = this.algorithm(this.graph, this.root)
             .map(state => this.getNormalizedState(state));
@@ -74,6 +73,7 @@ export class BreadthFirstSearchService {
 
     private onGraphChange(): void {
         this.currentState$.next(this.normalizedStates[this.currentStateIndex]);
+        this.graphState$.next(this.graph);
     }
 
     public updateStateNumber(action: string): void {
@@ -103,7 +103,7 @@ export class BreadthFirstSearchService {
         }
     }
 
-    private getNodeId(nodeLabel: string): string {
+    public getNodeId(nodeLabel: string): string {
         return this.graph.nodes()
             .find(nodeId => this.graph.node(nodeId) == nodeLabel);
     }
@@ -118,7 +118,7 @@ export class BreadthFirstSearchService {
                 .find(nodeLabel => nodeLabel === label) != null;
     }
 
-    private suggestNewNodeName(): string {
+    public suggestNewNodeName(): string {
         const labels: string[] = this.graph.nodes()
             .map(nodeId => this.graph.node(nodeId))
             .sort();
@@ -138,6 +138,13 @@ export class BreadthFirstSearchService {
         this.graph.setNode(id, label);
         this.setGraph();
         this.setPosition(label, position);
+    }
+
+    public addNodeOnRandomPlace(): void {
+        const x: number = Math.random() * 100;
+        const y: number = Math.random() * 100;
+
+        this.addNode({y, x});
     }
 
     public removeNode(nodeId: string): void {
@@ -163,6 +170,30 @@ export class BreadthFirstSearchService {
     public linkNodes(nodeA: string, nodeB: string) {
         this.graph.setEdge(nodeA, nodeB);
         this.setGraph();
+    }
+
+    public linkNodesByLabel(labelA: string, labelB: string) {
+        const nodeA: string = this.getNodeId(labelA);
+        const nodeB: string = this.getNodeId(labelB);
+
+        this.linkNodes(nodeA, nodeB);
+    }
+
+    public unlinkNodes(nodeA: string, nodeB: string) {
+        (<any>this.graph).removeEdge(nodeA, nodeB);
+        this.setGraph();
+    }
+
+    public unlinkNodesByLabel(labelA: string, labelB: string) {
+        const nodeA: string = this.getNodeId(labelA);
+        const nodeB: string = this.getNodeId(labelB);
+
+        this.unlinkNodes(nodeA, nodeB);
+    }
+
+    public removeEdge(edge: string) {
+        const graphEdge = JSON.parse(edge);
+        this.unlinkNodes(graphEdge.v, graphEdge.w);
     }
 
     private setPosition(nodeLabel: string, position: ClickPosition): void {

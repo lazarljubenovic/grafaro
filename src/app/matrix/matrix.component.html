@@ -1,5 +1,10 @@
 <table>
-  <tr *ngFor="let row of data | matrixWithLabels : rowLabels : colLabels">
-    <td *ngFor="let cell of row">{{cell}}</td>
+  <tr
+    *ngFor="let row of data |  matrixWithLabels : labels : labels; let rowInd = index">
+    <td *ngFor="let cell of row; let colInd = index"
+        (click)="connectNode(rowInd - 1, colInd - 1)">{{cell}}
+    </td>
   </tr>
 </table>
+
+<button (click)="addNode()">Add me</button>
