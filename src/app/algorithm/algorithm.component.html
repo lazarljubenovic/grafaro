@@ -47,7 +47,7 @@
 </grf-annotation>
 
 <grf-annotation *ngIf="isOpenNeighbors$ | async" [algorithm]="box" [snippet]="neighbors">
-  <grf-array [array]="varNeighbors$ | async"></grf-array>
+  <grf-array [array]="varNeighbors$ | async" [highlightedLetters]="[varCurrentNeighbor$ | async]"></grf-array>
 </grf-annotation>
 
 <grf-annotation *ngIf="isOpenCurrentNode$ | async" [algorithm]="box" [snippet]="currentNode">
