@@ -3,11 +3,14 @@
 $color: mix(black, white, 86%);
 
 :host {
-  display: block;
+  display: flex;
+  position: fixed;
+  justify-content: center;
+  overflow: visible;
+  width: 0;
 
   > div {
     display: block;
-    position: fixed;
     z-index: 9999;
     user-select: none;
     cursor: move;

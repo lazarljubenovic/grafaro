@@ -5,7 +5,8 @@ import {
     HostListener,
     ViewChild,
     Input,
-    AfterContentInit
+    AfterContentInit,
+    HostBinding
 } from "@angular/core";
 import {GeometryService} from "./geometry.service";
 import {ElementPositionService} from "./element-position.service";
@@ -14,7 +15,6 @@ import {ElementPositionService} from "./element-position.service";
     selector: 'grf-annotation',
     templateUrl: './annotation.component.html',
     styleUrls: ['./annotation.component.scss'],
-    providers: [],
 })
 export class AnnotationComponent implements OnInit, AfterContentInit {
 
@@ -28,7 +28,10 @@ export class AnnotationComponent implements OnInit, AfterContentInit {
     @ViewChild('handle') public handleRef: ElementRef;
     @ViewChild('movable') public movableRef: ElementRef;
 
+    @HostBinding('style.left.px')
     @Input() public x: number;
+
+    @HostBinding('style.top.px')
     @Input() public y: number;
 
     public annotationX: number;
@@ -64,23 +67,23 @@ export class AnnotationComponent implements OnInit, AfterContentInit {
         const algorithmRectangle = this.elementPositionService.getRectangle(this.algorithm);
         const largeRectangle = this.geometryService.expandRectangle(algorithmRectangle, 36);
         const exitPoint = this.geometryService.getClosestExitPoint(snippetCenter, largeRectangle);
-        const div = this.elementRef.nativeElement.children[0];
-        const size = this.elementPositionService.getSize(div);
+        const size = this.elementPositionService.getSize(this.handleRef.nativeElement);
         this.x = exitPoint.x - size.w / 2;
         this.y = exitPoint.y - size.h / 2;
     }
 
     private recalculatePosition(clientX: number, clientY: number): void {
-        const rect = this.handleRef.nativeElement.getBoundingClientRect();
-        const handleX = rect.left;
-        const handleY = rect.top;
-        const height = rect.bottom - rect.top;
-        const width = rect.right - rect.left;
-        const dx = clientX - handleX - this.grabbedX;
+        const hostRect = this.elementRef.nativeElement.getBoundingClientRect();
+        const visualRect = this.handleRef.nativeElement.getBoundingClientRect();
+        const handleX = hostRect.left;
+        const handleY = hostRect.top;
+        const height = visualRect.bottom - visualRect.top;
+        const width = visualRect.right - visualRect.left;
+        const dx = clientX - handleX - this.grabbedX + width / 2;
         const dy = clientY - handleY - this.grabbedY;
         this.x = handleX + dx;
         this.y = handleY + dy;
-        this.annotationX = this.x + width / 2;
+        this.annotationX = this.x;
         this.annotationY = this.y + height / 2;
     }
 
