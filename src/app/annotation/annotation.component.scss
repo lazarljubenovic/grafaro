@@ -10,12 +10,17 @@ $color: mix(black, white, 86%);
   width: 0;
 
   > div {
-    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     z-index: 9999;
     user-select: none;
     cursor: move;
     background-color: $color;
-    padding: 1ex 1em;
+    padding: 1.2ex 1.6ex;
+    height: 32px;
+    border-radius: 6px;
+    @include z-depth-1;
     font-family: $font;
     color: $white;
   }
