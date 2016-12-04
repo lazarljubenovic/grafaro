@@ -10,7 +10,6 @@ import {TabsModule} from '../shared/tabs/tabs.module';
 import {ChatModule} from '../shared/chat/chat.module';
 import {WebSocketService} from '../shared/websocket.service';
 import {MatrixModule} from '../matrix/matrix.module';
-import {ArrayModule} from '../array/array.module';
 import {JdenticonModule} from '../jdenticon/jdenticon.module';
 import {PopupRenameComponent} from './popup-rename/popup-rename.component';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -26,7 +25,6 @@ import {AlgorithmModule} from '../algorithm/algorithm.module';
         TabsModule,
         ChatModule,
         MatrixModule,
-        ArrayModule,
         JdenticonModule,
         ToastModule,
         AlgorithmModule,

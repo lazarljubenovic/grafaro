@@ -13,22 +13,6 @@
       (stateNumberChange)="updateStateNumber($event)"></grf-controls>
 
     <div class="bfs">
-      <grf-array grfQueue
-                 class="queue"
-                 [array]="(service.currentNormalizedState$ | async)?.queue"
-                 [accentColor]="(service.currentNormalizedState$ | async)?.accentColor"
-                 [primaryColor]="(service.currentNormalizedState$ | async)?.primaryColor"
-                 [secondaryColor]="(service.currentNormalizedState$ | async)?.secondaryColor"
-      ></grf-array>
-
-      <grf-array grfQueue
-                 class="solution"
-                 [array]="(service.currentNormalizedState$ | async)?.solution"
-                 [accentColor]="(service.currentNormalizedState$ | async)?.accentColor"
-                 [primaryColor]="(service.currentNormalizedState$ | async)?.primaryColor"
-                 [secondaryColor]="(service.currentNormalizedState$ | async)?.secondaryColor"
-      ></grf-array>
-
       <grf-graph [nodes]="(service.currentNormalizedState$ | async)?.nodes"
                  [edges]="(service.currentNormalizedState$ | async)?.edges"
                  (graphClick)="click$.next($event)"
