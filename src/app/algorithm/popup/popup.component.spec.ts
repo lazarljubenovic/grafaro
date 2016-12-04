@@ -1,5 +1,5 @@
 /* tslint:disable:no-unused-variable */
-import {PopupComponent} from "./popup.component";
+import {PopupComponent} from './popup.component';
 
 describe('Component: Popup', () => {
     it('should create an instance', () => {

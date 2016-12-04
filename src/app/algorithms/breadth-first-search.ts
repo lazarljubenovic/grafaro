@@ -1,7 +1,6 @@
 /* tslint:disable */
-
-import {Graph} from "graphlib";
-import {Queue} from "../data-structures/queue";
+import {Graph} from 'graphlib';
+import {Queue} from '../data-structures/queue';
 
 export interface BreadthFirstSearchState {
     nodeIds: string[];

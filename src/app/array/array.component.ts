@@ -10,7 +10,7 @@ import {
     style,
     transition,
     animate
-} from "@angular/core";
+} from '@angular/core';
 
 @Directive({
     selector: '[grfStack]',

@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-variable */
-import {ChatComponent} from "./chat.component";
-import {ComponentFixture, TestBed} from "@angular/core/testing";
-import {ChatModule} from "./chat.module";
+import {ChatComponent} from './chat.component';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {ChatModule} from './chat.module';
 
 // TODO
 xdescribe('Component: Chat', () => {

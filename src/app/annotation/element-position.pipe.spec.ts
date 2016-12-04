@@ -1,5 +1,5 @@
 /* tslint:disable:no-unused-variable */
-import {ElementPositionPipe} from "./element-position.pipe";
+import {ElementPositionPipe} from './element-position.pipe';
 
 describe('Pipe: ElementPosition', () => {
     it('create an instance', () => {

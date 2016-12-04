@@ -1,6 +1,6 @@
 /* tslint:disable:no-unused-variable */
-import {TestBed, inject} from "@angular/core/testing";
-import {WebSocketService} from "./websocket.service";
+import {TestBed, inject} from '@angular/core/testing';
+import {WebSocketService} from './websocket.service';
 
 // TODO
 xdescribe('Service: WebSocket', () => {

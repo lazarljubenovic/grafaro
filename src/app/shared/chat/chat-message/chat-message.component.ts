@@ -1,6 +1,6 @@
-import {Component, OnInit, Input, ViewEncapsulation} from "@angular/core";
-import {MarkdownService} from "../../markdown.service";
-import {EmojiService} from "../../emoji.service";
+import {Component, OnInit, Input, ViewEncapsulation} from '@angular/core';
+import {MarkdownService} from '../../markdown.service';
+import {EmojiService} from '../../emoji.service';
 
 
 export interface ChatMessageInfo {

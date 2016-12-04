@@ -1,5 +1,5 @@
 /* tslint:disable:no-unused-variable */
-import {PopupPositionPipe} from "./popup-position.pipe";
+import {PopupPositionPipe} from './popup-position.pipe';
 
 
 xdescribe('Pipe: PopupPosition', () => {

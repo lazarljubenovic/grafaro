@@ -1,5 +1,5 @@
 /* tslint:disable:no-unused-variable */
-import {OrderedArrayPipe} from "./ordered-array.pipe";
+import {OrderedArrayPipe} from './ordered-array.pipe';
 
 describe('Pipe: OrderedArray', () => {
     const pipe = new OrderedArrayPipe();

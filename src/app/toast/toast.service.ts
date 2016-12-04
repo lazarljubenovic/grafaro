@@ -4,10 +4,10 @@ import {
     ViewContainerRef,
     Inject,
     ComponentRef
-} from "@angular/core";
-import {ReplaySubject, Subscription} from "rxjs";
-import {ToastComponent} from "./toast.component";
-import {Queue} from "../data-structures/queue";
+} from '@angular/core';
+import {ReplaySubject, Subscription} from 'rxjs';
+import {ToastComponent} from './toast.component';
+import {Queue} from '../data-structures/queue';
 
 @Injectable()
 export class ToastService {

@@ -1,11 +1,5 @@
-import {
-    Component,
-    OnInit,
-    Input,
-    ChangeDetectionStrategy,
-    OnChanges
-} from "@angular/core";
-import {CalloutLineService} from "./callout-line.service";
+import {Component, OnInit, Input, ChangeDetectionStrategy, OnChanges} from '@angular/core';
+import {CalloutLineService} from './callout-line.service';
 
 @Component({
     selector: 'grf-callout-line',

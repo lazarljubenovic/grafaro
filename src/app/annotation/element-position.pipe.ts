@@ -1,5 +1,5 @@
-import {Pipe, PipeTransform, Inject} from "@angular/core";
-import {ElementPositionService} from "./element-position.service";
+import {Pipe, PipeTransform, Inject} from '@angular/core';
+import {ElementPositionService} from './element-position.service';
 
 @Pipe({
     name: 'elementPosition'

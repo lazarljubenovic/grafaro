@@ -7,8 +7,8 @@ import {
     ElementRef,
     Renderer,
     Input
-} from "@angular/core";
-import {TabComponent} from "./tab/tab.component";
+} from '@angular/core';
+import {TabComponent} from './tab/tab.component';
 
 interface Tab {
     icon: string;

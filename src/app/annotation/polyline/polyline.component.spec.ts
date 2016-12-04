@@ -1,5 +1,5 @@
 /* tslint:disable:no-unused-variable */
-import {PolylineComponent} from "./polyline.component";
+import {PolylineComponent} from './polyline.component';
 
 describe('Component: Polyline', () => {
     it('should create an instance', () => {

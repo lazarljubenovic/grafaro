@@ -1,8 +1,8 @@
 /* tslint:disable:no-unused-variable */
-import {TestBed, ComponentFixture} from "@angular/core/testing";
-import {TabsComponent} from "./tabs.component";
-import {Renderer} from "@angular/core";
-import {TabsModule} from "./tabs.module";
+import {TestBed, ComponentFixture} from '@angular/core/testing';
+import {TabsComponent} from './tabs.component';
+import {Renderer} from '@angular/core';
+import {TabsModule} from './tabs.module';
 
 // TODO
 xdescribe('Component: Tabs', () => {

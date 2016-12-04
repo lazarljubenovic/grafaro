@@ -1,8 +1,8 @@
 /* tslint:disable:no-unused-variable */
-import {TestBed, ComponentFixture} from "@angular/core/testing";
-import {ChatMessageComponent} from "./chat-message.component";
-import {EmojiService} from "../../emoji.service";
-import {MarkdownService} from "../../markdown.service";
+import {TestBed, ComponentFixture} from '@angular/core/testing';
+import {ChatMessageComponent} from './chat-message.component';
+import {EmojiService} from '../../emoji.service';
+import {MarkdownService} from '../../markdown.service';
 
 describe('Component: ChatMessage', () => {
     let component: ChatMessageComponent;

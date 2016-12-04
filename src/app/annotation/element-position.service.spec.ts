@@ -1,16 +1,15 @@
 /* tslint:disable:no-unused-variable */
-
-import { TestBed, async, inject } from '@angular/core/testing';
-import { ElementPositionService } from './element-position.service';
+import {TestBed, inject} from '@angular/core/testing';
+import {ElementPositionService} from './element-position.service';
 
 describe('Service: ElementPosition', () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [ElementPositionService]
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            providers: [ElementPositionService]
+        });
     });
-  });
 
-  it('should ...', inject([ElementPositionService], (service: ElementPositionService) => {
-    expect(service).toBeTruthy();
-  }));
+    it('should ...', inject([ElementPositionService], (service: ElementPositionService) => {
+        expect(service).toBeTruthy();
+    }));
 });

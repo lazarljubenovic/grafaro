@@ -1,5 +1,5 @@
 /* tslint:disable:no-unused-variable */
-import {CalloutLineComponent} from "./callout-line.component";
+import {CalloutLineComponent} from './callout-line.component';
 
 describe('Component: CalloutLine', () => {
     it('should create an instance', () => {

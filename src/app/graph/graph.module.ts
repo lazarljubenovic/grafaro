@@ -1,10 +1,10 @@
-import {NgModule} from "@angular/core";
-import {CommonModule} from "@angular/common";
-import {GraphComponent} from "./graph.component";
-import {VisNetworkModule} from "@lazarljubenovic/vis-ng/core";
-import {GraphNodeOptionsTransformPipe} from "./graph-node-options-transform.pipe";
-import {GraphEdgeOptionsTransformPipe} from "./graph-edge-options-transform.pipe";
-import {ColorThemeService} from "../color-theme.service";
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {GraphComponent} from './graph.component';
+import {VisNetworkModule} from '@lazarljubenovic/vis-ng/core';
+import {GraphNodeOptionsTransformPipe} from './graph-node-options-transform.pipe';
+import {GraphEdgeOptionsTransformPipe} from './graph-edge-options-transform.pipe';
+import {ColorThemeService} from '../color-theme.service';
 
 export interface GrfGraphNodeOptions {
     id: string;

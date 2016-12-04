@@ -1,6 +1,6 @@
 /* tslint:disable:no-unused-variable */
-import {TestBed, inject} from "@angular/core/testing";
-import {ChatService} from "./chat.service";
+import {TestBed, inject} from '@angular/core/testing';
+import {ChatService} from './chat.service';
 
 // TODO
 xdescribe('Service: ChatService', () => {

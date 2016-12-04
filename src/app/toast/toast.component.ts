@@ -7,8 +7,8 @@ import {
     trigger,
     state,
     HostBinding
-} from "@angular/core";
-import {Observable} from "rxjs";
+} from '@angular/core';
+import {Observable} from 'rxjs';
 
 @Component({
     selector: 'grf-toast',

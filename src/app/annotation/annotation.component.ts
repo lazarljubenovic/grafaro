@@ -7,9 +7,9 @@ import {
     Input,
     AfterContentInit,
     HostBinding
-} from "@angular/core";
-import {GeometryService} from "./geometry.service";
-import {ElementPositionService} from "./element-position.service";
+} from '@angular/core';
+import {GeometryService} from './geometry.service';
+import {ElementPositionService} from './element-position.service';
 
 @Component({
     selector: 'grf-annotation',

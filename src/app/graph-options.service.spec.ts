@@ -1,6 +1,6 @@
 /* tslint:disable:no-unused-variable */
-import {TestBed, inject} from "@angular/core/testing";
-import {GraphOptionsService} from "./graph-options.service";
+import {TestBed, inject} from '@angular/core/testing';
+import {GraphOptionsService} from './graph-options.service';
 
 describe('Service: GraphOptions', () => {
     beforeEach(() => {

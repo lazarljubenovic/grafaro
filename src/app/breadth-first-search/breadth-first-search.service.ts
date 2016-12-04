@@ -1,10 +1,10 @@
-import {Injectable} from "@angular/core";
-import {Graph} from "graphlib";
-import {BreadthFirstSearchState, breadthFirstSearch} from "../algorithms/breadth-first-search";
-import {VisNgNetworkOptionsEdges} from "@lazarljubenovic/vis-ng/core";
-import {GrfGraphNodeOptions} from "../graph/graph.module";
-import {ReplaySubject} from "rxjs";
-import {ClickPosition} from "../user-interface/toolbar/toolbar.component";
+import {Injectable} from '@angular/core';
+import {Graph} from 'graphlib';
+import {BreadthFirstSearchState, breadthFirstSearch} from '../algorithms/breadth-first-search';
+import {VisNgNetworkOptionsEdges} from '@lazarljubenovic/vis-ng/core';
+import {GrfGraphNodeOptions} from '../graph/graph.module';
+import {ReplaySubject} from 'rxjs';
+import {ClickPosition} from '../user-interface/toolbar/toolbar.component';
 
 export interface NormalizedState {
     nodes: GrfGraphNodeOptions[];

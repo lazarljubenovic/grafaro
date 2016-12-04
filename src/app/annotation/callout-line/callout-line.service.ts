@@ -1,5 +1,5 @@
-import {Injectable, Inject} from "@angular/core";
-import {GeometryService} from "../geometry.service";
+import {Injectable, Inject} from '@angular/core';
+import {GeometryService} from '../geometry.service';
 
 interface Point {
     x: number;

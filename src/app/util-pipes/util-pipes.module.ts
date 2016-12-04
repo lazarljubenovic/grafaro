@@ -1,7 +1,7 @@
-import {NgModule} from "@angular/core";
-import {CommonModule} from "@angular/common";
-import {ContainsPipe} from "./contains.pipe";
-import {OrderedArrayPipe} from "./ordered-array.pipe";
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {ContainsPipe} from './contains.pipe';
+import {OrderedArrayPipe} from './ordered-array.pipe';
 
 @NgModule({
     imports: [

@@ -1,5 +1,5 @@
 /* tslint:disable:no-unused-variable */
-import {ControlsComponent} from "./controls.component";
+import {ControlsComponent} from './controls.component';
 
 // TODO
 xdescribe('Component: Controls', () => {

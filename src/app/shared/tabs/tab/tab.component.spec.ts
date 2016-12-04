@@ -1,6 +1,6 @@
 /* tslint:disable:no-unused-variable */
-import {TestBed, ComponentFixture} from "@angular/core/testing";
-import {TabComponent} from "./tab.component";
+import {TestBed, ComponentFixture} from '@angular/core/testing';
+import {TabComponent} from './tab.component';
 
 describe('Component: Tab', () => {
     let component: TabComponent;

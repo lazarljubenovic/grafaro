@@ -1,5 +1,5 @@
 /* tslint:disable:no-unused-variable */
-import {MatrixComponent} from "./matrix.component";
+import {MatrixComponent} from './matrix.component';
 
 // TODO
 xdescribe('Component: Matrix', () => {

@@ -1,6 +1,6 @@
 /* tslint:disable:no-unused-variable */
-import {TestBed, inject} from "@angular/core/testing";
-import {CalloutLineService} from "./callout-line.service";
+import {TestBed, inject} from '@angular/core/testing';
+import {CalloutLineService} from './callout-line.service';
 
 interface Point {
     x: number;

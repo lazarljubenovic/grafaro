@@ -1,11 +1,11 @@
-import {Component, OnInit, AfterViewInit} from "@angular/core";
-import {BehaviorSubject, Observable} from "rxjs";
-import {BreadthFirstSearchService} from "../breadth-first-search/breadth-first-search.service";
+import {Component, OnInit, AfterViewInit} from '@angular/core';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {BreadthFirstSearchService} from '../breadth-first-search/breadth-first-search.service';
 
 @Component({
     selector: 'grf-algorithm',
     templateUrl: './algorithm.component.html',
-    styleUrls: ['./algorithm.component.scss']
+    styleUrls: ['./algorithm.component.scss'],
 })
 export class AlgorithmComponent implements OnInit, AfterViewInit {
 

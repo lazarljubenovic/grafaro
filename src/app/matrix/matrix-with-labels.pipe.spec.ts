@@ -1,5 +1,5 @@
 /* tslint:disable:no-unused-variable */
-import {MatrixWithLabelsPipe} from "./matrix-with-labels.pipe";
+import {MatrixWithLabelsPipe} from './matrix-with-labels.pipe';
 
 describe('Pipe: MatrixWithLabels', () => {
     const pipe = new MatrixWithLabelsPipe();

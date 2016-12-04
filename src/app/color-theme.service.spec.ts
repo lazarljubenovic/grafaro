@@ -1,6 +1,6 @@
 /* tslint:disable:no-unused-variable */
-import {TestBed, inject} from "@angular/core/testing";
-import {ColorThemeService} from "./color-theme.service";
+import {TestBed, inject} from '@angular/core/testing';
+import {ColorThemeService} from './color-theme.service';
 
 describe('Service: ColorTheme', () => {
     beforeEach(() => {

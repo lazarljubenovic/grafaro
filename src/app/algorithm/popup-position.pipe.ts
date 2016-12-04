@@ -1,4 +1,4 @@
-import {Pipe, PipeTransform} from "@angular/core";
+import {Pipe, PipeTransform} from '@angular/core';
 
 interface Position {
     x: number;
@@ -10,9 +10,7 @@ interface Size {
     h: number;
 }
 
-@Pipe({
-    name: 'popupPosition'
-})
+@Pipe({name: 'popupPosition'})
 export class PopupPositionPipe implements PipeTransform {
 
     private getSize(element: HTMLElement): Size {

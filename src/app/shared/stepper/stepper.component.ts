@@ -7,8 +7,8 @@ import {
     ElementRef,
     AfterContentInit,
     ViewChild
-} from "@angular/core";
-import {StepperStepComponent} from "./stepper-step/stepper-step.component";
+} from '@angular/core';
+import {StepperStepComponent} from './stepper-step/stepper-step.component';
 
 @Component({
     selector: 'grf-stepper',

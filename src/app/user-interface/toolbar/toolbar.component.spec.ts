@@ -1,5 +1,5 @@
 /* tslint:disable:no-unused-variable */
-import {ToolbarComponent} from "./toolbar.component";
+import {ToolbarComponent} from './toolbar.component';
 
 // TODO
 xdescribe('Component: Toolbar', () => {

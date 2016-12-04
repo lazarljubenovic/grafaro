@@ -1,7 +1,14 @@
 import {
-    Component, OnInit, Input, trigger, state, style, transition, animate,
+    Component,
+    OnInit,
+    Input,
+    trigger,
+    state,
+    style,
+    transition,
+    animate,
     ChangeDetectionStrategy
-} from "@angular/core";
+} from '@angular/core';
 
 @Component({
     selector: 'grf-array',

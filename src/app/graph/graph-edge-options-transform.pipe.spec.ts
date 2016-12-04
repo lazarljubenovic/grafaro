@@ -1,5 +1,5 @@
 /* tslint:disable:no-unused-variable */
-import {GraphEdgeOptionsTransformPipe} from "./graph-edge-options-transform.pipe";
+import {GraphEdgeOptionsTransformPipe} from './graph-edge-options-transform.pipe';
 
 // TODO
 xdescribe('Pipe: GraphEdgeOptionsTransform', () => {

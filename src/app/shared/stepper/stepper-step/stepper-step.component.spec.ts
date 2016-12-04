@@ -1,6 +1,6 @@
 /* tslint:disable:no-unused-variable */
-import {TestBed, ComponentFixture} from "@angular/core/testing";
-import {StepperStepComponent} from "./stepper-step.component";
+import {TestBed, ComponentFixture} from '@angular/core/testing';
+import {StepperStepComponent} from './stepper-step.component';
 
 // TODO
 xdescribe('Component: StepperStep', () => {

@@ -6,9 +6,9 @@ import {
     ElementRef,
     OnChanges,
     ChangeDetectionStrategy
-} from "@angular/core";
-import * as jdenticon from "jdenticon";
-import {Sha1Service} from "./sha1.service";
+} from '@angular/core';
+import * as jdenticon from 'jdenticon';
+import {Sha1Service} from './sha1.service';
 
 @Component({
     selector: 'grf-jdenticon',

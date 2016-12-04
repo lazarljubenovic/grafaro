@@ -1,6 +1,6 @@
-import {Pipe, PipeTransform} from "@angular/core";
-import {VisNgNetworkOptionsEdges} from "@lazarljubenovic/vis-ng/core";
-import {GrfGraphEdgeOptions} from "./graph.module";
+import {Pipe, PipeTransform} from '@angular/core';
+import {VisNgNetworkOptionsEdges} from '@lazarljubenovic/vis-ng/core';
+import {GrfGraphEdgeOptions} from './graph.module';
 
 @Pipe({
     name: 'graphEdgeOptionsTransform',

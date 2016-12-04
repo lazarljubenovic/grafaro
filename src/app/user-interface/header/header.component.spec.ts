@@ -1,5 +1,5 @@
 /* tslint:disable:no-unused-variable */
-import {HeaderComponent} from "./header.component";
+import {HeaderComponent} from './header.component';
 
 // TODO
 xdescribe('Component: Header', () => {

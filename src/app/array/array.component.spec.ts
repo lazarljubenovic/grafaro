@@ -1,5 +1,5 @@
 /* tslint:disable:no-unused-variable */
-import {ArrayComponent} from "./array.component";
+import {ArrayComponent} from './array.component';
 
 // TODO
 xdescribe('Component: Array', () => {

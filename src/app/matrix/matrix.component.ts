@@ -1,6 +1,6 @@
-import {Component, OnInit} from "@angular/core";
-import {BreadthFirstSearchService} from "../breadth-first-search/breadth-first-search.service";
-import {Graph} from "graphlib";
+import {Component, OnInit} from '@angular/core';
+import {BreadthFirstSearchService} from '../breadth-first-search/breadth-first-search.service';
+import {Graph} from 'graphlib';
 
 @Component({
     selector: 'grf-matrix',

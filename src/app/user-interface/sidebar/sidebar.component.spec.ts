@@ -1,9 +1,9 @@
 /* tslint:disable:no-unused-variable */
-import {TestBed, ComponentFixture} from "@angular/core/testing";
-import {SidebarComponent} from "./sidebar.component";
-import {WebSocketService} from "../../shared/websocket.service";
-import {ChatModule} from "../../shared/chat/chat.module";
-import {TabsModule} from "../../shared/tabs/tabs.module";
+import {TestBed, ComponentFixture} from '@angular/core/testing';
+import {SidebarComponent} from './sidebar.component';
+import {WebSocketService} from '../../shared/websocket.service';
+import {ChatModule} from '../../shared/chat/chat.module';
+import {TabsModule} from '../../shared/tabs/tabs.module';
 
 // TODO
 xdescribe('Component: Sidebar', () => {

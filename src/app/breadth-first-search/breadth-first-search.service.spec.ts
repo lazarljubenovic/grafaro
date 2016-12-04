@@ -1,6 +1,6 @@
 /* tslint:disable:no-unused-variable */
-import {TestBed, inject} from "@angular/core/testing";
-import {BreadthFirstSearchService} from "./breadth-first-search.service";
+import {TestBed, inject} from '@angular/core/testing';
+import {BreadthFirstSearchService} from './breadth-first-search.service';
 
 // TODO
 xdescribe('Service: BreadthFirstSearch', () => {

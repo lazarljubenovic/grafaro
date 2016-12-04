@@ -5,14 +5,14 @@ import {
     ViewChild,
     ViewContainerRef,
     ComponentFactory
-} from "@angular/core";
-import {Subject, Observable} from "rxjs";
-import {Actions, ClickPosition} from "./toolbar/toolbar.component";
-import {GraphOptionsService} from "../graph-options.service";
-import {VisNgNetworkEventArgument} from "@lazarljubenovic/vis-ng/core";
-import {PopupRenameComponent} from "./popup-rename/popup-rename.component";
-import {BreadthFirstSearchService} from "../breadth-first-search/breadth-first-search.service";
-import {ToastService} from "../toast/toast.service";
+} from '@angular/core';
+import {Subject, Observable} from 'rxjs';
+import {Actions, ClickPosition} from './toolbar/toolbar.component';
+import {GraphOptionsService} from '../graph-options.service';
+import {VisNgNetworkEventArgument} from '@lazarljubenovic/vis-ng/core';
+import {PopupRenameComponent} from './popup-rename/popup-rename.component';
+import {BreadthFirstSearchService} from '../breadth-first-search/breadth-first-search.service';
+import {ToastService} from '../toast/toast.service';
 
 @Component({
     selector: 'grf-user-interface',

@@ -1,8 +1,6 @@
-import {Pipe, PipeTransform} from "@angular/core";
+import {Pipe, PipeTransform} from '@angular/core';
 
-@Pipe({
-    name: 'lineNumberStyle'
-})
+@Pipe({name: 'lineNumberStyle'})
 export class LineNumberStylePipe implements PipeTransform {
 
     transform(lineNumber: number,

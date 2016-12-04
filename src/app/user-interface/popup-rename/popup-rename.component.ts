@@ -6,8 +6,8 @@ import {
     ViewChild,
     ElementRef,
     HostListener
-} from "@angular/core";
-import {Subject} from "rxjs";
+} from '@angular/core';
+import {Subject} from 'rxjs';
 
 @Component({
     templateUrl: './popup-rename.component.html',

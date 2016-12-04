@@ -1,5 +1,5 @@
-import {Injectable} from "@angular/core";
-import {Rectangle} from "./callout-line/callout-line.service";
+import {Injectable} from '@angular/core';
+import {Rectangle} from './callout-line/callout-line.service';
 
 interface Point {
     x: number;

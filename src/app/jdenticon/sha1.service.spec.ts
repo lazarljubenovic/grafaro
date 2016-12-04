@@ -1,6 +1,6 @@
 /* tslint:disable:no-unused-variable */
-import {TestBed, inject} from "@angular/core/testing";
-import {Sha1Service} from "./sha1.service";
+import {TestBed, inject} from '@angular/core/testing';
+import {Sha1Service} from './sha1.service';
 
 // TODO why like this?
 xdescribe('Service: Sha1', () => {

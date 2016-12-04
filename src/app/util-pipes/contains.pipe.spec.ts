@@ -1,5 +1,5 @@
 /* tslint:disable:no-unused-variable */
-import {ContainsPipe} from "./contains.pipe";
+import {ContainsPipe} from './contains.pipe';
 
 describe('Pipe: Contains', () => {
     const transform = new ContainsPipe().transform;

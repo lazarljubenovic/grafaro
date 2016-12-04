@@ -1,7 +1,7 @@
-import {NgModule} from "@angular/core";
-import {CommonModule} from "@angular/common";
-import {JdenticonComponent} from "./jdenticon.component";
-import {Sha1Service} from "./sha1.service";
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {JdenticonComponent} from './jdenticon.component';
+import {Sha1Service} from './sha1.service';
 
 @NgModule({
     imports: [

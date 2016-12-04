@@ -5,8 +5,8 @@ import {
     ChangeDetectionStrategy,
     OnChanges,
     HostBinding
-} from "@angular/core";
-import {GeometryService} from "../geometry.service";
+} from '@angular/core';
+import {GeometryService} from '../geometry.service';
 
 interface EuclideanPoint {
     x: number;

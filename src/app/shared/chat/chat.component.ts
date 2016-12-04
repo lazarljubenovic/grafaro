@@ -6,13 +6,10 @@ import {
     ComponentFactoryResolver,
     ComponentRef,
     ElementRef
-} from "@angular/core";
-import {
-    ChatMessageInfo,
-    ChatMessageComponent
-} from "./chat-message/chat-message.component";
-import {ChatService} from "./chat.service";
-import {Observable} from "rxjs";
+} from '@angular/core';
+import {ChatMessageInfo, ChatMessageComponent} from './chat-message/chat-message.component';
+import {ChatService} from './chat.service';
+import {Observable} from 'rxjs';
 
 @Component({
     selector: 'grf-chat',
@@ -87,13 +84,13 @@ export class ChatComponent implements OnInit {
 
     ngOnInit() {
         this.chatMessageFactory = this.cfr.resolveComponentFactory(ChatMessageComponent);
-        this.chatMessages$ = this.chatService.create("ws://localhost:4000");
+        this.chatMessages$ = this.chatService.create('ws://localhost:4000');
 
         this.chatService.send({
-            message: "init",
-            senderHandle: "lazar",
-            senderHash: "231230213412",
-            senderName: "Lazar Ljubenovic",
+            message: 'init',
+            senderHandle: 'lazar',
+            senderHash: '231230213412',
+            senderName: 'Lazar Ljubenovic',
             timeStamp: new Date(),
         });
 

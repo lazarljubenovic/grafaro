@@ -8,7 +8,7 @@ import {
     trigger,
     HostBinding,
     Input
-} from "@angular/core";
+} from '@angular/core';
 
 @Component({
     selector: 'grf-popup',
@@ -25,8 +25,8 @@ import {
                 opacity: '1',
             })),
             transition('* <=> void', animate('240ms ease-out')),
-        ])
-    ]
+        ]),
+    ],
 })
 export class PopupComponent implements OnInit {
 

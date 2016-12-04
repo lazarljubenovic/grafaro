@@ -1,6 +1,6 @@
-import {Pipe, PipeTransform} from "@angular/core";
-import {GrfGraphNodeOptions} from "./graph.module";
-import {ColorThemeService} from "../color-theme.service";
+import {Pipe, PipeTransform} from '@angular/core';
+import {GrfGraphNodeOptions} from './graph.module';
+import {ColorThemeService} from '../color-theme.service';
 
 @Pipe({
     name: 'graphNodeOptionsTransform',
