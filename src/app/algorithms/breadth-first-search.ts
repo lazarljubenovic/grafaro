@@ -26,7 +26,7 @@ function createNewState(currentNode, neighbors, solution, graph, visited, queue,
     return {
         currentNode: currentNode ? graph.node(currentNode) : null,
         currentNodeNeighbors: neighbors ? neighbors.map(neighbor => graph.node(neighbor)) : [],
-        currentNeighbor: graph.node(currentNeighbor),
+        currentNeighbor: currentNeighbor ? graph.node(currentNeighbor) : null,
         currentSolution: [...solution].map(node => graph.node(node)),
         edges: graph.edges().map(edge => ({
             from: edge.v,
@@ -37,7 +37,7 @@ function createNewState(currentNode, neighbors, solution, graph, visited, queue,
         nodes: graph.nodes().map(node => graph.node(node)),
         nodeIds: graph.nodes(),
         visitedNodes: [...visited].map(node => graph.node(node)),
-        currentQueue: [currentNode, ...queue.toArray()].map(node => graph.node(node)),
+        currentQueue: [...queue.toArray()].map(node => graph.node(node)),
         rootNode: graph.node(root),
         lineNumber: lineNumber,
     };
