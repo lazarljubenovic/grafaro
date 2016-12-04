@@ -7,7 +7,8 @@ import {
     style,
     transition,
     animate,
-    ChangeDetectionStrategy
+    ChangeDetectionStrategy,
+    OnChanges
 } from '@angular/core';
 
 @Component({
@@ -33,10 +34,17 @@ import {
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ArrayComponent implements OnInit {
+export class ArrayComponent implements OnInit, OnChanges {
 
     @Input() public array: string[] = [];
     @Input() public highlightedLetters: string[] = [];
+
+    ngOnChanges() {
+        if (this.array.length == 1 && this.array[0] == null) {
+            this.array = [];
+        }
+        console.log(this.array);
+    }
 
     constructor() {
     }
