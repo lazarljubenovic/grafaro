@@ -43,7 +43,7 @@
 </grf-annotation>
 
 <grf-annotation *ngIf="isOpenRoot$ | async" [algorithm]="box" [snippet]="root">
-  <grf-array [array]="[varRoot$ | async]"></grf-array>
+  <grf-single-item [item]="varRoot$ | async"></grf-single-item>
 </grf-annotation>
 
 <grf-annotation *ngIf="isOpenVisited$ | async" [algorithm]="box" [snippet]="visited">
@@ -56,9 +56,9 @@
 </grf-annotation>
 
 <grf-annotation *ngIf="isOpenCurrentNode$ | async" [algorithm]="box" [snippet]="currentNode">
-  <grf-array [array]="[varCurrentNode$ | async]"></grf-array>
+  <grf-single-item [item]="varCurrentNode$ | async"></grf-single-item>
 </grf-annotation>
 
 <grf-annotation *ngIf="isOpenCurrentNeighbor$ | async" [algorithm]="box" [snippet]="neighbor">
-  <grf-array [array]="[varCurrentNeighbor$ | async]"></grf-array>
+  <grf-single-item [item]="varCurrentNeighbor$ | async"></grf-single-item>
 </grf-annotation>

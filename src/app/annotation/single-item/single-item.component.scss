@@ -1,0 +1,31 @@
+@import '../../global';
+
+$marble-size: 27px;
+
+@function get-border-color($color) {
+  @return mix(white, $color, 80%);
+}
+
+@mixin marble-colors($color) {
+  background-color: $color;
+  border: solid 1px get-border-color($color);
+}
+
+:host {
+  display: block;
+
+  div {
+    @include force-square($marble-size);
+    @include marble-colors(mix(white, black, 86%));
+    border-radius: 50%;
+    color: $black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all .2s ease-out;
+
+    &.highlighted {
+      @include marble-colors(get-color('primary'));
+    }
+  }
+}

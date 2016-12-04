@@ -1,0 +1,12 @@
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 27px;
+  height: 27px;
+  font-size: .7em;
+
+  span {
+    color: rgba(white, .5);
+  }
+}

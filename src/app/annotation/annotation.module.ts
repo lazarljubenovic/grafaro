@@ -11,6 +11,8 @@ import {ArrayComponent} from './array/array.component';
 import {UtilPipesModule} from '../util-pipes/util-pipes.module';
 import {ElementPositionService} from './element-position.service';
 import {EmptyComponent} from './empty/empty.component';
+import { SingleItemComponent } from './single-item/single-item.component';
+import { NullComponent } from './null/null.component';
 
 @NgModule({
     imports: [
@@ -25,10 +27,13 @@ import {EmptyComponent} from './empty/empty.component';
         ElementPositionPipe,
         ArrayComponent,
         EmptyComponent,
+        SingleItemComponent,
+        NullComponent,
     ],
     exports: [
         AnnotationComponent,
         ArrayComponent,
+        SingleItemComponent,
     ],
     providers: [
         GeometryService,
