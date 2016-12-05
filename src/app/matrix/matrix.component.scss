@@ -10,8 +10,8 @@
 
 %td-label {
   color: rgba(black, .5);
-  font-weight: 100;
   font-size: .8em;
+  cursor: default;
 }
 
 $size: 24px;
@@ -24,6 +24,10 @@ table {
     width: $size;
     height: $size;
     text-align: center;
+  }
+
+  tr:not(:first-child) {
+    cursor: pointer;
   }
 
   tr:first-child,
