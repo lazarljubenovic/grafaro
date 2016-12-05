@@ -19,6 +19,10 @@ export class MatrixComponent implements OnInit {
         this.graphService.addNodeOnRandomPlace();
     }
 
+    public removeNode(): void {
+        this.graphService.removeNode(this.graphService.getNodeId(this.labels.pop()));
+    }
+
     public connectNode(row: number, column: number) {
         const nodeA = this.graphService.getNodeId(this.labels[row]);
         const nodeB = this.graphService.getNodeId(this.labels[column]);
