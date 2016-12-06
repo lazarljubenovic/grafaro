@@ -9,6 +9,7 @@ import {
     Input
 } from '@angular/core';
 import {TabComponent} from './tab/tab.component';
+import {TabsService} from './tabs.service';
 
 interface Tab {
     icon: string;
@@ -20,7 +21,8 @@ interface Tab {
 @Component({
     selector: 'grf-tabs',
     templateUrl: './tabs.component.html',
-    styleUrls: ['./tabs.component.scss']
+    styleUrls: ['./tabs.component.scss'],
+    providers: [TabsService],
 })
 export class TabsComponent implements AfterContentInit {
 
@@ -33,23 +35,25 @@ export class TabsComponent implements AfterContentInit {
     @Input()
     public initialTabIndex: number = 2;
 
-    public currentTab: Tab;
+    public currentTabIndex: number;
 
     public tabs: Tab[] = [];
 
-    public setCurrentTab(tab: Tab) {
-        this.currentTab = tab;
+    public setCurrentTabIndex(tabIndex: number) {
+        this.tabsService.tabChange.next(tabIndex);
+        this.currentTabIndex = tabIndex;
         this.updateView();
     }
 
     public updateView(): void {
         const nativeElements = this.tabReferences.map(el => el.elementRef.nativeElement);
-        const currentStepNativeElement = nativeElements[this.currentTab.index];
+        const currentStepNativeElement = nativeElements[this.currentTabIndex];
         this.renderer.detachView(nativeElements);
         this.renderer.attachViewAfter(this.tabOutletRef.nativeElement, [currentStepNativeElement]);
     }
 
-    constructor(private renderer: Renderer) {
+    constructor(private renderer: Renderer,
+                private tabsService: TabsService) {
     }
 
     ngAfterContentInit() {
@@ -59,7 +63,7 @@ export class TabsComponent implements AfterContentInit {
             index: index,
             ref: ref,
         }));
-        this.setCurrentTab(this.tabs[this.initialTabIndex]);
+        this.setCurrentTabIndex(this.initialTabIndex);
     }
 
 }

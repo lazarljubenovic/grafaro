@@ -1,9 +1,9 @@
 <div #tabOutlet></div>
 <ng-content select="grf-tab"></ng-content>
 <ul class="tab-controls">
-  <li *ngFor="let tab of tabs"
-      (click)="setCurrentTab(tab)"
-      [class.current]="tab == currentTab"
+  <li *ngFor="let tab of tabs; let i = index"
+      (click)="setCurrentTabIndex(i)"
+      [class.current]="i == currentTabIndex"
   >
     <i class="fa fa-{{tab.icon}}"></i>
     <span>{{tab.title}}</span>

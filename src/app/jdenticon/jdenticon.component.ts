@@ -1,6 +1,5 @@
 import {
     Component,
-    OnInit,
     Input,
     ViewChild,
     ElementRef,
@@ -16,7 +15,7 @@ import {Sha1Service} from './sha1.service';
     styleUrls: ['./jdenticon.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class JdenticonComponent implements OnInit, OnChanges {
+export class JdenticonComponent implements OnChanges {
 
     @Input()
     public plaintext: string;
@@ -30,13 +29,7 @@ export class JdenticonComponent implements OnInit, OnChanges {
     @ViewChild('svg')
     public elementRef: ElementRef;
 
-    constructor(private hashService: Sha1Service) {
-    }
-
-    ngOnInit() {
-    }
-
-    ngOnChanges() {
+    public update(): void {
         try {
             if (this.hash) {
                 jdenticon.update(this.elementRef.nativeElement, this.hash, this.padding);
@@ -45,8 +38,16 @@ export class JdenticonComponent implements OnInit, OnChanges {
                 jdenticon.update(this.elementRef.nativeElement, hash, this.padding);
             }
         } catch (e) {
-            // TODO It tries to load identicons at the moment when they are hidden from the screen.
+            // The only error which can happen here is that Jdenticon cannot draw given space
+            // less than 30px.
         }
+    }
+
+    constructor(private hashService: Sha1Service) {
+    }
+
+    ngOnChanges() {
+        this.update();
     }
 
 }

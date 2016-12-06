@@ -1,6 +1,8 @@
-import {Component, OnInit, Input, ViewEncapsulation} from '@angular/core';
+import {Component, OnInit, Input, ViewEncapsulation, ViewChild} from '@angular/core';
 import {MarkdownService} from '../../markdown.service';
 import {EmojiService} from '../../emoji.service';
+import {TabsService} from '../../tabs/tabs.service';
+import {JdenticonComponent} from '../../../jdenticon/jdenticon.component';
 
 
 export interface ChatMessageInfo {
@@ -33,6 +35,9 @@ export class ChatMessageComponent implements OnInit {
 
     public parsedMessageHtml: string;
 
+    @ViewChild(JdenticonComponent)
+    public jdenticonComponentRef: JdenticonComponent;
+
     private updateParsed() {
         const message: string = this.info.message;
         const markdown: string = this.markdownService.transform(message);
@@ -40,10 +45,14 @@ export class ChatMessageComponent implements OnInit {
     }
 
     constructor(private markdownService: MarkdownService,
-                private emojiService: EmojiService) {
+                private emojiService: EmojiService,
+                private tabsService: TabsService) {
     }
 
     ngOnInit() {
+        this.tabsService.tabChange.subscribe(tabIndex => {
+            setTimeout(() => this.jdenticonComponentRef.update());
+        });
     }
 
 }
