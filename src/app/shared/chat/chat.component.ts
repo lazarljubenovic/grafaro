@@ -30,15 +30,32 @@ export class ChatComponent implements OnInit {
 
     public currentTypedMessage: string = '';
 
-    private scrollToBottom() {
+    private lastChatMessageInfo: ChatMessageInfo;
+
+    private scrollToBottom(): void {
         setTimeout(() => this.messagesContainer.nativeElement.scrollTop =
             this.messagesContainer.nativeElement.scrollHeight);
     }
 
-    private createChatMessage(content: ChatMessageInfo): void {
+    private isContinuous(message: ChatMessageInfo): boolean {
+        // If still nothing is set
+        if (!this.lastChatMessageInfo) {
+            return false;
+        }
+        if (message.senderName !== this.lastChatMessageInfo.senderName) {
+            return false;
+        }
+        const maxDelayMiliseonds: number = 60000; // 1 minute
+        const delay: number = (+message.timeStamp) - (+this.lastChatMessageInfo.timeStamp);
+        return delay <= maxDelayMiliseonds;
+    }
+
+    private createChatMessage(chatMessageInfo: ChatMessageInfo): void {
         let cmp: ComponentRef<ChatMessageComponent> =
             this.messageOutlet.createComponent(this.chatMessageFactory);
-        cmp.instance.info = content;
+        cmp.instance.info = chatMessageInfo;
+        cmp.instance.isShort = this.isContinuous(chatMessageInfo);
+        this.lastChatMessageInfo = chatMessageInfo;
         this.scrollToBottom();
     }
 

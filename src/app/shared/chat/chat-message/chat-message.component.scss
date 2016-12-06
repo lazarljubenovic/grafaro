@@ -3,10 +3,14 @@ $padding: 12px;
 
 grf-chat-message {
   display: flex;
-  margin-bottom: 1.8ex;
+  margin-top: 1.8ex;
   font-family: Roboto, sans-serif;
   font-size: .94em;
   width: 100%;
+
+  &:first-child {
+    margin-top: 0;
+  }
 
   .picture-column {
     width: $picture-size;
@@ -61,6 +65,22 @@ grf-chat-message {
     img {
       max-width: 100%;
     }
+  }
+
+}
+
+grf-chat-message.short {
+  margin-top: 0;
+  margin-bottom: 1.8ex;
+
+  .picture-column,
+  .info {
+    display: none;
+  }
+
+  .message {
+    padding-left: $picture-size + $padding;
+    width: calc(100% - #{$picture-size + $padding});
   }
 
 }
