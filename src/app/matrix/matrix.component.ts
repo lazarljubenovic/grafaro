@@ -15,6 +15,12 @@ export class MatrixComponent implements OnInit {
 
     private graph: Graph;
 
+    public highlightedIndexes: number[] = [-1, -1];
+
+    public highlight(row: number, column: number): void {
+        this.highlightedIndexes = [row, column];
+    }
+
     public addNode(): void {
         this.graphService.addNodeOnRandomPlace();
     }
@@ -59,11 +65,10 @@ export class MatrixComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.graphService.graphState$
-            .subscribe(graphState => {
-                this.graph = graphState;
-                this.graphToMatrix();
-            });
+        this.graphService.graphState$.subscribe(graphState => {
+            this.graph = graphState;
+            this.graphToMatrix();
+        });
     }
 
 }

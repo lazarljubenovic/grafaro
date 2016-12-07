@@ -25,6 +25,16 @@ table {
     width: $size;
     height: $size;
     text-align: center;
+
+    &.highlight {
+      color: get-color('primary');
+    }
+
+    &.this,
+    &.mirror {
+      color: get-color('accent');
+      font-weight: bold;
+    }
   }
 
   tr:not(:first-child) {
