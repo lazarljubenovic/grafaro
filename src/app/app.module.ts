@@ -13,6 +13,8 @@ import {ProjectBrowserModule} from './project-browser/project-browser.module';
 import {RouterModule} from '@angular/router';
 import {UserInterfaceComponent} from './user-interface/user-interface.component';
 import {ProjectBrowserComponent} from './project-browser/project-browser.component';
+import {FourOhFourModule} from './four-oh-four/four-oh-four.module';
+import {FourOhFourComponent} from './four-oh-four/four-oh-four.component';
 
 @NgModule({
     declarations: [
@@ -25,6 +27,7 @@ import {ProjectBrowserComponent} from './project-browser/project-browser.compone
         StepperModule,
         UserInterfaceModule,
         ProjectBrowserModule,
+        FourOhFourModule,
         RouterModule.forRoot([
             {
                 path: '',
@@ -33,6 +36,10 @@ import {ProjectBrowserComponent} from './project-browser/project-browser.compone
             {
                 path: 'project/:id',
                 component: UserInterfaceComponent,
+            },
+            {
+                path: '**',
+                component: FourOhFourComponent,
             },
         ]),
     ],

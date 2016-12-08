@@ -1,0 +1,53 @@
+@import '../global';
+
+:host {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: get-color('secondary');
+
+  .bubble {
+    $size: 320px;
+    width: $size;
+    height: $size;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: get-color('primary');
+    border: solid 3px white;
+    border-radius: $size / 2;
+
+    span {
+      color: $white;
+      font-family: $font;
+      font-weight: 700;
+      font-size: $size * .33;
+    }
+  }
+
+  h1 {
+    font-family: $font;
+    font-size: 80px;
+    font-weight: 300;
+    color: $white;
+  }
+
+  nav {
+    margin-top: 120px;
+
+    a {
+      text-transform: uppercase;
+      font-family: $font;
+      color: $white;
+      text-decoration: none;
+      cursor: pointer;
+      
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
