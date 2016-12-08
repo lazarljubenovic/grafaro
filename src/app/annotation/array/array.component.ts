@@ -43,7 +43,6 @@ export class ArrayComponent implements OnInit, OnChanges {
         if (this.array.length == 1 && this.array[0] == null) {
             this.array = [];
         }
-        console.log(this.array);
     }
 
     constructor() {
