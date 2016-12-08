@@ -9,6 +9,10 @@ import {UserInterfaceModule} from './user-interface/user-interface.module';
 import {MarkdownService} from './shared/markdown.service';
 import {EmojiService} from './shared/emoji.service';
 import {GraphOptionsService} from './graph-options.service';
+import {ProjectBrowserModule} from './project-browser/project-browser.module';
+import {RouterModule} from '@angular/router';
+import {UserInterfaceComponent} from './user-interface/user-interface.component';
+import {ProjectBrowserComponent} from './project-browser/project-browser.component';
 
 @NgModule({
     declarations: [
@@ -20,6 +24,17 @@ import {GraphOptionsService} from './graph-options.service';
         HttpModule,
         StepperModule,
         UserInterfaceModule,
+        ProjectBrowserModule,
+        RouterModule.forRoot([
+            {
+                path: '',
+                component: ProjectBrowserComponent,
+            },
+            {
+                path: 'project/:id',
+                component: UserInterfaceComponent,
+            },
+        ]),
     ],
     providers: [
         BreadthFirstSearchService,
