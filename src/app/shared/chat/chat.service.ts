@@ -1,5 +1,5 @@
 import {Injectable, Inject} from '@angular/core';
-import {WebSocketService} from '../websocket.service';
+import {WebSocketService} from '../../core/websocket.service';
 import {ChatMessageInfo} from './chat-message/chat-message.component';
 import {Observable} from 'rxjs';
 import {Message} from '../../message';

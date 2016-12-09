@@ -12,15 +12,11 @@ export class WebSocketService {
             type: type
         };
 
-        // console.log("WS servis:", messageToSend);
-
         this.wsSubject.next(JSON.stringify(messageToSend));
     }
 
     public create(url: string): Observable<Message<any>> {
         this.wsSubject = Observable.webSocket(url);
-
-        // this.wsSubject.subscribe(msg => console.log("recieved", msg));
 
         return this.wsSubject;
     }
