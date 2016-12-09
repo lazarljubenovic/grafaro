@@ -61,7 +61,6 @@ export class UserInterfaceComponent implements OnInit {
             position: values.event.pointer.DOM,
         }));
 
-    private selectedNode: string;
     private linkNodesNode$: Observable<string> = this.actions$
         .filter(values => values.action == Actions.connect && values.event.nodes.length != 0)
         .map(values => values.event.nodes[0].toString());
@@ -152,18 +151,13 @@ export class UserInterfaceComponent implements OnInit {
             });
         });
 
-        this.linkNodesBackground$.subscribe(() => {
-            this.selectedNode = null;
-        });
-
-        this.linkNodesNode$.subscribe(node => {
-            if (this.selectedNode == null) {
-                this.selectedNode = node;
-            } else if (this.selectedNode) {
-                this.linkTwoNodes(this.selectedNode, node);
-                this.selectedNode = null;
-            }
-        });
+        // Alt. solutions from Gitter: http://pastebin.com/ZpeSDwpJ
+        this.linkNodesNode$
+            .window(this.linkNodesBackground$)
+            .flatMap(window => window
+                .bufferCount(2)
+                .filter(arr => arr.length === 2))
+            .subscribe((nodes: string[]) => this.linkTwoNodes(nodes[0], nodes[1]));
 
         this.removeEdge$.subscribe((edge: string) => {
             this.service.removeEdge(edge);
