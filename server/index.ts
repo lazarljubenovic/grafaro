@@ -1,7 +1,8 @@
-import {ChatMessageInfo, Message} from './interfaces';
-import * as http from 'http';
-import * as ws from 'ws';
-import * as express from 'express';
+import {ChatMessageInfo, Message} from "./interfaces";
+import * as http from "http";
+import * as ws from "ws";
+import * as express from "express";
+import * as url from "url";
 
 const server = http.createServer();
 const WebSocketServer = ws.Server;
@@ -47,42 +48,39 @@ const dummyMessages: ChatMessageInfo[] = [
     },
 ];
 
-let messageRooms = {}; // associative array where each member holds an array of websocket clients
+let messageRooms: Map<string, Set<ws>> = new Map();
 
 app.use(function (req, res) {
     res.send({msg: 'hello'});
 });
 
 wss.on('connection', ws => {
-    // let location = url.parse(ws.upgradeReq.url, true);
+    let location = url.parse(ws.upgradeReq.url, true);
+    const userRoom: string = location.path.slice(1);
+    console.log('New user');
+
+    if (userRoom == '') {
+        // No user hash, send new one
+        ws.send(JSON.stringify({hash: "1231"}));
+    }
+
+    // Create room if it doesn't exists
+    if (!messageRooms.has(userRoom)) {
+        messageRooms.set(userRoom, new Set());
+    }
+
+    // Add user to the room
+    messageRooms.get(userRoom).add(ws);
+    console.log('New user joined the room', userRoom);
 
     ws.on('message', (message: string) => {
         let messageObj: Message<any> = JSON.parse(message);
 
-        if (messageObj.type == 'chat') {
-            var parsedMessage: ChatMessageInfo = messageObj.payload; // todo fix type
-        }
-        console.log(parsedMessage);
+        console.log(messageObj, "to room", userRoom);
 
-        // Create room if it doesn't exists
-        if (messageRooms[parsedMessage.senderHash] == undefined) {
-            messageRooms[parsedMessage.senderHash] = [];
-        }
-
-
-        if (parsedMessage.message == 'init') {
-            // Add user if the message is "init"
-            // todo should have special type for init messages
-            messageRooms[parsedMessage.senderHash].push(ws);
-            console.log('New user joined the room', parsedMessage.senderHash);
-        } else {
-            // Broadcast message to other users in the same room
-            wss.clients.filter(client => {
-                return (messageRooms[parsedMessage.senderHash].indexOf(client) > -1)
-                    && client != ws;
-            })
-                .forEach(client => client.send(JSON.stringify(messageObj)));
-        }
+        // Broadcast message to other users in the same room
+        messageRooms.get(userRoom)
+            .forEach(client => client != ws && client.send(JSON.stringify(messageObj)));
     });
 
     ws.on('error', (error) => {
@@ -90,15 +88,9 @@ wss.on('connection', ws => {
     });
 
     ws.on('close', () => {
-        let rooms = Object.keys(messageRooms);
-        rooms.forEach(room => {
-            let ind = messageRooms[room].indexOf(ws);
-
-            if (ind > -1) {
-                messageRooms[room].splice(ind, 1);
-                console.log('User has left the room', room);
-            }
-        });
+        messageRooms.get(userRoom)
+            .delete(ws);
+        console.log('User has left the room', userRoom);
     });
 
     setTimeout(() => {

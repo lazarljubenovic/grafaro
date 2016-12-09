@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {WebSocketService} from "./core/websocket.service";
 
 @Component({
     selector: 'grf-app',
@@ -7,10 +8,11 @@ import {Component, OnInit} from '@angular/core';
 })
 export class AppComponent implements OnInit {
 
-    constructor() {
+    constructor(private webSocket: WebSocketService) {
     }
 
     ngOnInit() {
+        this.webSocket.create('ws://localhost:4000/1213');
     }
 
 }
