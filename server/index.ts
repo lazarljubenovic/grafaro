@@ -47,7 +47,7 @@ const dummyMessages: ChatMessageInfo[] = [
     },
 ];
 
-let messageRooms = {}; // associative array where each member holds an array of websocket clients
+let messageRooms: Map<string, Set<ws>> = new Map();
 
 app.use(function (req, res) {
     res.send({msg: 'hello'});
@@ -65,23 +65,20 @@ wss.on('connection', ws => {
         console.log(parsedMessage);
 
         // Create room if it doesn't exists
-        if (messageRooms[parsedMessage.senderHash] == undefined) {
-            messageRooms[parsedMessage.senderHash] = [];
+        if (!messageRooms.has(parsedMessage.senderHash)) {
+            messageRooms.set(parsedMessage.senderHash, new Set());
         }
 
 
         if (parsedMessage.message == 'init') {
             // Add user if the message is "init"
             // todo should have special type for init messages
-            messageRooms[parsedMessage.senderHash].push(ws);
+            messageRooms.get(parsedMessage.senderHash).add(ws);
             console.log('New user joined the room', parsedMessage.senderHash);
         } else {
             // Broadcast message to other users in the same room
-            wss.clients.filter(client => {
-                return (messageRooms[parsedMessage.senderHash].indexOf(client) > -1)
-                    && client != ws;
-            })
-                .forEach(client => client.send(JSON.stringify(messageObj)));
+            messageRooms.get(parsedMessage.senderHash)
+                .forEach(client => client != ws && client.send(JSON.stringify(messageObj)));
         }
     });
 
