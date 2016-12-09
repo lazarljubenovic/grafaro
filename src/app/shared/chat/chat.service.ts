@@ -11,8 +11,8 @@ export class ChatService {
     constructor(@Inject(WebSocketService) private webSocketService: WebSocketService) {
     }
 
-    public create(url: string): Observable<ChatMessageInfo> {
-        this.chatSubject = this.webSocketService.create(url)
+    public create(): Observable<ChatMessageInfo> {
+        this.chatSubject = this.webSocketService.getWebSocket()
             .filter((msg: Message<ChatMessageInfo>) => msg.type == 'chat')
             .map((msg: Message<ChatMessageInfo>) => {
                 return msg.payload;

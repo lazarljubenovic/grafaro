@@ -101,15 +101,7 @@ export class ChatComponent implements OnInit {
 
     ngOnInit() {
         this.chatMessageFactory = this.cfr.resolveComponentFactory(ChatMessageComponent);
-        this.chatMessages$ = this.chatService.create('ws://localhost:4000');
-
-        this.chatService.send({
-            message: 'init',
-            senderHandle: 'lazar',
-            senderHash: '231230213412',
-            senderName: 'Lazar Ljubenovic',
-            timeStamp: new Date(),
-        });
+        this.chatMessages$ = this.chatService.create();
 
         this.chatMessages$.subscribe((message: ChatMessageInfo) => {
             this.createChatMessage(message);

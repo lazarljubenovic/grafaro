@@ -21,6 +21,10 @@ export class WebSocketService {
         return this.wsSubject;
     }
 
+    public getWebSocket(): Observable<Message<any>> {
+        return this.wsSubject;
+    }
+
     constructor() {
     }
 
