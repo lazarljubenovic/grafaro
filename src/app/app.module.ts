@@ -5,13 +5,13 @@ import {HttpModule} from '@angular/http';
 import {AppComponent} from './app.component';
 import {StepperModule} from './shared/stepper/stepper.module';
 import {BreadthFirstSearchService} from './breadth-first-search/breadth-first-search.service';
-import {UserInterfaceModule} from './user-interface/user-interface.module';
+import {ProjectViewModel} from './project-view/project-view.module';
 import {MarkdownService} from './shared/markdown.service';
 import {EmojiService} from './shared/emoji.service';
 import {GraphOptionsService} from './graph-options.service';
 import {ProjectBrowserModule} from './project-browser/project-browser.module';
 import {RouterModule} from '@angular/router';
-import {UserInterfaceComponent} from './user-interface/user-interface.component';
+import {ProjectViewComponent} from './project-view/project-view.component';
 import {ProjectBrowserComponent} from './project-browser/project-browser.component';
 import {FourOhFourModule} from './four-oh-four/four-oh-four.module';
 import {FourOhFourComponent} from './four-oh-four/four-oh-four.component';
@@ -25,7 +25,7 @@ import {FourOhFourComponent} from './four-oh-four/four-oh-four.component';
         FormsModule,
         HttpModule,
         StepperModule,
-        UserInterfaceModule,
+        ProjectViewModel,
         ProjectBrowserModule,
         FourOhFourModule,
         RouterModule.forRoot([
@@ -35,7 +35,7 @@ import {FourOhFourComponent} from './four-oh-four/four-oh-four.component';
             },
             {
                 path: 'project/:id',
-                component: UserInterfaceComponent,
+                component: ProjectViewComponent,
             },
             {
                 path: '**',

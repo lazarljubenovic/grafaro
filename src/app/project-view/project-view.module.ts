@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {UserInterfaceComponent} from './user-interface.component';
+import {ProjectViewComponent} from './project-view.component';
 import {HeaderComponent} from './header/header.component';
 import {GraphModule} from '../graph/graph.module';
 import {ToolbarComponent} from './toolbar/toolbar.component';
@@ -30,7 +30,7 @@ import {AlgorithmModule} from '../algorithm/algorithm.module';
         AlgorithmModule,
     ],
     declarations: [
-        UserInterfaceComponent,
+        ProjectViewComponent,
         HeaderComponent,
         ToolbarComponent,
         SidebarComponent,
@@ -41,11 +41,11 @@ import {AlgorithmModule} from '../algorithm/algorithm.module';
         WebSocketService,
     ],
     exports: [
-        UserInterfaceComponent,
+        ProjectViewComponent,
     ],
     entryComponents: [
         PopupRenameComponent,
     ]
 })
-export class UserInterfaceModule {
+export class ProjectViewModel {
 }

@@ -16,10 +16,10 @@ import {ToastService} from '../toast/toast.service';
 
 @Component({
     selector: 'grf-user-interface',
-    templateUrl: './user-interface.component.html',
-    styleUrls: ['./user-interface.component.scss']
+    templateUrl: 'project-view.component.html',
+    styleUrls: ['project-view.component.scss']
 })
-export class UserInterfaceComponent implements OnInit {
+export class ProjectViewComponent implements OnInit {
 
     public chooseTool$ = new Subject<Actions>();
     public click$ = new Subject<VisNgNetworkEventArgument>();
