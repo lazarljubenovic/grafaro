@@ -2,7 +2,13 @@
   <div class="avatar">
     <grf-jdenticon [plaintext]="project?.title"></grf-jdenticon>
   </div>
-  <div class="title">{{project?.title}}</div>
+  <div class="title-and-creator">
+    <div class="title">{{project?.title}}</div>
+    <div class="creator">
+      <div class="name">{{project?.creator.name}}</div>
+      <div class="handle">@{{project?.creator.handle}}</div>
+    </div>
+  </div>
 </div>
 
 <div class="description">{{project?.description}}</div>
@@ -10,3 +16,18 @@
 <ul class="tags">
   <li *ngFor="let tag of project?.tags">{{tag}}</li>
 </ul>
+
+<div class="additional-info">
+  <div class="badge">
+    <div class="icon"><i class="fa fa-user"></i></div>
+    <div class="number">{{project?.numberOfPeopleOnline}}</div>
+  </div>
+  <div class="badge">
+    <div class="icon"><i class="fa fa-thumbs-o-up"></i></div>
+    <div class="number">{{project?.numberOfLikes}}</div>
+  </div>
+  <div class="badge">
+    <div class="icon"><i class="fa fa-thumbs-o-down"></i></div>
+    <div class="number">{{project?.numberOfDislikes}}</div>
+  </div>
+</div>

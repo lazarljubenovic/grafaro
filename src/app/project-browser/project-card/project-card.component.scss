@@ -27,15 +27,55 @@ $title-height: 48px;
     @include z-depth-1;
   }
 
-  .title {
-    font-size: 1.5em;
+  .title-and-creator {
     margin-left: .5em;
     font-weight: 300;
+    display: flex;
+    flex-direction: column;
+
+    .title {
+      font-size: 1.5em;
+    }
+
+    .creator {
+      display: flex;
+      font-size: .86em;
+
+      .name {
+        margin-right: .5em;
+      }
+
+      .handle {
+        color: rgba(black, .4);
+      }
+    }
   }
 }
 
 .description {
   font-weight: 300;
+}
+
+.additional-info {
+  font-size: .8em;
+  display: flex;
+
+  .badge {
+    display: flex;
+
+    &:not(:last-child) {
+      margin-right: 1em;
+    }
+
+    .icon {
+      color: rgba(black, .45);
+      margin-right: 6px;
+    }
+
+    .number {
+      color: rgba(black, .6);
+    }
+  }
 }
 
 .tags {

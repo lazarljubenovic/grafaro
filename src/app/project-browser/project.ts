@@ -7,4 +7,8 @@ export interface Project {
         name: string;
         handle: string;
     };
+    isMadeByProfessor: boolean;
+    numberOfPeopleOnline: number;
+    numberOfLikes: number;
+    numberOfDislikes: number;
 }
