@@ -33,7 +33,10 @@ export class ProjectBrowserComponent implements OnInit {
 
         this.queryForm.valueChanges
             .debounceTime(200)
-            .subscribe(console.log.bind(console));
+            .subscribe(query => {
+                console.log(query);
+                this.projects$ = this._projectsService.getProjectByQuery(query);
+            });
     }
 
 }

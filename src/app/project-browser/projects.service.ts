@@ -124,6 +124,48 @@ export class ProjectsService {
         return Observable.of(this.mockProjects);
     }
 
+    // TODO type
+    public getProjectByQuery(query: any): Observable<Project[]> {
+        // searchBy: this._formBuilder.group({
+        //     searchQuery: '',
+        //     isCreatedByProfessor: false,
+        //     isWithPeopleOnline: false,
+        // }),
+        //     orderBy: 'name',
+        const result = this.mockProjects
+            .filter(project => project.isMadeByProfessor == query.searchBy.isCreatedByProfessor)
+            .filter(project => {
+                if (query.searchBy.isWithPeopleOnline) {
+                    return project.numberOfPeopleOnline > 0;
+                } else {
+                    return true;
+                }
+            })
+            .filter(project => !!project.title.match(query.searchBy.searchQuery))
+            .sort((projectA, projectB) => {
+                switch (query.orderBy) {
+                    case 'name':
+                        return projectA.title > projectB.title ? 1 : -1;
+                    case 'likes':
+                        const totalVotesA = projectA.numberOfLikes + projectA.numberOfDislikes;
+                        const totalVotesB = projectB.numberOfLikes + projectB.numberOfDislikes;
+                        if (totalVotesA == 0) {
+                            return 1;
+                        }
+                        if (totalVotesB == 0) {
+                            return -1;
+                        }
+                        const projectAPercentage = projectA.numberOfLikes / totalVotesA;
+                        const projectBPercentage = projectB.numberOfLikes / totalVotesB;
+                        return projectAPercentage > projectBPercentage ? -1 : 1;
+                    case 'people':
+                        return projectA.numberOfPeopleOnline > projectB.numberOfPeopleOnline
+                            ? -1 : 1;
+                }
+            });
+        return Observable.of(result);
+    }
+
     constructor() {
     }
 
