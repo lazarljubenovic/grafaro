@@ -7,6 +7,7 @@ import {ProjectCardComponent} from './project-card/project-card.component';
 import {ProjectsService} from './projects.service';
 import {JdenticonModule} from '../jdenticon/jdenticon.module';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {UtilPipesModule} from '../util-pipes/util-pipes.module';
 
 @NgModule({
     imports: [
@@ -16,6 +17,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
         JdenticonModule,
         FormsModule,
         ReactiveFormsModule,
+        UtilPipesModule,
     ],
     declarations: [
         ProjectBrowserComponent,
