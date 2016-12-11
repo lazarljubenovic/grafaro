@@ -1,0 +1,64 @@
+@import '../../global';
+
+$title-height: 48px;
+
+:host {
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+  @include z-depth-1;
+  font-family: $font;
+  color: $black;
+
+  > *:not(:last-child) {
+    margin-bottom: 12px;
+  }
+}
+
+.main-info {
+  display: flex;
+  align-items: center;
+  height: $title-height;
+  cursor: pointer;
+
+  .avatar {
+    width: $title-height;
+    height: $title-height;
+    @include z-depth-1;
+  }
+
+  .title {
+    font-size: 1.5em;
+    margin-left: .5em;
+    font-weight: 300;
+  }
+}
+
+.description {
+  font-weight: 300;
+}
+
+.tags {
+  display: flex;
+  padding: 0;
+  list-style-type: none;
+  font-size: .8em;
+
+  li {
+    display: inline-block;
+    font-weight: 500;
+    background-color: rgba(black, .1);
+    padding: .6ex .6em;
+    text-transform: uppercase;
+    border-radius: 3px;
+    cursor: pointer;
+
+    &:not(:last-child) {
+      margin-right: .5em;
+    }
+
+    &:hover {
+      background-color: rgba(get-color('accent'), .5);
+    }
+  }
+}

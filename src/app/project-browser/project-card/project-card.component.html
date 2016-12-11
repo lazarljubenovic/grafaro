@@ -1,0 +1,12 @@
+<div class="main-info" [routerLink]="['project/' + project.id]">
+  <div class="avatar">
+    <grf-jdenticon [plaintext]="project?.title"></grf-jdenticon>
+  </div>
+  <div class="title">{{project?.title}}</div>
+</div>
+
+<div class="description">{{project?.description}}</div>
+
+<ul class="tags">
+  <li *ngFor="let tag of project?.tags">{{tag}}</li>
+</ul>

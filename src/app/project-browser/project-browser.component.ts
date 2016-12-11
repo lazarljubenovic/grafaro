@@ -1,4 +1,7 @@
 import {Component, OnInit} from '@angular/core';
+import {ProjectsService} from './projects.service';
+import {Project} from './project';
+import {Observable} from 'rxjs';
 
 @Component({
     selector: 'grf-project-browser',
@@ -7,10 +10,13 @@ import {Component, OnInit} from '@angular/core';
 })
 export class ProjectBrowserComponent implements OnInit {
 
-    constructor() {
+    public projects$: Observable<Project[]>;
+
+    constructor(private _projectsService: ProjectsService) {
     }
 
     ngOnInit() {
+        this.projects$ = this._projectsService.getProjects();
     }
 
 }

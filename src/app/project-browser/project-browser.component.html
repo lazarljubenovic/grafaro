@@ -1,7 +1,7 @@
 <grf-header [isProjectViewMode]="false"></grf-header>
 
 <ul>
-  <li>
-    <a [routerLink]="['./project/1']">Untitled</a>
+  <li *ngFor="let project of projects$ | async">
+    <grf-project-card [project]="project"></grf-project-card>
   </li>
 </ul>

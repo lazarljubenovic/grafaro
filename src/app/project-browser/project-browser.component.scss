@@ -1,4 +1,18 @@
 :host {
   display: flex;
   flex-direction: column;
+
+  ul {
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    margin-top: 12px;
+    padding: 12px;
+    box-sizing: border-box;
+
+    li:not(:last-child) {
+      margin-bottom: 24px;
+    }
+  }
 }
