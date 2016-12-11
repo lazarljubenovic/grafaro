@@ -1,8 +1,16 @@
+@import '../global';
+
 :host {
   display: flex;
   flex-direction: column;
 
+  grf-header {
+    position: fixed;
+    height: $header-height;
+  }
+
   main {
+    padding-top: $header-height;
     position: relative;
 
     ul {
@@ -21,9 +29,9 @@
     }
 
     aside {
+      position: fixed;
       width: 300px;
-      position: absolute;
-      top: 16px;
+      top: $header-height + 16px;
       right: 16px;
 
       hr {
