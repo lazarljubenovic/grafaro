@@ -15,8 +15,8 @@ import {Subject} from 'rxjs';
 })
 export class PopupRenameComponent implements OnInit {
 
-    public x: string = '0px';
-    public y: string = '0px';
+    public x: number = 0;
+    public y: number = 0;
     @HostBinding('class') public direction: string = 'up';
     public previousValue: string;
 

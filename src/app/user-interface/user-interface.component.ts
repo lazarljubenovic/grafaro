@@ -136,8 +136,8 @@ export class UserInterfaceComponent implements OnInit {
             const oldLabel: string = this.service.getNodeLabel(id);
             const popupRenameComponent =
                 this.viewContainerRef.createComponent(this.popupRenameComponentFactory);
-            popupRenameComponent.instance.x = 80 + action.position.x + 'px';
-            popupRenameComponent.instance.y = 80 + action.position.y + 'px';
+            popupRenameComponent.instance.x = 80 + action.position.x;
+            popupRenameComponent.instance.y = 80 + action.position.y;
             popupRenameComponent.instance.direction = 'up';
             popupRenameComponent.instance.previousValue = oldLabel;
             popupRenameComponent.changeDetectorRef.detectChanges();

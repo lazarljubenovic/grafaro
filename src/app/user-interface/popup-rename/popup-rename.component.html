@@ -1,11 +1,10 @@
 <div class="outer"
-     [style.left]="x"
-     [style.top]="y"
+     [style.left.px]="x"
+     [style.top.px]="y"
 >
   <div class="inner">
     <label>
-      <span class="text">Rename node <span
-        class="node-name">{{previousValue}}</span>:</span>
+      <span class="text">Rename node <span class="node-name">{{previousValue}}</span>:</span>
       <input #input type="text"
              (keypress)="onKeyPress($event.key)"
              (keydown)="onKeyDown($event.key)"
