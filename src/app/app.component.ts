@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {WebSocketService} from "./core/websocket.service";
+import {WebSocketService} from './core/websocket.service';
 
 @Component({
     selector: 'grf-app',
