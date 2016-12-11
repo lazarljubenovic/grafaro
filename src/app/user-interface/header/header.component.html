@@ -1,0 +1,28 @@
+<div id="logo"></div>
+
+
+<ng-container *ngIf="isProjectViewMode">
+  <div id="current-project-info">
+    <div id="project-image">
+      <grf-jdenticon [plaintext]="projectTitle"></grf-jdenticon>
+    </div>
+    <div id="project-name">
+      <span id="project-title">{{projectTitle}}</span>
+      <span id="project-description">{{projectDescription}}</span>
+    </div>
+  </div>
+
+  <div class="flex-spacer"></div>
+
+  <div id="options">
+    <ul>
+      <li><i class="fa fa-heart-o"></i></li>
+      <li><i class="fa fa-sliders"></i></li>
+    </ul>
+  </div>
+  <div id="profile-image"></div>
+</ng-container>
+
+<ng-container *ngIf="!isProjectViewMode">
+
+</ng-container>

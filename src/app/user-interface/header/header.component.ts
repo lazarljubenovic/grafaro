@@ -2,8 +2,8 @@ import {Component, OnInit, Input} from '@angular/core';
 
 @Component({
     selector: 'grf-header',
-    templateUrl: './header.component.html',
-    styleUrls: ['./header.component.scss']
+    templateUrl: 'header.component.html',
+    styleUrls: ['header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
 
@@ -12,6 +12,9 @@ export class HeaderComponent implements OnInit {
 
     @Input()
     public projectDescription: string = `Project Untitled doesn't have a description.`;
+
+    @Input()
+    public isProjectViewMode: boolean = false;
 
     constructor() {
     }
