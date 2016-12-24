@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema({
 
 const projectSchema = new mongoose.Schema({
     id: String,
-    creatorId: String,
+    creatorId: {type: String, ref: 'User'},
     algorithmId: String,
     graph: {
         nodes: [{
@@ -62,7 +62,7 @@ dbRoutes.put('/user', (req, res) => {
 
     newUser.save()
         .then((dbUser: IUser) => res.json({data: {id: dbUser._id}}))
-        .catch(error => res.json({status: 'error' + error}));
+        .catch(error => res.json({error}));
 });
 
 dbRoutes.post('/user/:id', (req, res) => {
@@ -73,15 +73,23 @@ dbRoutes.post('/user/:id', (req, res) => {
 
     User.update({_id: id}, {$set: {displayName: user.displayName}})
         .then(() => res.json({status: 'succes'}))
-        .catch(error => res.json({status: 'error' + error}));
+        .catch(error => res.json({error}));
 });
 
 dbRoutes.get('/project/:id', (req, res) => {
     console.log('Getting project', req.params['id']);
     Project.findById(req.params['id'])
         .then((dbProject: IProject) => res.json({data: dbProject}))
-        .catch(error => res.json({status: 'error' + error}));
+        .catch(error => res.json({error}));
 });
+
+dbRoutes.get('/project', (req, res) => {
+    Project.find()
+        .populate({path: 'creatorId', select: 'displayName'})
+        .exec()
+        .then((dbProjects: IProject[]) => res.json({data: dbProjects}))
+        .catch(error => res.json({error}));
+})
 
 dbRoutes.put('/project', (req, res) => {
     console.log('Creating new project');
@@ -107,9 +115,9 @@ dbRoutes.put('/project', (req, res) => {
             .then((dbProject: IProject) => {
                 User.update({_id: userId}, {$push: {projectIds: dbProject._id}})
                     .then(() => res.json({data: {id: dbProject._id}}))
-                    .catch(error => res.json({status: 'error' + error}));
+                    .catch(error => res.json({error}));
             })
-            .catch(error => res.json({status: 'error' + error}));
+            .catch(error => res.json({error}));
     }
 });
 
@@ -145,14 +153,14 @@ function updateProjectFieldsByUser(id: string, userId: string, res, fieldObj): v
             if (dbProject.creatorId == userId) {
                 updateProjectFields(id, res, fieldObj);
             } else {
-                res.json({status: 'error: The user is not the creator of the project.'});
+                res.json({error: 'The user is not the creator of the project.'});
             }
         })
-        .catch(error => res.json({status: 'error: ' + error}));
+        .catch(error => res.json({errror: error}));
 }
 
 function updateProjectFields(id: string, res, fieldObj): void {
     Project.update({_id: id}, {$set: fieldObj})
         .then(() => res.json({status: 'success'}))
-        .catch(error => res.json({status: 'error: ' + error}));
+        .catch(error => res.json({error}));
 }

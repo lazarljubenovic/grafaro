@@ -1,12 +1,12 @@
 <div class="main-info" [routerLink]="['project/' + project.id]">
   <div class="avatar">
-    <grf-jdenticon [plaintext]="project?.title"></grf-jdenticon>
+    <grf-jdenticon [plaintext]="project?.name"></grf-jdenticon>
   </div>
   <div class="title-and-creator">
-    <div class="title">{{project?.title}}</div>
+    <div class="title">{{project?.name}}</div>
     <div class="creator">
-      <div class="name">{{project?.creator.name}}</div>
-      <div class="handle">@{{project?.creator.handle}}</div>
+      <!--<div class="name">@{{project?.creator?.handle}}</div>-->
+      <div class="handle">{{project?.creatorId.displayName}}</div>
     </div>
   </div>
 </div>

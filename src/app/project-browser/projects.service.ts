@@ -1,9 +1,11 @@
 import {Injectable} from '@angular/core';
 import {Project} from './project';
 import {Observable} from 'rxjs';
+import {GrafaroHttpService} from '../shared/grafaro-http.service';
+import {Http} from '@angular/http';
 
 @Injectable()
-export class ProjectsService {
+export class ProjectsService extends GrafaroHttpService {
 
     private mockProjects: Project[] = [
         {
@@ -121,7 +123,10 @@ export class ProjectsService {
     ];
 
     public getProjects(): Observable<Project[]> {
-        return Observable.of(this.mockProjects);
+        // return Observable.of(this.mockProjects);
+        return this.http.get(this.url)
+            .map(x => this.responseToObject(x))
+            .catch(e => this.handleError(e));
     }
 
     // TODO type
@@ -166,7 +171,9 @@ export class ProjectsService {
         return Observable.of(result);
     }
 
-    constructor() {
+    constructor(http: Http) {
+        super(http);
+        this.url += '/project';
     }
 
 }

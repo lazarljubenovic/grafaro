@@ -30,6 +30,7 @@ export interface IProject extends Document {
     graph: Graph;
     name: string;
     description: string;
+    tags: string[]; // todo
 }
 
 interface GraphNode {

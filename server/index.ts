@@ -5,6 +5,7 @@ import * as ws from 'ws';
 import * as express from 'express';
 import * as url from 'url';
 import * as mongoose from 'mongoose';
+import * as cors from 'cors';
 import {dbRoutes} from './routes';
 
 const server = http.createServer();
@@ -61,6 +62,8 @@ const dummyMessages: ChatMessageInfo[] = [
 
 let messageRooms: Map<string, Set<ws>> = new Map();
 
+
+app.use(cors());
 
 app.use(bodyParser.urlencoded({
     extended: true
