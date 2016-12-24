@@ -106,6 +106,7 @@ export class ProjectViewComponent implements OnInit {
             .subscribe(projectGraph => {
                 this.service.graph = projectGraph.graph;
                 this.service.root = projectGraph.algorithm.options.root;
+                this.service.positions = projectGraph.positions;
                 this.service.setGraph();
             });
 

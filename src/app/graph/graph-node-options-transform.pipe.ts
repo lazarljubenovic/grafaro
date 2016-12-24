@@ -10,7 +10,7 @@ export class GraphNodeOptionsTransformPipe implements PipeTransform {
     constructor(private theme: ColorThemeService) {
     }
 
-    transform(options: GrfGraphNodeOptions): any {
+    transform(options: GrfGraphNodeOptions, positions?: Map<string, {x: number, y: number}>): any {
         const colorVisited = {
             background: '#afafaf',
             border: '#6f6f6f',
@@ -49,7 +49,7 @@ export class GraphNodeOptionsTransformPipe implements PipeTransform {
             label: options.label,
             color,
             shape,
-        }, options.position);
+        }, positions.get(options.id));
     }
 
 }

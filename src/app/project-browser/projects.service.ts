@@ -5,6 +5,12 @@ import {GrafaroHttpService} from '../shared/grafaro-http.service';
 import {Http} from '@angular/http';
 import {Graph} from 'graphlib';
 
+interface ProjectGraph {
+    graph: Graph;
+    algorithm: any;
+    positions: Map<string, {x: number, y: number}>;
+}
+
 @Injectable()
 export class ProjectsService extends GrafaroHttpService {
 
@@ -134,17 +140,21 @@ export class ProjectsService extends GrafaroHttpService {
         return this.http.get(this.url + '/' + id)
             .map(p => {
                 const project: any = this.responseToObject(p);
-                let projectGraph: { graph: Graph, algorithm: any } = {
+                let projectGraph: ProjectGraph = {
                     graph: new Graph({directed: false}),
                     algorithm: {
                         id: project.algorithm.id,
                         options: {
                             root: project.algorithm.options.root
                         }
-                    }
+                    },
+                    positions: new Map<string, {x: number, y: number}>(),
                 };
                 project.graph.nodes
-                    .forEach(node => projectGraph.graph.setNode(node.id, node.label));
+                    .forEach(node => {
+                        projectGraph.graph.setNode(node.id, node.label);
+                        projectGraph.positions.set(node.id, node.position);
+                    });
                 project.graph.edges
                     .forEach(edge => projectGraph.graph.setEdge(edge.from, edge.to, edge.label));
 

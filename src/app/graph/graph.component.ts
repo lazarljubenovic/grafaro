@@ -15,11 +15,10 @@ export class GraphComponent implements OnInit {
     public visNetworkComponentInstance;
 
     @Input() public nodes: GrfGraphNodeOptions[] = [];
-
     @Input() public edges: GrfGraphEdgeOptions[] = [];
+    @Input() public positions: Map<string, {x: number, y: number}>;
 
     @Output() public graphClick = new EventEmitter<VisNgNetworkEventArgument>();
-
     @Output() public graphNodeDragEnd = new EventEmitter<VisNgNetworkEventArgument>();
 
     private _defaultOptions: VisNgNetworkOptions = {

@@ -3,7 +3,7 @@
              (graphDragEnd)="onGraphDragEnd($event)"
 >
   <vis-network-node *ngFor="let node of nodes"
-                    [options]="node | graphNodeOptionsTransform"
+                    [options]="node | graphNodeOptionsTransform : positions"
   ></vis-network-node>
 
   <vis-network-edge *ngFor="let edge of edges"

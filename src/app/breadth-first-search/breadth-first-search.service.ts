@@ -22,6 +22,8 @@ export class BreadthFirstSearchService {
 
     private id: number = 1000;
 
+    public positions: Map<string, {x: number, y: number}>;
+
     public graph = new Graph({directed: false});
         // .setNode('100', 'A')
         // .setNode('101', 'B')
