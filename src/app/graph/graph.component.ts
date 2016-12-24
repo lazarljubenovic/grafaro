@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter, ViewChild} from '@angular/core';
 import {VisNgNetworkOptions, VisNgNetworkEventArgument} from '@lazarljubenovic/vis-ng/core';
 import {GrfGraphEdgeOptions, GrfGraphNodeOptions} from './graph.module';
 import * as deepAssign from 'deep-assign';
@@ -11,11 +11,16 @@ import {GraphOptionsService} from '../graph-options.service';
 })
 export class GraphComponent implements OnInit {
 
+    @ViewChild('network')
+    public visNetworkComponentInstance;
+
     @Input() public nodes: GrfGraphNodeOptions[] = [];
 
     @Input() public edges: GrfGraphEdgeOptions[] = [];
 
     @Output() public graphClick = new EventEmitter<VisNgNetworkEventArgument>();
+
+    @Output() public graphNodeDragEnd = new EventEmitter<VisNgNetworkEventArgument>();
 
     private _defaultOptions: VisNgNetworkOptions = {
         nodes: {
@@ -49,6 +54,11 @@ export class GraphComponent implements OnInit {
 
     public onGraphClick(event: VisNgNetworkEventArgument): void {
         this.graphClick.next(event);
+    }
+
+    public onGraphDragEnd(event: VisNgNetworkEventArgument): void {
+        console.log(event);
+        this.graphNodeDragEnd.next(event);
     }
 
     constructor(private graphOptionsService: GraphOptionsService) {

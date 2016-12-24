@@ -9,13 +9,13 @@
   ></grf-toolbar>
 
   <div id="graph">
-    <grf-controls
-      (stateNumberChange)="updateStateNumber($event)"></grf-controls>
+    <grf-controls (stateNumberChange)="updateStateNumber($event)"></grf-controls>
 
     <div class="bfs">
       <grf-graph [nodes]="(service.currentNormalizedState$ | async)?.nodes"
                  [edges]="(service.currentNormalizedState$ | async)?.edges"
                  (graphClick)="click$.next($event)"
+                 (graphDragEnd)="onMoveNode($event)"
       >
       </grf-graph>
     </div>

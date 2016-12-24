@@ -74,6 +74,12 @@ export class ProjectViewComponent implements OnInit {
         )
         .map(values => values.event.edges[0].toString());
 
+    public moveNode$ = new Subject<{nodeId: string, x: number, y: number}>();
+
+    public onMoveNode(arg: any) {
+        this.moveNode$.next(arg);
+    }
+
     private linkTwoNodes(first: string, second: string): void {
         this.service.linkNodes(first, second);
     }
