@@ -112,3 +112,47 @@ dbRoutes.put('/project', (req, res) => {
             .catch(error => res.json({status: 'error' + error}));
     }
 });
+
+dbRoutes.post('/project/:id/save', (req, res) => {
+    const projectId: string = req.params['id'];
+    const algorithmId = req.body['data']['algorithmId'];
+    const graph = req.body['data']['graph'];
+
+    console.log('Updating project', projectId);
+
+    updateProjectFields(projectId, res, {algorithmId, graph});
+});
+
+dbRoutes.post('/project/:id/rename', (req, res) => {
+    const projectId: string = req.params['id'];
+    const userId: string = req.body['data']['userId'];
+    const name: string = req.body['data']['name'];
+
+    updateProjectFieldsByUser(projectId, userId, res, {name});
+});
+
+dbRoutes.post('/project/:id/redescribe', (req, res) => {
+    const projectId: string = req.params['id'];
+    const userId: string = req.body['data']['userId'];
+    const description: string = req.body['data']['description'];
+
+    updateProjectFieldsByUser(projectId, userId, res, {description});
+});
+
+function updateProjectFieldsByUser(id: string, userId: string, res, fieldObj): void {
+    Project.findById(id)
+        .then((dbProject: IProject) => {
+            if (dbProject.creatorId == userId) {
+                updateProjectFields(id, res, fieldObj);
+            } else {
+                res.json({status: 'error: The user is not the creator of the project.'});
+            }
+        })
+        .catch(error => res.json({status: 'error: ' + error}));
+}
+
+function updateProjectFields(id: string, res, fieldObj): void {
+    Project.update({_id: id}, {$set: fieldObj})
+        .then(() => res.json({status: 'success'}))
+        .catch(error => res.json({status: 'error: ' + error}));
+}
