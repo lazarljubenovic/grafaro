@@ -9,7 +9,7 @@ import {ColorThemeService} from '../color-theme.service';
 export interface GrfGraphNodeOptions {
     id: string;
     label: string;
-    position?: {
+    position: {
         x: number;
         y: number;
     };

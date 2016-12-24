@@ -17,12 +17,12 @@ module.exports = function (config) {
     preprocessors: {
       './src/test.ts': ['angular-cli']
     },
-    remapIstanbulReporter: {
-      reports: {
-        html: 'coverage',
-        lcovonly: './coverage/coverage.lcov'
-      }
-    },
+    // remapIstanbulReporter: {
+    //   reports: {
+    //     html: 'coverage',
+    //     lcovonly: './coverage/coverage.lcov'
+    //   }
+    // },
     angularCli: {
       config: './angular-cli.json',
       environment: 'dev'

@@ -1,6 +1,7 @@
 import {Pipe, PipeTransform} from '@angular/core';
 import {GrfGraphNodeOptions} from './graph.module';
 import {ColorThemeService} from '../color-theme.service';
+import {VisNgNetworkOptionsNodes} from '@lazarljubenovic/vis-ng/core';
 
 @Pipe({
     name: 'graphNodeOptionsTransform',
@@ -10,7 +11,7 @@ export class GraphNodeOptionsTransformPipe implements PipeTransform {
     constructor(private theme: ColorThemeService) {
     }
 
-    transform(options: GrfGraphNodeOptions, positions?: Map<string, {x: number, y: number}>): any {
+    transform(options: GrfGraphNodeOptions): VisNgNetworkOptionsNodes {
         const colorVisited = {
             background: '#afafaf',
             border: '#6f6f6f',
@@ -44,12 +45,15 @@ export class GraphNodeOptionsTransformPipe implements PipeTransform {
 
         const shape = 'circle';
 
+        const position: {x: number, y: number} = options.position;
+
         return Object.assign({
             id: options.id,
             label: options.label,
             color,
             shape,
-        }, positions.get(options.id));
+            position,
+        });
     }
 
 }

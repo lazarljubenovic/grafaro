@@ -16,7 +16,6 @@ export class GraphComponent implements OnInit {
 
     @Input() public nodes: GrfGraphNodeOptions[] = [];
     @Input() public edges: GrfGraphEdgeOptions[] = [];
-    @Input() public positions: Map<string, {x: number, y: number}>;
 
     @Output() public graphClick = new EventEmitter<VisNgNetworkEventArgument>();
     @Output() public graphNodeDragEnd = new EventEmitter<VisNgNetworkEventArgument>();
@@ -56,7 +55,6 @@ export class GraphComponent implements OnInit {
     }
 
     public onGraphDragEnd(event: VisNgNetworkEventArgument): void {
-        console.log('drag', event);
         this.graphNodeDragEnd.next(event);
     }
 
