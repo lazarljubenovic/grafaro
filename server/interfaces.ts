@@ -20,6 +20,7 @@ export interface IUser extends Document {
     projectIds: string[];
     username: string; // from social networks
     displayName: string;
+    favProjects: string[];
 }
 
 export interface IProject extends Document {
@@ -27,6 +28,8 @@ export interface IProject extends Document {
     creatorId: string;
     algorithmId: string;
     graph: Graph;
+    name: string;
+    description: string;
 }
 
 interface GraphNode {
@@ -49,3 +52,32 @@ export interface Graph {
     nodes: GraphNode[];
     edges: GraphEdge[];
 }
+
+export const defaultGraph: Graph = {
+    nodes: [
+        {
+            id: '101',
+            label: 'A',
+            position: {
+                x: 100,
+                y: 100
+            }
+        },
+        {
+            id: '102',
+            label: 'B',
+            position: {
+                x: 150,
+                y: 150
+            }
+        }
+    ],
+    edges: [
+        {
+            from: '101',
+            to: '102',
+            label: '1',
+            directed: false,
+        }
+    ]
+};

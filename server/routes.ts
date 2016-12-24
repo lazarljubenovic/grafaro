@@ -1,5 +1,5 @@
 import * as express from 'express';
-import {IUser, IProject} from './interfaces';
+import {IUser, IProject, defaultGraph} from './interfaces';
 import * as mongoose from 'mongoose';
 
 
@@ -12,6 +12,7 @@ const userSchema = new mongoose.Schema({
     projectIds: [String],
     username: String,
     displayName: String,
+    favProjects: [String],
 });
 
 const projectSchema = new mongoose.Schema({
@@ -34,6 +35,8 @@ const projectSchema = new mongoose.Schema({
             directed: Boolean,
         }]
     },
+    name: String,
+    description: String,
 });
 
 const User = mongoose.model<IUser>('User', userSchema);
@@ -58,7 +61,7 @@ dbRoutes.put('/user', (req, res) => {
     });
 
     newUser.save()
-        .then((dbUser: IUser) => res.json({id: dbUser._id}))
+        .then((dbUser: IUser) => res.json({data: {id: dbUser._id}}))
         .catch(error => res.json({status: 'error' + error}));
 });
 
@@ -68,7 +71,44 @@ dbRoutes.post('/user/:id', (req, res) => {
 
     console.log('Updating user', req.params['id']);
 
-    User.update({_id: id}, { $set: { displayName: user.displayName }})
+    User.update({_id: id}, {$set: {displayName: user.displayName}})
         .then(() => res.json({status: 'succes'}))
         .catch(error => res.json({status: 'error' + error}));
+});
+
+dbRoutes.get('/project/:id', (req, res) => {
+    console.log('Getting project', req.params['id']);
+    Project.findById(req.params['id'])
+        .then((dbProject: IProject) => res.json({data: dbProject}))
+        .catch(error => res.json({status: 'error' + error}));
+});
+
+dbRoutes.put('/project', (req, res) => {
+    console.log('Creating new project');
+
+    const userId: string = req.body['data']['userId'];
+
+    if (!userId) {
+        res.json({status: 'error' + ': User is unknown'});
+    } else {
+        const projectName: string = req.body['data']['projectName'];
+
+        const projectDescription: string = req.body['data']['projectDescription'];
+
+        const newProject = new Project({
+            creatorId: userId,
+            name: projectName,
+            description: projectDescription ? projectDescription : '',
+            graph: defaultGraph,
+            algorithmId: 'bfs',
+        });
+
+        newProject.save()
+            .then((dbProject: IProject) => {
+                User.update({_id: userId}, {$push: {projectIds: dbProject._id}})
+                    .then(() => res.json({data: {id: dbProject._id}}))
+                    .catch(error => res.json({status: 'error' + error}));
+            })
+            .catch(error => res.json({status: 'error' + error}));
+    }
 });

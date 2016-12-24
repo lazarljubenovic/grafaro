@@ -1,4 +1,4 @@
-import {ChatMessageInfo, Message, IUser} from './interfaces';
+import {ChatMessageInfo, Message} from './interfaces';
 import * as bodyParser from 'body-parser';
 import * as http from 'http';
 import * as ws from 'ws';
