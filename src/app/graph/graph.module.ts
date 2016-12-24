@@ -31,7 +31,7 @@ export interface GrfGraphEdgeOptions {
 @NgModule({
     imports: [
         CommonModule,
-        VisNetworkModule,
+        VisNetworkModule.forRoot(),
     ],
     declarations: [
         GraphComponent,

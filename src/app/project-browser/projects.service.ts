@@ -163,6 +163,35 @@ export class ProjectsService extends GrafaroHttpService {
             .catch(e => this.handleError(e));
     }
 
+    public saveProject(id: string, graph, positions, root) {
+        const obj = {
+            data: {
+                graph: {
+                    edges: graph.edges().map(edge => ({
+                        from: edge.v,
+                        to: edge.w,
+                        label: graph.edge(edge),
+                    })),
+                    nodes: graph.nodes().map(nodeId => ({
+                        id: nodeId,
+                        label: graph.node(nodeId),
+                        position: positions.get(nodeId),
+                    })),
+                },
+                algorithm: {
+                    id: 'bfs', // todo
+                    options: {
+                        root,
+                    },
+                },
+            },
+        };
+
+        const url = `${this.url}/${id}/save`;
+        console.log(url);
+        this.http.post(url, obj).subscribe(x => console.log(x));
+    }
+
     // TODO type
     public getProjectByQuery(query: any): Observable<Project[]> {
         // searchBy: this._formBuilder.group({

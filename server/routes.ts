@@ -92,7 +92,7 @@ dbRoutes.get('/project', (req, res) => {
         .exec()
         .then((dbProjects: IProject[]) => res.json({data: dbProjects}))
         .catch(error => res.json({error}));
-})
+});
 
 dbRoutes.put('/project', (req, res) => {
     console.log('Creating new project');

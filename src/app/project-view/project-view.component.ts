@@ -9,7 +9,7 @@ import {
 import {Subject, Observable} from 'rxjs';
 import {Actions, ClickPosition} from './toolbar/toolbar.component';
 import {GraphOptionsService} from '../graph-options.service';
-import {VisNgNetworkEventArgument} from '@lazarljubenovic/vis-ng/core';
+import {VisNgNetworkEventArgument, VisNetworkService} from '@lazarljubenovic/vis-ng/core';
 import {PopupRenameComponent} from './popup-rename/popup-rename.component';
 import {BreadthFirstSearchService} from '../breadth-first-search/breadth-first-search.service';
 import {ToastService} from '../toast/toast.service';
@@ -90,12 +90,27 @@ export class ProjectViewComponent implements OnInit {
         this.service.updateStateNumber(action);
     }
 
+    public updatePositions() {
+        this.service.positions = this.visService.getPositions();
+    }
+
+    public save() {
+        this.updatePositions();
+        this.projectService.saveProject(
+            this.activeRoute.snapshot.params['id'],
+            this.service.graph,
+            this.service.positions,
+            this.service.root
+        );
+    }
+
     constructor(private graphOptionsService: GraphOptionsService,
                 componentFactoryResolver: ComponentFactoryResolver,
                 public service: BreadthFirstSearchService,
                 private toastService: ToastService,
                 public projectService: ProjectsService,
-                private activeRoute: ActivatedRoute
+                private activeRoute: ActivatedRoute,
+                private visService: VisNetworkService
     ) {
         this.popupRenameComponentFactory =
             componentFactoryResolver.resolveComponentFactory(PopupRenameComponent);
