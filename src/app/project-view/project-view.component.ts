@@ -13,6 +13,8 @@ import {VisNgNetworkEventArgument} from '@lazarljubenovic/vis-ng/core';
 import {PopupRenameComponent} from './popup-rename/popup-rename.component';
 import {BreadthFirstSearchService} from '../breadth-first-search/breadth-first-search.service';
 import {ToastService} from '../toast/toast.service';
+import {ProjectsService} from '../project-browser/projects.service';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
     selector: 'grf-user-interface',
@@ -91,12 +93,21 @@ export class ProjectViewComponent implements OnInit {
     constructor(private graphOptionsService: GraphOptionsService,
                 componentFactoryResolver: ComponentFactoryResolver,
                 public service: BreadthFirstSearchService,
-                private toastService: ToastService) {
+                private toastService: ToastService,
+                public projectService: ProjectsService,
+                private activeRoute: ActivatedRoute
+    ) {
         this.popupRenameComponentFactory =
             componentFactoryResolver.resolveComponentFactory(PopupRenameComponent);
     }
 
     ngOnInit() {
+        this.projectService.getProject(this.activeRoute.snapshot.params['id'])
+            .subscribe(projectGraph => {
+                this.service.graph = projectGraph.graph;
+                this.service.root = projectGraph.algorithm.options.root;
+                this.service.setGraph();
+            });
 
         // Initial settings
         this.graphOptionsService.setOptions([

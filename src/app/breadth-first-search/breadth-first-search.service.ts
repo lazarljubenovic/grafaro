@@ -22,28 +22,28 @@ export class BreadthFirstSearchService {
 
     private id: number = 1000;
 
-    public graph = new Graph({directed: false})
-        .setNode('100', 'A')
-        .setNode('101', 'B')
-        .setNode('102', 'C')
-        .setNode('103', 'D')
-        .setNode('104', 'E')
-        .setNode('105', 'F')
-        .setNode('106', 'G')
-        .setNode('107', 'H')
-        .setNode('108', 'I')
-        .setNode('109', 'J')
-        .setEdge('100', '101', '1')
-        .setEdge('100', '102', '2')
-        .setEdge('100', '103', '3')
-        .setEdge('101', '104', '4')
-        .setEdge('102', '105', '5')
-        .setEdge('102', '106', '6')
-        .setEdge('106', '107', '7')
-        .setEdge('104', '109', '8')
-        .setEdge('109', '108', '9')
-        .setEdge('103', '108', '10')
-        .setEdge('106', '108', '11');
+    public graph = new Graph({directed: false});
+        // .setNode('100', 'A')
+        // .setNode('101', 'B')
+        // .setNode('102', 'C')
+        // .setNode('103', 'D')
+        // .setNode('104', 'E')
+        // .setNode('105', 'F')
+        // .setNode('106', 'G')
+        // .setNode('107', 'H')
+        // .setNode('108', 'I')
+        // .setNode('109', 'J')
+        // .setEdge('100', '101', '1');
+        // .setEdge('100', '102', '2')
+        // .setEdge('100', '103', '3')
+        // .setEdge('101', '104', '4')
+        // .setEdge('102', '105', '5')
+        // .setEdge('102', '106', '6')
+        // .setEdge('106', '107', '7')
+        // .setEdge('104', '109', '8')
+        // .setEdge('109', '108', '9')
+        // .setEdge('103', '108', '10')
+        // .setEdge('106', '108', '11');
 
     public root: string = '100';
 
@@ -67,10 +67,14 @@ export class BreadthFirstSearchService {
     public graphState$ = new ReplaySubject<Graph>(1);
 
     public setGraph() {
-        this.states = this.algorithm(this.graph, this.root);
-        this.normalizedStates = this.states.map(state => this.getNormalizedState(state));
-        this.fixCurrentStateIndex();
-        this.onGraphChange();
+        try {
+            this.states = this.algorithm(this.graph, this.root);
+            this.normalizedStates = this.states.map(state => this.getNormalizedState(state));
+            this.fixCurrentStateIndex();
+            this.onGraphChange();
+        } catch (error) {
+            console.log(error); // todo
+        }
     }
 
     private onGraphChange(): void {

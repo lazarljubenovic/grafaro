@@ -26,7 +26,10 @@ export interface IUser extends Document {
 export interface IProject extends Document {
     id: string;
     creatorId: string;
-    algorithmId: string;
+    algorithm: {
+        id: string,
+        options: any,
+    };
     graph: Graph;
     name: string;
     description: string;
@@ -46,7 +49,6 @@ interface GraphEdge {
     from: string;
     to: string;
     label: string;
-    directed: boolean;
 }
 
 export interface Graph {
@@ -57,7 +59,7 @@ export interface Graph {
 export const defaultGraph: Graph = {
     nodes: [
         {
-            id: '101',
+            id: '100',
             label: 'A',
             position: {
                 x: 100,
@@ -65,7 +67,7 @@ export const defaultGraph: Graph = {
             }
         },
         {
-            id: '102',
+            id: '101',
             label: 'B',
             position: {
                 x: 150,
@@ -75,10 +77,9 @@ export const defaultGraph: Graph = {
     ],
     edges: [
         {
-            from: '101',
-            to: '102',
+            from: '100',
+            to: '101',
             label: '1',
-            directed: false,
         }
     ]
 };

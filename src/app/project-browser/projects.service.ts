@@ -3,13 +3,14 @@ import {Project} from './project';
 import {Observable} from 'rxjs';
 import {GrafaroHttpService} from '../shared/grafaro-http.service';
 import {Http} from '@angular/http';
+import {Graph} from 'graphlib';
 
 @Injectable()
 export class ProjectsService extends GrafaroHttpService {
 
     private mockProjects: Project[] = [
         {
-            id: `1`,
+            _id: `1`,
             title: `A Random Smart Title`,
             description: `A long random description for a long random title of a smart project.`,
             tags: [`linked lists`, `double linked lists`, `random lists`],
@@ -23,7 +24,7 @@ export class ProjectsService extends GrafaroHttpService {
             numberOfDislikes: 0,
         },
         {
-            id: `2`,
+            _id: `2`,
             title: `Short`,
             description: `A pretty short desc.`,
             tags: [`breadth first search`],
@@ -37,7 +38,7 @@ export class ProjectsService extends GrafaroHttpService {
             numberOfDislikes: 11,
         },
         {
-            id: `3`,
+            _id: `3`,
             title: `Kinda Short`,
             description: `Not short but not really long either as first one`,
             tags: [`a*`, `a very very long tag`, `some more tags to fill space`, `fasdfsdfasd`],
@@ -51,7 +52,7 @@ export class ProjectsService extends GrafaroHttpService {
             numberOfDislikes: 1,
         },
         {
-            id: `3`,
+            _id: `3`,
             title: `Pretty Short`,
             description: `Not short but not really long either as first one`,
             tags: [`a*`, `a very very long tag`, `some more tags to fill space`, `fasdfsdfasd`],
@@ -65,7 +66,7 @@ export class ProjectsService extends GrafaroHttpService {
             numberOfDislikes: 6,
         },
         {
-            id: `4`,
+            _id: `4`,
             title: `Very Short`,
             description: `Not short but not really long either as first one`,
             tags: [`a*`, `a very very long tag`, `some more tags to fill space`, `fasdfsdfasd`],
@@ -79,7 +80,7 @@ export class ProjectsService extends GrafaroHttpService {
             numberOfDislikes: 143,
         },
         {
-            id: `5`,
+            _id: `5`,
             title: `Sign Short`,
             description: `Not short but not really long either as first one`,
             tags: [`a*`, `a very very long tag`, `some more tags to fill space`, `fasdfsdfasd`],
@@ -93,7 +94,7 @@ export class ProjectsService extends GrafaroHttpService {
             numberOfDislikes: 111,
         },
         {
-            id: `6`,
+            _id: `6`,
             title: `Eh Whatever`,
             description: `Not short but not really long either as first one`,
             tags: [`a*`, `a very very long tag`, `some more tags to fill space`, `fasdfsdfasd`],
@@ -107,7 +108,7 @@ export class ProjectsService extends GrafaroHttpService {
             numberOfDislikes: 11,
         },
         {
-            id: `7`,
+            _id: `7`,
             title: `No Idea Really`,
             description: `Not short but not really long either as first one`,
             tags: [`a*`, `a very very long tag`, `some more tags to fill space`, `fasdfsdfasd`],
@@ -126,6 +127,29 @@ export class ProjectsService extends GrafaroHttpService {
         // return Observable.of(this.mockProjects);
         return this.http.get(this.url)
             .map(x => this.responseToObject(x))
+            .catch(e => this.handleError(e));
+    }
+
+    public getProject(id: string): Observable<any> {
+        return this.http.get(this.url + '/' + id)
+            .map(p => {
+                const project: any = this.responseToObject(p);
+                let projectGraph: { graph: Graph, algorithm: any } = {
+                    graph: new Graph({directed: false}),
+                    algorithm: {
+                        id: project.algorithm.id,
+                        options: {
+                            root: project.algorithm.options.root
+                        }
+                    }
+                };
+                project.graph.nodes
+                    .forEach(node => projectGraph.graph.setNode(node.id, node.label));
+                project.graph.edges
+                    .forEach(edge => projectGraph.graph.setEdge(edge.from, edge.to, edge.label));
+
+                return projectGraph;
+            })
             .catch(e => this.handleError(e));
     }
 

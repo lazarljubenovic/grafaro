@@ -44,6 +44,10 @@ function createNewState(currentNode, neighbors, solution, graph, visited, queue,
 }
 
 export function breadthFirstSearch(graph: Graph, root: string): BreadthFirstSearchState[] {
+    if (!graph.node(root)) {
+        throw new Error('Root doesn\'t exist on graph!');
+    }
+
     let states: BreadthFirstSearchState[] = [];
 
     states.push(createNewState(null, null, [], graph, [], new Queue<string>(), root, 1));

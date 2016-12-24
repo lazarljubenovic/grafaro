@@ -57,7 +57,7 @@ export class GraphComponent implements OnInit {
     }
 
     public onGraphDragEnd(event: VisNgNetworkEventArgument): void {
-        console.log(event);
+        console.log('drag', event);
         this.graphNodeDragEnd.next(event);
     }
 

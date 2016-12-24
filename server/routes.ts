@@ -18,7 +18,10 @@ const userSchema = new mongoose.Schema({
 const projectSchema = new mongoose.Schema({
     id: String,
     creatorId: {type: String, ref: 'User'},
-    algorithmId: String,
+    algorithm: {
+        id: String,
+        options: Object,
+    },
     graph: {
         nodes: [{
             id: String,
@@ -108,7 +111,12 @@ dbRoutes.put('/project', (req, res) => {
             name: projectName,
             description: projectDescription ? projectDescription : '',
             graph: defaultGraph,
-            algorithmId: 'bfs',
+            algorithm: {
+                id: 'bfs',
+                options: {
+                    root: '100'
+                }
+            },
         });
 
         newProject.save()

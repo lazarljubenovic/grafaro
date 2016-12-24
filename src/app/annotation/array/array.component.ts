@@ -40,6 +40,9 @@ export class ArrayComponent implements OnInit, OnChanges {
     @Input() public highlightedLetters: string[] = [];
 
     ngOnChanges() {
+        if (this.array == null) {
+            this.array = [];
+        }
         if (this.array.length == 1 && this.array[0] == null) {
             this.array = [];
         }
