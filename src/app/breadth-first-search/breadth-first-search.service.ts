@@ -23,8 +23,6 @@ export interface NormalizedState {
 @Injectable()
 export class BreadthFirstSearchService {
 
-    public positions: Map<string, {x: number, y: number}>;
-
     public graph = new Graph();
         // .setNode('100', 'A')
         // .setNode('101', 'B')

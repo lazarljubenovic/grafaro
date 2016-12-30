@@ -95,7 +95,11 @@ export class ProjectViewComponent implements OnInit {
     }
 
     public updatePositions() {
-        this.service.positions = this.visService.getPositions();
+        this.visService.getPositions()
+            .forEach((position, nodeId) => {
+                this.service.graph.nodes
+                    .filter(node => node.id == nodeId)[0].position = position;
+            });
     }
 
     public save() {
@@ -103,7 +107,6 @@ export class ProjectViewComponent implements OnInit {
         this.projectService.saveProject(
             this.activeRoute.snapshot.params['id'],
             this.service.graph,
-            this.service.positions,
             this.service.root
         );
     }
@@ -114,8 +117,7 @@ export class ProjectViewComponent implements OnInit {
                 private toastService: ToastService,
                 public projectService: ProjectsService,
                 private activeRoute: ActivatedRoute,
-                private visService: VisNetworkService
-    ) {
+                private visService: VisNetworkService) {
         this.popupRenameComponentFactory =
             componentFactoryResolver.resolveComponentFactory(PopupRenameComponent);
     }
@@ -125,8 +127,12 @@ export class ProjectViewComponent implements OnInit {
             .subscribe(projectGraph => {
                 this.service.graph = projectGraph.graph;
                 this.service.root = projectGraph.algorithm.options.root;
-                this.service.positions = projectGraph.positions;
                 this.service.setGraph();
+                let val = new Map<string, {x: number, y: number}>();
+                this.service.graph.nodes.map(node => val[node.id] = node.position);
+                this.visService.setPositions(val);
+                console.log('vis service', this.visService.getPositions());
+                console.log('graph', this.service);
             });
 
         // Initial settings
@@ -157,7 +163,7 @@ export class ProjectViewComponent implements OnInit {
 
         this.actions$
             .subscribe(values => {
-                console.log(values);
+                console.log('actions$', values);
             });
 
         this.addNode$.subscribe(action => {

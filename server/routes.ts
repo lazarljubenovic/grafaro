@@ -45,6 +45,13 @@ const projectSchema = new mongoose.Schema({
 const User = mongoose.model<IUser>('User', userSchema);
 const Project = mongoose.model<IProject>('Project', projectSchema);
 
+dbRoutes.get('/user', (req, res) => {
+    console.log('Getting users', req.params['id']);
+    User.find()
+        .then((dbUser: IUser[]) => res.json({data: dbUser}))
+        .catch(error => res.json({error: error}));
+});
+
 dbRoutes.get('/user/:id', (req, res) => {
     console.log('Getting user', req.params['id']);
     User.findById(req.params['id'])

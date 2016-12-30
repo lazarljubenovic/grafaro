@@ -5,7 +5,7 @@ export type EdgeId = string;
 export type NodeLabel = string;
 export type EdgeLabel = string;
 
-interface GraphNodePosition {
+export interface GraphNodePosition {
     x: number;
     y: number;
 }

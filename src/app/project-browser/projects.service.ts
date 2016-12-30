@@ -155,7 +155,7 @@ export class ProjectsService extends GrafaroHttpService {
             .catch(e => this.handleError(e));
     }
 
-    public saveProject(id: string, graph: Graph, positions, root) {
+    public saveProject(id: string, graph: Graph, root) {
         const obj = {
             data: {
                 graph: {
@@ -172,7 +172,6 @@ export class ProjectsService extends GrafaroHttpService {
         };
 
         const url = `${this.url}/${id}/save`;
-        console.log(url);
         this.http.post(url, obj).subscribe(x => console.log(x));
     }
 
