@@ -28,6 +28,8 @@ export interface GraphEdge {
 export interface GraphJson {
     nodes: GraphNode[];
     edges: GraphEdge[];
+    nextEdgeId?: number;
+    nextNodeId?: number;
 }
 
 export class Graph {
@@ -52,6 +54,7 @@ export class Graph {
     }
 
     public setNodeIdGeneratorId(value: number): void {
+        console.log('setNodeId', value);
         this._nodeIdGenerator.id = value;
     }
 
@@ -69,6 +72,8 @@ export class Graph {
     public readJson(json: GraphJson): this {
         this._nodes = json.nodes;
         this._edges = json.edges;
+        this.setNodeIdGeneratorId(json.nextNodeId);
+        this.setEdgeIdGeneratorId(json.nextEdgeId);
         return this;
     }
 
