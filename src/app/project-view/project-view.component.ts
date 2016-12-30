@@ -131,8 +131,6 @@ export class ProjectViewComponent implements OnInit {
                 let val = new Map<string, {x: number, y: number}>();
                 this.service.graph.nodes.map(node => val[node.id] = node.position);
                 this.visService.setPositions(val);
-                console.log('vis service', this.visService.getPositions());
-                console.log('graph', this.service);
             });
 
         // Initial settings

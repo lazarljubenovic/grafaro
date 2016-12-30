@@ -45,14 +45,16 @@ export class GraphNodeOptionsTransformPipe implements PipeTransform {
 
         const shape = 'circle';
 
-        const position: {x: number, y: number} = options.position;
+        const x = options.position.x;
+        const y = options.position.y;
 
         return Object.assign({
             id: options.id,
             label: options.label,
             color,
             shape,
-            position,
+            x,
+            y,
         });
     }
 
