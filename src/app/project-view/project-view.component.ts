@@ -76,14 +76,11 @@ export class ProjectViewComponent implements OnInit {
         )
         .map(values => values.event.edges[0].toString());
 
-    public moveNode$ = new Subject<{nodeId: string, x: number, y: number}>();
-
     public onMoveNode(arg: any) {
-        console.log('move node', arg);
         const nodeId = arg.nodes[0];
-        const x = 10;
-        const y = 10;
-        this.moveNode$.next({nodeId, x, y});
+        const position = arg.pointer.canvas;
+
+        this.service.graph.nodes.find(node => node.id == nodeId).position = position;
     }
 
     private linkTwoNodes(first: string, second: string): void {
@@ -94,16 +91,7 @@ export class ProjectViewComponent implements OnInit {
         this.service.updateStateNumber(action);
     }
 
-    public updatePositions() {
-        this.visService.getPositions()
-            .forEach((position, nodeId) => {
-                this.service.graph.nodes
-                    .filter(node => node.id == nodeId)[0].position = position;
-            });
-    }
-
     public save() {
-        this.updatePositions();
         this.projectService.saveProject(
             this.activeRoute.snapshot.params['id'],
             this.service.graph,
