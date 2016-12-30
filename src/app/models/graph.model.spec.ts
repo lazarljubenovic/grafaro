@@ -54,6 +54,47 @@ describe(`Graph`, () => {
         ]);
     });
 
+    it(`should check if node with given id exists`, () => {
+        const graph = new Graph();
+        graph.addNode('A', {x: 0, y: 0});
+        expect(graph.hasNodeId('node-0')).toBe(true);
+        expect(graph.hasNodeId('xxx')).toBe(false);
+    });
+
+    it(`should get node's label by its id`, () => {
+        const graph = new Graph();
+        graph.addNode('A', {x: 0, y: 0});
+        expect(graph.getNodeLabel('node-0')).toBe('A');
+        expect(() => graph.getNodeLabel('xxx')).toThrow();
+    });
+
+    it(`should get node's id by its label`, () => {
+        const graph = new Graph();
+        graph.addNode('A', {x: 0, y: 0});
+        expect(graph.getNodeId('A')).toBe('node-0');
+        expect(() => graph.getNodeId('xxx')).toThrow();
+    });
+
+    it(`should change node's label`, () => {
+        const graph = new Graph();
+        graph.addNode('A', {x: 0, y: 0});
+        expect(graph.getNodeId('A')).toBe('node-0');
+        graph.changeNodeLabel('node-0', 'B');
+        expect(() => graph.getNodeId('A')).toThrow();
+        expect(graph.hasNodeId('node-0')).toBe(true);
+        expect(graph.getNodeLabel('node-0')).toBe('B');
+        expect(graph.getNodeId('B')).toBe('node-0');
+    });
+
+    it(`should check if edge with given from-to ids exists`, () => {
+        const graph = new Graph();
+        graph.addNode('A', {x: 0, y: 0})
+            .addNode('B', {x: 0, y: 0})
+            .addEdge('node-0', 'node-1', 'a');
+        expect(graph.hasEdge('node-0', 'node-1')).toBe(true);
+        expect(graph.hasEdge('node-1', 'node-0')).toBe(false);
+    });
+
     const graph = new Graph();
     graph
         .addNode('A', {x: 0, y: 0}) // 0
@@ -117,6 +158,24 @@ describe(`Graph`, () => {
             [null, null, null, null, 1, null, null],
             [null, null, null, null, null, null, null],
         ]);
+    });
+
+
+    it(`should remove a node and all its associated edges`, () => {
+        graph.removeNode('node-5');
+        expect(graph.hasNodeId('node-5')).toBe(false);
+        expect(() => graph.getNodeLabel('node-5')).toThrow();
+        expect(graph.getSources('node-2').map(e => e.label).sort())
+            .toEqual(['d', 'f', 'e'].sort());
+        expect(graph.getSinks('node-4').map(e => e.label).sort())
+            .toEqual(['e'].sort());
+    });
+
+    it(`should remove a directed edge`, () => {
+        graph.removeEdge('node-0', 'node-1');
+        expect(graph.hasNodeId('node-0')).toBe(true);
+        expect(graph.hasNodeId('node-1')).toBe(true);
+        expect(graph.hasEdge('node-0', 'node-1')).toBe(false);
     });
 
 });

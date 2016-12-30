@@ -114,7 +114,7 @@ dbRoutes.put('/project', (req, res) => {
             algorithm: {
                 id: 'bfs',
                 options: {
-                    root: '100'
+                    root: 'node-0'
                 }
             },
         });

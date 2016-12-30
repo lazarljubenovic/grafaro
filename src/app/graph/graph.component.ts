@@ -11,8 +11,7 @@ import {GraphOptionsService} from '../graph-options.service';
 })
 export class GraphComponent implements OnInit {
 
-    @ViewChild('network')
-    public visNetworkComponentInstance;
+    @ViewChild('network') public visNetworkComponentInstance;
 
     @Input() public nodes: GrfGraphNodeOptions[] = [];
     @Input() public edges: GrfGraphEdgeOptions[] = [];
@@ -55,7 +54,9 @@ export class GraphComponent implements OnInit {
     }
 
     public onGraphDragEnd(event: VisNgNetworkEventArgument): void {
-        this.graphNodeDragEnd.next(event);
+        if (event.nodes.length != 0) {
+            this.graphNodeDragEnd.next(event);
+        }
     }
 
     constructor(private graphOptionsService: GraphOptionsService) {

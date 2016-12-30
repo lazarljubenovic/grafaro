@@ -79,7 +79,11 @@ export class ProjectViewComponent implements OnInit {
     public moveNode$ = new Subject<{nodeId: string, x: number, y: number}>();
 
     public onMoveNode(arg: any) {
-        this.moveNode$.next(arg);
+        console.log('move node', arg);
+        const nodeId = arg.nodes[0];
+        const x = 10;
+        const y = 10;
+        this.moveNode$.next({nodeId, x, y});
     }
 
     private linkTwoNodes(first: string, second: string): void {

@@ -59,7 +59,7 @@ export interface Graph {
 export const defaultGraph: Graph = {
     nodes: [
         {
-            id: '100',
+            id: 'node-0',
             label: 'A',
             position: {
                 x: 100,
@@ -67,7 +67,7 @@ export const defaultGraph: Graph = {
             }
         },
         {
-            id: '101',
+            id: 'node-1',
             label: 'B',
             position: {
                 x: 150,
@@ -77,8 +77,8 @@ export const defaultGraph: Graph = {
     ],
     edges: [
         {
-            from: '100',
-            to: '101',
+            from: 'node-0',
+            to: 'node-1',
             label: '1',
         }
     ]

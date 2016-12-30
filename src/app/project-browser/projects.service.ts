@@ -3,12 +3,11 @@ import {Project} from './project';
 import {Observable} from 'rxjs';
 import {GrafaroHttpService} from '../shared/grafaro-http.service';
 import {Http} from '@angular/http';
-import {Graph} from 'graphlib';
+import {Graph} from '../models/graph.model';
 
 interface ProjectGraph {
     graph: Graph;
     algorithm: any;
-    positions: Map<string, {x: number, y: number}>;
 }
 
 @Injectable()
@@ -140,43 +139,28 @@ export class ProjectsService extends GrafaroHttpService {
         return this.http.get(this.url + '/' + id)
             .map(p => {
                 const project: any = this.responseToObject(p);
-                let projectGraph: ProjectGraph = {
-                    graph: new Graph({directed: false}),
+                const graph: Graph = new Graph();
+                console.log('from server', project);
+                graph.readJson(project.graph);
+                return {
+                    graph,
                     algorithm: {
                         id: project.algorithm.id,
                         options: {
                             root: project.algorithm.options.root
                         }
                     },
-                    positions: new Map<string, {x: number, y: number}>(),
                 };
-                project.graph.nodes
-                    .forEach(node => {
-                        projectGraph.graph.setNode(node.id, node.label);
-                        projectGraph.positions.set(node.id, node.position);
-                    });
-                project.graph.edges
-                    .forEach(edge => projectGraph.graph.setEdge(edge.from, edge.to, edge.label));
-
-                return projectGraph;
             })
             .catch(e => this.handleError(e));
     }
 
-    public saveProject(id: string, graph, positions, root) {
+    public saveProject(id: string, graph: Graph, positions, root) {
         const obj = {
             data: {
                 graph: {
-                    edges: graph.edges().map(edge => ({
-                        from: edge.v,
-                        to: edge.w,
-                        label: graph.edge(edge),
-                    })),
-                    nodes: graph.nodes().map(nodeId => ({
-                        id: nodeId,
-                        label: graph.node(nodeId),
-                        position: positions.get(nodeId),
-                    })),
+                    edges: graph.edges,
+                    nodes: graph.nodes,
                 },
                 algorithm: {
                     id: 'bfs', // todo

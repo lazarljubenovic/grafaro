@@ -14,9 +14,8 @@
     <div class="bfs">
       <grf-graph [nodes]="(service.currentNormalizedState$ | async)?.nodes"
                  [edges]="(service.currentNormalizedState$ | async)?.edges"
-                 [positions]="service.positions"
                  (graphClick)="click$.next($event)"
-                 (graphDragEnd)="onMoveNode($event)"
+                 (graphNodeDragEnd)="onMoveNode($event)"
       >
       </grf-graph>
     </div>

@@ -1,10 +1,13 @@
 import {Injectable} from '@angular/core';
-import {Graph} from 'graphlib';
-import {BreadthFirstSearchState, breadthFirstSearch} from '../algorithms/breadth-first-search';
+import {
+    BreadthFirstSearchState, breadthFirstSearch,
+    breadthFirstSearchNormalizer
+} from '../algorithms/breadth-first-search';
 import {VisNgNetworkOptionsEdges} from '@lazarljubenovic/vis-ng/core';
 import {GrfGraphNodeOptions} from '../graph/graph.module';
 import {ReplaySubject} from 'rxjs';
 import {ClickPosition} from '../project-view/toolbar/toolbar.component';
+import {Graph} from '../models/graph.model';
 
 export interface NormalizedState {
     nodes: GrfGraphNodeOptions[];
@@ -20,11 +23,9 @@ export interface NormalizedState {
 @Injectable()
 export class BreadthFirstSearchService {
 
-    private id: number = 1000;
-
     public positions: Map<string, {x: number, y: number}>;
 
-    public graph = new Graph({directed: false});
+    public graph = new Graph();
         // .setNode('100', 'A')
         // .setNode('101', 'B')
         // .setNode('102', 'C')
@@ -47,7 +48,7 @@ export class BreadthFirstSearchService {
         // .setEdge('103', '108', '10')
         // .setEdge('106', '108', '11');
 
-    public root: string = '100';
+    public root: string = 'node-0';
 
     private algorithm: Function = breadthFirstSearch;
     private states: BreadthFirstSearchState[];
@@ -133,24 +134,20 @@ export class BreadthFirstSearchService {
     }
 
     public getNodeId(nodeLabel: string): string {
-        return this.graph.nodes()
-            .find(nodeId => this.graph.node(nodeId) == nodeLabel);
+        return this.graph.getNodeId(nodeLabel);
     }
 
     public getNodeLabel(nodeId: string): string {
-        return this.graph.node(nodeId);
+        return this.graph.getNodeLabel(nodeId);
     }
 
-    private existsNodeWithLabel(label: string): boolean {
-        return this.graph.nodes()
-                .map(nodeId => this.graph.node(nodeId))
-                .find(nodeLabel => nodeLabel === label) != null;
+    private existsNodeWithLabel(nodeLabel: string): boolean {
+        const nodeId: string = this.graph.getNodeId(nodeLabel);
+        return this.graph.hasNodeId(nodeId);
     }
 
     public suggestNewNodeName(): string {
-        const labels: string[] = this.graph.nodes()
-            .map(nodeId => this.graph.node(nodeId))
-            .sort();
+        const labels: string[] = this.graph.nodes.map(node => node.label).sort();
         const lastLabel: string = labels[labels.length - 1];
         if (!Number.isNaN(Number.parseInt(lastLabel))) {
             return lastLabel + 1;
@@ -162,9 +159,8 @@ export class BreadthFirstSearchService {
     }
 
     public addNode(position: ClickPosition): void {
-        const id: string = (++this.id).toString();
         const label: string = this.suggestNewNodeName();
-        this.graph.setNode(id, label);
+        this.graph.addNode(label, position);
         this.setGraph();
         this.setPosition(label, position);
     }
@@ -179,7 +175,7 @@ export class BreadthFirstSearchService {
     public removeNode(nodeId: string): void {
         this.graph.removeNode(nodeId);
         if (nodeId == this.root) {
-            this.root = this.graph.nodes()[0];
+            this.root = this.graph.nodes[0].id;
         }
         this.setGraph();
     }
@@ -192,12 +188,12 @@ export class BreadthFirstSearchService {
             throw new Error(`Node with label ${newNodeLabel} already exists.`);
         }
         const id: string = this.getNodeId(oldNodeLabel);
-        this.graph.setNode(id, newNodeLabel);
+        this.graph.changeNodeLabel(id, newNodeLabel);
         this.setGraph();
     }
 
     public linkNodes(nodeA: string, nodeB: string) {
-        this.graph.setEdge(nodeA, nodeB);
+        this.graph.addEdge(nodeA, nodeB, 'foobar');
         this.setGraph();
     }
 
@@ -232,7 +228,7 @@ export class BreadthFirstSearchService {
     }
 
     private getNormalizedState(state: BreadthFirstSearchState): NormalizedState {
-
+        return breadthFirstSearchNormalizer(state);
     }
 
     constructor() {

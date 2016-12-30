@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {BreadthFirstSearchService} from '../breadth-first-search/breadth-first-search.service';
-import {Graph} from 'graphlib';
+import {Graph} from '../models/graph.model';
 
 @Component({
     selector: 'grf-matrix',
@@ -40,17 +40,18 @@ export class MatrixComponent implements OnInit {
         }
     }
 
+    // TODO fix this shitty code
     private graphToMatrix(): void {
-        const nodes = this.graph.nodes();
+        const nodes = this.graph.nodes;
         const matrix: number[][] = Array(nodes.length).fill(null)
             .map(row => Array(nodes.length).fill(0));
-        const labels: string[] = nodes.map(node => this.graph.node(node));
+        const labels: string[] = this.graph.nodes.map(node => node.label);
 
         nodes.forEach(node => {
-            const nodeInd: number = labels.indexOf(this.graphService.getNodeLabel(node));
-            this.graph.nodeEdges(node)
+            const nodeInd: number = labels.indexOf(this.graphService.getNodeLabel(node.id));
+            [...this.graph.getSinks(node.id), ...this.graph.getSources(node.id)]
                 .forEach(edge => {
-                    const nodeB = node == edge.v ? edge.w : edge.v;
+                    const nodeB = node.id == edge.from ? edge.to : edge.from;
                     const nodeBInd: number = labels.indexOf(this.graphService.getNodeLabel(nodeB));
                     matrix[nodeInd][nodeBInd] = 1;
                 });
