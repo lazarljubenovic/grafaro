@@ -32,6 +32,7 @@ const projectSchema = new mongoose.Schema({
             }
         }],
         edges: [{
+            id: String,
             from: String,
             to: String,
             label: String,
@@ -82,14 +83,29 @@ dbRoutes.post('/user/:id', (req, res) => {
     console.log('Updating user', req.params['id']);
 
     User.update({_id: id}, {$set: {displayName: user.displayName}})
-        .then(() => res.json({status: 'succes'}))
+        .then(() => res.json({status: 'success'}))
         .catch(error => res.json({error}));
 });
 
+function getLastId(nodeEdgeObj: any): number {
+    return parseInt(nodeEdgeObj.sort((A, B) =>
+        parseInt(B.id.split('-')[1], 10) - parseInt(A.id.split('-')[1], 10))[0] // ensure ordering
+        .id.split('-')[1], 10);
+}
+
 dbRoutes.get('/project/:id', (req, res) => {
     console.log('Getting project', req.params['id']);
+
     Project.findById(req.params['id'])
-        .then((dbProject: IProject) => res.json({data: dbProject}))
+        .lean(true)
+        .exec()
+        .then((dbProject: IProject) => {
+            let nextNodeId = getLastId(dbProject.graph.nodes) + 1;
+            let nextEdgeId = getLastId(dbProject.graph.edges) + 1;
+            dbProject.graph.nextNodeId = nextNodeId;
+            dbProject.graph.nextEdgeId = nextEdgeId;
+            res.json({data: dbProject});
+        })
         .catch(error => res.json({error}));
 });
 

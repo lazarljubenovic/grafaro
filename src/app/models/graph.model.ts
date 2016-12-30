@@ -51,6 +51,14 @@ export class Graph {
         return this._edges;
     }
 
+    public setNodeIdGeneratorId(value: number): void {
+        this._nodeIdGenerator.id = value;
+    }
+
+    public setEdgeIdGeneratorId(value: number): void {
+        this._edgeIdGenerator.id = value;
+    }
+
     public writeJson(): GraphJson {
         return {
             nodes: this._nodes,

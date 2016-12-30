@@ -36,7 +36,7 @@ export interface IProject extends Document {
     tags: string[]; // todo
 }
 
-interface GraphNode {
+export interface GraphNode {
     id: string;
     label: string;
     position: {
@@ -45,7 +45,8 @@ interface GraphNode {
     };
 }
 
-interface GraphEdge {
+export interface GraphEdge {
+    id: string;
     from: string;
     to: string;
     label: string;
@@ -54,6 +55,8 @@ interface GraphEdge {
 export interface Graph {
     nodes: GraphNode[];
     edges: GraphEdge[];
+    nextNodeId?: number;
+    nextEdgeId?: number;
 }
 
 export const defaultGraph: Graph = {
@@ -77,6 +80,7 @@ export const defaultGraph: Graph = {
     ],
     edges: [
         {
+            id: 'edge-0',
             from: 'node-0',
             to: 'node-1',
             label: '1',

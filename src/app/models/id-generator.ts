@@ -12,4 +12,8 @@ export class IdGenerator {
         return `${this._prefix}-${this._id++}`;
     }
 
+    set id (value: number) {
+        this._id = value;
+    }
+
 }
