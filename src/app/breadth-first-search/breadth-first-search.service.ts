@@ -215,9 +215,10 @@ export class BreadthFirstSearchService {
         this.unlinkNodes(nodeA, nodeB);
     }
 
-    public removeEdge(edge: string) {
-        const graphEdge = JSON.parse(edge);
-        this.unlinkNodes(graphEdge.v, graphEdge.w);
+    public removeEdge(edgeId: string) {
+        const edge = this.graph.getEdge(edgeId);
+        this.unlinkNodes(edge.from, edge.to);
+        this.setGraph();
     }
 
     private setPosition(nodeLabel: string, position: ClickPosition): void {

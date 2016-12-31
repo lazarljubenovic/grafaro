@@ -189,4 +189,8 @@ export class Graph {
         return matrix;
     }
 
+    public getEdge(edgeId: EdgeId): GraphEdge {
+        return this._edges.find(edge => edge.id == edgeId);
+    }
+
 }
