@@ -13,6 +13,7 @@ export class GraphEdgeOptionsTransformPipe implements PipeTransform {
             from: value.from,
             to: value.to,
             label: value.label,
+            arrows: 'to',
         };
     }
 
