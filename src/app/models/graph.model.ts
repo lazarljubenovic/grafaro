@@ -54,7 +54,6 @@ export class Graph {
     }
 
     public setNodeIdGeneratorId(value: number): void {
-        console.log('setNodeId', value);
         this._nodeIdGenerator.id = value;
     }
 
@@ -132,8 +131,7 @@ export class Graph {
         }
 
         // Remove node
-        const index = this._nodes.map(node => node.id).indexOf(nodeId);
-        this._nodes.splice(index);
+        this._nodes = this._nodes.filter(node => node.id != nodeId);
 
         // Remove its associated edges
         this._edges = this._edges
