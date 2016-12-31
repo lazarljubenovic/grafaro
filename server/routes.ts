@@ -109,6 +109,15 @@ dbRoutes.get('/project/:id', (req, res) => {
         .catch(error => res.json({error}));
 });
 
+dbRoutes.delete('/project/:id', (req, res) => {
+    console.log('Deleting project', req.params['id']);
+
+    Project.findById(req.params['id'])
+        .remove()
+        .then(() => res.json({status: 'success'}))
+        .catch(error => res.json({error}));
+})
+
 dbRoutes.get('/project', (req, res) => {
     Project.find()
         .populate({path: 'creatorId', select: 'displayName'})
