@@ -38,6 +38,10 @@ import {FourOhFourComponent} from './four-oh-four/four-oh-four.component';
                 component: ProjectViewComponent,
             },
             {
+                path: 'room',
+                component: ProjectViewComponent,
+            },
+            {
                 path: '**',
                 component: FourOhFourComponent,
             },

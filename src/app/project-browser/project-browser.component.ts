@@ -3,6 +3,7 @@ import {ProjectsService} from './projects.service';
 import {Project} from './project';
 import {Observable} from 'rxjs';
 import {FormGroup, FormBuilder} from '@angular/forms';
+import {JoinService} from './join.service';
 
 @Component({
     selector: 'grf-project-browser',
@@ -16,7 +17,8 @@ export class ProjectBrowserComponent implements OnInit {
     public queryForm: FormGroup;
 
     constructor(private _projectsService: ProjectsService,
-                private _formBuilder: FormBuilder) {
+                private _formBuilder: FormBuilder,
+                private joinService: JoinService) {
     }
 
     ngOnInit() {
@@ -37,6 +39,13 @@ export class ProjectBrowserComponent implements OnInit {
                 console.log(query);
                 this.projects$ = this._projectsService.getProjectByQuery(query);
             });
+
+        this.joinService.create().subscribe((message) =>
+            console.log(message));
+    }
+
+    public createNewRoom(): void {
+        this.joinService.newRoom();
     }
 
 }

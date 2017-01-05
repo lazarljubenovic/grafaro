@@ -1,4 +1,4 @@
-import {ChatMessageInfo, Message} from './interfaces';
+import {ChatMessageInfo, Message, JoinMessage} from './interfaces';
 import * as bodyParser from 'body-parser';
 import * as http from 'http';
 import * as ws from 'ws';
@@ -7,6 +7,7 @@ import * as url from 'url';
 import * as mongoose from 'mongoose';
 import * as cors from 'cors';
 import {dbRoutes} from './routes';
+import {MessageRoom} from './messageRoom.model';
 
 const server = http.createServer();
 const WebSocketServer = ws.Server;
@@ -60,7 +61,7 @@ const dummyMessages: ChatMessageInfo[] = [
     },
 ];
 
-let messageRooms: Map<string, Set<ws>> = new Map();
+let messageRooms: MessageRoom = MessageRoom.getInstance();
 
 
 app.use(cors());
@@ -72,33 +73,55 @@ app.use(bodyParser.json());
 
 app.use('/', dbRoutes);
 
+app.use('/room', (req, res) => {
+    const userId = req.body['id'];
+    const roomId = messageRooms.createNewRoom();
+    messageRooms.addUserToRoom(roomId, userId);
+
+    res.send({data: roomId});
+});
+
 wss.on('connection', ws => {
     let location = url.parse(ws.upgradeReq.url, true);
     const userRoom: string = location.path.slice(1);
     console.log('New user');
 
-    if (userRoom == '') {
-        // No user hash, send new one
-        ws.send(JSON.stringify({hash: '1231'}));
-    }
+    ws.send(JSON.stringify(messageRooms.getRooms()));
 
-    // Create room if it doesn't exists
-    if (!messageRooms.has(userRoom)) {
-        messageRooms.set(userRoom, new Set());
-    }
+    // if (userRoom == '') {
+    //     // No user hash, send new one
+    //     ws.send(JSON.stringify({hash: '1231'}));
+    // }
 
-    // Add user to the room
-    messageRooms.get(userRoom).add(ws);
-    console.log('New user joined the room', userRoom);
+    // // Create room if it doesn't exists
+    // if (!messageRooms.hasRoom(userRoom)) {
+    //     messageRooms.set(userRoom, new Set());
+    // }
+    //
+    // // Add user to the room
+    // messageRooms.get(userRoom).add(ws);
+    // console.log('New user joined the room', userRoom);
 
     ws.on('message', (message: string) => {
         let messageObj: Message<any> = JSON.parse(message);
 
-        console.log(messageObj, 'to room', userRoom);
+        if (messageObj.type == 'join') {
+            const messagePayload = <JoinMessage>messageObj.payload;
+            let roomId = messagePayload.roomId;
 
-        // Broadcast message to other users in the same room
-        messageRooms.get(userRoom)
-            .forEach(client => client != ws && client.send(JSON.stringify(messageObj)));
+            if (!messageRooms.hasRoom(roomId)) {
+                // Create new room if it doesn't exist
+                roomId = messageRooms.createNewRoom();
+            }
+
+            messageRooms.addUserToRoom(roomId, ws);
+            (<JoinMessage>messageObj.payload).roomId = roomId;
+            messageRooms.returnMessage(ws, messageObj);
+        } else {
+            console.log(messageObj, 'to room', userRoom);
+            // Broadcast message to other users in the same room
+            messageRooms.sendMessageToRoom(userRoom, ws, messageObj);
+        }
     });
 
     ws.on('error', (error) => {
@@ -106,9 +129,9 @@ wss.on('connection', ws => {
     });
 
     ws.on('close', () => {
-        messageRooms.get(userRoom)
-            .delete(ws);
-        console.log('User has left the room', userRoom);
+        if (messageRooms.userHasRoom(ws)) {
+            messageRooms.removeUserFromRoom(userRoom, ws);
+        }
     });
 
     setTimeout(() => {

@@ -12,7 +12,7 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.webSocket.create('ws://localhost:4000/1213');
+        this.webSocket.create('ws://localhost:4000');
     }
 
 }

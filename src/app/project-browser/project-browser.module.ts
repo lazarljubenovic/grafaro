@@ -8,6 +8,7 @@ import {ProjectsService} from './projects.service';
 import {JdenticonModule} from '../jdenticon/jdenticon.module';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {UtilPipesModule} from '../util-pipes/util-pipes.module';
+import {JoinService} from "./join.service";
 
 @NgModule({
     imports: [
@@ -25,6 +26,7 @@ import {UtilPipesModule} from '../util-pipes/util-pipes.module';
     ],
     providers: [
         ProjectsService,
+        JoinService,
     ],
 })
 export class ProjectBrowserModule {

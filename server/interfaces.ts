@@ -13,6 +13,10 @@ export interface Message<Type> {
     type: string;
 }
 
+export interface JoinMessage {
+    roomId: string;
+}
+
 export interface IUser extends Document {
     id: string;
     googleId: string;
