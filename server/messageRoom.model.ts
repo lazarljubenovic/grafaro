@@ -1,4 +1,5 @@
 import * as ws from 'ws';
+import {RoomInfo, Message, RoomInfoMessage} from './interfaces';
 
 export class MessageRoom {
     private static _instance: MessageRoom = null;
@@ -56,12 +57,25 @@ export class MessageRoom {
         return inRoom;
     }
 
-    public getRooms(): Map<string, number> {
-        let roomInfo = new Map();
+    public getRooms(): RoomInfo[] {
+        let roomInfo: RoomInfo[] = [];
 
-        this.rooms.forEach((users: Set<ws>, roomId: string) => roomInfo.set(roomId, users.size));
+        this.rooms.forEach((users: Set<ws>, roomId: string) => roomInfo.push({
+            roomId: roomId,
+            userCount: users.size
+        }));
 
         return roomInfo;
+    }
+
+    public sendRoomsInfo(user: ws): void {
+        let roomInfoMessage: Message<RoomInfoMessage> = {
+            payload: {
+                info: this.getRooms(),
+            },
+            type: 'roomInfo'
+        };
+        user.send(JSON.stringify(roomInfoMessage));
     }
 
     private constructor() {

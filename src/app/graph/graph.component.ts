@@ -69,4 +69,9 @@ export class GraphComponent implements OnInit {
         });
     }
 
+    public dragging(event: VisNgNetworkEventArgument): void {
+        // todo maybe?
+        // console.log(event);
+    }
+
 }

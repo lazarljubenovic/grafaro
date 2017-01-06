@@ -9,6 +9,7 @@ import {JdenticonModule} from '../jdenticon/jdenticon.module';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {UtilPipesModule} from '../util-pipes/util-pipes.module';
 import {JoinService} from './join.service';
+import {RoomInfoService} from './room-info.service';
 
 @NgModule({
     imports: [
@@ -27,6 +28,7 @@ import {JoinService} from './join.service';
     providers: [
         ProjectsService,
         JoinService,
+        RoomInfoService,
     ],
 })
 export class ProjectBrowserModule {

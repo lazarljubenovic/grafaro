@@ -7,6 +7,12 @@
     </li>
   </ul>
 
+  <ul>
+    <li *ngFor="let room of roomsInfo">
+      {{room.roomId + " " + room.userCount}}
+    </li>
+  </ul>
+
   <aside>
     <form [formGroup]="queryForm">
 

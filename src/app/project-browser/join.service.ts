@@ -1,7 +1,7 @@
 import {Injectable, Inject} from '@angular/core';
 import {WebSocketService} from '../core/websocket.service';
 import {Observable} from 'rxjs';
-import {Message} from '../../../server/interfaces';
+import {Message} from '../message';
 
 export interface JoinMessageInfo {
     roomId: string;

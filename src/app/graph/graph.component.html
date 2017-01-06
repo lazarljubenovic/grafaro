@@ -1,6 +1,7 @@
 <vis-network #network [options]="resultingOptions"
              (graphClick)="onGraphClick($event)"
              (graphDragEnd)="onGraphDragEnd($event)"
+             (graphDragging)="dragging($event)"
 >
   <vis-network-node *ngFor="let node of nodes"
                     [options]="node | graphNodeOptionsTransform"

@@ -1,4 +1,4 @@
-import {ChatMessageInfo, Message, JoinMessage} from './interfaces';
+import {ChatMessageInfo, Message, JoinMessage, RoomInfoMessage} from './interfaces';
 import * as bodyParser from 'body-parser';
 import * as http from 'http';
 import * as ws from 'ws';
@@ -62,6 +62,7 @@ const dummyMessages: ChatMessageInfo[] = [
 ];
 
 let messageRooms: MessageRoom = MessageRoom.getInstance();
+let lobby: ws[] = [];
 
 
 app.use(cors());
@@ -86,21 +87,9 @@ wss.on('connection', ws => {
     const userRoom: string = location.path.slice(1);
     console.log('New user');
 
-    ws.send(JSON.stringify(messageRooms.getRooms()));
-
-    // if (userRoom == '') {
-    //     // No user hash, send new one
-    //     ws.send(JSON.stringify({hash: '1231'}));
-    // }
-
-    // // Create room if it doesn't exists
-    // if (!messageRooms.hasRoom(userRoom)) {
-    //     messageRooms.set(userRoom, new Set());
-    // }
-    //
-    // // Add user to the room
-    // messageRooms.get(userRoom).add(ws);
-    // console.log('New user joined the room', userRoom);
+    lobby.push(ws);
+    messageRooms.sendRoomsInfo(ws);
+    console.log(lobby.length);
 
     ws.on('message', (message: string) => {
         let messageObj: Message<any> = JSON.parse(message);
@@ -114,9 +103,14 @@ wss.on('connection', ws => {
                 roomId = messageRooms.createNewRoom();
             }
 
+            let lobbyInd = lobby.findIndex(client => client == ws);
             messageRooms.addUserToRoom(roomId, ws);
+            lobby.splice(lobbyInd, 1);
             (<JoinMessage>messageObj.payload).roomId = roomId;
             messageRooms.returnMessage(ws, messageObj);
+
+            // Update room list
+            lobby.forEach(client => messageRooms.sendRoomsInfo(client));
         } else {
             console.log(messageObj, 'to room', userRoom);
             // Broadcast message to other users in the same room
@@ -129,8 +123,12 @@ wss.on('connection', ws => {
     });
 
     ws.on('close', () => {
+        let lobbyInd = lobby.findIndex(client => client == ws);
+
         if (messageRooms.userHasRoom(ws)) {
             messageRooms.removeUserFromRoom(userRoom, ws);
+        } else if (lobbyInd > -1) {
+            lobby.splice(lobbyInd, 1);
         }
     });
 

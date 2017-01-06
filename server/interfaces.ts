@@ -17,6 +17,15 @@ export interface JoinMessage {
     roomId: string;
 }
 
+export interface RoomInfo {
+    roomId: string;
+    userCount: number;
+}
+
+export interface RoomInfoMessage {
+    info: RoomInfo[];
+}
+
 export interface IUser extends Document {
     id: string;
     googleId: string;
