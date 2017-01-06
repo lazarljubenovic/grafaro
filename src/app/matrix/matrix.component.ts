@@ -22,21 +22,21 @@ export class MatrixComponent implements OnInit {
     }
 
     public addNode(): void {
-        this.graphService.addNodeOnRandomPlace();
+        this.algorithmService.addNodeOnRandomPlace();
     }
 
     public removeNode(): void {
-        this.graphService.removeNode(this.graphService.getNodeId(this.labels.pop()));
+        this.algorithmService.removeNode(this.algorithmService.getNodeId(this.labels.pop()));
     }
 
     public connectNode(row: number, column: number) {
-        const nodeA = this.graphService.getNodeId(this.labels[row]);
-        const nodeB = this.graphService.getNodeId(this.labels[column]);
+        const nodeA = this.algorithmService.getNodeId(this.labels[row]);
+        const nodeB = this.algorithmService.getNodeId(this.labels[column]);
 
         if (this.data[row][column] == 0) {
-            this.graphService.linkNodes(nodeA, nodeB);
+            this.algorithmService.linkNodes(nodeA, nodeB);
         } else {
-            this.graphService.unlinkNodes(nodeA, nodeB);
+            this.algorithmService.unlinkNodes(nodeA, nodeB);
         }
     }
 
@@ -48,11 +48,12 @@ export class MatrixComponent implements OnInit {
         const labels: string[] = this.graph.nodes.map(node => node.label);
 
         nodes.forEach(node => {
-            const nodeInd: number = labels.indexOf(this.graphService.getNodeLabel(node.id));
+            const nodeInd: number = labels.indexOf(this.algorithmService.getNodeLabel(node.id));
             [...this.graph.getSinks(node.id), ...this.graph.getSources(node.id)]
                 .forEach(edge => {
                     const nodeB = node.id == edge.from ? edge.to : edge.from;
-                    const nodeBInd: number = labels.indexOf(this.graphService.getNodeLabel(nodeB));
+                    const nodeBInd: number = labels
+                        .indexOf(this.algorithmService.getNodeLabel(nodeB));
                     matrix[nodeInd][nodeBInd] = 1;
                 });
 
@@ -62,11 +63,11 @@ export class MatrixComponent implements OnInit {
         this.labels = labels;
     }
 
-    constructor(private graphService: AlgorithmService) {
+    constructor(private algorithmService: AlgorithmService) {
     }
 
     ngOnInit() {
-        this.graphService.graphState$.subscribe(graphState => {
+        this.algorithmService.graphState$.subscribe(graphState => {
             this.graph = graphState;
             this.graphToMatrix();
         });

@@ -12,8 +12,8 @@
     <grf-controls (stateNumberChange)="updateStateNumber($event)"></grf-controls>
 
     <div class="bfs">
-      <grf-graph [nodes]="(service.currentNormalizedState$ | async)?.nodes"
-                 [edges]="(service.currentNormalizedState$ | async)?.edges"
+      <grf-graph [nodes]="(algorithmService.currentNormalizedState$ | async)?.nodes"
+                 [edges]="(algorithmService.currentNormalizedState$ | async)?.edges"
                  (graphClick)="click$.next($event)"
                  (graphNodeDragEnd)="onMoveNode($event)"
       >

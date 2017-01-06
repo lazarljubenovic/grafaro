@@ -28,8 +28,8 @@ export class AlgorithmComponent implements OnInit, AfterViewInit {
     public isOpenCurrentNode$ = new BehaviorSubject<boolean>(false);
     public isOpenCurrentNeighbor$ = new BehaviorSubject<boolean>(false);
 
-    constructor(graphService: AlgorithmService) {
-        this.currentState$ = graphService.currentState$;
+    constructor(algorithmService: AlgorithmService) {
+        this.currentState$ = algorithmService.currentState$;
     }
 
     ngOnInit() {

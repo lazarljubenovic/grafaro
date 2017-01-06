@@ -80,28 +80,28 @@ export class ProjectViewComponent implements OnInit {
         const nodeId = arg.nodes[0];
         const position = arg.pointer.canvas;
 
-        this.service.moveNode(nodeId, position);
+        this.algorithmService.moveNode(nodeId, position);
     }
 
     private linkTwoNodes(first: string, second: string): void {
-        this.service.linkNodes(first, second);
+        this.algorithmService.linkNodes(first, second);
     }
 
     public updateStateNumber(action: string) {
-        this.service.updateStateNumber(action);
+        this.algorithmService.updateStateNumber(action);
     }
 
     public save() {
         this.projectService.saveProject(
             this.activeRoute.snapshot.params['id'],
-            this.service.graph,
-            this.service.root
+            this.algorithmService.graph,
+            this.algorithmService.root
         );
     }
 
     constructor(private graphOptionsService: GraphOptionsService,
                 componentFactoryResolver: ComponentFactoryResolver,
-                public service: AlgorithmService,
+                public algorithmService: AlgorithmService,
                 private toastService: ToastService,
                 public projectService: ProjectsService,
                 private activeRoute: ActivatedRoute,
@@ -113,9 +113,9 @@ export class ProjectViewComponent implements OnInit {
     ngOnInit() {
         this.projectService.getProject(this.activeRoute.snapshot.params['id'])
             .subscribe(projectGraph => {
-                this.service.graph = projectGraph.graph;
-                this.service.root = projectGraph.algorithm.options.root;
-                this.service.setGraph();
+                this.algorithmService.graph = projectGraph.graph;
+                this.algorithmService.root = projectGraph.algorithm.options.root;
+                this.algorithmService.setGraph();
             });
 
         // Initial settings
@@ -150,16 +150,16 @@ export class ProjectViewComponent implements OnInit {
             });
 
         this.addNode$.subscribe(action => {
-            this.service.addNode(action.position);
+            this.algorithmService.addNode(action.position);
         });
 
         this.removeNode$.subscribe(nodeId => {
-            this.service.removeNode(nodeId);
+            this.algorithmService.removeNode(nodeId);
         });
 
         this.renameNode$.subscribe(action => {
             const id: string = action.node;
-            const oldLabel: string = this.service.getNodeLabel(id);
+            const oldLabel: string = this.algorithmService.getNodeLabel(id);
             const popupRenameComponent =
                 this.viewContainerRef.createComponent(this.popupRenameComponentFactory);
             popupRenameComponent.instance.x = 80 + action.position.x;
@@ -169,7 +169,7 @@ export class ProjectViewComponent implements OnInit {
             popupRenameComponent.changeDetectorRef.detectChanges();
             popupRenameComponent.instance.name.subscribe(newLabel => {
                 try {
-                    this.service.renameNode(oldLabel, newLabel);
+                    this.algorithmService.renameNode(oldLabel, newLabel);
                 } catch (e) {
                     this.toastService.display(`Rename unsuccessful. ${e}`, this.toastOutlet);
                 }
@@ -186,7 +186,7 @@ export class ProjectViewComponent implements OnInit {
             .subscribe((nodes: string[]) => this.linkTwoNodes(nodes[0], nodes[1]));
 
         this.removeEdge$.subscribe((edge: string) => {
-            this.service.removeEdge(edge);
+            this.algorithmService.removeEdge(edge);
         });
 
     }
