@@ -49,7 +49,8 @@ export class ChatComponent implements OnInit {
             return false;
         }
         const maxDelayMiliseonds: number = 60000; // 1 minute
-        const delay: number = (+message.timeStamp) - (+this.lastChatMessageInfo.timeStamp);
+        const delay: number = (+new Date(message.timeStamp)) -
+            (+new Date(this.lastChatMessageInfo.timeStamp));
         return delay <= maxDelayMiliseonds;
     }
 
