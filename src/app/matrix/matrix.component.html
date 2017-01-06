@@ -1,7 +1,7 @@
 <table cellspacing="0" cellpadding="0">
     <tr *ngFor="let row of data |  matrixWithLabels : labels : labels; let rowInd = index">
         <td *ngFor="let cell of row; let colInd = index"
-            (click)="connectNode(rowInd, colInd)"
+            (click)="connectNode(rowInd - 1, colInd - 1)"
             (mouseenter)="highlight(rowInd, colInd)"
             (mouseleave)="highlight(-1, -1)"
             [class.highlight]="rowInd == highlightedIndexes[0] || colInd == highlightedIndexes[1]"
