@@ -4,7 +4,8 @@ import {Project} from './project';
 import {Observable} from 'rxjs';
 import {FormGroup, FormBuilder} from '@angular/forms';
 import {JoinService} from './join.service';
-import {RoomInfoService, RoomInfo} from './room-info.service';
+import {RoomInfoService} from './room-info.service';
+import {RoomInfo} from './room-info.interface';
 
 @Component({
     selector: 'grf-project-browser',

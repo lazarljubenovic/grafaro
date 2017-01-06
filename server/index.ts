@@ -1,4 +1,4 @@
-import {ChatMessageInfo, Message, JoinMessage, RoomInfoMessage} from './interfaces';
+import {ChatMessageInfo, Message, JoinMessage} from './interfaces';
 import * as bodyParser from 'body-parser';
 import * as http from 'http';
 import * as ws from 'ws';

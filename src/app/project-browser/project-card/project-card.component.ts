@@ -1,5 +1,6 @@
 import {Component, OnInit, Input} from '@angular/core';
-import {Project} from '../project';
+import {RoomInfo} from '../room-info.interface';
+// import {Project} from '../project';
 
 @Component({
     selector: 'grf-project-card',
@@ -9,7 +10,8 @@ import {Project} from '../project';
 export class ProjectCardComponent implements OnInit {
 
     @Input()
-    public project: Project;
+    public project: RoomInfo;
+    // public project: Project;
 
     constructor() {
     }

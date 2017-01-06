@@ -6,12 +6,12 @@
     <div class="title">{{project?.name}}</div>
     <div class="creator">
       <!--<div class="name">{{project?.creator?.name}}</div>-->
-      <div class="handle">@{{project?.creatorId.displayName}}</div>
+      <div class="handle">@{{project?.master}}</div>
     </div>
   </div>
 </div>
 
-<div class="description">{{project?.description}}</div>
+<div class="description">{{project?.id}}</div>
 
 <ul class="tags">
   <li *ngFor="let tag of project?.tags">{{tag}}</li>
@@ -20,7 +20,7 @@
 <div class="additional-info">
   <div class="badge">
     <div class="icon"><i class="fa fa-user"></i></div>
-    <div class="number">{{project?.numberOfPeopleOnline}}</div>
+    <div class="number">{{project?.userCount}}</div>
   </div>
   <div class="badge">
     <div class="icon"><i class="fa fa-thumbs-o-up"></i></div>

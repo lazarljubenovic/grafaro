@@ -18,8 +18,10 @@ export interface JoinMessage {
 }
 
 export interface RoomInfo {
-    roomId: string;
+    id: string;
     userCount: number;
+    name: string;
+    master: string;
 }
 
 export interface RoomInfoMessage {

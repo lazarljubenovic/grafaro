@@ -2,15 +2,7 @@ import {Injectable, Inject} from '@angular/core';
 import {WebSocketService} from '../core/websocket.service';
 import {Observable} from 'rxjs';
 import {Message} from '../message';
-
-export interface RoomInfo {
-    roomId: string;
-    userCount: number;
-}
-
-export interface RoomInfoMessage {
-    info: RoomInfo[];
-}
+import {RoomInfoMessage} from './room-info.interface';
 
 @Injectable()
 export class RoomInfoService {

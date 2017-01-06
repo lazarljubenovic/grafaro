@@ -1,15 +1,15 @@
 <grf-header [isProjectViewMode]="false"></grf-header>
 
 <main>
-  <ul>
-    <li *ngFor="let project of projects$ | async">
-      <grf-project-card [project]="project"></grf-project-card>
-    </li>
-  </ul>
+  <!--<ul>-->
+    <!--<li *ngFor="let project of projects$ | async">-->
+      <!--<grf-project-card [project]="project"></grf-project-card>-->
+    <!--</li>-->
+  <!--</ul>-->
 
   <ul>
     <li *ngFor="let room of roomsInfo">
-      {{room.roomId + " " + room.userCount}}
+      <grf-project-card [project]="room"></grf-project-card>
     </li>
   </ul>
 

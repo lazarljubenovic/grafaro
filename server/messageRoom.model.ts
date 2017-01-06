@@ -61,8 +61,10 @@ export class MessageRoom {
         let roomInfo: RoomInfo[] = [];
 
         this.rooms.forEach((users: Set<ws>, roomId: string) => roomInfo.push({
-            roomId: roomId,
-            userCount: users.size
+            id: roomId,
+            userCount: users.size,
+            name: `room-${roomId}`,
+            master: 'Isus' // todo
         }));
 
         return roomInfo;
