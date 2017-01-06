@@ -91,8 +91,6 @@ app.get('/room/:id', (req, res) => {
 app.use('/', dbRoutes);
 
 wss.on('connection', ws => {
-    let location = url.parse(ws.upgradeReq.url, true);
-    const userRoom: string = location.path.slice(1);
     console.log('New user');
 
     lobby.push(ws);
@@ -101,21 +99,17 @@ wss.on('connection', ws => {
 
     ws.on('message', (message: string) => {
         let messageObj: Message<any> = JSON.parse(message);
+        let roomId = messageObj.roomId;
 
         if (messageObj.type == 'create') {
             const roomId = messageRooms.createNewRoom();
             const joinMessage: Message<JoinMessage> = {
                 type: 'join',
-                payload: {
-                    roomId
-                }
+                payload: {roomId},
+                roomId
             };
-
             messageRooms.returnMessage(ws, joinMessage);
         } else if (messageObj.type == 'join') {
-            const messagePayload = <JoinMessage>messageObj.payload;
-            let roomId = messagePayload.roomId;
-
             if (!messageRooms.hasRoom(roomId)) {
                 // Create new room if it doesn't exist
                 console.log('No such room', roomId);
@@ -130,9 +124,9 @@ wss.on('connection', ws => {
             // Update room list
             lobby.forEach(client => messageRooms.sendRoomsInfo(client));
         } else {
-            console.log(messageObj, 'to room', userRoom);
+            console.log(messageObj, 'to room', roomId);
             // Broadcast message to other users in the same room
-            messageRooms.sendMessageToRoom(userRoom, ws, messageObj);
+            messageRooms.sendMessageToRoom(roomId, ws, messageObj);
         }
     });
 

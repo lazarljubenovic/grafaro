@@ -116,6 +116,7 @@ export class ProjectViewComponent implements OnInit {
 
     ngOnInit() {
         const roomId = this.activeRoute.snapshot.params['id'];
+        console.log(roomId);
         this.joinService.joinRoom(roomId);
         this.graphSocketService.create().subscribe(roomGraph => {
             console.log('room graph', roomGraph);

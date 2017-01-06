@@ -29,8 +29,9 @@ export class JoinService {
         this.webSocketService.send({}, 'create');
     }
 
-    public joinRoom(roomId: string): void {
-        this.webSocketService.send({roomId}, 'join');
+    public joinRoom(id: string): void {
+        this.webSocketService.roomId = id;
+        this.webSocketService.send({id}, 'join');
     }
 
 }

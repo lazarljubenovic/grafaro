@@ -37,7 +37,8 @@ export class MessageRoom {
                 graph,
                 algorithm,
                 type: 'graph'
-            }
+            },
+            roomId
         });
     }
 
@@ -88,7 +89,8 @@ export class MessageRoom {
             payload: {
                 info: this.getRooms(),
             },
-            type: 'roomInfo'
+            type: 'roomInfo',
+            roomId: null
         };
         user.send(JSON.stringify(roomInfoMessage));
     }
