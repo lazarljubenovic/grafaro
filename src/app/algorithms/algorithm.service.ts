@@ -3,7 +3,7 @@ import {
     BreadthFirstSearchState,
     breadthFirstSearch,
     breadthFirstSearchNormalizer
-} from '../algorithms/breadth-first-search';
+} from './breadth-first-search';
 import {VisNgNetworkOptionsEdges} from '@lazarljubenovic/vis-ng/core';
 import {GrfGraphNodeOptions} from '../graph/graph.module';
 import {ReplaySubject} from 'rxjs';
@@ -22,7 +22,7 @@ export interface NormalizedState {
 }
 
 @Injectable()
-export class BreadthFirstSearchService {
+export class AlgorithmService {
 
     public graph = new Graph();
     // .setNode('100', 'A')

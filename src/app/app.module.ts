@@ -4,7 +4,7 @@ import {FormsModule} from '@angular/forms';
 import {HttpModule} from '@angular/http';
 import {AppComponent} from './app.component';
 import {StepperModule} from './shared/stepper/stepper.module';
-import {BreadthFirstSearchService} from './breadth-first-search/breadth-first-search.service';
+import {AlgorithmService} from './algorithms/algorithm.service';
 import {ProjectViewModel} from './project-view/project-view.module';
 import {MarkdownService} from './shared/markdown.service';
 import {EmojiService} from './shared/emoji.service';
@@ -48,7 +48,7 @@ import {FourOhFourComponent} from './four-oh-four/four-oh-four.component';
         ]),
     ],
     providers: [
-        BreadthFirstSearchService,
+        AlgorithmService,
         MarkdownService,
         EmojiService,
         GraphOptionsService,

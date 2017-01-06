@@ -11,7 +11,7 @@ import {Actions, ClickPosition} from './toolbar/toolbar.component';
 import {GraphOptionsService} from '../graph-options.service';
 import {VisNgNetworkEventArgument, VisNetworkService} from '@lazarljubenovic/vis-ng/core';
 import {PopupRenameComponent} from './popup-rename/popup-rename.component';
-import {BreadthFirstSearchService} from '../breadth-first-search/breadth-first-search.service';
+import {AlgorithmService} from '../algorithms/algorithm.service';
 import {ToastService} from '../toast/toast.service';
 import {ProjectsService} from '../project-browser/projects.service';
 import {ActivatedRoute} from '@angular/router';
@@ -101,7 +101,7 @@ export class ProjectViewComponent implements OnInit {
 
     constructor(private graphOptionsService: GraphOptionsService,
                 componentFactoryResolver: ComponentFactoryResolver,
-                public service: BreadthFirstSearchService,
+                public service: AlgorithmService,
                 private toastService: ToastService,
                 public projectService: ProjectsService,
                 private activeRoute: ActivatedRoute,

@@ -1,6 +1,6 @@
 import {Component, OnInit, AfterViewInit} from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
-import {BreadthFirstSearchService} from '../breadth-first-search/breadth-first-search.service';
+import {AlgorithmService} from '../algorithms/algorithm.service';
 
 @Component({
     selector: 'grf-algorithm',
@@ -28,7 +28,7 @@ export class AlgorithmComponent implements OnInit, AfterViewInit {
     public isOpenCurrentNode$ = new BehaviorSubject<boolean>(false);
     public isOpenCurrentNeighbor$ = new BehaviorSubject<boolean>(false);
 
-    constructor(graphService: BreadthFirstSearchService) {
+    constructor(graphService: AlgorithmService) {
         this.currentState$ = graphService.currentState$;
     }
 

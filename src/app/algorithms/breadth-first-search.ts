@@ -1,6 +1,6 @@
 /* tslint:disable */
 import {Queue} from '../data-structures/queue';
-import {NormalizedState} from '../breadth-first-search/breadth-first-search.service';
+import {NormalizedState} from './algorithm.service';
 import {VisNgNetworkOptionsEdges} from '@lazarljubenovic/vis-ng/core';
 import {GrfGraphNodeOptions} from '../graph/graph.module';
 import {Graph, GraphJson} from '../models/graph.model';

@@ -1,16 +1,16 @@
 /* tslint:disable:no-unused-variable */
 import {TestBed, inject} from '@angular/core/testing';
-import {BreadthFirstSearchService} from './breadth-first-search.service';
+import {AlgorithmService} from './algorithm.service';
 
 // TODO
 xdescribe('Service: BreadthFirstSearch', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
-            providers: [BreadthFirstSearchService]
+            providers: [AlgorithmService]
         });
     });
 
-    it('should ...', inject([BreadthFirstSearchService], (service: BreadthFirstSearchService) => {
+    it('should ...', inject([AlgorithmService], (service: AlgorithmService) => {
         expect(service).toBeTruthy();
     }));
 });

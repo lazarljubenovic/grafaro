@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {BreadthFirstSearchService} from '../breadth-first-search/breadth-first-search.service';
+import {AlgorithmService} from '../algorithms/algorithm.service';
 import {Graph} from '../models/graph.model';
 
 @Component({
@@ -62,7 +62,7 @@ export class MatrixComponent implements OnInit {
         this.labels = labels;
     }
 
-    constructor(private graphService: BreadthFirstSearchService) {
+    constructor(private graphService: AlgorithmService) {
     }
 
     ngOnInit() {
