@@ -1,6 +1,5 @@
 import {Component, OnInit, Input} from '@angular/core';
 import {RoomInfo} from '../room-info.interface';
-// import {Project} from '../project';
 
 @Component({
     selector: 'grf-project-card',
@@ -8,10 +7,10 @@ import {RoomInfo} from '../room-info.interface';
     styleUrls: ['./project-card.component.scss']
 })
 export class ProjectCardComponent implements OnInit {
+    // todo rename
 
     @Input()
     public project: RoomInfo;
-    // public project: Project;
 
     constructor() {
     }

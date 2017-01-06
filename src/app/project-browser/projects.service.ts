@@ -136,7 +136,7 @@ export class ProjectsService extends GrafaroHttpService {
     }
 
     public getProject(id: string): Observable<any> {
-        return this.http.get(this.url + '/' + id)
+        return this.http.get('http://localhost:4000/room/' + id)
             .map(p => {
                 const project: any = this.responseToObject(p);
                 const graph: Graph = new Graph();

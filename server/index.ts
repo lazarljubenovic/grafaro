@@ -1,4 +1,4 @@
-import {ChatMessageInfo, Message, JoinMessage} from './interfaces';
+import {ChatMessageInfo, Message, JoinMessage, defaultGraph} from './interfaces';
 import * as bodyParser from 'body-parser';
 import * as http from 'http';
 import * as ws from 'ws';
@@ -72,15 +72,21 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
-app.use('/', dbRoutes);
-
-app.use('/room', (req, res) => {
-    const userId = req.body['id'];
-    const roomId = messageRooms.createNewRoom();
-    messageRooms.addUserToRoom(roomId, userId);
-
-    res.send({data: roomId});
+app.get('/room/:id', (req, res) => {
+    console.log('room get');
+    console.log(req.params['id']);
+    res.json({data: {
+        graph: defaultGraph,
+        algorithm: {
+            id: 'bfs',
+            options: {
+                root: 'node-0'
+            }
+        },
+    }});
 });
+
+app.use('/', dbRoutes);
 
 wss.on('connection', ws => {
     let location = url.parse(ws.upgradeReq.url, true);

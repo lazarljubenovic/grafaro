@@ -6,6 +6,7 @@ import {FormGroup, FormBuilder} from '@angular/forms';
 import {JoinService} from './join.service';
 import {RoomInfoService} from './room-info.service';
 import {RoomInfo} from './room-info.interface';
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'grf-project-browser',
@@ -23,7 +24,9 @@ export class ProjectBrowserComponent implements OnInit {
     constructor(private _projectsService: ProjectsService,
                 private _formBuilder: FormBuilder,
                 private joinService: JoinService,
-                private roomInfoService: RoomInfoService) {
+                private roomInfoService: RoomInfoService,
+                private router: Router
+    ) {
     }
 
     ngOnInit() {
@@ -45,8 +48,10 @@ export class ProjectBrowserComponent implements OnInit {
                 this.projects$ = this._projectsService.getProjectByQuery(query);
             });
 
-        this.joinService.create().subscribe((message) =>
-            console.log(message));
+        this.joinService.create().subscribe((joinMessage) => {
+            const roomId = joinMessage.roomId;
+            this.router.navigate(['/room', roomId]);
+        });
 
         this.roomInfoService.create().subscribe((roomInfo) => {
             console.log('room info');
