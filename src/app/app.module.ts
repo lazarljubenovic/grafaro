@@ -15,6 +15,8 @@ import {ProjectViewComponent} from './project-view/project-view.component';
 import {ProjectBrowserComponent} from './project-browser/project-browser.component';
 import {FourOhFourModule} from './four-oh-four/four-oh-four.module';
 import {FourOhFourComponent} from './four-oh-four/four-oh-four.component';
+import {Auth0Service} from './auth0.service';
+import {AUTH_PROVIDERS} from 'angular2-jwt';
 
 @NgModule({
     declarations: [
@@ -48,6 +50,8 @@ import {FourOhFourComponent} from './four-oh-four/four-oh-four.component';
         MarkdownService,
         EmojiService,
         GraphOptionsService,
+        Auth0Service,
+        AUTH_PROVIDERS,
     ],
     bootstrap: [
         AppComponent,
