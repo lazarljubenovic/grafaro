@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-variable */
 
 import { TestBed, async } from '@angular/core/testing';
-import { ProjectCardComponent } from './project-card.component';
+import { ProjectCardComponent } from './room-card.component';
 
 describe('Component: ProjectCard', () => {
   it('should create an instance', () => {

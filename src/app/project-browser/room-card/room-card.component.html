@@ -1,0 +1,20 @@
+<div class="main-info" [routerLink]="['room/' + roomInfo.id]">
+  <div class="avatar">
+    <grf-jdenticon [plaintext]="roomInfo?.name"></grf-jdenticon>
+  </div>
+  <div class="title-and-creator">
+    <div class="title">{{roomInfo?.name}}</div>
+    <div class="creator">
+      <div class="handle">@{{roomInfo?.master}}</div>
+    </div>
+  </div>
+</div>
+
+<div class="description">{{roomInfo?.id}}</div>
+
+<div class="additional-info">
+  <div class="badge">
+    <div class="icon"><i class="fa fa-user"></i></div>
+    <div class="number">{{roomInfo?.userCount}}</div>
+  </div>
+</div>

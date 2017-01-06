@@ -34,10 +34,6 @@ import {FourOhFourComponent} from './four-oh-four/four-oh-four.component';
                 component: ProjectBrowserComponent,
             },
             {
-                path: 'project/:id',
-                component: ProjectViewComponent,
-            },
-            {
                 path: 'room/:id',
                 component: ProjectViewComponent,
             },
