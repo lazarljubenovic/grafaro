@@ -221,10 +221,15 @@ export class AlgorithmService {
         this.setGraph();
     }
 
-    private setPosition(nodeLabel: string, position: ClickPosition): void {
+    public setPosition(nodeLabel: string, position: ClickPosition): void {
         this.normalizedStates[this.currentStateIndex].nodes
             .find(node => node.label == nodeLabel).position = position;
         this.onGraphChange();
+    }
+
+    public moveNode(nodeId: string, position: ClickPosition): void {
+        this.graph.nodes.find(node => node.id == nodeId).position = position;
+        this.setGraph();
     }
 
     private getNormalizedState(state: BreadthFirstSearchState): NormalizedState {

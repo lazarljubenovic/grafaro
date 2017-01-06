@@ -80,7 +80,7 @@ export class ProjectViewComponent implements OnInit {
         const nodeId = arg.nodes[0];
         const position = arg.pointer.canvas;
 
-        this.service.graph.nodes.find(node => node.id == nodeId).position = position;
+        this.service.moveNode(nodeId, position);
     }
 
     private linkTwoNodes(first: string, second: string): void {
