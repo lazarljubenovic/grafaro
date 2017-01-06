@@ -5,11 +5,18 @@ import {Message} from '../message';
 @Injectable()
 export class WebSocketService {
     private wsSubject: Subject<any>; // todo type
+    private _roomId: string = '';
+    public set roomId(value: string) {
+        this._roomId = value;
+    }
 
     public send(message: any, type: string) {
+        console.log(message);
+        console.log(this._roomId);
         let messageToSend: Message<any> = {
             payload: message,
-            type: type
+            type: type,
+            roomId: this._roomId
         };
 
         this.wsSubject.next(JSON.stringify(messageToSend));

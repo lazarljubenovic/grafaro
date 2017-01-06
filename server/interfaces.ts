@@ -11,6 +11,7 @@ export interface ChatMessageInfo {
 export interface Message<Type> {
     payload: Type;
     type: string;
+    roomId: string;
 }
 
 export interface JoinMessage {
@@ -26,6 +27,11 @@ export interface RoomInfo {
 
 export interface RoomInfoMessage {
     info: RoomInfo[];
+}
+
+export interface GraphMessage {
+    graph: Graph;
+    algorithm: any;
 }
 
 export interface IUser extends Document {
@@ -102,5 +108,7 @@ export const defaultGraph: Graph = {
             label: '1',
             weight: '1'
         }
-    ]
+    ],
+    nextNodeId: 2,
+    nextEdgeId: 1,
 };

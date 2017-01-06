@@ -26,7 +26,12 @@ export class JoinService {
     }
 
     public newRoom(): void {
-        this.webSocketService.send({roomId: ''}, 'join');
+        this.webSocketService.send({}, 'create');
+    }
+
+    public joinRoom(id: string): void {
+        this.webSocketService.roomId = id;
+        this.webSocketService.send({id}, 'join');
     }
 
 }
