@@ -1,22 +1,23 @@
 <table cellspacing="0" cellpadding="0">
-    <tr *ngFor="let row of data |  matrixWithLabels : labels : labels; let rowInd = index">
-        <td *ngFor="let cell of row; let colInd = index"
-            (click)="connectNode(rowInd - 1, colInd - 1)"
-            (mouseenter)="highlight(rowInd, colInd)"
-            (mouseleave)="highlight(-1, -1)"
-            [class.highlight]="rowInd == highlightedIndexes[0] || colInd == highlightedIndexes[1]"
-            [class.this]="rowInd == highlightedIndexes[0] && colInd == highlightedIndexes[1]"
-            [class.mirror]="rowInd == highlightedIndexes[1] && colInd == highlightedIndexes[0]"
-        >
-          {{cell}}
-        </td>
-    </tr>
+  <tr
+    *ngFor="let row of data |  matrixWithLabels : labels : labels; let rowInd = index">
+    <td *ngFor="let cell of row; let colInd = index"
+        (click)="connectNode(rowInd - 1, colInd - 1)"
+        (mouseenter)="highlight(rowInd, colInd)"
+        (mouseleave)="highlight(-1, -1)"
+        [class.highlight]="rowInd == highlightedIndexes[0] || colInd == highlightedIndexes[1]"
+        [class.this]="rowInd == highlightedIndexes[0] && colInd == highlightedIndexes[1]"
+        [class.mirror]="rowInd == highlightedIndexes[1] && colInd == highlightedIndexes[0]"
+    >
+      {{cell}}
+    </td>
+  </tr>
 </table>
 
 <div class="buttons">
-    <button (click)="addNode()">Add me</button>
-    <button (click)="removeNode()"
-            [disabled]="labels.length == 1"
-    >Remove last node
-    </button>
+  <button (click)="addNode()">Add me</button>
+  <button (click)="removeNode()"
+          [disabled]="labels.length == 1"
+  >Remove last node
+  </button>
 </div>

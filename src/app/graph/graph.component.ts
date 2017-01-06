@@ -1,5 +1,15 @@
-import {Component, OnInit, Input, Output, EventEmitter, ViewChild} from '@angular/core';
-import {VisNgNetworkOptions, VisNgNetworkEventArgument} from '@lazarljubenovic/vis-ng/core';
+import {
+    Component,
+    OnInit,
+    Input,
+    Output,
+    EventEmitter,
+    ViewChild
+} from '@angular/core';
+import {
+    VisNgNetworkOptions,
+    VisNgNetworkEventArgument
+} from '@lazarljubenovic/vis-ng/core';
 import {GrfGraphEdgeOptions, GrfGraphNodeOptions} from './graph.module';
 import * as deepAssign from 'deep-assign';
 import {GraphOptionsService} from '../graph-options.service';

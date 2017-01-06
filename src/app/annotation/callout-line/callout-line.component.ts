@@ -1,4 +1,10 @@
-import {Component, OnInit, Input, ChangeDetectionStrategy, OnChanges} from '@angular/core';
+import {
+    Component,
+    OnInit,
+    Input,
+    ChangeDetectionStrategy,
+    OnChanges
+} from '@angular/core';
 import {CalloutLineService} from './callout-line.service';
 
 @Component({

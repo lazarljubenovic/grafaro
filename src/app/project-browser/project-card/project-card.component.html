@@ -24,10 +24,14 @@
   </div>
   <div class="badge">
     <div class="icon"><i class="fa fa-thumbs-o-up"></i></div>
-    <div class="number">{{project?.numberOfLikes | percentage : (project?.numberOfLikes + project?.numberOfDislikes)}}</div>
+    <div class="number">{{project?.numberOfLikes | percentage :
+      (project?.numberOfLikes + project?.numberOfDislikes)}}
+    </div>
   </div>
   <div class="badge">
     <div class="icon"><i class="fa fa-thumbs-o-down"></i></div>
-    <div class="number">{{project?.numberOfDislikes | percentage : (project?.numberOfLikes + project?.numberOfDislikes)}}</div>
+    <div class="number">{{project?.numberOfDislikes | percentage :
+      (project?.numberOfLikes + project?.numberOfDislikes)}}
+    </div>
   </div>
 </div>

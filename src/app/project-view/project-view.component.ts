@@ -9,7 +9,10 @@ import {
 import {Subject, Observable} from 'rxjs';
 import {Actions, ClickPosition} from './toolbar/toolbar.component';
 import {GraphOptionsService} from '../graph-options.service';
-import {VisNgNetworkEventArgument, VisNetworkService} from '@lazarljubenovic/vis-ng/core';
+import {
+    VisNgNetworkEventArgument,
+    VisNetworkService
+} from '@lazarljubenovic/vis-ng/core';
 import {PopupRenameComponent} from './popup-rename/popup-rename.component';
 import {AlgorithmService} from '../algorithms/algorithm.service';
 import {ToastService} from '../toast/toast.service';
@@ -22,6 +25,9 @@ import {ActivatedRoute} from '@angular/router';
     styleUrls: ['project-view.component.scss']
 })
 export class ProjectViewComponent implements OnInit {
+
+    public isSaveDialogOpen: boolean = false;
+    public isLoadDialogOpen: boolean = false;
 
     public chooseTool$ = new Subject<Actions>();
     public click$ = new Subject<VisNgNetworkEventArgument>();
@@ -97,6 +103,14 @@ export class ProjectViewComponent implements OnInit {
             this.algorithmService.graph,
             this.algorithmService.root
         );
+    }
+
+    public saveDialogToggle(): void {
+        this.isSaveDialogOpen = !this.isSaveDialogOpen;
+    }
+
+    public loadDialogToggle(): void {
+        this.isLoadDialogOpen = !this.isLoadDialogOpen;
     }
 
     constructor(private graphOptionsService: GraphOptionsService,

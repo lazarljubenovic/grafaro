@@ -1,0 +1,44 @@
+@import '../../../global';
+
+:host {
+  $height: 2em;
+  min-height: $height;
+
+  .description {
+    display: flex;
+
+    > * {
+      display: flex;
+      align-items: center;
+    }
+
+    .icon {
+      @include force-square($height);
+      justify-content: center;
+    }
+
+    .name {
+      flex: auto;
+    }
+
+    .number-of-files {
+      @include force-square($height);
+      justify-content: flex-end;
+    }
+
+    .last-change {
+      @include force-height($height);
+      @include force-width(12em);
+      justify-content: flex-end;
+    }
+
+    &.file-description {
+      padding-left: $height / 2;
+    }
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+  }
+}

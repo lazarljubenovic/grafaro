@@ -21,11 +21,11 @@ export enum Actions {
 })
 export class ToolbarComponent implements OnInit {
 
-    @Input()
-    public currentSelected: number = 0;
+    @Input() public currentSelected: number = 0;
+    @Output() public currentSelectedChange = new EventEmitter<Actions>();
 
-    @Output()
-    public currentSelectedChange = new EventEmitter<Actions>();
+    @Output() public load = new EventEmitter<void>();
+    @Output() public save = new EventEmitter<void>();
 
     public tools = [
         {

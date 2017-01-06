@@ -1,5 +1,4 @@
 /* tslint:disable:no-unused-variable */
-import {ElementPositionPipe} from './element-position.pipe';
 
 // TODO
 xdescribe('Pipe: ElementPosition', () => {
