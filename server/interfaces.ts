@@ -102,5 +102,7 @@ export const defaultGraph: Graph = {
             label: '1',
             weight: '1'
         }
-    ]
+    ],
+    nextNodeId: 2,
+    nextEdgeId: 1,
 };
