@@ -37,6 +37,7 @@ const projectSchema = new mongoose.Schema({
             to: String,
             label: String,
             directed: Boolean,
+            weight: String,
         }]
     },
     name: String,
@@ -116,7 +117,7 @@ dbRoutes.delete('/project/:id', (req, res) => {
         .remove()
         .then(() => res.json({status: 'success'}))
         .catch(error => res.json({error}));
-})
+});
 
 dbRoutes.get('/project', (req, res) => {
     Project.find()

@@ -54,6 +54,7 @@ export interface GraphEdge {
     from: string;
     to: string;
     label: string;
+    weight: string;
 }
 
 export interface Graph {
@@ -88,6 +89,7 @@ export const defaultGraph: Graph = {
             from: 'node-0',
             to: 'node-1',
             label: '1',
+            weight: '1'
         }
     ]
 };

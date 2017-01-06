@@ -40,27 +40,12 @@ export class MatrixComponent implements OnInit {
         }
     }
 
-    // TODO fix this shitty code
     private graphToMatrix(): void {
-        const nodes = this.graph.nodes;
-        const matrix: number[][] = Array(nodes.length).fill(null)
-            .map(row => Array(nodes.length).fill(0));
-        const labels: string[] = this.graph.nodes.map(node => node.label);
-
-        nodes.forEach(node => {
-            const nodeInd: number = labels.indexOf(this.algorithmService.getNodeLabel(node.id));
-            [...this.graph.getSinks(node.id), ...this.graph.getSources(node.id)]
-                .forEach(edge => {
-                    const nodeB = node.id == edge.from ? edge.to : edge.from;
-                    const nodeBInd: number = labels
-                        .indexOf(this.algorithmService.getNodeLabel(nodeB));
-                    matrix[nodeInd][nodeBInd] = 1;
-                });
-
-        });
+        let matrix: number[][] = this.algorithmService.graph.getMatrix();
+        matrix = matrix.map(row => row.map(entry => entry ? entry : 0));
 
         this.data = matrix;
-        this.labels = labels;
+        this.labels = this.algorithmService.graph.nodes.map(node => node.label);
     }
 
     constructor(private algorithmService: AlgorithmService) {
