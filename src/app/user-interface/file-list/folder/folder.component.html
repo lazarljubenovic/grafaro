@@ -1,0 +1,24 @@
+<div class="description folder-description">
+
+  <div class="icon" (click)="toggle()">
+    <i class="fa fa-folder-o"></i>
+  </div>
+
+  <div class="name">
+    <span>{{name}}</span>
+  </div>
+
+  <div class="number-of-files">
+    <span>{{fileComponents.length}}</span>
+  </div>
+
+  <div class="last-change">
+    <span>{{lastChange | date : 'medium'}}</span>
+  </div>
+
+</div>
+
+
+<div class="content" *ngIf="isOpen">
+  <ng-content select="grf-file"></ng-content>
+</div>

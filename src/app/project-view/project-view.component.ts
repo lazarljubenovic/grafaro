@@ -25,6 +25,9 @@ import {GraphSocketService} from './graph-socket.service';
 })
 export class ProjectViewComponent implements OnInit {
 
+    public isSaveDialogOpen: boolean = false;
+    public isLoadDialogOpen: boolean = false;
+
     public chooseTool$ = new Subject<Actions>();
     public click$ = new Subject<VisNgNetworkEventArgument>();
 
@@ -99,6 +102,14 @@ export class ProjectViewComponent implements OnInit {
             this.algorithmService.graph,
             this.algorithmService.root
         );
+    }
+
+    public saveDialogToggle(): void {
+        this.isSaveDialogOpen = !this.isSaveDialogOpen;
+    }
+
+    public loadDialogToggle(): void {
+        this.isLoadDialogOpen = !this.isLoadDialogOpen;
     }
 
     constructor(private graphOptionsService: GraphOptionsService,

@@ -5,4 +5,7 @@
   >
     <i class="fa {{tool.icon}}"></i>
   </li>
+  <li class="spacer"></li>
+  <li (click)="load.emit()"><i class="fa fa-folder-open-o"></i></li>
+  <li (click)="save.emit()"><i class="fa fa-floppy-o"></i></li>
 </ul>

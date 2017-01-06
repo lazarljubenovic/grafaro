@@ -16,6 +16,8 @@ import {ToastModule} from '../toast/toast.module';
 import {AlgorithmModule} from '../algorithm/algorithm.module';
 import {UserInterfaceModule} from '../user-interface/user-interface.module';
 import {GraphSocketService} from './graph-socket.service';
+import {SaveDialogComponent} from './save-dialog/save-dialog.component';
+import {LoadDialogComponent} from './load-dialog/load-dialog.component';
 
 @NgModule({
     imports: [
@@ -37,6 +39,8 @@ import {GraphSocketService} from './graph-socket.service';
         SidebarComponent,
         ControlsComponent,
         PopupRenameComponent,
+        SaveDialogComponent,
+        LoadDialogComponent,
     ],
     providers: [
         WebSocketService,

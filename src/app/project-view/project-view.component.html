@@ -6,16 +6,20 @@
 
   <grf-toolbar [currentSelected]="chooseTool$ | async"
                (currentSelectedChange)="chooseTool$.next($event)"
+               (load)="loadDialogToggle()"
+               (save)="saveDialogToggle()"
   ></grf-toolbar>
 
   <div id="graph">
-    <grf-controls (stateNumberChange)="updateStateNumber($event)"></grf-controls>
+    <grf-controls
+      (stateNumberChange)="updateStateNumber($event)"></grf-controls>
 
     <div class="bfs">
-      <grf-graph [nodes]="(algorithmService.currentNormalizedState$ | async)?.nodes"
-                 [edges]="(algorithmService.currentNormalizedState$ | async)?.edges"
-                 (graphClick)="click$.next($event)"
-                 (graphNodeDragEnd)="onMoveNode($event)"
+      <grf-graph
+        [nodes]="(algorithmService.currentNormalizedState$ | async)?.nodes"
+        [edges]="(algorithmService.currentNormalizedState$ | async)?.edges"
+        (graphClick)="click$.next($event)"
+        (graphNodeDragEnd)="onMoveNode($event)"
       >
       </grf-graph>
     </div>
@@ -27,5 +31,13 @@
   <button (click)="save()">Gde li ce ovo da bude SAVE</button>
 
 </main>
+
+<grf-dialog *ngIf="isSaveDialogOpen" (close)="saveDialogToggle()">
+  <grf-save-dialog></grf-save-dialog>
+</grf-dialog>
+
+<grf-dialog *ngIf="isLoadDialogOpen" (close)="loadDialogToggle()">
+  <grf-load-dialog></grf-load-dialog>
+</grf-dialog>
 
 <template #toastOutlet></template>

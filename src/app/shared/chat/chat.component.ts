@@ -7,7 +7,10 @@ import {
     ComponentRef,
     ElementRef
 } from '@angular/core';
-import {ChatMessageInfo, ChatMessageComponent} from './chat-message/chat-message.component';
+import {
+    ChatMessageInfo,
+    ChatMessageComponent
+} from './chat-message/chat-message.component';
 import {ChatService} from './chat.service';
 import {Observable} from 'rxjs';
 

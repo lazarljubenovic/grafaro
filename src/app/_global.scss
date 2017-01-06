@@ -44,13 +44,21 @@ $header-color: get-color('secondary');
 
 // Utils
 
-@mixin force-square($size) {
+@mixin force-width($size) {
   width: $size;
   min-width: $size;
   max-width: $size;
+}
+
+@mixin force-height($size) {
   height: $size;
   min-height: $size;
   max-height: $size;
+}
+
+@mixin force-square($size) {
+  @include force-width($size);
+  @include force-height($size);
 }
 
 body {

@@ -1,5 +1,4 @@
 /* tslint:disable:no-unused-variable */
-import {LineComponent} from './line.component';
 
 // TODO
 xdescribe('Component: Line', () => {

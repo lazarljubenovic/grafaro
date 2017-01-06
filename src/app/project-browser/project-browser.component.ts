@@ -25,8 +25,7 @@ export class ProjectBrowserComponent implements OnInit {
                 private _formBuilder: FormBuilder,
                 private joinService: JoinService,
                 private roomInfoService: RoomInfoService,
-                private router: Router
-    ) {
+                private router: Router) {
     }
 
     ngOnInit() {

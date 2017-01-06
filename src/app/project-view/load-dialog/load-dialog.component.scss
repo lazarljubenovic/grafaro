@@ -1,0 +1,17 @@
+@import '../../global';
+
+:host {
+  display: block;
+  background-color: white;
+  padding: 1em;
+  border-radius: .33em;
+  min-width: 500px;
+  color: $black;
+  font-family: $font;
+}
+
+footer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
