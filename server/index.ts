@@ -75,15 +75,17 @@ app.use(bodyParser.json());
 app.get('/room/:id', (req, res) => {
     console.log('room get');
     console.log(req.params['id']);
-    res.json({data: {
-        graph: defaultGraph,
-        algorithm: {
-            id: 'bfs',
-            options: {
-                root: 'node-0'
-            }
-        },
-    }});
+    res.json({
+        data: {
+            graph: defaultGraph,
+            algorithm: {
+                id: 'bfs',
+                options: {
+                    root: 'node-0'
+                }
+            },
+        }
+    });
 });
 
 app.use('/', dbRoutes);
@@ -100,13 +102,23 @@ wss.on('connection', ws => {
     ws.on('message', (message: string) => {
         let messageObj: Message<any> = JSON.parse(message);
 
-        if (messageObj.type == 'join') {
+        if (messageObj.type == 'create') {
+            const roomId = messageRooms.createNewRoom();
+            const joinMessage: Message<JoinMessage> = {
+                type: 'join',
+                payload: {
+                    roomId
+                }
+            };
+
+            messageRooms.returnMessage(ws, joinMessage);
+        } else if (messageObj.type == 'join') {
             const messagePayload = <JoinMessage>messageObj.payload;
             let roomId = messagePayload.roomId;
 
             if (!messageRooms.hasRoom(roomId)) {
                 // Create new room if it doesn't exist
-                roomId = messageRooms.createNewRoom();
+                console.log('No such room', roomId);
             }
 
             let lobbyInd = lobby.findIndex(client => client == ws);
@@ -130,9 +142,11 @@ wss.on('connection', ws => {
 
     ws.on('close', () => {
         let lobbyInd = lobby.findIndex(client => client == ws);
+        let userRoom = messageRooms.userHasRoom(ws);
 
-        if (messageRooms.userHasRoom(ws)) {
+        if (!!userRoom) {
             messageRooms.removeUserFromRoom(userRoom, ws);
+            lobby.forEach(client => messageRooms.sendRoomsInfo(client));
         } else if (lobbyInd > -1) {
             lobby.splice(lobbyInd, 1);
         }

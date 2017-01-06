@@ -9,12 +9,14 @@ import {
 import {Subject, Observable} from 'rxjs';
 import {Actions, ClickPosition} from './toolbar/toolbar.component';
 import {GraphOptionsService} from '../graph-options.service';
-import {VisNgNetworkEventArgument, VisNetworkService} from '@lazarljubenovic/vis-ng/core';
+import {VisNgNetworkEventArgument} from '@lazarljubenovic/vis-ng/core';
 import {PopupRenameComponent} from './popup-rename/popup-rename.component';
 import {AlgorithmService} from '../algorithms/algorithm.service';
 import {ToastService} from '../toast/toast.service';
 import {ProjectsService} from '../project-browser/projects.service';
 import {ActivatedRoute} from '@angular/router';
+import {JoinService} from '../project-browser/join.service';
+import {GraphSocketService} from './graph-socket.service';
 
 @Component({
     selector: 'grf-user-interface',
@@ -105,18 +107,22 @@ export class ProjectViewComponent implements OnInit {
                 private toastService: ToastService,
                 public projectService: ProjectsService,
                 private activeRoute: ActivatedRoute,
-                private visService: VisNetworkService) {
+                private joinService: JoinService,
+                private graphSocketService: GraphSocketService
+    ) {
         this.popupRenameComponentFactory =
             componentFactoryResolver.resolveComponentFactory(PopupRenameComponent);
     }
 
     ngOnInit() {
-        this.projectService.getProject(this.activeRoute.snapshot.params['id'])
-            .subscribe(projectGraph => {
-                this.algorithmService.graph = projectGraph.graph;
-                this.algorithmService.root = projectGraph.algorithm.options.root;
-                this.algorithmService.setGraph();
-            });
+        const roomId = this.activeRoute.snapshot.params['id'];
+        this.joinService.joinRoom(roomId);
+        this.graphSocketService.create().subscribe(roomGraph => {
+            console.log('room graph', roomGraph);
+            this.algorithmService.graph.readJson(roomGraph.graph);
+            this.algorithmService.root = roomGraph.algorithm.options.root;
+            this.algorithmService.setGraph();
+        });
 
         // Initial settings
         this.graphOptionsService.setOptions([

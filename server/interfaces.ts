@@ -28,6 +28,11 @@ export interface RoomInfoMessage {
     info: RoomInfo[];
 }
 
+export interface GraphMessage {
+    graph: Graph;
+    algorithm: any;
+}
+
 export interface IUser extends Document {
     id: string;
     googleId: string;

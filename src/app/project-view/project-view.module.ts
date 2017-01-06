@@ -15,6 +15,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ToastModule} from '../toast/toast.module';
 import {AlgorithmModule} from '../algorithm/algorithm.module';
 import {UserInterfaceModule} from '../user-interface/user-interface.module';
+import {GraphSocketService} from './graph-socket.service';
 
 @NgModule({
     imports: [
@@ -39,6 +40,7 @@ import {UserInterfaceModule} from '../user-interface/user-interface.module';
     ],
     providers: [
         WebSocketService,
+        GraphSocketService,
     ],
     exports: [
         ProjectViewComponent,
