@@ -6,10 +6,51 @@
     <div id="project-image">
       <grf-jdenticon [plaintext]="projectTitle"></grf-jdenticon>
     </div>
+
     <div id="project-name">
-      <span id="project-title">{{projectTitle}}</span>
-      <span id="project-description">{{projectDescription}}</span>
+
+      <div class="col project-title" *ngIf="!isTitleInEditMode">
+        <span class="text">{{projectTitle}}</span>
+        <span class="icon edit"
+              *ngIf="isProjectTitleEditable"
+              (click)="openTitleEditMode()"
+        >
+          <i class="fa fa-pencil"></i>
+        </span>
+      </div>
+
+      <div class="col project-title" *ngIf="isTitleInEditMode">
+        <input #titleInput type="text" [(ngModel)]="newTitle" (keyup.esc)="discardTitle()" (keyup.enter)="submitTitle()">
+        <span class="icon edit"
+              *ngIf="isProjectTitleEditable"
+              (click)="submitTitle()"
+        >
+          <i class="fa fa-check"></i>
+        </span>
+      </div>
+
+      <div class="col project-description" *ngIf="!isDescriptionInEditMode">
+        <span class="text">{{projectDescription}}</span>
+        <span class="icon edit"
+              *ngIf="isProjectTitleEditable"
+              (click)="openDescriptionEditMode()"
+        >
+          <i class="fa fa-pencil"></i>
+        </span>
+      </div>
+
+      <div class="col project-description" *ngIf="isDescriptionInEditMode">
+        <input #descriptionInput type="text" [(ngModel)]="newDescription" (keyup.esc)="discardTitle()" (keyup.enter)="submitTitle()">
+        <span class="icon edit"
+              *ngIf="isProjectTitleEditable"
+              (click)="submitDescription()"
+        >
+          <i class="fa fa-check"></i>
+        </span>
+      </div>
+
     </div>
+
   </div>
 
   <div class="flex-spacer"></div>

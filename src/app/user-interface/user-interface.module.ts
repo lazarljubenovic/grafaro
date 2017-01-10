@@ -6,10 +6,12 @@ import {DialogComponent} from './dialog/dialog.component';
 import {FileListComponent} from './file-list/file-list.component';
 import {FolderComponent} from './file-list/folder/folder.component';
 import {FileComponent} from './file-list/file/file.component';
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
     imports: [
         CommonModule,
+        FormsModule,
         JdenticonModule,
     ],
     declarations: [
