@@ -1,0 +1,15 @@
+@import '../../../global';
+
+:host {
+
+  &.selected {
+
+    .icon {
+      color: get-color('accent');
+    }
+
+    .name {
+      font-weight: bold;
+    }
+  }
+}

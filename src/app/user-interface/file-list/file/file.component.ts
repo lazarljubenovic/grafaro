@@ -5,7 +5,7 @@ import {
     HostListener,
     AfterViewInit,
     ViewChild,
-    ElementRef
+    ElementRef, HostBinding
 } from '@angular/core';
 import {FileListService} from '../file-list.service';
 
@@ -20,6 +20,9 @@ export class FileComponent implements OnInit, AfterViewInit {
 
     public parentPath: string;
     public filename: string;
+
+    @HostBinding('class.selected')
+    @Input() public isSelected: boolean = false;
 
     @Input() public lastChange: Date;
 

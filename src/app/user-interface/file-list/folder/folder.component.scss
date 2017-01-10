@@ -1,11 +1,29 @@
 @import '../../../global';
 
 :host {
+  display: block;
   $height: 2em;
   min-height: $height;
+  color: $black;
 
   .description {
     display: flex;
+    cursor: pointer;
+
+    &:hover {
+      background-color: rgba(black, .05);
+    }
+
+    &.open {
+
+      .icon {
+        color: get-color('accent');
+      }
+
+      .name {
+        font-weight: bold;
+      }
+    }
 
     > * {
       display: flex;
@@ -15,21 +33,31 @@
     .icon {
       @include force-square($height);
       justify-content: center;
+      color: get-color('secondary');
     }
 
     .name {
       flex: auto;
     }
 
-    .number-of-files {
+    .number-of-files,
+    .last-change {
       @include force-square($height);
       justify-content: flex-end;
+      color: rgba(black, .54);
+      font-size: .8em;
+
+      span {
+        display: inline-block;
+        padding-top: 1ex;
+      }
+    }
+
+    .number-of-files {
     }
 
     .last-change {
-      @include force-height($height);
       @include force-width(12em);
-      justify-content: flex-end;
     }
 
     &.file-description {

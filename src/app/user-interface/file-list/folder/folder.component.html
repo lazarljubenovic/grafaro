@@ -1,7 +1,10 @@
-<div class="description folder-description">
+<div class="description folder-description"
+     [class.open]="isOpen"
+     (click)="toggle()">
 
-  <div class="icon" (click)="toggle()">
-    <i class="fa fa-folder-o"></i>
+  <div class="icon">
+    <i *ngIf="!isOpen" class="fa fa-folder-o"></i>
+    <i *ngIf="isOpen" class="fa fa-folder-open"></i>
   </div>
 
   <div class="name">

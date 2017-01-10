@@ -127,10 +127,10 @@ export class ProjectViewComponent implements OnInit {
 
     ngOnInit() {
         const roomId = this.activeRoute.snapshot.params['id'];
-        console.log(roomId);
+        // console.log(roomId);
         this.joinService.joinRoom(roomId);
         this.graphSocketService.create().subscribe(roomGraph => {
-            console.log('room graph', roomGraph);
+            // console.log('room graph', roomGraph);
             this.algorithmService.graph.readJson(roomGraph.graph);
             this.algorithmService.root = roomGraph.algorithm.options.root;
             this.algorithmService.setGraph();

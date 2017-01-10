@@ -26,6 +26,8 @@ export class FolderComponent implements OnInit, AfterContentInit {
 
     public isOpen: boolean = false;
 
+    // Not on host element because we don't want the folder to
+    // collapse on file pick
     public toggle(): void {
         this.isOpen = !this.isOpen;
     }
