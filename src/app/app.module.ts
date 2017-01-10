@@ -17,6 +17,8 @@ import {FourOhFourModule} from './four-oh-four/four-oh-four.module';
 import {FourOhFourComponent} from './four-oh-four/four-oh-four.component';
 import {Auth0Service} from './auth0.service';
 import {AUTH_PROVIDERS} from 'angular2-jwt';
+import {LoginPageModule} from './login-page/login-page.module';
+import {LoginPageComponent} from './login-page/login-page.component';
 
 @NgModule({
     declarations: [
@@ -30,10 +32,15 @@ import {AUTH_PROVIDERS} from 'angular2-jwt';
         ProjectViewModel,
         ProjectBrowserModule,
         FourOhFourModule,
+        LoginPageModule,
         RouterModule.forRoot([
             {
                 path: '',
                 component: ProjectBrowserComponent,
+            },
+            {
+                path: 'login',
+                component: LoginPageComponent,
             },
             {
                 path: 'room/:id',
