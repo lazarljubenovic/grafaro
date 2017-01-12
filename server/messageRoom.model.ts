@@ -25,6 +25,10 @@ export class MessageRoom {
         return roomId;
     }
 
+    public deleteRoom(roomId: string): void {
+        this.rooms.delete(roomId);
+    }
+
     public addUserToRoom(roomId: string, user: ws): void {
         console.log('User joined the room', roomId);
         this.rooms.get(roomId).addUser(user);
@@ -93,6 +97,10 @@ export class MessageRoom {
             roomId: null
         };
         user.send(JSON.stringify(roomInfoMessage));
+    }
+
+    public getRoomUserCount(roomId: string): number {
+        return this.rooms.get(roomId).users.size;
     }
 
     private constructor() {

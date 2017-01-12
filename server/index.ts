@@ -72,22 +72,6 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
-app.get('/room/:id', (req, res) => {
-    console.log('room get');
-    console.log(req.params['id']);
-    res.json({
-        data: {
-            graph: defaultGraph,
-            algorithm: {
-                id: 'bfs',
-                options: {
-                    root: 'node-0'
-                }
-            },
-        }
-    });
-});
-
 app.use('/', dbRoutes);
 
 wss.on('connection', ws => {
@@ -95,7 +79,7 @@ wss.on('connection', ws => {
 
     lobby.push(ws);
     messageRooms.sendRoomsInfo(ws);
-    console.log(lobby.length);
+    console.log('Users in lobby:', lobby.length);
 
     ws.on('message', (message: string) => {
         let messageObj: Message<any> = JSON.parse(message);
@@ -140,6 +124,10 @@ wss.on('connection', ws => {
 
         if (!!userRoom) {
             messageRooms.removeUserFromRoom(userRoom, ws);
+            if (messageRooms.getRoomUserCount(userRoom) == 0) {
+                messageRooms.deleteRoom(userRoom);
+                console.log('Room', userRoom, 'is deleted.');
+            }
             lobby.forEach(client => messageRooms.sendRoomsInfo(client));
         } else if (lobbyInd > -1) {
             lobby.splice(lobbyInd, 1);
