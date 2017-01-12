@@ -3,8 +3,9 @@ import {Graph, defaultGraph} from './interfaces';
 
 export class Room {
     public users: Set<ws>;
-    public graph: Graph;
-    public algorithm: any;
+    private _master: ws;
+    private _graph: Graph;
+    private _algorithm: any;
 
     constructor(roomId: string) {
         this.users = new Set();
@@ -15,13 +16,37 @@ export class Room {
                 root: 'node-0'
             }
         };
+        this._master = null;
     }
 
     public addUser(user: ws): void {
         this.users.add(user);
+        if (this.users.size == 1) {
+            this._master = user;
+        }
     }
 
     public removeUser(user: ws): void {
         this.users.delete(user);
+        if (this._master == user) {
+            console.log('Master has left. Long live the new master!');
+            this._master = this.users[0];
+        }
+    }
+
+    public set graph(value: Graph) {
+        this._graph = value;
+    }
+
+    public get graph(): Graph {
+        return this._graph;
+    }
+
+    public set algorithm(value: any) {
+        this._algorithm = value;
+    }
+
+    public get algorithm(): any {
+        return this._algorithm;
     }
 }

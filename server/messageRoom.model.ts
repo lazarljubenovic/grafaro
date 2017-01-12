@@ -1,5 +1,5 @@
 import * as ws from 'ws';
-import {RoomInfo, Message, RoomInfoMessage} from './interfaces';
+import {RoomInfo, Message, RoomInfoMessage, Graph} from './interfaces';
 import {Room} from './room.model';
 
 export class MessageRoom {
@@ -101,6 +101,14 @@ export class MessageRoom {
 
     public getRoomUserCount(roomId: string): number {
         return this.rooms.get(roomId).users.size;
+    }
+
+    public setRoomGraph(roomId: string, graph: Graph) {
+        this.rooms.get(roomId).graph = graph;
+    }
+
+    public setRoomAlgorithm(roomId: string, algorithm: any) {
+        this.rooms.get(roomId).algorithm = algorithm;
     }
 
     private constructor() {

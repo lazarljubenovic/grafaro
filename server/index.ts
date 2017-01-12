@@ -1,4 +1,4 @@
-import {ChatMessageInfo, Message, JoinMessage, defaultGraph} from './interfaces';
+import {ChatMessageInfo, Message, JoinMessage, defaultGraph, GraphMessage} from './interfaces';
 import * as bodyParser from 'body-parser';
 import * as http from 'http';
 import * as ws from 'ws';
@@ -108,6 +108,11 @@ wss.on('connection', ws => {
             // Update room list
             lobby.forEach(client => messageRooms.sendRoomsInfo(client));
         } else {
+            if (messageObj.type == 'graph') {
+                const graphMessage = <GraphMessage>messageObj.payload;
+                messageRooms.setRoomGraph(messageObj.roomId, graphMessage.graph);
+                messageRooms.setRoomAlgorithm(messageObj.roomId, graphMessage.algorithm);
+            }
             console.log(messageObj, 'to room', roomId);
             // Broadcast message to other users in the same room
             messageRooms.sendMessageToRoom(roomId, ws, messageObj);
