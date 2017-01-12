@@ -1,0 +1,224 @@
+@startuml
+
+together {
+    interface Message<Type> <<interface>> {
+        payload: Type
+        type: string
+        roomId: string
+    }
+
+    interface Position <<interface>> {
+        x: number
+        y: number
+    }
+
+    interface Size <<interface>> {
+        w: number
+        h: number
+    }
+
+    interface NormalizedState <<interface>> {
+        nodes: GrfGraphNodeOptions[]
+        edges: VisNgNetworkOptionsEdges[]
+        solution: string[]
+        stack?: string[]
+        queue?: string[]
+        accentColor?: string[]
+        primaryColor?: string[]
+        secondaryColor?: string[]
+    }
+
+    interface BreadthFirstSearchState <<interface>> {
+        graphJson: GraphJson
+        currentNode: string
+        currentNodeNeighbors: string[]
+        visitedNodes: string[]
+        currentSolution: string[]
+        currentQueue: string[]
+        rootNode: string
+        currentNeighbor?: string
+        lineNumber: number
+    }
+}
+
+
+class WebSocketService {
+}
+
+class ColorThemeService <<Injectable>> {
+    +palette: any
+    +constructor()
+}
+
+class GraphJsonService <<Injectable>> {
+    +writeJson(graph: Graph): GraphJson
+    +readJson(graph: GraphJson): Graph
+}
+
+package AngularCore <<Folder>> {
+    interface OnInit
+    interface AfterViewInit
+    interface PipeTransform
+}
+
+package BrowserModule{}
+package FormsModule{}
+package HttpModule{}
+package StepperModule{}
+package ProjectViewModel{}
+package ProjectBrowserModule{}
+package FourOhFourModule{}
+package RouterModule{}
+package CommonModule{}
+package UtilPipesModule{}
+
+package AppModule <<Folder>> {
+    class AppComponent <<Component>> implements OnInit {
+        +constructor()
+        +ngOnInit()
+    }
+
+    class AlgorithmService <<Injectable>> {
+        + graph = new Graph();    
+        + root: string = 'node-0';    
+        - algorithm: Function = breadthFirstSearch;
+        - states: BreadthFirstSearchState[];
+        - normalizedStates: NormalizedState[];    
+        - _currentStateIndex: number = 0;
+        + currentNormalizedState$: ReplaySubject<NormalizedState> = 1;
+        + currentState$: ReplaySubject<BreadthFirstSearchState> = 1;
+        + graphState$: ReplaySubject<Graph> = 1;
+        __
+        - onGraphChange()
+        - currentStateIndexInc()
+        - currentStateIndexDec()
+        - currentStateIndexFirst()
+        - currentStateIndexLast()
+        - fixCurrentStateIndex()
+        - existsNodeWithLabel(nodeLabel: string): boolean
+        - getNormalizedState(state: BreadthFirstSearchState): NormalizedState
+        + setGraph()
+        + updateStateNumber(action: string)
+        + getNodeId(nodeLabel: string): string
+        + getNodeLabel(nodeId: string): string
+        + suggestNewNodeName(): string
+        + addNode(position: ClickPosition)
+        + addNodeOnRandomPlace()
+        + removeNode(nodeId: string)
+        + renameNode(oldNodeLabel: string, newNodeLabel: string)
+        + linkNodes(nodeA: string, nodeB: string)
+        + linkNodesByLabel(labelA: string, labelB: string)
+        + unlinkNodes(nodeA: string, nodeB: string)
+        + unlinkNodesByLabel(labelA: string, labelB: string)
+        + removeEdge(edgeId: string)
+        + setPosition(nodeLabel: string, position: ClickPosition)
+        + moveNode(nodeId: string, position: ClickPosition)
+        + constructor()
+        ..State index getter and setter..
+        - set currentStateIndex(currentStateIndex: number);
+        - get currentStateIndex(): number;
+    }
+
+    class MarkdownService <<Injectable>> {
+    }
+
+    class EmojiService <<Injectable>> {
+    }
+
+    class GraphOptionsService <<Injectable>> {
+        -_options: VisNgNetworkOptions
+        +optionsChange$: Subject<VisNgNetworkOptions>
+        __
+        +hasOption(optionName: string): any
+        +constructor()
+        .. Options getter ..
+        +options(): VisNgNetworkOptions
+        +getOption(optionName: string): any
+        .. Options setter ..
+        +setOptions(optionName: string, value: any)
+        +setOptions(options: {name: string, value: any}[])
+        +setOptions(first: {name: string, value: any}[] | string, second?: any)
+    }
+
+
+    class Auth0Service {
+        +lock: Auth0Lock
+        +userProfile: Object
+        +constructor()
+        +login()
+        +authenticated()
+        +logout()
+    }
+}
+
+package AlgorithmModule {
+    class AlgorithmComponent <<Component>> implements OnInit, AfterViewInit {
+        -currentState$: Observable<any>
+        +varSolution$: Observable<string[]>
+        +varQueue$
+        +varRoot$
+        +varVisited$
+        +varNeighbors$
+        +varCurrentNode$
+        +varCurrentNeighbor$
+        +lineNumber$: Observable<number>
+        +isOpenSolution$: BehaviorSubject<boolean> = false
+        +isOpenQueue$: BehaviorSubject<boolean> = false
+        +isOpenRoot$: BehaviorSubject<boolean> = false
+        +isOpenVisited$: BehaviorSubject<boolean> = false
+        +isOpenNeighbors$: BehaviorSubject<boolean> = false
+        +isOpenCurrentNode$: BehaviorSubject<boolean> = false
+        +isOpenCurrentNeighbor$: BehaviorSubject<boolean> = false
+        +ngOnInit()
+        +ngAfterViewInit()
+    }
+
+    class LineNumberStylePipe <<Pipe>> implements PipeTransform {
+        transform(lineNumber: number, box: HTMLElement, totalLineNumber: number): string
+    }
+
+    class PopupComponent <<Component>> {
+        +componentAnimation <<HostBinding>>: boolean = true
+        +x <<HostBinding>>: string = '0px'
+        +y <<HostBinding>>: string = '0px'
+        +name <<Input>>: string = 'Popup name'
+        .. Position setter ..
+        +position(position: Position)
+    }
+    
+    class PopupPositionPipe <<Pipe>> implements PipeTransform {
+        -getSize(element: HTMLElement): Size
+        -getCenter(element: HTMLElement): Position
+        -getTopCenter(element: HTMLElement, margin: number = 8) : Position
+        +transform(element: HTMLElement, margin: number = 8): Position
+    }
+}
+
+
+package AnnotationModule {
+
+}
+
+AppModule ..> BrowserModule : <<imports>>
+AppModule ..> FormsModule : <<imports>>
+AppModule ..> HttpModule : <<imports>>
+AppModule ..> StepperModule : <<imports>>
+AppModule ..> ProjectViewModel : <<imports>>
+AppModule ..> ProjectBrowserModule : <<imports>>
+AppModule ..> FourOhFourModule : <<imports>>
+AppModule ..> RouterModule : <<imports>>
+
+AlgorithmModule ..> CommonModule : <<imports>>
+AlgorithmModule ..> UtilPipesModule : <<imports>>
+AlgorithmModule ..> AnnotationModule : <<imports>>
+
+AppComponent ..> WebSocketService
+AppComponent ..> Auth0Service
+
+AlgorithmComponent ..> AlgorithmService
+
+
+hide <<interface>> circle
+hide <<interface>> methods
+
+@enduml
