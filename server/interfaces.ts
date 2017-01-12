@@ -16,6 +16,7 @@ export interface Message<Type> {
 
 export interface JoinMessage {
     roomId: string;
+    isMaster: boolean;
 }
 
 export interface RoomInfo {

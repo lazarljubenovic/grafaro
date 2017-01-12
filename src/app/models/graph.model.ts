@@ -28,8 +28,8 @@ export interface GraphEdge {
 export interface GraphJson {
     nodes: GraphNode[];
     edges: GraphEdge[];
-    nextEdgeId?: number;
-    nextNodeId?: number;
+    nextEdgeId: number;
+    nextNodeId: number;
 }
 
 export class Graph {
@@ -65,6 +65,8 @@ export class Graph {
         return {
             nodes: this._nodes,
             edges: this._edges,
+            nextNodeId: this._nodeIdGenerator.id,
+            nextEdgeId: this._edgeIdGenerator.id
         };
     }
 

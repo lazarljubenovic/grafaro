@@ -111,6 +111,10 @@ export class MessageRoom {
         this.rooms.get(roomId).algorithm = algorithm;
     }
 
+    public getRoomMaster(roomId: string): ws {
+        return this.rooms.get(roomId).master;
+    }
+
     private constructor() {
         this.rooms = new Map();
     }

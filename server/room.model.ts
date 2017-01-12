@@ -29,8 +29,8 @@ export class Room {
     public removeUser(user: ws): void {
         this.users.delete(user);
         if (this._master == user) {
-            console.log('Master has left. Long live the new master!');
-            this._master = this.users[0];
+            console.log('The master left. Long live the master!');
+            this._master = this.users.values().next().value;
         }
     }
 
@@ -48,5 +48,9 @@ export class Room {
 
     public get algorithm(): any {
         return this._algorithm;
+    }
+
+    public get master(): ws {
+        return this._master;
     }
 }

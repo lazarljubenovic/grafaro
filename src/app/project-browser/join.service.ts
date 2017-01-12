@@ -5,12 +5,14 @@ import {Message} from '../message';
 
 export interface JoinMessageInfo {
     roomId: string;
+    isMaster: boolean;
 }
 
 @Injectable()
 export class JoinService {
     // todo factory? or something?
     private joinSubject: Observable<JoinMessageInfo>;
+    public isMaster = false;
 
     constructor(@Inject(WebSocketService) private webSocketService: WebSocketService) {
     }
@@ -19,6 +21,7 @@ export class JoinService {
         this.joinSubject = this.webSocketService.getWebSocket()
             .filter((msg: Message<JoinMessageInfo>) => msg.type == 'join')
             .map((msg: Message<JoinMessageInfo>) => {
+                this.isMaster = msg.payload.isMaster;
                 return msg.payload;
             });
 

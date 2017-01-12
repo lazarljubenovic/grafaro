@@ -16,4 +16,8 @@ export class IdGenerator {
         this._id = value;
     }
 
+    public get id(): number {
+        return this._id;
+    }
+
 }

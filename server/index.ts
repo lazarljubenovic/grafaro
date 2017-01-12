@@ -89,7 +89,10 @@ wss.on('connection', ws => {
             const roomId = messageRooms.createNewRoom();
             const joinMessage: Message<JoinMessage> = {
                 type: 'join',
-                payload: {roomId},
+                payload: {
+                    roomId,
+                    isMaster: true
+                },
                 roomId
             };
             messageRooms.returnMessage(ws, joinMessage);
@@ -103,12 +106,13 @@ wss.on('connection', ws => {
             messageRooms.addUserToRoom(roomId, ws);
             lobby.splice(lobbyInd, 1);
             (<JoinMessage>messageObj.payload).roomId = roomId;
+            (<JoinMessage>messageObj.payload).isMaster = messageRooms.getRoomMaster(roomId) == ws;
             messageRooms.returnMessage(ws, messageObj);
 
             // Update room list
             lobby.forEach(client => messageRooms.sendRoomsInfo(client));
         } else {
-            if (messageObj.type == 'graph') {
+            if (messageObj.type == 'graph' && messageRooms.getRoomMaster(roomId) == ws) {
                 const graphMessage = <GraphMessage>messageObj.payload;
                 messageRooms.setRoomGraph(messageObj.roomId, graphMessage.graph);
                 messageRooms.setRoomAlgorithm(messageObj.roomId, graphMessage.algorithm);
@@ -128,10 +132,22 @@ wss.on('connection', ws => {
         let userRoom = messageRooms.userHasRoom(ws);
 
         if (!!userRoom) {
+            let roomMaster = messageRooms.getRoomMaster(userRoom);
             messageRooms.removeUserFromRoom(userRoom, ws);
             if (messageRooms.getRoomUserCount(userRoom) == 0) {
                 messageRooms.deleteRoom(userRoom);
                 console.log('Room', userRoom, 'is deleted.');
+            } else if (roomMaster == ws) {
+                const newMaster = messageRooms.getRoomMaster(userRoom);
+                const joinMessage: Message<JoinMessage> = {
+                    type: 'join',
+                    payload: {
+                        roomId: userRoom,
+                        isMaster: true
+                    },
+                    roomId: userRoom
+                };
+                messageRooms.returnMessage(newMaster, joinMessage);
             }
             lobby.forEach(client => messageRooms.sendRoomsInfo(client));
         } else if (lobbyInd > -1) {

@@ -119,8 +119,7 @@ export class ProjectViewComponent implements OnInit {
                 public projectService: ProjectsService,
                 private activeRoute: ActivatedRoute,
                 private joinService: JoinService,
-                private graphSocketService: GraphSocketService
-    ) {
+                private graphSocketService: GraphSocketService) {
         this.popupRenameComponentFactory =
             componentFactoryResolver.resolveComponentFactory(PopupRenameComponent);
     }
@@ -130,10 +129,18 @@ export class ProjectViewComponent implements OnInit {
         // console.log(roomId);
         this.joinService.joinRoom(roomId);
         this.graphSocketService.create().subscribe(roomGraph => {
-            // console.log('room graph', roomGraph);
+            console.log('room graph', roomGraph);
             this.algorithmService.graph.readJson(roomGraph.graph);
             this.algorithmService.root = roomGraph.algorithm.options.root;
             this.algorithmService.setGraph();
+        });
+
+        this.algorithmService.graphState$.subscribe(graph => {
+            if (this.joinService.isMaster) {
+                console.log('graph changed');
+                const graphJson = graph.writeJson();
+                this.graphSocketService.changeGraphAndAlgorithm(graphJson);
+            }
         });
 
         // Initial settings
