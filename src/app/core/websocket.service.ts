@@ -11,8 +11,6 @@ export class WebSocketService {
     }
 
     public send(message: any, type: string) {
-        console.log(message);
-        console.log(this._roomId);
         let messageToSend: Message<any> = {
             payload: message,
             type: type,

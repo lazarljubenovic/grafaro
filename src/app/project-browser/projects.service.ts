@@ -140,7 +140,6 @@ export class ProjectsService extends GrafaroHttpService {
             .map(p => {
                 const project: any = this.responseToObject(p);
                 const graph: Graph = new Graph();
-                console.log('from server', project);
                 graph.readJson(project.graph);
                 return {
                     graph,

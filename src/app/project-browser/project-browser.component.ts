@@ -48,13 +48,11 @@ export class ProjectBrowserComponent implements OnInit {
             });
 
         this.joinService.create().subscribe((joinMessage) => {
-            console.log(joinMessage);
             const roomId = joinMessage.roomId;
             this.router.navigate(['/room', roomId]);
         });
 
         this.roomInfoService.create().subscribe((roomInfo) => {
-            console.log('room info');
             this.roomsInfo = roomInfo.info;
         });
     }

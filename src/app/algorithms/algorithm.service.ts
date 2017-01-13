@@ -70,7 +70,6 @@ export class AlgorithmService {
 
     public setGraph() {
         try {
-            console.log(this.graph);
             this.states = this.algorithm(this.graph, this.root);
             this.normalizedStates = this.states.map(state => this.getNormalizedState(state));
             this.fixCurrentStateIndex();
