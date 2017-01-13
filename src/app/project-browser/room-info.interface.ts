@@ -3,6 +3,7 @@ export interface RoomInfo {
     name: string;
     master: string;
     userCount: number;
+    description: string;
 }
 
 export interface RoomInfoMessage {

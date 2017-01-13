@@ -1,9 +1,8 @@
-import {ChatMessageInfo, Message, JoinMessage, defaultGraph, GraphMessage} from './interfaces';
+import {ChatMessageInfo, Message, JoinMessage, GraphMessage} from './interfaces';
 import * as bodyParser from 'body-parser';
 import * as http from 'http';
 import * as ws from 'ws';
 import * as express from 'express';
-import * as url from 'url';
 import * as mongoose from 'mongoose';
 import * as cors from 'cors';
 import {dbRoutes} from './routes';

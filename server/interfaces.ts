@@ -23,6 +23,7 @@ export interface RoomInfo {
     id: string;
     userCount: number;
     name: string;
+    description: string;
     master: string;
 }
 

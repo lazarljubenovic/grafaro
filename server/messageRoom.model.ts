@@ -81,7 +81,8 @@ export class MessageRoom {
         this.rooms.forEach((room: Room, id: string) => roomInfo.push({
             id: id,
             userCount: room.users.size,
-            name: `room-${id}`,
+            name: room.name,
+            description: room.description,
             master: 'Isus' // todo
         }));
 

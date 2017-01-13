@@ -2,13 +2,15 @@ import * as ws from 'ws';
 import {Graph, defaultGraph} from './interfaces';
 
 export class Room {
-    public users: Set<ws>;
+    private _users: Set<ws>;
     private _master: ws;
     private _graph: Graph;
     private _algorithm: any;
+    private _name: string;
+    private _description: string;
 
     constructor(roomId: string) {
-        this.users = new Set();
+        this._users = new Set();
         this.graph = defaultGraph;
         this.algorithm = {
             id: 'bfs',
@@ -17,6 +19,12 @@ export class Room {
             }
         };
         this._master = null;
+        this._name = `room-${roomId}`;
+        this._description = 'New room without description';
+    }
+
+    public get users(): Set<ws> {
+        return this._users;
     }
 
     public addUser(user: ws): void {
@@ -52,5 +60,21 @@ export class Room {
 
     public get master(): ws {
         return this._master;
+    }
+
+    public get name(): string {
+        return this._name;
+    }
+
+    public set name(value: string) {
+        this._name = value;
+    }
+
+    public get description(): string {
+        return this._description;
+    }
+
+    public set description(value: string) {
+        this._description = value;
     }
 }
