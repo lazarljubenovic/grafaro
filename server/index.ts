@@ -1,4 +1,4 @@
-import {ChatMessageInfo, Message, JoinMessage, GraphMessage} from './interfaces';
+import {ChatMessageInfo, Message, JoinMessage, GraphMessage, RoomEdit} from './interfaces';
 import * as bodyParser from 'body-parser';
 import * as http from 'http';
 import * as ws from 'ws';
@@ -108,7 +108,20 @@ wss.on('connection', ws => {
             (<JoinMessage>messageObj.payload).isMaster = messageRooms.getRoomMaster(roomId) == ws;
             messageRooms.returnMessage(ws, messageObj);
 
+            // Send room name and description
+            const roomNameDesc: Message<RoomEdit> = {
+                payload: messageRooms.getRoomEdit(roomId),
+                type: 'roomEdit',
+                roomId
+            };
+            messageRooms.returnMessage(ws, roomNameDesc);
+
             // Update room list
+            lobby.forEach(client => messageRooms.sendRoomsInfo(client));
+        } else if (messageObj.type == 'roomEdit'){
+            const roomEdit: RoomEdit = messageObj.payload;
+            messageRooms.setRoomEdit(roomId, roomEdit);
+            messageRooms.sendMessageToRoom(roomId, ws, messageObj);
             lobby.forEach(client => messageRooms.sendRoomsInfo(client));
         } else {
             if (messageObj.type == 'graph' && messageRooms.getRoomMaster(roomId) == ws) {

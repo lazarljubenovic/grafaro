@@ -19,6 +19,11 @@ export interface JoinMessage {
     isMaster: boolean;
 }
 
+export interface RoomEdit {
+    name: string;
+    description: string;
+}
+
 export interface RoomInfo {
     id: string;
     userCount: number;

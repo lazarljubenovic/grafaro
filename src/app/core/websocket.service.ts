@@ -30,6 +30,13 @@ export class WebSocketService {
         return this.wsSubject;
     }
 
+    public getSubscriber(type: string): Observable<any> {
+        return this.wsSubject.filter((msg: Message<any>) => msg.type == type)
+            .map((msg: Message<any>) => {
+                return msg.payload;
+            });
+    }
+
     constructor() {
     }
 

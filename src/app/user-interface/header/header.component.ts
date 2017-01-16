@@ -1,4 +1,6 @@
 import {Component, OnInit, Input, ViewChild, ElementRef} from '@angular/core';
+import {RoomEditService} from '../../project-view/room-edit.service';
+import {JoinService} from '../../project-browser/join.service';
 
 @Component({
     selector: 'grf-header',
@@ -41,8 +43,7 @@ export class HeaderComponent implements OnInit {
 
     public submitTitle() {
         if (this.projectTitle != this.newTitle) {
-            // TODO
-            console.log(`TODO: Rename ${this.projectTitle} to ${this.newTitle}`);
+            this.updateNameDescription();
         }
 
         this.projectTitle = this.newTitle;
@@ -51,8 +52,7 @@ export class HeaderComponent implements OnInit {
 
     public submitDescription() {
         if (this.projectDescription != this.newDescription) {
-            // TODO
-            console.log(`TODO: Rename ${this.projectDescription} to ${this.newDescription}`);
+            this.updateNameDescription();
         }
 
         this.projectDescription = this.newDescription;
@@ -67,10 +67,32 @@ export class HeaderComponent implements OnInit {
         this.isDescriptionInEditMode = false;
     }
 
-    constructor() {
+    private updateNameDescription() {
+        const roomNameDescription = {
+            name: this.newTitle,
+            description: this.newDescription
+        };
+        this.roomEditService.update(roomNameDescription);
+    }
+
+    public isMaster(): boolean {
+        return this.joinService.isMaster;
+    }
+
+    constructor(private roomEditService: RoomEditService,
+                private joinService: JoinService
+    ) {
     }
 
     ngOnInit() {
+        this.roomEditService.name$.subscribe(name => {
+            this.projectTitle = name;
+            this.newTitle = this.projectTitle;
+        });
+        this.roomEditService.description$.subscribe(description => {
+            this.projectDescription = description;
+            this.newDescription = this.projectDescription;
+        });
         this.newTitle = this.projectTitle;
         this.newDescription = this.projectDescription;
     }

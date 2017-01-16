@@ -18,6 +18,7 @@ import {UserInterfaceModule} from '../user-interface/user-interface.module';
 import {GraphSocketService} from './graph-socket.service';
 import {SaveDialogComponent} from './save-dialog/save-dialog.component';
 import {LoadDialogComponent} from './load-dialog/load-dialog.component';
+import {RoomEditService} from './room-edit.service';
 
 @NgModule({
     imports: [
@@ -45,6 +46,7 @@ import {LoadDialogComponent} from './load-dialog/load-dialog.component';
     providers: [
         WebSocketService,
         GraphSocketService,
+        RoomEditService,
     ],
     exports: [
         ProjectViewComponent,

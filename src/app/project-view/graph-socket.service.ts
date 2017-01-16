@@ -1,6 +1,6 @@
 import {Injectable, Inject} from '@angular/core';
 import {WebSocketService} from '../core/websocket.service';
-import {Graph, GraphJson} from '../models/graph.model';
+import {GraphJson} from '../models/graph.model';
 import {Observable} from 'rxjs';
 import {Message} from '../message';
 

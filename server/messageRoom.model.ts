@@ -1,5 +1,5 @@
 import * as ws from 'ws';
-import {RoomInfo, Message, RoomInfoMessage, Graph} from './interfaces';
+import {RoomInfo, Message, RoomInfoMessage, Graph, RoomEdit} from './interfaces';
 import {Room} from './room.model';
 
 export class MessageRoom {
@@ -114,6 +114,19 @@ export class MessageRoom {
 
     public getRoomMaster(roomId: string): ws {
         return this.rooms.get(roomId).master;
+    }
+
+    public getRoomEdit(roomId: string): RoomEdit {
+        let room = this.rooms.get(roomId);
+        return {
+            name: room.name,
+            description: room.description
+        };
+    }
+
+    public setRoomEdit(roomId: string, roomEdit: RoomEdit): void {
+        this.rooms.get(roomId).name = roomEdit.name;
+        this.rooms.get(roomId).description = roomEdit.description;
     }
 
     private constructor() {
