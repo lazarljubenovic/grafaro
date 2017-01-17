@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {WebSocketService} from './core/websocket.service';
-import {Auth0Service} from './auth0.service';
+import {Auth0Service} from './core/auth0.service';
 
 @Component({
     selector: 'grf-app',

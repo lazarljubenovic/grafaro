@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {Auth0Service} from '../core/auth0.service';
 
 @Component({
     selector: 'grf-login-page',
@@ -8,21 +9,18 @@ import {Component, OnInit} from '@angular/core';
 export class LoginPageComponent implements OnInit {
 
     public facebookLogin() {
-        // TODO
-        console.log('TODO: Login with Facebook');
+        this.auth0.socialLogin('facebook');
     }
 
     public twitterLogin() {
-        // TODO
-        console.log('TODO: Login with Twitter');
+        this.auth0.socialLogin('twitter');
     }
 
     public googleLogin() {
-        // TODO
-        console.log('TODO: Login with Facebook');
+        this.auth0.socialLogin('google-oauth2');
     }
 
-    constructor() {
+    constructor(private auth0: Auth0Service) {
     }
 
     ngOnInit() {

@@ -15,7 +15,6 @@ import {ProjectViewComponent} from './project-view/project-view.component';
 import {ProjectBrowserComponent} from './project-browser/project-browser.component';
 import {FourOhFourModule} from './four-oh-four/four-oh-four.module';
 import {FourOhFourComponent} from './four-oh-four/four-oh-four.component';
-import {Auth0Service} from './auth0.service';
 import {AUTH_PROVIDERS} from 'angular2-jwt';
 import {LoginPageModule} from './login-page/login-page.module';
 import {LoginPageComponent} from './login-page/login-page.component';
@@ -57,7 +56,6 @@ import {LoginPageComponent} from './login-page/login-page.component';
         MarkdownService,
         EmojiService,
         GraphOptionsService,
-        Auth0Service,
         AUTH_PROVIDERS,
     ],
     bootstrap: [

@@ -2,19 +2,29 @@ import {Injectable} from '@angular/core';
 import {tokenNotExpired} from 'angular2-jwt';
 import Auth0Lock from 'auth0-lock';
 
+declare const Auth0;
+
 @Injectable()
 export class Auth0Service {
-    // Configure Auth0
-    lock = new Auth0Lock('Vzzk8AXP4Ret2DaR0SATsiSa4yDHR5Zw', 'pritilender.eu.auth0.com', {});
-    userProfile: Object;
+    private auth0 = new Auth0({
+        domain: 'pritilender.eu.auth0.com',
+        clientID: 'Vzzk8AXP4Ret2DaR0SATsiSa4yDHR5Zw',
+        callbackURL: 'http://localhost:4200',
+        responseType: 'token'
+    });
+    private lock = new Auth0Lock(
+        'Vzzk8AXP4Ret2DaR0SATsiSa4yDHR5Zw',
+        'pritilender.eu.auth0.com',
+        {});
+    private userProfile: Object;
 
     constructor() {
         this.userProfile = JSON.parse(localStorage.getItem('profile'));
-        // Add callback for lock `authenticated` event
+
         this.lock.on(`authenticated`, (authResult) => {
             localStorage.setItem('id_token', authResult.idToken);
 
-            this.lock.getProfile(authResult.idToken, (error, profile) => {
+            this.lock.getUserInfo(authResult.accessToken, (error, profile) => {
                 if (error) {
                     console.log(error);
                     return;
@@ -27,11 +37,6 @@ export class Auth0Service {
         });
     }
 
-    public login() {
-        // Call the show method to display the widget.
-        this.lock.show();
-    }
-
     public authenticated() {
         // Check if there's an unexpired JWT
         // This searches for an item in localStorage with key == 'id_token'
@@ -41,5 +46,15 @@ export class Auth0Service {
     public logout() {
         // Remove token from localStorage
         localStorage.removeItem('id_token');
+    }
+
+    public socialLogin(connection: string) {
+        this.auth0.login({
+            connection
+        }, (err) => {
+            if (err) {
+                console.log('Woops', err);
+            }
+        });
     }
 }
