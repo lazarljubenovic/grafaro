@@ -1,8 +1,8 @@
 import {Component, OnInit, AfterViewInit, AfterContentInit} from '@angular/core';
 import {Observable} from 'rxjs';
 import {AlgorithmService} from '../algorithms/algorithm.service';
-import {getCodeJson, CODE} from '../algorithms/breadth-first-search';
 import {NotifyService} from './notify.service';
+import {DepthFirstSearchAlgorithm} from '../algorithms/depth-first-search';
 
 @Component({
     selector: 'grf-algorithm',
@@ -24,16 +24,16 @@ export class AlgorithmComponent implements OnInit, AfterViewInit, AfterContentIn
         return index;
     }
 
-    constructor(algorithmService: AlgorithmService,
-                private notifyService: NotifyService
-    ) {
+    constructor(private algorithmService: AlgorithmService,
+                private notifyService: NotifyService) {
+        algorithmService.setAlgorithm(new DepthFirstSearchAlgorithm());
         this.currentState$ = algorithmService.currentState$;
     }
 
     ngOnInit() {
         this.code$ = this.currentState$
             .map(state => {
-                return getCodeJson(CODE, state);
+                return  this.algorithmService.getCodeJson();
             });
 
         this.lineNumber$ = this.currentState$.map(state => state.lineNumber);

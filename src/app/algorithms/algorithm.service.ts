@@ -1,14 +1,12 @@
 import {Injectable} from '@angular/core';
-import {
-    BreadthFirstSearchState,
-    breadthFirstSearch,
-    breadthFirstSearchNormalizer
-} from './breadth-first-search';
+import {BreadthFirstSearchState} from './breadth-first-search';
 import {VisNgNetworkOptionsEdges} from '@lazarljubenovic/vis-ng/core';
 import {GrfGraphNodeOptions} from '../graph/graph.module';
 import {ReplaySubject} from 'rxjs';
 import {ClickPosition} from '../project-view/toolbar/toolbar.component';
 import {Graph} from '../models/graph.model';
+import {AlgorithmBase} from './algorithm-base';
+import {DepthFirstSearchAlgorithm} from './depth-first-search';
 
 export interface NormalizedState {
     nodes: GrfGraphNodeOptions[];
@@ -28,7 +26,7 @@ export class AlgorithmService {
 
     public root: string = 'node-0';
 
-    private algorithm: Function;
+    private algorithmStrategy: AlgorithmBase;
     private states: BreadthFirstSearchState[];
     private normalizedStates: NormalizedState[];
 
@@ -47,14 +45,18 @@ export class AlgorithmService {
 
     public graphState$ = new ReplaySubject<Graph>(1);
 
-    public setAlgorithm(algorithm: Function): void {
-        this.algorithm = algorithm;
+    public setAlgorithm(algorithmStrategy: AlgorithmBase): void {
+        this.algorithmStrategy = algorithmStrategy;
         this.setGraph();
+    }
+
+    public getCodeJson() {
+        return this.algorithmStrategy.getCodeJson(this.states[this.currentStateIndex]);
     }
 
     public setGraph() {
         try {
-            this.states = this.algorithm(this.graph, this.root);
+            this.states = this.algorithmStrategy.algorithmFunction(this.graph, this.root);
             this.normalizedStates = this.states.map(state => this.getNormalizedState(state));
             this.fixCurrentStateIndex();
             this.onGraphChange();
@@ -217,11 +219,12 @@ export class AlgorithmService {
     }
 
     private getNormalizedState(state: BreadthFirstSearchState): NormalizedState {
-        return breadthFirstSearchNormalizer(state);
+        return this.algorithmStrategy.normalize(state);
     }
 
+
     constructor() {
-        this.setAlgorithm(breadthFirstSearch);
+        this.setAlgorithm(new DepthFirstSearchAlgorithm());
     }
 
 }
