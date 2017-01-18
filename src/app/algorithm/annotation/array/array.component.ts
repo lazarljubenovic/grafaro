@@ -1,12 +1,4 @@
-import {
-    Component,
-    trigger,
-    state,
-    style,
-    transition,
-    animate,
-    ChangeDetectorRef
-} from '@angular/core';
+import {Component, ChangeDetectorRef} from '@angular/core';
 import {AnnotationBase} from '../annotation-base';
 
 @Component({

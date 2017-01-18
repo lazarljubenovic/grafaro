@@ -41,18 +41,18 @@ export class DepthFirstSearchAlgorithm extends AlgorithmBase {
 }`;
 
     public normalize(state: DepthFirstSearchState): NormalizedState {
-        const nodes: GrfGraphNodeOptions[] = state.graphJson.nodes.map((node, i) => {
+        const nodes: GrfGraphNodeOptions[] = state.graphJson.nodes.map(node => {
             return {
                 id: node.id,
                 label: node.label,
                 position: node.position,
                 weight: node.weight,
-                isStart: state.rootNode == node.id,
+                isStart: state.rootNode == node.label,
                 isEnd: false,
-                isAccentColor: state.currentNode == node.id,
-                isPrimaryColor: state.currentNeighbor == node.id,
+                isAccentColor: state.currentNode == node.label,
+                isPrimaryColor: state.currentNeighbor == node.label,
                 isSecondaryColor: false,
-                isDimmedColor: state.visitedNodes.indexOf(node.id) != -1,
+                isDimmedColor: state.visitedNodes.indexOf(node.label) != -1,
             };
         });
         const edges: VisNgNetworkOptionsEdges[] = state.graphJson.edges;
