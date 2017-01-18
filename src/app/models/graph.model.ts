@@ -1,4 +1,5 @@
 import {IdGenerator} from './id-generator';
+import {ReplaySubject} from 'rxjs';
 
 export type NodeId = string;
 export type EdgeId = string;
@@ -40,6 +41,12 @@ export class Graph {
     private _nodeIdGenerator: IdGenerator = new IdGenerator('node');
     private _edgeIdGenerator: IdGenerator = new IdGenerator('edge');
 
+    public nodeLabelChange$: ReplaySubject<string[]> = new ReplaySubject<string[]>();
+
+    private emitNodeLabelChange() {
+        this.nodeLabelChange$.next(this.nodes.map(node => node.label));
+    }
+
     constructor() {
         this._edges = [];
         this._nodes = [];
@@ -75,6 +82,7 @@ export class Graph {
         this._edges = json.edges;
         this.setNodeIdGeneratorId(json.nextNodeId);
         this.setEdgeIdGeneratorId(json.nextEdgeId);
+        this.emitNodeLabelChange();
         return this;
     }
 
@@ -105,6 +113,23 @@ export class Graph {
             position,
             weight,
         });
+        this.emitNodeLabelChange();
+        return this;
+    }
+
+    public removeNode(nodeId: NodeId): this {
+        if (!this.hasNodeId(nodeId)) {
+            throw new Error(`Node with id ${nodeId} doesn't exist`);
+        }
+
+        // Remove node
+        this._nodes = this._nodes.filter(node => node.id != nodeId);
+
+        // Remove its associated edges
+        this._edges = this._edges
+            .filter(edge => !(edge.from === nodeId || edge.to === nodeId));
+
+        this.emitNodeLabelChange();
         return this;
     }
 
@@ -125,21 +150,6 @@ export class Graph {
 
     public addUndirectedEdge(from: NodeId, to: NodeId, label: EdgeLabel, weight: number = 1): this {
         return this.addEdge(from, to, label, weight).addEdge(to, from, label, weight);
-    }
-
-    public removeNode(nodeId: NodeId): this {
-        if (!this.hasNodeId(nodeId)) {
-            throw new Error(`Node with id ${nodeId} doesn't exist`);
-        }
-
-        // Remove node
-        this._nodes = this._nodes.filter(node => node.id != nodeId);
-
-        // Remove its associated edges
-        this._edges = this._edges
-            .filter(edge => !(edge.from === nodeId || edge.to === nodeId));
-
-        return this;
     }
 
     public removeEdge(from: NodeId, to: NodeId): this {

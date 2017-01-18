@@ -11,16 +11,26 @@ import {DepthFirstSearchAlgorithm} from '../../algorithms/depth-first-search';
 })
 export class AlgorithmPickerComponent implements OnInit {
 
-    public form: FormGroup = this.fb.group({
+    public form: FormGroup = this.formBuilder.group({
         algorithm: 'dfs',
+        options: this.formBuilder.group({
+            root: 'A',
+        }),
     });
 
-    constructor(private fb: FormBuilder,
+    public nodes = [];
+
+    constructor(private formBuilder: FormBuilder,
                 private algorithmService: AlgorithmService
     ) {
     }
 
     ngOnInit() {
+        this.algorithmService.graph.nodeLabelChange$.subscribe(nodes => {
+            console.log(nodes);
+            this.nodes = nodes;
+        });
+
         this.form.valueChanges.subscribe(form => {
             switch (form.algorithm) {
                 case 'bfs':
@@ -32,6 +42,7 @@ export class AlgorithmPickerComponent implements OnInit {
                 default:
                     throw 'TODO';
             }
+            this.algorithmService.root = this.algorithmService.graph.getNodeId(form.options.root);
         });
     }
 

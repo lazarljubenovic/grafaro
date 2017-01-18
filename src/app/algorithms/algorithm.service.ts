@@ -24,7 +24,16 @@ export class AlgorithmService {
 
     public graph = new Graph();
 
-    public root: string = 'node-0';
+    private _root: string = 'node-0';
+
+    public get root(): string {
+        return this._root;
+    }
+
+    public set root(value: string) {
+        this._root = value;
+        this.setGraph();
+    }
 
     private algorithmStrategy: AlgorithmBase;
     private states: BreadthFirstSearchState[];
@@ -56,7 +65,7 @@ export class AlgorithmService {
 
     public setGraph() {
         try {
-            this.states = this.algorithmStrategy.algorithmFunction(this.graph, this.root);
+            this.states = this.algorithmStrategy.algorithmFunction(this.graph, this._root);
             this.normalizedStates = this.states.map(state => this.getNormalizedState(state));
             this.fixCurrentStateIndex();
             this.onGraphChange();
@@ -118,6 +127,11 @@ export class AlgorithmService {
         }
     }
 
+    // Returns labels
+    public getAllNodes(): string[] {
+        return this.graph.nodes.map(node => node.label);
+    }
+
     public getNodeId(nodeLabel: string): string {
         return this.graph.getNodeId(nodeLabel);
     }
@@ -159,8 +173,8 @@ export class AlgorithmService {
 
     public removeNode(nodeId: string): void {
         this.graph.removeNode(nodeId);
-        if (nodeId == this.root) {
-            this.root = this.graph.nodes[0].id;
+        if (nodeId == this._root) {
+            this._root = this.graph.nodes[0].id;
         }
         this.setGraph();
     }

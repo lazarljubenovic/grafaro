@@ -3,7 +3,6 @@
   <ul *ngIf="value.length">
     <li *ngFor="let item of value"
         [class.highlighted]="highlightedLetters | contains : item"
-        [@element]="true"
     >
     <span class="outer">
       <span class="inner">{{item}}</span>

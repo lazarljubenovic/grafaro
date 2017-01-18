@@ -7,6 +7,12 @@
     <input type="radio" value="dfs" formControlName="algorithm">
     <span>Depth First Search</span>
   </label>
+  <div formGroupName="options">
+    <label *ngFor="let node of nodes">
+      <input type="radio" [value]="node" formControlName="root">
+      <span>{{node}}</span>
+    </label>
+  </div>
 </form>
 
 <pre>{{form.value | json}}</pre>
