@@ -1,0 +1,12 @@
+<form novalidate [formGroup]="form">
+  <label>
+    <input type="radio" value="bfs" formControlName="algorithm">
+    <span>Breadth First Search</span>
+  </label>
+  <label>
+    <input type="radio" value="dfs" formControlName="algorithm">
+    <span>Depth First Search</span>
+  </label>
+</form>
+
+<pre>{{form.value | json}}</pre>

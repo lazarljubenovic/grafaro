@@ -19,11 +19,13 @@ import {GraphSocketService} from './graph-socket.service';
 import {SaveDialogComponent} from './save-dialog/save-dialog.component';
 import {LoadDialogComponent} from './load-dialog/load-dialog.component';
 import {RoomEditService} from './room-edit.service';
+import { AlgorithmPickerComponent } from './algorithm-picker/algorithm-picker.component';
 
 @NgModule({
     imports: [
         CommonModule,
         FormsModule,
+        ReactiveFormsModule,
         ReactiveFormsModule,
         GraphModule,
         TabsModule,
@@ -42,6 +44,7 @@ import {RoomEditService} from './room-edit.service';
         PopupRenameComponent,
         SaveDialogComponent,
         LoadDialogComponent,
+        AlgorithmPickerComponent,
     ],
     providers: [
         WebSocketService,
