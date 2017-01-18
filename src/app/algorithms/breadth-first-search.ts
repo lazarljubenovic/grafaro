@@ -58,7 +58,7 @@ export function getCodeJson(code: string, state: BreadthFirstSearchState) {
                             text,
                             annotation: {
                                 value: state[propName],
-                                type: state[propName].length != null ? 'single' : 'array',
+                                type: (typeof state[propName] == 'object' && state[propName].length != null) ? 'array' : 'single',
                             }
                         }
                     } else {
