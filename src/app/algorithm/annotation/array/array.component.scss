@@ -13,6 +13,7 @@ $marble-size: 27px;
 
 :host {
   display: block;
+  position: fixed;
   font-family: $font;
 
   ul {
