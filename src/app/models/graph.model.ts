@@ -93,7 +93,8 @@ export class Graph {
     public getNodeId(nodeLabel: NodeLabel): NodeId {
         const node = this._nodes.find(node => node.label == nodeLabel);
         if (node == null) {
-            throw new Error(`Node with label ${nodeLabel} doesn't exist`);
+            // throw new Error(`Node with label ${nodeLabel} doesn't exist`);
+            return null;
         }
         return node.id;
     }
