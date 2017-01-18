@@ -1,20 +1,18 @@
 import {
     Component,
-    OnInit,
-    Input,
     trigger,
     state,
     style,
     transition,
     animate,
-    ChangeDetectionStrategy,
-    OnChanges
+    ChangeDetectorRef
 } from '@angular/core';
+import {AnnotationBase} from '../annotation-base';
 
 @Component({
     selector: 'grf-array',
     templateUrl: 'array.component.html',
-    styleUrls: ['array.component.scss'],
+    styleUrls: ['./array.component.scss'],
     animations: [
         trigger('element', [
             state('void', style({
@@ -32,26 +30,24 @@ import {
             transition('* <=> void', animate('360ms ease-out')),
         ])
     ],
-    changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ArrayComponent implements OnInit, OnChanges {
+export class ArrayComponent extends AnnotationBase {
 
-    @Input() public array: string[] = [];
-    @Input() public highlightedLetters: string[] = [];
+    public value: string[] = [];
+    public highlightedLetters: string[] = [];
 
-    ngOnChanges() {
-        if (this.array == null) {
-            this.array = [];
+    onChange() {
+        if (this.value == null) {
+            this.value = [];
         }
-        if (this.array.length == 1 && this.array[0] == null) {
-            this.array = [];
+        if (this.value.length == 1 && this.value[0] == null) {
+            this.value = [];
         }
+        this.cdr.detectChanges();
     }
 
-    constructor() {
-    }
-
-    ngOnInit() {
+    constructor(cdr: ChangeDetectorRef) {
+        super(cdr);
     }
 
 }

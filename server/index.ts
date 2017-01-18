@@ -143,28 +143,28 @@ wss.on('connection', ws => {
         let lobbyInd = lobby.findIndex(client => client == ws);
         let userRoom = messageRooms.userHasRoom(ws);
 
-        if (!!userRoom) {
-            let roomMaster = messageRooms.getRoomMaster(userRoom);
-            messageRooms.removeUserFromRoom(userRoom, ws);
-            if (messageRooms.getRoomUserCount(userRoom) == 0) {
-                messageRooms.deleteRoom(userRoom);
-                console.log('Room', userRoom, 'is deleted.');
-            } else if (roomMaster == ws) {
-                const newMaster = messageRooms.getRoomMaster(userRoom);
-                const joinMessage: Message<JoinMessage> = {
-                    type: 'join',
-                    payload: {
-                        roomId: userRoom,
-                        isMaster: true
-                    },
-                    roomId: userRoom
-                };
-                messageRooms.returnMessage(newMaster, joinMessage);
-            }
-            lobby.forEach(client => messageRooms.sendRoomsInfo(client));
-        } else if (lobbyInd > -1) {
-            lobby.splice(lobbyInd, 1);
-        }
+        // if (!!userRoom) {
+        //     let roomMaster = messageRooms.getRoomMaster(userRoom);
+        //     messageRooms.removeUserFromRoom(userRoom, ws);
+        //     if (messageRooms.getRoomUserCount(userRoom) == 0) {
+        //         messageRooms.deleteRoom(userRoom);
+        //         console.log('Room', userRoom, 'is deleted.');
+        //     } else if (roomMaster == ws) {
+        //         const newMaster = messageRooms.getRoomMaster(userRoom);
+        //         const joinMessage: Message<JoinMessage> = {
+        //             type: 'join',
+        //             payload: {
+        //                 roomId: userRoom,
+        //                 isMaster: true
+        //             },
+        //             roomId: userRoom
+        //         };
+        //         messageRooms.returnMessage(newMaster, joinMessage);
+        //     }
+        //     lobby.forEach(client => messageRooms.sendRoomsInfo(client));
+        // } else if (lobbyInd > -1) {
+        //     lobby.splice(lobbyInd, 1);
+        // }
     });
 
     setTimeout(() => {

@@ -1,71 +1,17 @@
 <div #box class="algorithm-with-line-numbers">
-  <div class="line-number-indicator"
-       [style.top]="lineNumber$ | async | lineNumberStyle : box : 18"
-  >
+  <div class="line-number-indicator" [style.top]="lineNumber$ | async | lineNumberStyle : box : 18">
     ➡
   </div>
   <div class="line-numbers">
     <span *ngFor="let i of 19 | orderedArray | slice : 1">{{i}}</span>
   </div>
-  <pre><code>function <b>BreadthFirst</b>(graph, <span #root
-                                                       (click)="isOpenRoot$.next(!isOpenRoot$.getValue())">root</span>) {{'{'}}
-  let <span #solution
-            (click)="isOpenSolution$.next(!isOpenSolution$.getValue())">solution</span> = [];
-  let queue = new Queue();
-  <span #queue
-        (click)="isOpenQueue$.next(!isOpenQueue$.getValue())">queue</span>.enqueue(root);
-  let visited = new Set();
-  <span #visited (click)="isOpenVisited$.next(!isOpenVisited$.getValue())">visited</span>.add(root);
-  while(!queue.isEmpty) {{'{'}}
-    let <span #currentNode
-              (click)="isOpenCurrentNode$.next(!isOpenCurrentNode$.getValue())">currentNode</span> = queue.deque();
-    let <span #neighbors
-              (click)="isOpenNeighbors$.next(!isOpenNeighbors$.getValue())">neighbors</span> = graph.neighbors(currentNode);
-    visited.push(currentNode);
-    neighbors
-      .filter(neighbor => !visited.has(neighbor))
-      .filter(neighbor => !queue.has(neighbor))
-      .forEach(<span #neighbor
-                     (click)="isOpenCurrentNeighbor$.next(!isOpenCurrentNeighbor$.getValue())">neighbor</span> => queue.enqueue(neighbor));
-    <span #solution (click)="isOpenSolution$.next(!isOpenSolution$.getValue())">solution</span>.push(currentNode);
-  {{'}'}}
-  return solution;
-{{'}'}}</code></pre>
+  <div class="code">
+    <div class="line-of-code" *ngFor="let line of code$ | async; trackBy: trackByIndex">
+        <code *ngFor="let word of line; trackBy: trackByIndex"
+              [grfAnnotation]="word.annotation"
+              [box]="box"
+        >{{word.text}}</code>
+    </div>
+  </div>
 </div>
 
-<grf-annotation *ngIf="isOpenSolution$ | async"
-                [algorithm]="box"
-                [snippet]="solution"
->
-  <grf-array [array]="varSolution$ | async"></grf-array>
-</grf-annotation>
-
-<grf-annotation *ngIf="isOpenQueue$ | async" [algorithm]="box"
-                [snippet]="queue">
-  <grf-array [array]="varQueue$ | async"></grf-array>
-</grf-annotation>
-
-<grf-annotation *ngIf="isOpenRoot$ | async" [algorithm]="box" [snippet]="root">
-  <grf-single-item [item]="varRoot$ | async"></grf-single-item>
-</grf-annotation>
-
-<grf-annotation *ngIf="isOpenVisited$ | async" [algorithm]="box"
-                [snippet]="visited">
-  <grf-array [array]="varVisited$ | async"></grf-array>
-</grf-annotation>
-
-<grf-annotation *ngIf="isOpenNeighbors$ | async" [algorithm]="box"
-                [snippet]="neighbors">
-  <grf-array [array]="varNeighbors$ | async"
-             [highlightedLetters]="[varCurrentNeighbor$ | async]"></grf-array>
-</grf-annotation>
-
-<grf-annotation *ngIf="isOpenCurrentNode$ | async" [algorithm]="box"
-                [snippet]="currentNode">
-  <grf-single-item [item]="varCurrentNode$ | async"></grf-single-item>
-</grf-annotation>
-
-<grf-annotation *ngIf="isOpenCurrentNeighbor$ | async" [algorithm]="box"
-                [snippet]="neighbor">
-  <grf-single-item [item]="varCurrentNeighbor$ | async"></grf-single-item>
-</grf-annotation>

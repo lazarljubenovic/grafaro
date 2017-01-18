@@ -18,6 +18,7 @@ import {FourOhFourComponent} from './four-oh-four/four-oh-four.component';
 import {AUTH_PROVIDERS} from 'angular2-jwt';
 import {LoginPageModule} from './login-page/login-page.module';
 import {LoginPageComponent} from './login-page/login-page.component';
+import {NotifyService} from './algorithm/notify.service';
 
 @NgModule({
     declarations: [
@@ -57,6 +58,7 @@ import {LoginPageComponent} from './login-page/login-page.component';
         EmojiService,
         GraphOptionsService,
         AUTH_PROVIDERS,
+        NotifyService,
     ],
     bootstrap: [
         AppComponent,

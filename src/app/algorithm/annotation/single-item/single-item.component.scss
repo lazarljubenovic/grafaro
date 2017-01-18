@@ -1,4 +1,4 @@
-@import '../../global';
+@import '../../../global';
 
 $marble-size: 27px;
 
@@ -13,6 +13,7 @@ $marble-size: 27px;
 
 :host {
   display: block;
+  position: fixed;
 
   div {
     @include force-square($marble-size);

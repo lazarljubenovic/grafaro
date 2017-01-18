@@ -5,6 +5,71 @@ import {VisNgNetworkOptionsEdges} from '@lazarljubenovic/vis-ng/core';
 import {GrfGraphNodeOptions} from '../graph/graph.module';
 import {Graph, GraphJson} from '../models/graph.model';
 
+export const CODE = `function BreadthFirstSearch(graph, ^[root|rootNode]^) {
+  let ^[solution|currentSolution]^ = [];
+  let ^[queue|currentQueue]^ = new Queue();
+  queue.enqueue(root);
+  let ^[visited|visitedNodes]^ = new Set();
+  visited.add(root);
+  while (!queue.isEmpty()) {
+    let currentNode = queue.deque();
+    let neighbors = graph.neighbors(currentNode);
+    visited.push(currentNode);
+    ^[neighbors|currentNodeNeighbors]^
+      .filter(neighbor => !visited.has(neighbor))
+      .filter(neighbor => !queue.has(neighbor))
+      .forEach(neighbor => queue.enqueue(neighbor));
+    solution.push(currentNode);
+  }
+  return solution;
+}
+`;
+
+export interface BreadthFirstSearchState {
+    graphJson: GraphJson,
+    currentNode: string;
+    currentNodeNeighbors: string[];
+    visitedNodes: string[];
+    currentSolution: string[];
+    currentQueue: string[];
+    rootNode: string;
+    currentNeighbor?: string;
+    lineNumber: number;
+}
+
+export function getCodeJson(code: string, state: BreadthFirstSearchState) {
+    return code
+        .replace(/ /g, '\u00a0')
+        .split('\n')
+        .map(line => line
+            .split(/(\^\[.*?\]\^)/g)
+            .map(word => {
+                    if (word.startsWith('^[')) {
+                        word = word.slice(2, -2);
+                        let text;
+                        let propName;
+                        if (word.indexOf('|') !== -1) {
+                            [text, propName] = word.split('|').map(el => el.trim());
+                        } else {
+                            text = word;
+                            propName = word;
+                        }
+                        return {
+                            text,
+                            annotation: {
+                                value: state[propName],
+                                type: state[propName].length != null ? 'single' : 'array',
+                            }
+                        }
+                    } else {
+                        return {
+                            text: word,
+                        }
+                    }
+                }
+            )
+        );
+}
 
 export function breadthFirstSearchNormalizer(state: BreadthFirstSearchState): NormalizedState {
     const nodes: GrfGraphNodeOptions[] = state.graphJson.nodes.map((node, i) => {
@@ -37,18 +102,6 @@ export function breadthFirstSearchNormalizer(state: BreadthFirstSearchState): No
         primaryColor,
         secondaryColor,
     };
-}
-
-export interface BreadthFirstSearchState {
-    graphJson: GraphJson,
-    currentNode: string;
-    currentNodeNeighbors: string[];
-    visitedNodes: string[];
-    currentSolution: string[];
-    currentQueue: string[];
-    rootNode: string;
-    currentNeighbor?: string;
-    lineNumber: number;
 }
 
 function createNewState(currentNode, neighbors, solution, graph: Graph, visited, queue, root, lineNumber: number,

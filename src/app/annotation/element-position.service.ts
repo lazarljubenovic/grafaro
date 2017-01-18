@@ -35,20 +35,19 @@ export class ElementPositionService {
         return {topLeft, bottomRight};
     }
 
-    public getSize(element: HTMLElement): {w: number, h: number} {
-        const rect = this.getRect(element);
+    public getSize(rect: ClientRect): {w: number, h: number} {
         return {
             w: rect.right - rect.left,
             h: rect.bottom - rect.top,
         };
     }
 
-    public getCenter(element: HTMLElement): {x: number, y: number} {
-        const left = element.getBoundingClientRect().left;
-        const top = element.getBoundingClientRect().top;
+    public getCenter(rect: ClientRect): {x: number, y: number} {
+        const left = rect.left;
+        const top = rect.top;
         return {
-            x: left + this.getSize(element).w / 2,
-            y: top + this.getSize(element).h / 2,
+            x: left + this.getSize(rect).w / 2,
+            y: top + this.getSize(rect).h / 2,
         };
     }
 

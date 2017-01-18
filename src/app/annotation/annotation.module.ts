@@ -7,12 +7,8 @@ import {PolylineComponent} from './polyline/polyline.component';
 import {CalloutLineComponent} from './callout-line/callout-line.component';
 import {CalloutLineService} from './callout-line/callout-line.service';
 import {ElementPositionPipe} from './element-position.pipe';
-import {ArrayComponent} from './array/array.component';
 import {UtilPipesModule} from '../util-pipes/util-pipes.module';
 import {ElementPositionService} from './element-position.service';
-import {EmptyComponent} from './empty/empty.component';
-import {SingleItemComponent} from './single-item/single-item.component';
-import {NullComponent} from './null/null.component';
 
 @NgModule({
     imports: [
@@ -25,15 +21,9 @@ import {NullComponent} from './null/null.component';
         PolylineComponent,
         CalloutLineComponent,
         ElementPositionPipe,
-        ArrayComponent,
-        EmptyComponent,
-        SingleItemComponent,
-        NullComponent,
     ],
     exports: [
         AnnotationComponent,
-        ArrayComponent,
-        SingleItemComponent,
     ],
     providers: [
         GeometryService,

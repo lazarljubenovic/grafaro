@@ -1,0 +1,13 @@
+<grf-annotation [algorithm]="box" [snippet]="snippet">
+  <grf-empty *ngIf="!value.length"></grf-empty>
+  <ul *ngIf="value.length">
+    <li *ngFor="let item of value"
+        [class.highlighted]="highlightedLetters | contains : item"
+        [@element]="true"
+    >
+    <span class="outer">
+      <span class="inner">{{item}}</span>
+    </span>
+    </li>
+  </ul>
+</grf-annotation>

@@ -10,6 +10,7 @@ import {
 } from '@angular/core';
 import {GeometryService} from './geometry.service';
 import {ElementPositionService} from './element-position.service';
+import {NotifyService} from '../algorithm/notify.service';
 
 @Component({
     selector: 'grf-annotation',
@@ -29,13 +30,15 @@ export class AnnotationComponent implements OnInit, AfterContentInit {
     @ViewChild('movable') public movableRef: ElementRef;
 
     @HostBinding('style.left.px')
-    @Input() public x: number;
+    public x: number;
 
     @HostBinding('style.top.px')
-    @Input() public y: number;
+    public y: number;
 
     public annotationX: number;
     public annotationY: number;
+
+    public snippetRect: ClientRect;
 
     @HostListener('window:mouseup')
     public onWindowMouseUp(): void {
@@ -62,8 +65,14 @@ export class AnnotationComponent implements OnInit, AfterContentInit {
         }
     }
 
+    private recalculateSnippetPosition() {
+        const rect = this.snippet.getBoundingClientRect();
+        this.snippetRect = rect;
+    }
+
     private calculateInitialPosition(): void {
-        const snippetCenter = this.elementPositionService.getCenter(this.snippet);
+        const snippetCenter =
+            this.elementPositionService.getCenter(this.snippet.getBoundingClientRect());
         const algorithmRectangle = this.elementPositionService.getRectangle(this.algorithm);
         const largeRectangle = this.geometryService.expandRectangle(algorithmRectangle, 36);
         const exitPoint = this.geometryService.getClosestExitPoint(snippetCenter, largeRectangle);
@@ -91,10 +100,16 @@ export class AnnotationComponent implements OnInit, AfterContentInit {
 
     constructor(private elementRef: ElementRef,
                 private geometryService: GeometryService,
-                private elementPositionService: ElementPositionService) {
+                private elementPositionService: ElementPositionService,
+                private notifyService: NotifyService
+    ) {
     }
 
     ngOnInit() {
+        this.recalculateSnippetPosition();
+        this.notifyService.stateChange$.delay(1).subscribe(() => {
+            this.recalculateSnippetPosition();
+        });
     }
 
     ngAfterContentInit() {
