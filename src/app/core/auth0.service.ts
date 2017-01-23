@@ -24,7 +24,7 @@ export class Auth0Service {
         this.lock.on(`authenticated`, (authResult) => {
             localStorage.setItem('id_token', authResult.idToken);
 
-            this.lock.getUserInfo(authResult.accessToken, (error, profile) => {
+            (<any>this.lock).getUserInfo(authResult.accessToken, (error, profile) => {
                 if (error) {
                     console.log(error);
                     return;
