@@ -2,7 +2,8 @@ $header-height: 80px;
 $toolbar-width: $header-height;
 $sidebar-width: 50%;
 
-$font: Roboto;
+$font: Roboto, sans-serif;
+$font-monospace: "Overpass Mono", monospace;
 
 $color-scheme-1: (
   "primary": #76bed0,

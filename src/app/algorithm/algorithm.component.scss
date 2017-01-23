@@ -3,7 +3,6 @@
 .algorithm-with-line-numbers {
   display: flex;
   position: relative;
-  font-size: 1.2em;
 
   .line-number-indicator {
     width: 3ex;
@@ -22,19 +21,33 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    color: rgba(black, .2);
-    font-family: monospace;
-    font-weight: bold;
+    color: rgba(black, .42);
+    font-family: $font-monospace;
+    font-weight: 300;
     line-height: 3ex;
-    height: 3ex;
     width: 3ex;
     padding-right: .5em;
-    text-align: center;
+    text-align: right;
+
+    span {
+      display: block;
+      height: 3ex;
+    }
   }
 
   .code {
     line-height: 3ex;
     color: $black;
+    font-family: $font-monospace;
+
+    .line-of-code {
+      height: 3ex;
+
+      code {
+        font-family: $font-monospace;
+        letter-spacing: -.3px;
+      }
+    }
   }
 
     //code {

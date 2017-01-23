@@ -7,10 +7,7 @@
   </div>
   <div class="code">
     <div class="line-of-code" *ngFor="let line of code$ | async; trackBy: trackByIndex">
-        <code *ngFor="let word of line; trackBy: trackByIndex"
-              [grfAnnotation]="word.annotation"
-              [box]="box"
-        >{{word.text}}</code>
+        <code *ngFor="let word of line; trackBy: trackByIndex">{{word.text}}</code>
     </div>
   </div>
 </div>
