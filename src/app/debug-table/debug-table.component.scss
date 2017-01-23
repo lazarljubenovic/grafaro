@@ -1,0 +1,32 @@
+@import '../global';
+
+:host {
+  font-family: $font;
+
+  table {
+
+    thead {
+
+      tr {
+
+        th {
+          text-align: left;
+        }
+      }
+    }
+
+    tbody {
+
+      tr {
+
+        td {
+          height: 24px;
+        }
+
+        td:first-child {
+          font-family: $font-monospace;
+        }
+      }
+    }
+  }
+}

@@ -1,4 +1,4 @@
-import {Component, OnInit, AfterViewInit, AfterContentInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Observable} from 'rxjs';
 import {AlgorithmService} from '../algorithms/algorithm.service';
 import {NotifyService} from './notify.service';
@@ -9,7 +9,7 @@ import {DepthFirstSearchAlgorithm} from '../algorithms/depth-first-search';
     templateUrl: './algorithm.component.html',
     styleUrls: ['./algorithm.component.scss'],
 })
-export class AlgorithmComponent implements OnInit, AfterViewInit, AfterContentInit {
+export class AlgorithmComponent implements OnInit {
 
     public code$;
 
@@ -33,22 +33,14 @@ export class AlgorithmComponent implements OnInit, AfterViewInit, AfterContentIn
     ngOnInit() {
         this.code$ = this.currentState$
             .map(state => {
-                return  this.algorithmService.getCodeJson();
+                return this.algorithmService.getCodeJson();
             });
 
         this.lineNumber$ = this.currentState$.map(state => state.lineNumber);
 
-        this.currentState$.subscribe(state => {
-            this.notifyService.stateChange$.next(true);
-        });
-    }
-
-    ngAfterViewInit() {
-        console.log('algorithm: after view int');
-    }
-
-    ngAfterContentInit() {
-        console.log('algorithm: after content init');
+        // this.currentState$.subscribe(state => {
+        //     this.notifyService.stateChange$.next(true);
+        // });
     }
 
 }

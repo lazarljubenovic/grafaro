@@ -1,0 +1,24 @@
+@import '../../global';
+
+:host {
+
+  .node {
+    display: inline-block;
+    background-color: rgba(black, .06);
+    border: solid 1px rgba(black, .4);
+    color: $black;
+    border-radius: 50%;
+    text-align: center;
+    font-size: 12px;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+  }
+
+  .null {
+    color: rgba(black, .4);
+    font-family: $font-monospace;
+    font-size: .8em;
+    text-transform: uppercase;
+  }
+}

@@ -1,0 +1,9 @@
+<ul class="array">
+  <li *ngFor="let label of labels" [@element]="true">
+    <div class="outer">
+      <div class="inner">
+        {{label}}
+      </div>
+    </div>
+  </li>
+</ul>

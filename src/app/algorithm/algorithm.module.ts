@@ -10,12 +10,14 @@ import {ArrayComponent} from './annotation/array/array.component';
 import {SingleItemComponent} from './annotation/single-item/single-item.component';
 import {EmptyComponent} from './annotation/empty/empty.component';
 import {NullComponent} from './annotation/null/null.component';
+import {DebugTableModule} from '../debug-table/debug-table.module';
 
 @NgModule({
     imports: [
         CommonModule,
         UtilPipesModule,
         AnnotationModule,
+        DebugTableModule,
     ],
     declarations: [
         AlgorithmComponent,

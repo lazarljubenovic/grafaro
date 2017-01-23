@@ -1,0 +1,18 @@
+<table>
+  <thead>
+  <tr>
+    <th>Name</th>
+    <th>Value</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let item of state | object; trackBy: trackBy">
+    <td>{{item.key}}</td>
+    <td>
+      <grf-debug-value [value]="item.value"></grf-debug-value>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+<button (click)="changeStuff()">sadsfdas</button>
