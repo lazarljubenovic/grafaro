@@ -7,9 +7,11 @@
   </div>
   <div class="code">
     <div class="line-of-code" *ngFor="let line of code$ | async; trackBy: trackByIndex">
-        <code *ngFor="let word of line; trackBy: trackByIndex">{{word.text}}</code>
+        <code *ngFor="let word of line; trackBy: trackByIndex"
+              [class]="'highlight-' + word.type"
+              [class.is-tracked]="word.isTracked">{{word.text}}</code>
     </div>
   </div>
 </div>
 
-<grf-debug-table [state]="currentState$ | async"></grf-debug-table>
+<grf-debug-table [state]="currentState$ | async" [trackedVariables]="algorithmService.algorithmStrategy.trackedVariables"></grf-debug-table>

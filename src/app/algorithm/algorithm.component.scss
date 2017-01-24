@@ -1,4 +1,4 @@
-@import '../_global.scss';
+@import '../global';
 
 .algorithm-with-line-numbers {
   display: flex;
@@ -46,6 +46,15 @@
       code {
         font-family: $font-monospace;
         letter-spacing: -.3px;
+
+        &.is-tracked {
+          text-decoration: underline;
+        }
+
+        &.highlight-Keyword {
+          font-weight: bold;
+          color: material-color('purple', '900');
+        }
       }
     }
   }

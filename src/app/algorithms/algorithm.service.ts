@@ -35,7 +35,7 @@ export class AlgorithmService {
         this.setGraph();
     }
 
-    private algorithmStrategy: AlgorithmBase;
+    public algorithmStrategy: AlgorithmBase;
     private states: BreadthFirstSearchState[];
     private normalizedStates: NormalizedState[];
 
@@ -60,7 +60,9 @@ export class AlgorithmService {
     }
 
     public getCodeJson() {
-        return this.algorithmStrategy.getCodeJson(this.states[this.currentStateIndex]);
+        const state = this.states[this.currentStateIndex];
+        const tracked = this.algorithmStrategy.trackedVariables;
+        return this.algorithmStrategy.getCodeJson(state, tracked);
     }
 
     public setGraph() {

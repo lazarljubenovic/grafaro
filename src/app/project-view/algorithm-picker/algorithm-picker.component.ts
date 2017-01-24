@@ -27,7 +27,6 @@ export class AlgorithmPickerComponent implements OnInit {
 
     ngOnInit() {
         this.algorithmService.graph.nodeLabelChange$.subscribe(nodes => {
-            console.log(nodes);
             this.nodes = nodes;
         });
 

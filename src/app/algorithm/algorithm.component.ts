@@ -38,9 +38,9 @@ export class AlgorithmComponent implements OnInit {
 
         this.lineNumber$ = this.currentState$.map(state => state.lineNumber);
 
-        // this.currentState$.subscribe(state => {
-        //     this.notifyService.stateChange$.next(true);
-        // });
+        this.currentState$.subscribe(state => {
+            this.notifyService.stateChange$.next(true);
+        });
     }
 
 }

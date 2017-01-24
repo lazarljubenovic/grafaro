@@ -9,6 +9,8 @@ export class DebugTableComponent implements OnInit {
 
     private _state: any;
 
+    @Input() trackedVariables: string[];
+
     @Input()
     public set state(state: any) {
         let newState = {};

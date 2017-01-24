@@ -6,32 +6,35 @@ import {Graph, GraphJson} from '../models/graph.model';
 import {Stack} from '../data-structures/stack';
 import {AlgorithmBase} from './algorithm-base';
 
-
 export interface DepthFirstSearchState {
     graphJson: GraphJson,
     currentNode: string;
-    currentNodeNeighbors: string[];
-    visitedNodes: string[];
-    currentSolution: string[];
-    currentStack: string[];
-    rootNode: string;
+    neighbors: string[];
+    visited: string[];
+    solution: string[];
+    stack: string[];
+    root: string;
     currentNeighbor?: string;
     lineNumber: number;
 }
 
 export class DepthFirstSearchAlgorithm extends AlgorithmBase {
 
-    public code: string = `function DepthFirstSearch(graph, ^[root|rootNode]^) {
-  let ^[solution|currentSolution]^ = [];
-  let ^[stack|currentStack]^ = new Stack();
+    public trackedVariables: string[] = [
+        'neighbors', 'visited', 'solution', 'stack', 'root', 'neighbor',
+    ];
+
+    public code: string = `function DepthFirstSearch(graph, root) {
+  let solution = [];
+  let stack = new Stack();
   stack.push(root);
-  let ^[visited|visitedNodes]^ = new Set();
+  let visited = new Set();
   visited.add(root);
   while (!stack.isEmpty()) {
     let currentNode = stack.pop();
     let neighbors = graph.neighbors(currentNode);
     visited.push(currentNode);
-    ^[neighbors|currentNodeNeighbors]^
+    neighbors
       .filter(neighbor => !visited.has(neighbor))
       .filter(neighbor => !stack.has(neighbor))
       .forEach(neighbor => stack.push(neighbor));
@@ -47,17 +50,17 @@ export class DepthFirstSearchAlgorithm extends AlgorithmBase {
                 label: node.label,
                 position: node.position,
                 weight: node.weight,
-                isStart: state.rootNode == node.label,
+                isStart: state.root == node.label,
                 isEnd: false,
                 isAccentColor: state.currentNode == node.label,
                 isPrimaryColor: state.currentNeighbor == node.label,
                 isSecondaryColor: false,
-                isDimmedColor: state.visitedNodes.indexOf(node.label) != -1,
+                isDimmedColor: state.visited.indexOf(node.label) != -1,
             };
         });
         const edges: VisNgNetworkOptionsEdges[] = state.graphJson.edges;
-        const stack: string[] = state.currentStack;
-        const solution: string[] = state.currentSolution;
+        const stack: string[] = state.stack;
+        const solution: string[] = state.solution;
         const accentColor: string[] = [state.currentNode];
         const primaryColor: string[] = [state.currentNeighbor];
         const secondaryColor: string[] = [];
@@ -78,12 +81,12 @@ export class DepthFirstSearchAlgorithm extends AlgorithmBase {
         return {
             graphJson: graph.writeJson(),
             currentNode: currentNode ? graph.getNodeLabel(currentNode) : null,
-            currentNodeNeighbors: neighbors ? neighbors.map(neighbor => graph.getNodeLabel(neighbor)) : [],
+            neighbors: neighbors ? neighbors.map(neighbor => graph.getNodeLabel(neighbor)) : [],
             currentNeighbor: currentNeighbor ? graph.getNodeLabel(currentNeighbor) : null,
-            currentSolution: [...solution].map(node => graph.getNodeLabel(node)),
-            visitedNodes: [...visited].map(node => graph.getNodeLabel(node)),
-            currentStack: [...stack.toArray()].map(node => graph.getNodeLabel(node)),
-            rootNode: graph.getNodeLabel(root),
+            solution: [...solution].map(node => graph.getNodeLabel(node)),
+            visited: [...visited].map(node => graph.getNodeLabel(node)),
+            stack: [...stack.toArray()].map(node => graph.getNodeLabel(node)),
+            root: graph.getNodeLabel(root),
             lineNumber: lineNumber,
         };
     }

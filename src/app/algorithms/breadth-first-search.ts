@@ -9,28 +9,32 @@ import {AlgorithmBase} from './algorithm-base';
 export interface BreadthFirstSearchState {
     graphJson: GraphJson,
     currentNode: string;
-    currentNodeNeighbors: string[];
-    visitedNodes: string[];
-    currentSolution: string[];
-    currentQueue: string[];
-    rootNode: string;
-    currentNeighbor?: string;
+    neighbors: string[];
+    visited: string[];
+    solution: string[];
+    queue: string[];
+    root: string;
+    neighbor?: string;
     lineNumber: number;
 }
 
 export class BreadthFirstSearchAlgorithm extends AlgorithmBase {
 
-    public code: string = `function BreadthFirstSearch(graph, ^[root|rootNode]^) {
-  let ^[solution|currentSolution]^ = [];
-  let ^[queue|currentQueue]^ = new Queue();
+    trackedVariables: string[] = [
+        'root', 'solution', 'queue', 'visited', 'neighbors'
+    ];
+
+    public code: string = `function BreadthFirstSearch(graph, root) {
+  let solution = [];
+  let queue = new Queue();
   queue.enqueue(root);
-  let ^[visited|visitedNodes]^ = new Set();
+  let visited = new Set();
   visited.add(root);
   while (!queue.isEmpty()) {
     let currentNode = queue.deque();
     let neighbors = graph.neighbors(currentNode);
     visited.push(currentNode);
-    ^[neighbors|currentNodeNeighbors]^
+    neighbors
       .filter(neighbor => !visited.has(neighbor))
       .filter(neighbor => !queue.has(neighbor))
       .forEach(neighbor => queue.enqueue(neighbor));
@@ -46,19 +50,19 @@ export class BreadthFirstSearchAlgorithm extends AlgorithmBase {
                 label: node.label,
                 position: node.position,
                 weight: node.weight,
-                isStart: state.rootNode == node.id,
+                isStart: state.root == node.id,
                 isEnd: false,
                 isAccentColor: state.currentNode == node.id,
-                isPrimaryColor: state.currentNeighbor == node.id,
+                isPrimaryColor: state.neighbor == node.id,
                 isSecondaryColor: false,
-                isDimmedColor: state.visitedNodes.indexOf(node.id) != -1,
+                isDimmedColor: state.visited.indexOf(node.id) != -1,
             };
         });
         const edges: VisNgNetworkOptionsEdges[] = state.graphJson.edges;
-        const queue: string[] = state.currentQueue;
-        const solution: string[] = state.currentSolution;
+        const queue: string[] = state.queue;
+        const solution: string[] = state.solution;
         const accentColor: string[] = [state.currentNode];
-        const primaryColor: string[] = [state.currentNeighbor];
+        const primaryColor: string[] = [state.neighbor];
         const secondaryColor: string[] = [];
 
         return {
@@ -77,12 +81,12 @@ export class BreadthFirstSearchAlgorithm extends AlgorithmBase {
     return {
         graphJson: graph.writeJson(),
         currentNode: currentNode ? graph.getNodeLabel(currentNode) : null,
-        currentNodeNeighbors: neighbors ? neighbors.map(neighbor => graph.getNodeLabel(neighbor)) : [],
-        currentNeighbor: currentNeighbor ? graph.getNodeLabel(currentNeighbor) : null,
-        currentSolution: [...solution].map(node => graph.getNodeLabel(node)),
-        visitedNodes: [...visited].map(node => graph.getNodeLabel(node)),
-        currentQueue: [...queue.toArray()].map(node => graph.getNodeLabel(node)),
-        rootNode: graph.getNodeLabel(root),
+        neighbors: neighbors ? neighbors.map(neighbor => graph.getNodeLabel(neighbor)) : [],
+        neighbor: currentNeighbor ? graph.getNodeLabel(currentNeighbor) : null,
+        solution: [...solution].map(node => graph.getNodeLabel(node)),
+        visited: [...visited].map(node => graph.getNodeLabel(node)),
+        queue: [...queue.toArray()].map(node => graph.getNodeLabel(node)),
+        root: graph.getNodeLabel(root),
         lineNumber: lineNumber,
     };
 }
