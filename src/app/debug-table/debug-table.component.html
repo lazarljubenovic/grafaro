@@ -6,10 +6,12 @@
   </tr>
   </thead>
   <tbody>
-  <tr *ngFor="let item of state | object | onlyKeys : (_service.visibleVariables$ | async); trackBy: trackBy">
-    <td>{{item.key}}</td>
+  <tr *ngFor="let item of debugData; trackBy: trackBy"
+      [class.out-of-scope]="!item.isInScope"
+  >
+    <td>{{item.name}}</td>
     <td>
-      <grf-debug-value [value]="item.value"></grf-debug-value>
+      <grf-debug-value [data]="item?.data"></grf-debug-value>
     </td>
   </tr>
   </tbody>

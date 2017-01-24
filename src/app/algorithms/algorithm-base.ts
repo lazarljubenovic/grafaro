@@ -1,8 +1,114 @@
 import {NormalizedState} from './algorithm.service';
-import {Graph} from '../models/graph.model';
+import {Graph, GraphJson} from '../models/graph.model';
 import * as Esprima from 'esprima';
 
-export interface AlgorithmState {
+
+export function mergeArrays(name1: string, name2: string, arr1: any[], arr2: any[]): any[] {
+    return arr1.map((x, i) => ({
+        [name1]: x,
+        [name2]: arr2[i],
+    }));
+}
+
+export interface DebugDataValue {
+    value: any;
+    color: string;
+}
+
+export interface DebugData {
+    type: 'single' | 'array';
+    name: string;
+    data: DebugDataValue | DebugDataValue[];
+    isInScope: boolean;
+}
+
+export function TrackedVariable() {
+    return function (target: AlgorithmState, key: string) {
+        if (!target._trackedVarsNames) {
+            target._trackedVarsNames = [];
+        }
+        target._trackedVarsNames.push(key);
+    };
+}
+
+export function ColorExporter(params: string[], fn: Function) {
+    return function (target: AlgorithmState, key: string) {
+        if (!target._exportFunctions) {
+            target._exportFunctions = new Map();
+        }
+        target._exportFunctions.set(key, {params, fn});
+    };
+}
+
+export abstract class AlgorithmState {
+
+    /**
+     * Filled with decorators.
+     * @internal
+     */
+    public _trackedVarsNames: string[];
+
+    /**
+     * Filled with decorators.
+     * @internal
+     */
+    public _exportFunctions: Map<string, {params: string[], fn: Function}>;
+
+    public graphJson: GraphJson;
+    public lineNumber: number;
+
+    constructor(graph: Graph, lineNumber: number) {
+        this.graphJson = graph.writeJson();
+        this.lineNumber = lineNumber;
+    }
+
+    public getDefaultDebugColor: (trackedVar: any) => any = (trackedVar) => {
+        if (Array.isArray(trackedVar)) {
+            return trackedVar.map(x => x == this['currentNode'] ? 'accent' : 'default');
+        } else {
+            return trackedVar == this['currentNode'] ? 'accent' : 'default';
+        }
+    };
+
+    public getDefaultDebugScope: (trackedVar: any) => any = (trackedVar) => {
+        return trackedVar !== undefined;
+    };
+
+    public getDefaultDebugType: (trackedVar: any) => any = (trackedVar) => {
+        return Array.isArray(trackedVar) ? 'array' : 'single';
+    };
+
+    public getDebugColor(trackedVarName: string): any {
+        const varVal = this[trackedVarName];
+        if (Array.from(this._exportFunctions.keys()).indexOf(trackedVarName) != -1) {
+            const firstArg = varVal;
+            const restArgs = this._exportFunctions.get(trackedVarName).params.map(x => this[x]);
+            const args = [firstArg, ...restArgs];
+            const fn = this._exportFunctions.get(trackedVarName).fn;
+            return fn(...args);
+        } else {
+            return this.getDefaultDebugColor(varVal);
+        }
+    }
+
+    public getDebugData(): DebugData[] {
+        return this._trackedVarsNames.map(name => {
+            const value = this[name];
+            const isInScope = this.getDefaultDebugScope(value);
+            const type = this.getDefaultDebugType(value);
+
+            let data;
+            if (type == 'single') {
+                const color = this.getDebugColor(name);
+                data = {value, color};
+            } else if (type == 'array') {
+                const color = this.getDebugColor(name);
+                data = mergeArrays('value', 'color', value, color);
+            }
+
+            return {type, name, isInScope, data};
+        });
+    }
 
 }
 
@@ -16,7 +122,6 @@ export type CodeJson = CodeJsonElement[][];
 export abstract class AlgorithmBase {
 
     public abstract code: string;
-
     public abstract trackedVariables: string[];
 
     public abstract normalize(state: AlgorithmState): NormalizedState;
@@ -32,7 +137,7 @@ export abstract class AlgorithmBase {
         let currentColumn = 0;
         let token;
 
-        for (let i = 0 ; i < tokens.length; i++) {
+        for (let i = 0; i < tokens.length; i++) {
             token = tokens[i];
             currentLine = (<any>token).loc.start.line - 1;
 

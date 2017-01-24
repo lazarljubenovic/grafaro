@@ -33,6 +33,7 @@ $marble-between: $marble-size / 3;
       line-height: $marble-size;
       justify-content: center;
       align-items: center;
+      @include all-background-colors;
 
       .inner {
         display: inline-block;

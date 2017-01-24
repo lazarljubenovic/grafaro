@@ -7,7 +7,7 @@ import {Component, OnInit, Input} from '@angular/core';
 })
 export class NodeComponent implements OnInit {
 
-    @Input() label: string;
+    @Input() data: {value: any, color: string};
 
     constructor() {
     }

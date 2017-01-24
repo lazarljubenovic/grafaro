@@ -8,6 +8,8 @@ import {DebugTableService} from './debug-table.service';
 })
 export class DebugTableComponent implements OnInit, OnDestroy {
 
+    public debugData: any;
+
     private _state: any;
 
     private _trackedVariables: string[] = [];
@@ -15,6 +17,10 @@ export class DebugTableComponent implements OnInit, OnDestroy {
     @Input()
     public set state(state: any) {
         this._state = state;
+
+        if (state != null) {
+            this.debugData = state.getDebugData();
+        }
     }
 
     public get state(): any {

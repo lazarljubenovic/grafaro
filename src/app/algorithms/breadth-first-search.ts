@@ -4,23 +4,38 @@ import {NormalizedState} from './algorithm.service';
 import {VisNgNetworkOptionsEdges} from '@lazarljubenovic/vis-ng/core';
 import {GrfGraphNodeOptions} from '../graph/graph.module';
 import {Graph, GraphJson} from '../models/graph.model';
-import {AlgorithmBase} from './algorithm-base';
+import {AlgorithmBase, AlgorithmState, TrackedVariable, ColorExporter} from './algorithm-base';
 
-export interface BreadthFirstSearchState {
-    graphJson: GraphJson,
-    currentNode: string;
-    neighbors: string[];
-    visited: string[];
-    solution: string[];
-    queue: string[];
-    root: string;
-    neighbor?: string;
-    lineNumber: number;
+export class BreadthFirstSearchState extends AlgorithmState {
+
+    @TrackedVariable()
+    public currentNode: string;
+
+    @ColorExporter(['neighbor'], (ns, n) => ns.map(x => x == n ? 'primary' : 'default'))
+    @TrackedVariable()
+    public neighbors: string[];
+
+    @ColorExporter([], () => 'primary')
+    @TrackedVariable()
+    public neighbor: string;
+
+    @TrackedVariable()
+    public visited: string[];
+
+    @TrackedVariable()
+    public solution: string[];
+
+    @TrackedVariable()
+    public queue: string[];
+
+    @TrackedVariable()
+    public root: string;
+
 }
 
 export class BreadthFirstSearchAlgorithm extends AlgorithmBase {
 
-    trackedVariables: string[] = [
+    public trackedVariables: string[] = [
         'root', 'solution', 'queue', 'visited', 'neighbors'
     ];
 
@@ -76,19 +91,24 @@ export class BreadthFirstSearchAlgorithm extends AlgorithmBase {
         };
     }
 
-    private createNewState(currentNode, neighbors, solution, graph: Graph, visited, queue, root, lineNumber: number,
-                                    currentNeighbor?): BreadthFirstSearchState {
-    return {
-        graphJson: graph.writeJson(),
-        currentNode: currentNode ? graph.getNodeLabel(currentNode) : null,
-        neighbors: neighbors ? neighbors.map(neighbor => graph.getNodeLabel(neighbor)) : [],
-        neighbor: currentNeighbor ? graph.getNodeLabel(currentNeighbor) : null,
-        solution: [...solution].map(node => graph.getNodeLabel(node)),
-        visited: [...visited].map(node => graph.getNodeLabel(node)),
-        queue: [...queue.toArray()].map(node => graph.getNodeLabel(node)),
-        root: graph.getNodeLabel(root),
-        lineNumber: lineNumber,
-    };
+    private createNewState(currentNode: string,
+                           neighbors: string[],
+                           solution: string[],
+                           graph: Graph,
+                           visited: string[],
+                           queue: Queue<string>,
+                           root: string,
+                           lineNumber: number,
+                           currentNeighbor: string = undefined): BreadthFirstSearchState {
+        let state = new BreadthFirstSearchState(graph, lineNumber);
+        state.currentNode = currentNode ? graph.getNodeLabel(currentNode) : null;
+        state.neighbors = neighbors ? neighbors.map(neighbor => graph.getNodeLabel(neighbor)) : [];
+        state.neighbor = currentNeighbor ? graph.getNodeLabel(currentNeighbor) : null;
+        state.solution = [...solution].map(node => graph.getNodeLabel(node));
+        state.visited = [...visited].map(node => graph.getNodeLabel(node));
+        state.queue = [...queue.toArray()].map(node => graph.getNodeLabel(node));
+        state.root = graph.getNodeLabel(root);
+        return state;
 }
 
     algorithmFunction(graph: Graph, rootId: string): BreadthFirstSearchState[] {
