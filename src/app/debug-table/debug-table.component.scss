@@ -2,6 +2,7 @@
 
 :host {
   font-family: $font;
+  display: block;
 
   table {
 
@@ -21,6 +22,7 @@
 
         td {
           height: 24px;
+          vertical-align: text-bottom;
         }
 
         td:first-child {

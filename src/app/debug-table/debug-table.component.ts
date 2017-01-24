@@ -14,17 +14,6 @@ export class DebugTableComponent implements OnInit, OnDestroy {
 
     @Input()
     public set state(state: any) {
-        // let newState = {};
-        // if (state == null) {
-        //     this._state = null;
-        //     return;
-        // }
-        // this._trackedVariables.forEach(key => {
-        //     const value = state[key];
-        //     if (key != 'graphJson' && key != 'lineNumber') {
-        //         newState[key] = value;
-        //     }
-        // });
         this._state = state;
     }
 

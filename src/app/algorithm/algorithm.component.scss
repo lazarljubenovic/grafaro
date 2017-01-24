@@ -1,5 +1,9 @@
 @import '../global';
 
+:host {
+  display: block;
+}
+
 .algorithm-with-line-numbers {
   display: flex;
   position: relative;
@@ -30,8 +34,12 @@
     text-align: right;
 
     span {
+      $font-size: .75;
       display: block;
-      height: 3ex;
+      height: 3ex / $font-size;
+      line-height: 3ex / $font-size;
+      font-size: $font-size * 1em;
+      letter-spacing: -1.2px;
     }
   }
 
@@ -45,7 +53,7 @@
 
       code {
         font-family: $font-monospace;
-        letter-spacing: -.3px;
+        letter-spacing: -.5px;
 
         &.is-tracked {
           position: relative;
@@ -53,7 +61,7 @@
           z-index: 2;
           $shadow-color: white;
           text-shadow: 1px 0 $shadow-color, 2px 0 $shadow-color, 3px 0 $shadow-color, -1px 0 $shadow-color, -2px 0 $shadow-color, -3px 0 $shadow-color, 0 1px $shadow-color, 0 -1px $shadow-color;
-          box-shadow:  0 -1px $shadow-color inset, 0 -2px rgba(black, .42) inset;
+          box-shadow: 0 -1px $shadow-color inset, 0 -2px rgba(black, .36) inset;
 
           &:hover {
             color: get-color('accent');

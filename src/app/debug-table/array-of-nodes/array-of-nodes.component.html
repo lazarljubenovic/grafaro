@@ -1,4 +1,4 @@
-<ul class="array">
+<ul class="array" *ngIf="labels.length">
   <li *ngFor="let label of labels" [@element]="true">
     <div class="outer">
       <div class="inner">
@@ -7,3 +7,7 @@
     </div>
   </li>
 </ul>
+
+<div class="empty-array" *ngIf="!labels.length">
+  <span>empty</span>
+</div>

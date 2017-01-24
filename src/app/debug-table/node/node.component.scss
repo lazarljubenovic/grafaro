@@ -1,6 +1,7 @@
 @import '../../global';
 
 :host {
+  display: inline-flex;
 
   .node {
     display: inline-block;

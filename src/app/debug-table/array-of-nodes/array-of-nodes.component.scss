@@ -4,6 +4,7 @@ $marble-size: 18px;
 $marble-between: $marble-size / 3;
 
 :host {
+  display: inline-flex;
 
   ul {
     margin: 0;
@@ -23,7 +24,7 @@ $marble-between: $marble-size / 3;
     .outer {
       display: inline-flex;
       background-color: rgba(black, .06);
-      border: solid 1px rgba(black, .4);
+      box-shadow: 0 0 0 1px rgba(black, .4) inset;
       color: $black;
       border-radius: 50%;
       font-size: 12px;
@@ -37,5 +38,12 @@ $marble-between: $marble-size / 3;
         display: inline-block;
       }
     }
+  }
+
+  .empty-array {
+    color: rgba(black, .4);
+    font-family: $font-monospace;
+    font-size: .8em;
+    text-transform: uppercase;
   }
 }
