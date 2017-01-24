@@ -1,8 +1,15 @@
-import {Injectable} from '@angular/core';
+import {Injectable, Inject} from '@angular/core';
 import {tokenNotExpired} from 'angular2-jwt';
 import Auth0Lock from 'auth0-lock';
+import {UserService} from '../login-page/user.service';
 
 declare const Auth0;
+
+export interface Profile {
+    _id: string;
+    displayName: string;
+    socialId: string;
+}
 
 @Injectable()
 export class Auth0Service {
@@ -12,13 +19,15 @@ export class Auth0Service {
         callbackURL: 'http://localhost:4200',
         responseType: 'token'
     });
+
     private lock = new Auth0Lock(
         'Vzzk8AXP4Ret2DaR0SATsiSa4yDHR5Zw',
         'pritilender.eu.auth0.com',
         {});
-    private userProfile: Object;
 
-    constructor() {
+    private userProfile: Profile;
+
+    constructor(@Inject(UserService) private userService: UserService) {
         this.userProfile = JSON.parse(localStorage.getItem('profile'));
 
         this.lock.on(`authenticated`, (authResult) => {
@@ -30,9 +39,13 @@ export class Auth0Service {
                     return;
                 }
 
-                localStorage.setItem('profile', JSON.stringify(profile));
-                this.userProfile = profile;
-                console.log(this.userProfile['user_id']);
+                const socialId: string = profile['user_id'];
+                this.userService.getUserBySocialId(socialId)
+                    .subscribe(profile => {
+                        console.log('Profile from DB', profile);
+                        this.userProfile = profile;
+                        localStorage.setItem('profile', JSON.stringify(profile));
+                    });
             });
         });
     }

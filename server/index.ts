@@ -14,13 +14,13 @@ const wss = new WebSocketServer({server: server});
 const app = express();
 const port = 4000;
 
-mongoose.connect('mongodb://admin:admin@ds139198.mlab.com:39198/grafaro');
+mongoose.connect('mongodb://admin:grafaroAdmin@ds025973.mlab.com:25973/grafaro');
 
 const db = mongoose.connection;
 
 db.on('error', (error) => console.log('Connection error: ', error));
 
-db.once('open', () => console.log('Connected'));
+db.once('open', () => console.log('Connected to DB'));
 
 const dummyMessages: ChatMessageInfo[] = [
     {
