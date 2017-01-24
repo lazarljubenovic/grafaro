@@ -38,7 +38,6 @@ import {DebugTableModule} from '../debug-table/debug-table.module';
         EmptyComponent,
         NullComponent,
     ],
-    providers: [],
 })
 export class AlgorithmModule {
 }

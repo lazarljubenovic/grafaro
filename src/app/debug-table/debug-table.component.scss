@@ -6,16 +6,6 @@
 
   table {
 
-    thead {
-
-      tr {
-
-        th {
-          text-align: left;
-        }
-      }
-    }
-
     tbody {
 
       tr {
@@ -23,6 +13,7 @@
         td {
           height: 24px;
           vertical-align: text-bottom;
+          padding: 0 .5em;
         }
 
         td:first-child {
