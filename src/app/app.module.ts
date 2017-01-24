@@ -1,7 +1,7 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
-import {HttpModule} from '@angular/http';
+import {HttpModule, RequestOptions, Http} from '@angular/http';
 import {AppComponent} from './app.component';
 import {StepperModule} from './shared/stepper/stepper.module';
 import {AlgorithmService} from './algorithms/algorithm.service';
@@ -15,10 +15,14 @@ import {ProjectViewComponent} from './project-view/project-view.component';
 import {ProjectBrowserComponent} from './project-browser/project-browser.component';
 import {FourOhFourModule} from './four-oh-four/four-oh-four.module';
 import {FourOhFourComponent} from './four-oh-four/four-oh-four.component';
-import {AUTH_PROVIDERS} from 'angular2-jwt';
+import {AuthHttp, AuthConfig} from 'angular2-jwt';
 import {LoginPageModule} from './login-page/login-page.module';
 import {LoginPageComponent} from './login-page/login-page.component';
 import {NotifyService} from './algorithm/notify.service';
+
+export function authHttpServiceFactory(http: Http, options: RequestOptions) {
+    return new AuthHttp(new AuthConfig({}), http, options);
+}
 
 @NgModule({
     declarations: [
@@ -57,7 +61,11 @@ import {NotifyService} from './algorithm/notify.service';
         MarkdownService,
         EmojiService,
         GraphOptionsService,
-        AUTH_PROVIDERS,
+        {
+            provide: AuthHttp,
+            useFactory: authHttpServiceFactory,
+            deps: [Http, RequestOptions],
+        },
         NotifyService,
     ],
     bootstrap: [

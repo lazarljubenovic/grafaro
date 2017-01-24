@@ -9,15 +9,15 @@ import {Auth0Service} from '../core/auth0.service';
 export class LoginPageComponent implements OnInit {
 
     public facebookLogin() {
-        this.auth0.socialLogin('facebook');
+        // this.auth0.socialLogin('facebook');
     }
 
     public twitterLogin() {
-        this.auth0.socialLogin('twitter');
+        // this.auth0.socialLogin('twitter');
     }
 
     public googleLogin() {
-        this.auth0.socialLogin('google-oauth2');
+        // this.auth0.socialLogin('google-oauth2');
     }
 
     constructor(private auth0: Auth0Service) {
