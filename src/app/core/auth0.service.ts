@@ -58,7 +58,11 @@ export class Auth0Service {
 
     public logout() {
         // Remove token from localStorage
+        console.log(localStorage.getItem('id_token'));
+        console.log('Logout');
         localStorage.removeItem('id_token');
+        localStorage.removeItem('profile');
+        console.log(localStorage.getItem('id_token'));
     }
 
     public socialLogin(connection: string) {
