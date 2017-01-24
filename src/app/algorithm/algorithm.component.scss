@@ -49,11 +49,16 @@
 
         &.is-tracked {
           text-decoration: underline;
+          cursor: pointer;
+
+          &:hover {
+            color: get-color('accent');
+          }
         }
 
         &.highlight-Keyword {
           font-weight: bold;
-          color: material-color('purple', '900');
+          color: get-color('secondary');
         }
       }
     }

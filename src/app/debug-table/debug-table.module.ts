@@ -5,6 +5,7 @@ import { NodeComponent } from './node/node.component';
 import { ArrayOfNodesComponent } from './array-of-nodes/array-of-nodes.component';
 import {UtilPipesModule} from '../util-pipes/util-pipes.module';
 import { DebugValueComponent } from './debug-value/debug-value.component';
+import {DebugTableService} from './debug-table.service';
 
 @NgModule({
     imports: [
@@ -19,6 +20,9 @@ import { DebugValueComponent } from './debug-value/debug-value.component';
     ],
     exports: [
         DebugTableComponent,
+    ],
+    providers: [
+        DebugTableService,
     ],
 })
 export class DebugTableModule {

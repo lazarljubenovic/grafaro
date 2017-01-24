@@ -3,6 +3,7 @@ import {Observable} from 'rxjs';
 import {AlgorithmService} from '../algorithms/algorithm.service';
 import {NotifyService} from './notify.service';
 import {DepthFirstSearchAlgorithm} from '../algorithms/depth-first-search';
+import {DebugTableService} from '../debug-table/debug-table.service';
 
 @Component({
     selector: 'grf-algorithm',
@@ -25,9 +26,14 @@ export class AlgorithmComponent implements OnInit {
     }
 
     constructor(private algorithmService: AlgorithmService,
-                private notifyService: NotifyService) {
+                private notifyService: NotifyService,
+                private debugTableService: DebugTableService) {
         algorithmService.setAlgorithm(new DepthFirstSearchAlgorithm());
         this.currentState$ = algorithmService.currentState$;
+    }
+
+    public toggleTrackedVariableVisibility(varName: string): void {
+        this.debugTableService.toggleVariable(varName);
     }
 
     ngOnInit() {

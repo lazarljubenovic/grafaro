@@ -4,6 +4,7 @@ import {ContainsPipe} from './contains.pipe';
 import {OrderedArrayPipe} from './ordered-array.pipe';
 import {PercentagePipe} from './percentage.pipe';
 import {ObjectPipe} from './object.pipe';
+import {OnlyKeysPipe} from './only-keys-pipe';
 
 @NgModule({
     imports: [
@@ -14,12 +15,14 @@ import {ObjectPipe} from './object.pipe';
         OrderedArrayPipe,
         PercentagePipe,
         ObjectPipe,
+        OnlyKeysPipe,
     ],
     exports: [
         ContainsPipe,
         OrderedArrayPipe,
         PercentagePipe,
         ObjectPipe,
+        OnlyKeysPipe,
     ],
 })
 export class UtilPipesModule {
