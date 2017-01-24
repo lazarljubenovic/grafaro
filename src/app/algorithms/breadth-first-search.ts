@@ -4,7 +4,10 @@ import {NormalizedState} from './algorithm.service';
 import {VisNgNetworkOptionsEdges} from '@lazarljubenovic/vis-ng/core';
 import {GrfGraphNodeOptions} from '../graph/graph.module';
 import {Graph, GraphJson} from '../models/graph.model';
-import {AlgorithmBase, AlgorithmState, TrackedVariable, ColorExporter} from './algorithm-base';
+import {
+    AlgorithmBase, AlgorithmState, TrackedVariable, ColorExporter,
+    getLabelIfDefined
+} from './algorithm-base';
 
 export class BreadthFirstSearchState extends AlgorithmState {
 
@@ -101,13 +104,13 @@ export class BreadthFirstSearchAlgorithm extends AlgorithmBase {
                            lineNumber: number,
                            currentNeighbor: string = undefined): BreadthFirstSearchState {
         let state = new BreadthFirstSearchState(graph, lineNumber);
-        state.currentNode = currentNode ? graph.getNodeLabel(currentNode) : null;
+        state.currentNode = getLabelIfDefined(graph, currentNode);
         state.neighbors = neighbors ? neighbors.map(neighbor => graph.getNodeLabel(neighbor)) : [];
-        state.neighbor = currentNeighbor ? graph.getNodeLabel(currentNeighbor) : null;
+        state.neighbor = getLabelIfDefined(graph, currentNeighbor);
         state.solution = [...solution].map(node => graph.getNodeLabel(node));
         state.visited = [...visited].map(node => graph.getNodeLabel(node));
         state.queue = [...queue.toArray()].map(node => graph.getNodeLabel(node));
-        state.root = graph.getNodeLabel(root);
+        state.root = getLabelIfDefined(graph, root);
         return state;
 }
 
@@ -118,20 +121,20 @@ export class BreadthFirstSearchAlgorithm extends AlgorithmBase {
 
         let states: BreadthFirstSearchState[] = [];
 
-        states.push(this.createNewState(null, null, [], graph, [], new Queue<string>(), rootId, 1));
-        states.push(this.createNewState(null, null, [], graph, [], new Queue<string>(), rootId, 2));
+        states.push(this.createNewState(undefined, null, [], graph, [], new Queue<string>(), undefined, 1));
+        states.push(this.createNewState(undefined, null, [], graph, [], new Queue<string>(), rootId, 2));
 
         let solution: string[] = [];
-        states.push(this.createNewState('', [], [], graph, [], new Queue<string>(), rootId, 3));
+        states.push(this.createNewState(undefined, [], [], graph, [], new Queue<string>(), rootId, 3));
 
         let queue = new Queue<string>();
-        states.push(this.createNewState('', [], solution, graph, [], queue, rootId, 4));
+        states.push(this.createNewState(undefined, [], solution, graph, [], queue, rootId, 4));
 
         queue.enqueue(rootId);
-        states.push(this.createNewState('', [], solution, graph, [], queue, rootId, 6));
+        states.push(this.createNewState(undefined, [], solution, graph, [], queue, rootId, 6));
 
         let visited: string[] = [rootId];
-        states.push(this.createNewState('', [], solution, graph, visited, queue, rootId, 7));
+        states.push(this.createNewState(undefined, [], solution, graph, visited, queue, rootId, 7));
 
         while (!queue.isEmpty) {
             states.push(this.createNewState('', [], solution, graph, visited, queue, rootId, 8));

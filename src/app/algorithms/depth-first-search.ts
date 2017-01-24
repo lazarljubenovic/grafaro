@@ -4,7 +4,13 @@ import {VisNgNetworkOptionsEdges} from '@lazarljubenovic/vis-ng/core';
 import {GrfGraphNodeOptions} from '../graph/graph.module';
 import {Graph} from '../models/graph.model';
 import {Stack} from '../data-structures/stack';
-import {AlgorithmBase, TrackedVariable, ColorExporter, AlgorithmState} from './algorithm-base';
+import {
+    AlgorithmBase,
+    TrackedVariable,
+    ColorExporter,
+    AlgorithmState,
+    getLabelIfDefined
+} from './algorithm-base';
 
 
 export class DepthFirstSearchState extends AlgorithmState {
@@ -102,14 +108,13 @@ export class DepthFirstSearchAlgorithm extends AlgorithmBase {
                            lineNumber: number,
                            currentNeighbor: string = undefined): DepthFirstSearchState {
         let state = new DepthFirstSearchState(graph, lineNumber);
-        state.currentNode = currentNode ? graph.getNodeLabel(currentNode) : null;
-        state.currentNode = currentNode ? graph.getNodeLabel(currentNode) : null;
+        state.currentNode = getLabelIfDefined(graph, currentNode);
         state.neighbors = neighbors ? neighbors.map(neighbor => graph.getNodeLabel(neighbor)) : [];
-        state.neighbor = currentNeighbor ? graph.getNodeLabel(currentNeighbor) : null;
+        state.neighbor = getLabelIfDefined(graph, currentNeighbor);
         state.solution = [...solution].map(node => graph.getNodeLabel(node));
         state.visited = [...visited].map(node => graph.getNodeLabel(node));
         state.stack = [...stack.toArray()].map(node => graph.getNodeLabel(node));
-        state.root = graph.getNodeLabel(root);
+        state.root = getLabelIfDefined(graph, root);
         return state;
     }
 
@@ -120,23 +125,23 @@ export class DepthFirstSearchAlgorithm extends AlgorithmBase {
 
         let states: DepthFirstSearchState[] = [];
 
-        states.push(this.createNewState(null, null, [], graph, [], new Stack<string>(), rootId, 1));
-        states.push(this.createNewState(null, null, [], graph, [], new Stack<string>(), rootId, 2));
+        states.push(this.createNewState(undefined, undefined, [], graph, [], new Stack<string>(), undefined, 1));
+        states.push(this.createNewState(undefined, undefined, [], graph, [], new Stack<string>(), rootId, 2));
 
         let solution: string[] = [];
-        states.push(this.createNewState('', [], [], graph, [], new Stack<string>(), rootId, 3));
+        states.push(this.createNewState(undefined, [], [], graph, [], new Stack<string>(), rootId, 3));
 
         let stack = new Stack<string>();
-        states.push(this.createNewState('', [], solution, graph, [], stack, rootId, 4));
+        states.push(this.createNewState(undefined, [], solution, graph, [], stack, rootId, 4));
 
         stack.push(rootId);
-        states.push(this.createNewState('', [], solution, graph, [], stack, rootId, 6));
+        states.push(this.createNewState(undefined, [], solution, graph, [], stack, rootId, 6));
 
         let visited: string[] = [rootId];
-        states.push(this.createNewState('', [], solution, graph, visited, stack, rootId, 7));
+        states.push(this.createNewState(undefined, [], solution, graph, visited, stack, rootId, 7));
 
         while (!stack.isEmpty) {
-            states.push(this.createNewState('', [], solution, graph, visited, stack, rootId, 8));
+            states.push(this.createNewState(undefined, [], solution, graph, visited, stack, rootId, 8));
 
             let currentNode: string = stack.pop();
             states.push(this.createNewState(currentNode, [], solution, graph, visited, stack, rootId, 9));

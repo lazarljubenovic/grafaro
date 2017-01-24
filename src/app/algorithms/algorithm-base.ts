@@ -2,6 +2,19 @@ import {NormalizedState} from './algorithm.service';
 import {Graph, GraphJson} from '../models/graph.model';
 import * as Esprima from 'esprima';
 
+export function getLabelIfDefined(graph: Graph, nodeId: string): any {
+    if (nodeId === undefined) {
+        return undefined;
+    }
+    if (nodeId === null) {
+        return null;
+    }
+    try {
+        return graph.getNodeLabel(nodeId);
+    } catch (e) {
+        return nodeId;
+    }
+}
 
 export function mergeArrays(name1: string, name2: string, arr1: any[], arr2: any[]): any[] {
     return arr1.map((x, i) => ({
