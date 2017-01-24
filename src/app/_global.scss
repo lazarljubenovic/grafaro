@@ -32,11 +32,11 @@ $color-scheme: $color-scheme-2;
   }
 }
 
-@function tint($color, $percentage: 0.2) {
+@function whiten($color, $percentage: 20%) {
   @return mix(white, $color, $percentage);
 }
 
-@function shade($color, $percentage: 0.2) {
+@function blacken($color, $percentage: 20%) {
   @return mix(black, $color, $percentage);
 }
 

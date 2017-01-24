@@ -11,7 +11,10 @@
                  [edges]="(algorithmService.currentNormalizedState$ | async)?.edges"
                  (graphClick)="click$.next($event)"
                  (graphNodeDragEnd)="onMoveNode($event)"></grf-graph>
-      <grf-controls (stateNumberChange)="updateStateNumber($event)"></grf-controls>
+      <grf-controls (stateNumberChange)="updateStateNumber($event)"
+                    [current]="algorithmService.currentStateIndex"
+                    [total]="algorithmService.totalNumberOfStates"
+      ></grf-controls>
     </div>
     <div class="debug-table-wrapper">
       <grf-debug-table [state]="currentState$ | async"></grf-debug-table>

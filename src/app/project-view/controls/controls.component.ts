@@ -1,14 +1,16 @@
-import {Component, OnInit, EventEmitter, Output} from '@angular/core';
+import {Component, OnInit, EventEmitter, Output, Input} from '@angular/core';
 
 @Component({
     selector: 'grf-controls',
     templateUrl: './controls.component.html',
-    styleUrls: ['./controls.component.scss']
+    styleUrls: ['./controls.component.scss'],
 })
 export class ControlsComponent implements OnInit {
 
-    @Output()
-    public stateNumberChange = new EventEmitter<string>();
+    @Input() public current: number;
+    @Input() public total: number;
+
+    @Output() public stateNumberChange = new EventEmitter<string>();
 
     public onNext(): void {
         this.stateNumberChange.emit('next');
