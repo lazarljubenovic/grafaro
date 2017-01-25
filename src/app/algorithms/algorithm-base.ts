@@ -2,7 +2,7 @@ import {NormalizedState} from './algorithm.service';
 import {Graph, GraphJson} from '../models/graph.model';
 import * as Esprima from 'esprima';
 
-export function getLabelIfDefined(graph: Graph, nodeId: string): any {
+function _getLabelIfDefined(graph: Graph, nodeId: string): any {
     if (nodeId === undefined) {
         return undefined;
     }
@@ -16,7 +16,7 @@ export function getLabelIfDefined(graph: Graph, nodeId: string): any {
     }
 }
 
-export function getLabelsIfDefined(graph: Graph, nodeIds: string[]): any {
+function _getLabelsIfDefined(graph: Graph, nodeIds: string[]): any {
     if (nodeIds === undefined) {
         return undefined;
     }
@@ -27,6 +27,14 @@ export function getLabelsIfDefined(graph: Graph, nodeIds: string[]): any {
         return nodeIds.map(nodeId => graph.getNodeLabel(nodeId));
     } catch (e) {
         return nodeIds;
+    }
+}
+
+export function getLabelIfDefined(graph: Graph, nodeId: string | string[]): any {
+    if (Array.isArray(nodeId)) {
+        return _getLabelsIfDefined(graph, nodeId);
+    } else {
+        return _getLabelIfDefined(graph, nodeId);
     }
 }
 

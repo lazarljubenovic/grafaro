@@ -9,8 +9,7 @@ import {
     AlgorithmState,
     TrackedVariable,
     ColorExporter,
-    getLabelIfDefined,
-    getLabelsIfDefined
+    getLabelIfDefined
 } from './algorithm-base';
 
 export class BreadthFirstSearchState extends AlgorithmState {
@@ -109,11 +108,11 @@ export class BreadthFirstSearchAlgorithm extends AlgorithmBase {
                            currentNeighbor: string = undefined): BreadthFirstSearchState {
         let state = new BreadthFirstSearchState(graph, lineNumber);
         state.currentNode = getLabelIfDefined(graph, currentNode);
-        state.neighbors = getLabelsIfDefined(graph, neighbors);
+        state.neighbors = getLabelIfDefined(graph, neighbors);
         state.neighbor = getLabelIfDefined(graph, currentNeighbor);
-        state.solution = getLabelsIfDefined(graph, solution);
-        state.visited = getLabelsIfDefined(graph, visited);
-        state.queue = getLabelsIfDefined(graph, queue ? queue.toArray() : undefined);
+        state.solution = getLabelIfDefined(graph, solution);
+        state.visited = getLabelIfDefined(graph, visited);
+        state.queue = getLabelIfDefined(graph, queue ? queue.toArray() : undefined);
         state.root = getLabelIfDefined(graph, root);
         return state;
     }

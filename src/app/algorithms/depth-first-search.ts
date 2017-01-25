@@ -9,8 +9,7 @@ import {
     TrackedVariable,
     ColorExporter,
     AlgorithmState,
-    getLabelIfDefined,
-    getLabelsIfDefined
+    getLabelIfDefined
 } from './algorithm-base';
 
 export class DepthFirstSearchState extends AlgorithmState {
@@ -109,11 +108,11 @@ export class DepthFirstSearchAlgorithm extends AlgorithmBase {
                            currentNeighbor: string = undefined): DepthFirstSearchState {
         let state = new DepthFirstSearchState(graph, lineNumber);
         state.currentNode = getLabelIfDefined(graph, currentNode);
-        state.neighbors = getLabelsIfDefined(graph, neighbors);
+        state.neighbors = getLabelIfDefined(graph, neighbors);
         state.neighbor = getLabelIfDefined(graph, currentNeighbor);
-        state.solution = getLabelsIfDefined(graph, solution);
-        state.visited = getLabelsIfDefined(graph, visited);
-        state.stack = getLabelsIfDefined(graph, stack ? stack.toArray() : undefined);
+        state.solution = getLabelIfDefined(graph, solution);
+        state.visited = getLabelIfDefined(graph, visited);
+        state.stack = getLabelIfDefined(graph, stack ? stack.toArray() : undefined);
         state.root = getLabelIfDefined(graph, root);
         return state;
     }
