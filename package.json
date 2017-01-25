@@ -3,6 +3,10 @@
   "version": "0.0.0",
   "license": "MIT",
   "angular-cli": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lazarljubenovic/grafaro"
+  },
   "scripts": {
     "start": "ng serve",
     "lint": "tslint \"src/**/*.ts\"",
