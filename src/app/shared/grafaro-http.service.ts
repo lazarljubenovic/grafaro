@@ -11,11 +11,15 @@ export class GrafaroHttpService {
 
     protected responseToObject(response: Response): any {
         let jsonResponse = response.json();
+        let data;
 
         if (jsonResponse['error']) {
             this.handleError(jsonResponse['error']);
+        } else if (jsonResponse['status']) {
+            data = jsonResponse.status;
+        } else {
+            data = jsonResponse.data;
         }
-        let data = jsonResponse.data;
         return data || {};
     }
 

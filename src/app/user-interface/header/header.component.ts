@@ -19,12 +19,17 @@ export class HeaderComponent implements OnInit {
 
     @ViewChild('titleInput') public newInputElRef: ElementRef;
     @ViewChild('descriptionInput') public newDescriptionElRef: ElementRef;
+    @ViewChild('nameInput') public newNameElRef: ElementRef;
 
     public isTitleInEditMode: boolean = false;
     public isDescriptionInEditMode: boolean = false;
 
     public newTitle: string;
     public newDescription: string;
+
+    public displayName: string = '';
+    public newName: string;
+    public isNameInEditMode: boolean = false;
 
     public openTitleEditMode() {
         this.isTitleInEditMode = true;
@@ -39,6 +44,14 @@ export class HeaderComponent implements OnInit {
         setTimeout(() => {
             this.newDescriptionElRef.nativeElement.focus();
             this.newDescriptionElRef.nativeElement.select();
+        });
+    }
+
+    public openNameEditMode() {
+        this.isNameInEditMode = true;
+        setTimeout(() => {
+            this.newNameElRef.nativeElement.focus();
+            this.newNameElRef.nativeElement.select();
         });
     }
 
@@ -60,6 +73,15 @@ export class HeaderComponent implements OnInit {
         this.isDescriptionInEditMode = false;
     }
 
+    public submitName() {
+        if (this.displayName != this.newName) {
+            this.updateDisplayName();
+        }
+
+        this.displayName = this.newName;
+        this.isNameInEditMode = false;
+    }
+
     public discardTitle() {
         this.isTitleInEditMode = false;
     }
@@ -74,6 +96,10 @@ export class HeaderComponent implements OnInit {
             description: this.newDescription
         };
         this.roomEditService.update(roomNameDescription);
+    }
+
+    public updateDisplayName() {
+        this.auth0.changeDisplayName(this.newName);
     }
 
     public isMaster(): boolean {
@@ -101,6 +127,10 @@ export class HeaderComponent implements OnInit {
         });
         this.newTitle = this.projectTitle;
         this.newDescription = this.projectDescription;
-    }
 
+        this.auth0.user$.subscribe(user => {
+            this.displayName = user.displayName;
+            this.newName = this.displayName;
+        });
+    }
 }

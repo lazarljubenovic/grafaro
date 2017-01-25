@@ -61,11 +61,33 @@
       <li><i class="fa fa-sliders"></i></li>
     </ul>
   </div>
-  <div id="profile-image"></div>
 
 </ng-container>
 
-<i class="fa fa-sign-out" (click)="logout()"></i>
+<div>
+  <div class="col display-name" *ngIf="!isNameInEditMode && displayName != ''">
+    <span class="text">{{displayName}}</span>
+    <span class="icon edit"
+          (click)="openNameEditMode()"
+    >
+          <i class="fa fa-pencil"></i>
+        </span>
+  </div>
+
+  <div class="col display-name" *ngIf="isNameInEditMode">
+    <input #nameInput type="text" [(ngModel)]="newName" (keyup.esc)="discardName()" (keyup.enter)="submitName()">
+    <span class="icon edit"
+          (click)="submitName()"
+    >
+          <i class="fa fa-check"></i>
+        </span>
+  </div>
+
+  <div id="profile-image">
+    <grf-jdenticon [plaintext]="displayName"></grf-jdenticon>
+  </div>
+  <i class="fa fa-sign-out" (click)="logout()"></i>
+</div>
 
 <ng-container *ngIf="!isProjectViewMode">
 

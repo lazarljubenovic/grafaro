@@ -2,18 +2,13 @@ import {Injectable, Inject} from '@angular/core';
 import {tokenNotExpired} from 'angular2-jwt';
 import {Router} from '@angular/router';
 import * as auth0 from 'auth0-js';
-import {UserService} from '../login-page/user.service';
-
-export interface Profile {
-    _id: string;
-    displayName: string;
-    socialId: string;
-}
+import {UserService, Profile} from '../login-page/user.service';
+import {ReplaySubject} from 'rxjs';
 
 @Injectable()
 export class Auth0Service {
 
-    private userProfile: Profile;
+    public user$: ReplaySubject<Profile> = new ReplaySubject(1);
 
     // Configure Auth0
     // todo type?
@@ -54,7 +49,7 @@ export class Auth0Service {
     }
 
     public logout(): void {
-        this.userProfile = null;
+        this.user$.next(null);
         localStorage.removeItem('socialId');
         localStorage.removeItem('access_token');
         localStorage.removeItem('id_token');
@@ -66,11 +61,18 @@ export class Auth0Service {
 
         this.userService.getUserBySocialId(socialId)
             .subscribe(dbUser => {
-                this.userProfile = dbUser;
+                this.user$.next(dbUser);
             });
 
         localStorage.setItem('socialId', socialId);
         localStorage.setItem('access_token', authResult.accessToken);
         localStorage.setItem('id_token', authResult.idToken);
+    }
+
+    public changeDisplayName(newName: string): void {
+        this.userService.changeDisplayName(newName)
+            .subscribe(user => {
+                this.user$.next(user);
+            });
     }
 }
