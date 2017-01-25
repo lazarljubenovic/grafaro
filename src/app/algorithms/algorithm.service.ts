@@ -79,8 +79,8 @@ export class AlgorithmService {
             this.normalizedStates = this.states.map(state => this.getNormalizedState(state));
             this.fixCurrentStateIndex();
             this.onGraphChange();
-        } catch (error) {
-            console.log(error); // todo
+        } catch (e) {
+            console.log(e); // todo
         }
     }
 

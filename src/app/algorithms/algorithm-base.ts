@@ -16,6 +16,20 @@ export function getLabelIfDefined(graph: Graph, nodeId: string): any {
     }
 }
 
+export function getLabelsIfDefined(graph: Graph, nodeIds: string[]): any {
+    if (nodeIds === undefined) {
+        return undefined;
+    }
+    if (nodeIds === null) {
+        return null;
+    }
+    try {
+        return nodeIds.map(nodeId => graph.getNodeLabel(nodeId));
+    } catch (e) {
+        return nodeIds;
+    }
+}
+
 export function mergeArrays(name1: string, name2: string, arr1: any[], arr2: any[]): any[] {
     return arr1.map((x, i) => ({
         [name1]: x,
@@ -76,6 +90,13 @@ export abstract class AlgorithmState {
     }
 
     public getDefaultDebugColor: (trackedVar: any) => any = (trackedVar) => {
+        if (trackedVar == null) {
+            if (Array.isArray(trackedVar)) {
+                return ['default'];
+            } else {
+                return 'default';
+            }
+        }
         if (Array.isArray(trackedVar)) {
             return trackedVar.map(x => x == this['currentNode'] ? 'accent' : 'default');
         } else {
@@ -93,6 +114,9 @@ export abstract class AlgorithmState {
 
     public getDebugColor(trackedVarName: string): any {
         const varVal = this[trackedVarName];
+        if (varVal == null) {
+            return this.getDefaultDebugColor(varVal);
+        }
         if (Array.from(this._exportFunctions.keys()).indexOf(trackedVarName) != -1) {
             const firstArg = varVal;
             const restArgs = this._exportFunctions.get(trackedVarName).params.map(x => this[x]);
