@@ -3,9 +3,12 @@ import {Queue} from '../data-structures/queue';
 import {NormalizedState} from './algorithm.service';
 import {VisNgNetworkOptionsEdges} from '@lazarljubenovic/vis-ng/core';
 import {GrfGraphNodeOptions} from '../graph/graph.module';
-import {Graph, GraphJson} from '../models/graph.model';
+import {Graph} from '../models/graph.model';
 import {
-    AlgorithmBase, AlgorithmState, TrackedVariable, ColorExporter,
+    AlgorithmBase,
+    AlgorithmState,
+    TrackedVariable,
+    ColorExporter,
     getLabelIfDefined
 } from './algorithm-base';
 
@@ -51,7 +54,7 @@ export class BreadthFirstSearchAlgorithm extends AlgorithmBase {
   while (!queue.isEmpty()) {
     let currentNode = queue.deque();
     let neighbors = graph.neighbors(currentNode);
-    visited.push(currentNode);
+    visited.add(currentNode);
     neighbors
       .filter(neighbor => !visited.has(neighbor))
       .filter(neighbor => !queue.has(neighbor))
@@ -73,7 +76,7 @@ export class BreadthFirstSearchAlgorithm extends AlgorithmBase {
                 isAccentColor: state.currentNode == node.id,
                 isPrimaryColor: state.neighbor == node.id,
                 isSecondaryColor: false,
-                isDimmedColor: state.visited.indexOf(node.id) != -1,
+                isDimmedColor: !state.visited ? false : state.visited.indexOf(node.label) != -1,
             };
         });
         const edges: VisNgNetworkOptionsEdges[] = state.graphJson.edges;
@@ -105,14 +108,14 @@ export class BreadthFirstSearchAlgorithm extends AlgorithmBase {
                            currentNeighbor: string = undefined): BreadthFirstSearchState {
         let state = new BreadthFirstSearchState(graph, lineNumber);
         state.currentNode = getLabelIfDefined(graph, currentNode);
-        state.neighbors = neighbors ? neighbors.map(neighbor => graph.getNodeLabel(neighbor)) : [];
+        state.neighbors = getLabelIfDefined(graph, neighbors);
         state.neighbor = getLabelIfDefined(graph, currentNeighbor);
-        state.solution = [...solution].map(node => graph.getNodeLabel(node));
-        state.visited = [...visited].map(node => graph.getNodeLabel(node));
-        state.queue = [...queue.toArray()].map(node => graph.getNodeLabel(node));
+        state.solution = getLabelIfDefined(graph, solution);
+        state.visited = getLabelIfDefined(graph, visited);
+        state.queue = getLabelIfDefined(graph, queue ? queue.toArray() : undefined);
         state.root = getLabelIfDefined(graph, root);
         return state;
-}
+    }
 
     algorithmFunction(graph: Graph, rootId: string): BreadthFirstSearchState[] {
         if (!graph.hasNodeId(rootId)) {
@@ -121,26 +124,29 @@ export class BreadthFirstSearchAlgorithm extends AlgorithmBase {
 
         let states: BreadthFirstSearchState[] = [];
 
-        states.push(this.createNewState(undefined, null, [], graph, [], new Queue<string>(), undefined, 1));
-        states.push(this.createNewState(undefined, null, [], graph, [], new Queue<string>(), rootId, 2));
+        states.push(this.createNewState(undefined, undefined, undefined, graph, undefined, undefined, undefined, 1));
+        states.push(this.createNewState(undefined, undefined, undefined, graph, undefined, undefined, rootId, 2));
 
         let solution: string[] = [];
-        states.push(this.createNewState(undefined, [], [], graph, [], new Queue<string>(), rootId, 3));
+        states.push(this.createNewState(undefined, undefined, solution, graph, undefined, undefined, rootId, 3));
 
         let queue = new Queue<string>();
-        states.push(this.createNewState(undefined, [], solution, graph, [], queue, rootId, 4));
+        states.push(this.createNewState(undefined, undefined, solution, graph, undefined, queue, rootId, 4));
 
         queue.enqueue(rootId);
-        states.push(this.createNewState(undefined, [], solution, graph, [], queue, rootId, 6));
+        states.push(this.createNewState(undefined, undefined, solution, graph, undefined, queue, rootId, 5));
 
-        let visited: string[] = [rootId];
-        states.push(this.createNewState(undefined, [], solution, graph, visited, queue, rootId, 7));
+        let visited: string[] = [];
+        states.push(this.createNewState(undefined, undefined, solution, graph, visited, queue, rootId, 6));
+
+        visited = [rootId];
+        states.push(this.createNewState(undefined, undefined, solution, graph, visited, queue, rootId, 7));
 
         while (!queue.isEmpty) {
-            states.push(this.createNewState('', [], solution, graph, visited, queue, rootId, 8));
+            states.push(this.createNewState(undefined, undefined, solution, graph, visited, queue, rootId, 8));
 
             let currentNode: string = queue.deque();
-            states.push(this.createNewState(currentNode, [], solution, graph, visited, queue, rootId, 9));
+            states.push(this.createNewState(currentNode, undefined, solution, graph, visited, queue, rootId, 9));
 
             let neighbors: string[] = graph.getSources(currentNode).map(edge => edge.to);
             states.push(this.createNewState(currentNode, neighbors, solution, graph, visited, queue, rootId, 10));
@@ -167,9 +173,8 @@ export class BreadthFirstSearchAlgorithm extends AlgorithmBase {
 
         }
 
-        states.push(this.createNewState('', [], solution, graph, visited, queue, rootId, 17));
+        states.push(this.createNewState(undefined, undefined, solution, graph, visited, queue, rootId, 17));
         return states;
     }
 
 }
-

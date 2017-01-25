@@ -12,7 +12,6 @@ import {
     getLabelIfDefined
 } from './algorithm-base';
 
-
 export class DepthFirstSearchState extends AlgorithmState {
 
     @TrackedVariable()
@@ -55,7 +54,7 @@ export class DepthFirstSearchAlgorithm extends AlgorithmBase {
   while (!stack.isEmpty()) {
     let currentNode = stack.pop();
     let neighbors = graph.neighbors(currentNode);
-    visited.push(currentNode);
+    visited.add(currentNode);
     neighbors
       .filter(neighbor => !visited.has(neighbor))
       .filter(neighbor => !stack.has(neighbor))
@@ -77,7 +76,7 @@ export class DepthFirstSearchAlgorithm extends AlgorithmBase {
                 isAccentColor: state.currentNode == node.label,
                 isPrimaryColor: state.neighbor == node.label,
                 isSecondaryColor: false,
-                isDimmedColor: state.visited.indexOf(node.label) != -1,
+                isDimmedColor: !state.visited ? false : state.visited.indexOf(node.label) != -1,
             };
         });
         const edges: VisNgNetworkOptionsEdges[] = state.graphJson.edges;
@@ -109,11 +108,11 @@ export class DepthFirstSearchAlgorithm extends AlgorithmBase {
                            currentNeighbor: string = undefined): DepthFirstSearchState {
         let state = new DepthFirstSearchState(graph, lineNumber);
         state.currentNode = getLabelIfDefined(graph, currentNode);
-        state.neighbors = neighbors ? neighbors.map(neighbor => graph.getNodeLabel(neighbor)) : [];
+        state.neighbors = getLabelIfDefined(graph, neighbors);
         state.neighbor = getLabelIfDefined(graph, currentNeighbor);
-        state.solution = [...solution].map(node => graph.getNodeLabel(node));
-        state.visited = [...visited].map(node => graph.getNodeLabel(node));
-        state.stack = [...stack.toArray()].map(node => graph.getNodeLabel(node));
+        state.solution = getLabelIfDefined(graph, solution);
+        state.visited = getLabelIfDefined(graph, visited);
+        state.stack = getLabelIfDefined(graph, stack ? stack.toArray() : undefined);
         state.root = getLabelIfDefined(graph, root);
         return state;
     }
@@ -125,26 +124,29 @@ export class DepthFirstSearchAlgorithm extends AlgorithmBase {
 
         let states: DepthFirstSearchState[] = [];
 
-        states.push(this.createNewState(undefined, undefined, [], graph, [], new Stack<string>(), undefined, 1));
-        states.push(this.createNewState(undefined, undefined, [], graph, [], new Stack<string>(), rootId, 2));
+        states.push(this.createNewState(undefined, undefined, undefined, graph, undefined, undefined, undefined, 1));
+        states.push(this.createNewState(undefined, undefined, undefined, graph, undefined, undefined, rootId, 2));
 
         let solution: string[] = [];
-        states.push(this.createNewState(undefined, [], [], graph, [], new Stack<string>(), rootId, 3));
+        states.push(this.createNewState(undefined, undefined, solution, graph, undefined, undefined, rootId, 3));
 
         let stack = new Stack<string>();
-        states.push(this.createNewState(undefined, [], solution, graph, [], stack, rootId, 4));
+        states.push(this.createNewState(undefined, undefined, solution, graph, undefined, stack, rootId, 4));
 
         stack.push(rootId);
-        states.push(this.createNewState(undefined, [], solution, graph, [], stack, rootId, 6));
+        states.push(this.createNewState(undefined, undefined, solution, graph, undefined, stack, rootId, 5));
 
-        let visited: string[] = [rootId];
-        states.push(this.createNewState(undefined, [], solution, graph, visited, stack, rootId, 7));
+        let visited: string[] = [];
+        states.push(this.createNewState(undefined, undefined, solution, graph, visited, stack, rootId, 6));
+
+        visited = [rootId];
+        states.push(this.createNewState(undefined, undefined, solution, graph, visited, stack, rootId, 7));
 
         while (!stack.isEmpty) {
-            states.push(this.createNewState(undefined, [], solution, graph, visited, stack, rootId, 8));
+            states.push(this.createNewState(undefined, undefined, solution, graph, visited, stack, rootId, 8));
 
             let currentNode: string = stack.pop();
-            states.push(this.createNewState(currentNode, [], solution, graph, visited, stack, rootId, 9));
+            states.push(this.createNewState(currentNode, undefined, solution, graph, visited, stack, rootId, 9));
 
             let neighbors: string[] = graph.getSources(currentNode).map(edge => edge.to);
             states.push(this.createNewState(currentNode, neighbors, solution, graph, visited, stack, rootId, 10));
@@ -171,7 +173,7 @@ export class DepthFirstSearchAlgorithm extends AlgorithmBase {
 
         }
 
-        states.push(this.createNewState('', [], solution, graph, visited, stack, rootId, 17));
+        states.push(this.createNewState(undefined, undefined, solution, graph, visited, stack, rootId, 17));
         return states;
     }
 

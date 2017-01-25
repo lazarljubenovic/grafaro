@@ -2,7 +2,7 @@ import {NormalizedState} from './algorithm.service';
 import {Graph, GraphJson} from '../models/graph.model';
 import * as Esprima from 'esprima';
 
-export function getLabelIfDefined(graph: Graph, nodeId: string): any {
+function _getLabelIfDefined(graph: Graph, nodeId: string): any {
     if (nodeId === undefined) {
         return undefined;
     }
@@ -13,6 +13,28 @@ export function getLabelIfDefined(graph: Graph, nodeId: string): any {
         return graph.getNodeLabel(nodeId);
     } catch (e) {
         return nodeId;
+    }
+}
+
+function _getLabelsIfDefined(graph: Graph, nodeIds: string[]): any {
+    if (nodeIds === undefined) {
+        return undefined;
+    }
+    if (nodeIds === null) {
+        return null;
+    }
+    try {
+        return nodeIds.map(nodeId => graph.getNodeLabel(nodeId));
+    } catch (e) {
+        return nodeIds;
+    }
+}
+
+export function getLabelIfDefined(graph: Graph, nodeId: string | string[]): any {
+    if (Array.isArray(nodeId)) {
+        return _getLabelsIfDefined(graph, nodeId);
+    } else {
+        return _getLabelIfDefined(graph, nodeId);
     }
 }
 
@@ -76,6 +98,13 @@ export abstract class AlgorithmState {
     }
 
     public getDefaultDebugColor: (trackedVar: any) => any = (trackedVar) => {
+        if (trackedVar == null) {
+            if (Array.isArray(trackedVar)) {
+                return ['default'];
+            } else {
+                return 'default';
+            }
+        }
         if (Array.isArray(trackedVar)) {
             return trackedVar.map(x => x == this['currentNode'] ? 'accent' : 'default');
         } else {
@@ -93,6 +122,9 @@ export abstract class AlgorithmState {
 
     public getDebugColor(trackedVarName: string): any {
         const varVal = this[trackedVarName];
+        if (varVal == null) {
+            return this.getDefaultDebugColor(varVal);
+        }
         if (Array.from(this._exportFunctions.keys()).indexOf(trackedVarName) != -1) {
             const firstArg = varVal;
             const restArgs = this._exportFunctions.get(trackedVarName).params.map(x => this[x]);
