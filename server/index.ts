@@ -5,7 +5,7 @@ import * as ws from 'ws';
 import * as express from 'express';
 import * as mongoose from 'mongoose';
 import * as cors from 'cors';
-import {dbRoutes} from './routes';
+import {databaseRoutes} from './routes';
 import {MessageRoom} from './messageRoom.model';
 
 const server = http.createServer();
@@ -71,7 +71,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
-app.use('/', dbRoutes);
+app.use('/', databaseRoutes);
 
 wss.on('connection', ws => {
     console.log('New user');

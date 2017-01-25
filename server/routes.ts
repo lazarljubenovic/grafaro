@@ -2,7 +2,8 @@ import * as express from 'express';
 import {IUser, IProject, defaultGraph} from './interfaces';
 import * as mongoose from 'mongoose';
 
-export const dbRoutes = express.Router();
+
+export const databaseRoutes = express.Router();
 
 const userSchema = new mongoose.Schema({
     _graphIds: [String],
@@ -42,7 +43,7 @@ const projectSchema = new mongoose.Schema({
 const User = mongoose.model<IUser>('User', userSchema);
 const Project = mongoose.model<IProject>('Project', projectSchema);
 
-dbRoutes.get('/user', (req, res) => {
+databaseRoutes.get('/user', (req, res) => {
     console.log('Getting users');
     User.find()
         .then((dbUser: IUser[]) => res.json({data: dbUser}))
@@ -61,13 +62,13 @@ function createNewUser(socialId: string, success: Function, error: Function) {
         .catch(err => error(err));
 }
 
-dbRoutes.get('/user/social/:id', (req, res) => {
+databaseRoutes.get('/user/social/:id', (req, res) => {
     const socialId = req.params['id'];
     console.log('Getting user with social id', socialId);
     User.findOne({socialId})
         .then((dbUser: IUser) => {
             if (dbUser) {
-                res.json({data: dbUser})
+                res.json({data: dbUser});
             } else {
                 createNewUser(socialId,
                     (dbUser: IUser) => res.json({data: dbUser}),
@@ -78,14 +79,14 @@ dbRoutes.get('/user/social/:id', (req, res) => {
         .catch(error => res.json({error: error}));
 });
 
-dbRoutes.get('/user/:id', (req, res) => {
+databaseRoutes.get('/user/:id', (req, res) => {
     console.log('Getting user', req.params['id']);
     User.findById(req.params['id'])
         .then((dbUser: IUser) => res.json({data: dbUser}))
         .catch(error => res.json({error: error}));
 });
 
-dbRoutes.put('/user', (req, res) => {
+databaseRoutes.put('/user', (req, res) => {
     let socialId: string = req.body['data'].socialId;
 
     createNewUser(socialId,
@@ -94,7 +95,7 @@ dbRoutes.put('/user', (req, res) => {
     );
 });
 
-dbRoutes.post('/user/:id', (req, res) => {
+databaseRoutes.post('/user/:id', (req, res) => {
     const id: string = req.params['id'];
     const user: IUser = req.body['data'];
 
@@ -105,7 +106,7 @@ dbRoutes.post('/user/:id', (req, res) => {
         .catch(error => res.json({error}));
 });
 
-dbRoutes.delete('/user/:id', (req, res) => {
+databaseRoutes.delete('/user/:id', (req, res) => {
     const id: string = req.params['id'];
 
     console.log('Removing user', id);
@@ -120,7 +121,7 @@ function getLastId(nodeEdgeObj: any): number {
         .id.split('-')[1], 10);
 }
 
-dbRoutes.get('/project/:id', (req, res) => {
+databaseRoutes.get('/project/:id', (req, res) => {
     console.log('Getting project', req.params['id']);
 
     Project.findById(req.params['id'])
@@ -136,7 +137,7 @@ dbRoutes.get('/project/:id', (req, res) => {
         .catch(error => res.json({error}));
 });
 
-dbRoutes.delete('/project/:id', (req, res) => {
+databaseRoutes.delete('/project/:id', (req, res) => {
     console.log('Deleting project', req.params['id']);
 
     Project.findById(req.params['id'])
@@ -145,7 +146,7 @@ dbRoutes.delete('/project/:id', (req, res) => {
         .catch(error => res.json({error}));
 });
 
-dbRoutes.get('/project', (req, res) => {
+databaseRoutes.get('/project', (req, res) => {
     Project.find()
         .populate({path: 'creatorId', select: 'displayName'})
         .exec()
@@ -153,7 +154,7 @@ dbRoutes.get('/project', (req, res) => {
         .catch(error => res.json({error}));
 });
 
-dbRoutes.put('/project', (req, res) => {
+databaseRoutes.put('/project', (req, res) => {
     console.log('Creating new project');
 
     const userId: string = req.body['data']['userId'];
@@ -188,7 +189,7 @@ dbRoutes.put('/project', (req, res) => {
     }
 });
 
-dbRoutes.post('/project/:id/save', (req, res) => {
+databaseRoutes.post('/project/:id/save', (req, res) => {
     const projectId: string = req.params['id'];
     const algorithmId = req.body['data']['algorithmId'];
     const graph = req.body['data']['graph'];
@@ -198,7 +199,7 @@ dbRoutes.post('/project/:id/save', (req, res) => {
     updateProjectFields(projectId, res, {algorithmId, graph});
 });
 
-dbRoutes.post('/project/:id/rename', (req, res) => {
+databaseRoutes.post('/project/:id/rename', (req, res) => {
     const projectId: string = req.params['id'];
     const userId: string = req.body['data']['userId'];
     const name: string = req.body['data']['name'];
@@ -206,7 +207,7 @@ dbRoutes.post('/project/:id/rename', (req, res) => {
     updateProjectFieldsByUser(projectId, userId, res, {name});
 });
 
-dbRoutes.post('/project/:id/redescribe', (req, res) => {
+databaseRoutes.post('/project/:id/redescribe', (req, res) => {
     const projectId: string = req.params['id'];
     const userId: string = req.body['data']['userId'];
     const description: string = req.body['data']['description'];
