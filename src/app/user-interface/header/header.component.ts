@@ -1,6 +1,7 @@
 import {Component, OnInit, Input, ViewChild, ElementRef} from '@angular/core';
 import {RoomEditService} from '../../project-view/room-edit.service';
 import {JoinService} from '../../project-browser/join.service';
+import {Auth0Service} from '../../core/auth0.service';
 
 @Component({
     selector: 'grf-header',
@@ -79,8 +80,13 @@ export class HeaderComponent implements OnInit {
         return this.joinService.isMaster;
     }
 
+    public logout(): void {
+        this.auth0.logout();
+    }
+
     constructor(private roomEditService: RoomEditService,
-                private joinService: JoinService
+                private joinService: JoinService,
+                private auth0: Auth0Service
     ) {
     }
 

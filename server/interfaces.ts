@@ -42,13 +42,10 @@ export interface GraphMessage {
 }
 
 export interface IUser extends Document {
-    id: string;
-    googleId: string;
-    twitterId: string;
-    projectIds: string[];
-    username: string; // from social networks
-    displayName: string;
-    favProjects: string[];
+    //_id: string;
+    _graphIds: string[];
+    displayName: string; // from social networks
+    socialId: string;
 }
 
 export interface IProject extends Document {

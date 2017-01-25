@@ -6,13 +6,9 @@ import * as mongoose from 'mongoose';
 export const databaseRoutes = express.Router();
 
 const userSchema = new mongoose.Schema({
-    id: String,
-    googleId: String,
-    twitterId: String,
-    projectIds: [String],
-    username: String,
+    _graphIds: [String],
+    socialId: String,
     displayName: String,
-    favProjects: [String],
 });
 
 const projectSchema = new mongoose.Schema({
@@ -48,9 +44,38 @@ const User = mongoose.model<IUser>('User', userSchema);
 const Project = mongoose.model<IProject>('Project', projectSchema);
 
 databaseRoutes.get('/user', (req, res) => {
-    console.log('Getting users', req.params['id']);
+    console.log('Getting users');
     User.find()
         .then((dbUser: IUser[]) => res.json({data: dbUser}))
+        .catch(error => res.json({error: error}));
+});
+
+function createNewUser(socialId: string, success: Function, error: Function) {
+    let newUser = new User({
+        _graphIds: [],
+        displayName: socialId,
+        socialId: socialId
+    });
+
+    newUser.save()
+        .then(dbUser => success(dbUser))
+        .catch(err => error(err));
+}
+
+databaseRoutes.get('/user/social/:id', (req, res) => {
+    const socialId = req.params['id'];
+    console.log('Getting user with social id', socialId);
+    User.findOne({socialId})
+        .then((dbUser: IUser) => {
+            if (dbUser) {
+                res.json({data: dbUser});
+            } else {
+                createNewUser(socialId,
+                    (dbUser: IUser) => res.json({data: dbUser}),
+                    (error) => res.json({error})
+                );
+            }
+        })
         .catch(error => res.json({error: error}));
 });
 
@@ -62,19 +87,12 @@ databaseRoutes.get('/user/:id', (req, res) => {
 });
 
 databaseRoutes.put('/user', (req, res) => {
-    console.log('Creating new user');
-    let reqUser: IUser = req.body['data'];
-    let newUser = new User({
-        googleId: reqUser.googleId,
-        twitterId: reqUser.twitterId,
-        projectIds: [],
-        username: reqUser.username,
-        name: reqUser.displayName
-    });
+    let socialId: string = req.body['data'].socialId;
 
-    newUser.save()
-        .then((dbUser: IUser) => res.json({data: {id: dbUser._id}}))
-        .catch(error => res.json({error}));
+    createNewUser(socialId,
+        (dbUser: IUser) => res.json({data: {id: dbUser._id}}),
+        (error) => res.json({error})
+    );
 });
 
 databaseRoutes.post('/user/:id', (req, res) => {
@@ -83,9 +101,18 @@ databaseRoutes.post('/user/:id', (req, res) => {
 
     console.log('Updating user', req.params['id']);
 
-    User.update({_id: id}, {$set: {displayName: user.displayName}})
+    User.findByIdAndUpdate(id, {$set: {displayName: user.displayName}})
         .then(() => res.json({status: 'success'}))
         .catch(error => res.json({error}));
+});
+
+databaseRoutes.delete('/user/:id', (req, res) => {
+    const id: string = req.params['id'];
+
+    console.log('Removing user', id);
+    User.findByIdAndRemove(id)
+        .then(() => res.json({status: 'success'}))
+        .catch((error) => res.json({error}));
 });
 
 function getLastId(nodeEdgeObj: any): number {
