@@ -10,21 +10,13 @@ export class DebugTableComponent implements OnInit, OnDestroy {
 
     public debugData: any;
 
-    private _state: any;
-
-    private _trackedVariables: string[] = [];
+    public trackedVars: string[] = [];
 
     @Input()
     public set state(state: any) {
-        this._state = state;
-
         if (state != null) {
             this.debugData = state.getDebugData();
         }
-    }
-
-    public get state(): any {
-        return this._state;
     }
 
     public trackBy(index: number, item: any): any {
@@ -35,7 +27,7 @@ export class DebugTableComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this._service.visibleVariables$.subscribe(vars => this._trackedVariables = vars);
+        this._service.visibleVariables$.subscribe(vars => this.trackedVars = vars);
     }
 
     ngOnDestroy() {

@@ -1,6 +1,6 @@
 <table>
   <tbody>
-  <tr *ngFor="let item of debugData; trackBy: trackBy"
+  <tr *ngFor="let item of debugData | filter : trackedVars; trackBy: trackBy"
       [class.out-of-scope]="!item.isInScope"
   >
     <td>{{item.name}}</td>
