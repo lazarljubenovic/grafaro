@@ -1,8 +1,25 @@
 <grf-header [isProjectViewMode]="true"></grf-header>
 
 <main>
-
   <template #renamePopupOutlet></template>
+
+  <grf-sidebar></grf-sidebar>
+
+  <div id="graph">
+    <div class="graph-inner">
+      <grf-graph [nodes]="(algorithmService.currentNormalizedState$ | async)?.nodes"
+                 [edges]="(algorithmService.currentNormalizedState$ | async)?.edges"
+                 (graphClick)="click$.next($event)"
+                 (graphNodeDragEnd)="onMoveNode($event)"></grf-graph>
+      <grf-controls (stateNumberChange)="updateStateNumber($event)"
+                    [current]="algorithmService.currentStateIndex"
+                    [total]="algorithmService.totalNumberOfStates"
+      ></grf-controls>
+    </div>
+    <div class="debug-table-wrapper">
+      <grf-debug-table [state]="currentState$ | async"></grf-debug-table>
+    </div>
+  </div>
 
   <grf-toolbar [currentSelected]="chooseTool$ | async"
                (currentSelectedChange)="chooseTool$.next($event)"
@@ -10,23 +27,6 @@
                (save)="saveDialogToggle()"
   ></grf-toolbar>
 
-  <div id="graph">
-    <grf-controls
-      (stateNumberChange)="updateStateNumber($event)"></grf-controls>
-
-    <div class="bfs">
-      <grf-graph
-        [nodes]="(algorithmService.currentNormalizedState$ | async)?.nodes"
-        [edges]="(algorithmService.currentNormalizedState$ | async)?.edges"
-        (graphClick)="click$.next($event)"
-        (graphNodeDragEnd)="onMoveNode($event)"
-      >
-      </grf-graph>
-    </div>
-
-  </div>
-
-  <grf-sidebar></grf-sidebar>
 </main>
 
 <grf-dialog *ngIf="isSaveDialogOpen" (close)="saveDialogToggle()">

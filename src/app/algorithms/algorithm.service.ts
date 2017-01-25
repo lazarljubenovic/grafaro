@@ -40,13 +40,21 @@ export class AlgorithmService {
     private normalizedStates: NormalizedState[];
 
     private _currentStateIndex: number = 0;
-    private set currentStateIndex(currentStateIndex: number) {
+    public set currentStateIndex(currentStateIndex: number) {
         this._currentStateIndex = currentStateIndex;
         this.onGraphChange();
     }
 
-    private get currentStateIndex(): number {
+    public get currentStateIndex(): number {
         return this._currentStateIndex;
+    }
+
+    public get totalNumberOfStates(): number {
+        if (this.states) {
+            return this.states.length;
+        } else {
+            return 0;
+        }
     }
 
     public currentNormalizedState$ = new ReplaySubject<NormalizedState>(1);

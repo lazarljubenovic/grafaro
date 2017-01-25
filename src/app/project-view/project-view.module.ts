@@ -19,7 +19,8 @@ import {GraphSocketService} from './graph-socket.service';
 import {SaveDialogComponent} from './save-dialog/save-dialog.component';
 import {LoadDialogComponent} from './load-dialog/load-dialog.component';
 import {RoomEditService} from './room-edit.service';
-import { AlgorithmPickerComponent } from './algorithm-picker/algorithm-picker.component';
+import {AlgorithmPickerComponent} from './algorithm-picker/algorithm-picker.component';
+import {DebugTableModule} from '../debug-table/debug-table.module';
 
 @NgModule({
     imports: [
@@ -35,6 +36,7 @@ import { AlgorithmPickerComponent } from './algorithm-picker/algorithm-picker.co
         ToastModule,
         AlgorithmModule,
         UserInterfaceModule,
+        DebugTableModule,
     ],
     declarations: [
         ProjectViewComponent,

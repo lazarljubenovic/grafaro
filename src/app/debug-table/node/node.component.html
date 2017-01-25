@@ -1,7 +1,4 @@
-<div class="node" *ngIf="label">
-  {{label}}
-</div>
-
-<div class="null" *ngIf="!label">
-  null
-</div>
+<div [class]="'node ' + data?.color" *ngIf="data?.value">{{data.value}}</div>
+<!--<div class="null" *ngIf="data?.value === null">null</div>-->
+<!--<div class="null" *ngIf="data?.value === undefined">undefined</div>-->
+<div class="null" *ngIf="data?.value == null">null</div>

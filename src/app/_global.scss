@@ -2,7 +2,7 @@
 
 $header-height: 80px;
 $toolbar-width: $header-height;
-$sidebar-width: 50%;
+$sidebar-width: 560px;
 
 $font: Roboto, sans-serif;
 $font-monospace: "Overpass Mono", monospace;
@@ -32,11 +32,11 @@ $color-scheme: $color-scheme-2;
   }
 }
 
-@function tint($color, $percentage: 0.2) {
+@function whiten($color, $percentage: 20%) {
   @return mix(white, $color, $percentage);
 }
 
-@function shade($color, $percentage: 0.2) {
+@function blacken($color, $percentage: 20%) {
   @return mix(black, $color, $percentage);
 }
 
@@ -93,3 +93,30 @@ body {
   box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
 }
 
+@function get-color-strings() {
+  @return 'primary' 'secondary' 'accent' 'foreground' 'background';
+}
+
+@mixin all-background-colors() {
+  @each $color in get-color-strings() {
+    &.#{$color} {
+      background-color: get-color($color);
+    }
+  }
+}
+
+@mixin all-border-colors($border-style: solid, $border-width: 1px) {
+  @each $color in get-color-strings() {
+    &.#{$color} {
+      border: $border-style $border-width get-color($color);
+    }
+  }
+}
+
+@mixin all-text-colors() {
+  @each $color in get-color-strings() {
+    &.#{$color} {
+      color: get-color($color);
+    }
+  }
+}

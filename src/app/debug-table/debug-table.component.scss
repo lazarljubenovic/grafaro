@@ -2,18 +2,9 @@
 
 :host {
   font-family: $font;
+  display: block;
 
   table {
-
-    thead {
-
-      tr {
-
-        th {
-          text-align: left;
-        }
-      }
-    }
 
     tbody {
 
@@ -21,10 +12,21 @@
 
         td {
           height: 24px;
+          vertical-align: text-bottom;
+          padding: 0 .5em;
         }
 
         td:first-child {
           font-family: $font-monospace;
+        }
+
+        &.out-of-scope {
+          opacity: .4;
+
+          td:first-child {
+            text-decoration: line-through;
+            text-decoration-color: rgba(black, .33);
+          }
         }
       }
     }

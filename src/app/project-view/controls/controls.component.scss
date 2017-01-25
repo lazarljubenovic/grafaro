@@ -6,6 +6,10 @@
   box-shadow: 0 2px 4px 1px rgba(black, .1);
   padding: 16px 24px;
   display: flex;
+
+  > *:not(:last-child) {
+    margin-right: 12px;
+  }
 }
 
 button {
@@ -17,16 +21,18 @@ button {
   font-weight: 700;
   cursor: pointer;
 
-  &:hover,
-  &:focus {
-    color: white;
-  }
-
-  &:not(:last-child) {
-    margin-right: 12px;
-  }
-
   &:hover {
     color: get-color('accent');
   }
+
+  &:focus {
+    color: whiten(get-color('accent'));
+  }
+}
+
+span {
+  display: block;
+  color: rgba(white, .4);
+  font-family: $font;
+  font-size: .8em;
 }

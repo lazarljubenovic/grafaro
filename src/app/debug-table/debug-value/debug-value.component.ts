@@ -8,7 +8,7 @@ import {Component, Input, ChangeDetectionStrategy, OnChanges} from '@angular/cor
 })
 export class DebugValueComponent implements OnChanges {
 
-    @Input() value: any;
+    @Input() data: any;
 
     public isSingleValue: boolean;
     public isArray: boolean;
@@ -17,12 +17,12 @@ export class DebugValueComponent implements OnChanges {
     }
 
     ngOnChanges() {
-        if (this.value == null) {
+        if (this.data == null) {
             this.isSingleValue = true;
             return;
         }
-        this.isSingleValue = typeof this.value == 'string' || this.value == 'number';
-        this.isArray = typeof this.value == 'object' && typeof this.value.length == 'number';
+        this.isArray = Array.isArray(this.data);
+        this.isSingleValue = !this.isArray;
     }
 
 }

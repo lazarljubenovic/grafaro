@@ -28,6 +28,8 @@ export class ProjectViewComponent implements OnInit {
     public isSaveDialogOpen: boolean = false;
     public isLoadDialogOpen: boolean = false;
 
+    public currentState$;
+
     public chooseTool$ = new Subject<Actions>();
     public click$ = new Subject<VisNgNetworkEventArgument>();
 
@@ -122,6 +124,8 @@ export class ProjectViewComponent implements OnInit {
                 private graphSocketService: GraphSocketService) {
         this.popupRenameComponentFactory =
             componentFactoryResolver.resolveComponentFactory(PopupRenameComponent);
+
+        this.currentState$ = algorithmService.currentState$;
     }
 
     ngOnInit() {

@@ -24,7 +24,11 @@ import {Component, OnInit, Input, trigger, state, style, transition, animate} fr
 })
 export class ArrayOfNodesComponent implements OnInit {
 
-    @Input() public labels: string[];
+    @Input() public data: {value: any, color: string}[];
+
+    public trackBy(index: number, item: any) {
+        return index;
+    }
 
     constructor() {
     }

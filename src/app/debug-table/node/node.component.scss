@@ -1,6 +1,7 @@
 @import '../../global';
 
 :host {
+  display: inline-flex;
 
   .node {
     display: inline-block;
@@ -13,6 +14,7 @@
     width: 18px;
     height: 18px;
     line-height: 18px;
+    @include all-background-colors;
   }
 
   .null {

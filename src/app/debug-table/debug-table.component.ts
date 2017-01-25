@@ -8,24 +8,19 @@ import {DebugTableService} from './debug-table.service';
 })
 export class DebugTableComponent implements OnInit, OnDestroy {
 
+    public debugData: any;
+
     private _state: any;
 
     private _trackedVariables: string[] = [];
 
     @Input()
     public set state(state: any) {
-        // let newState = {};
-        // if (state == null) {
-        //     this._state = null;
-        //     return;
-        // }
-        // this._trackedVariables.forEach(key => {
-        //     const value = state[key];
-        //     if (key != 'graphJson' && key != 'lineNumber') {
-        //         newState[key] = value;
-        //     }
-        // });
         this._state = state;
+
+        if (state != null) {
+            this.debugData = state.getDebugData();
+        }
     }
 
     public get state(): any {
