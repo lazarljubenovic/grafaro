@@ -1,9 +1,8 @@
 import {Injectable, Inject} from '@angular/core';
 import {tokenNotExpired} from 'angular2-jwt';
-import Auth0Lock from 'auth0-lock';
+import {Router} from '@angular/router';
+import * as auth0 from 'auth0-js';
 import {UserService} from '../login-page/user.service';
-
-declare const Auth0;
 
 export interface Profile {
     _id: string;
@@ -13,65 +12,65 @@ export interface Profile {
 
 @Injectable()
 export class Auth0Service {
-    // private auth0 = new Auth0({
-    //     domain: 'pritilender.eu.auth0.com',
-    //     clientID: 'Vzzk8AXP4Ret2DaR0SATsiSa4yDHR5Zw',
-    //     callbackURL: 'http://localhost:4200',
-    //     responseType: 'token'
-    // });
-    //
-    private lock = new Auth0Lock(
-        'Vzzk8AXP4Ret2DaR0SATsiSa4yDHR5Zw',
-        'pritilender.eu.auth0.com',
-        {});
 
     private userProfile: Profile;
 
-    constructor(@Inject(UserService) private userService: UserService) {
-        this.userProfile = JSON.parse(localStorage.getItem('profile'));
+    // Configure Auth0
+    // todo type?
+    auth0 = new (<any>auth0).WebAuth({
+        domain: 'pritilender.eu.auth0.com',
+        clientID: 'Vzzk8AXP4Ret2DaR0SATsiSa4yDHR5Zw',
+        redirectUri: 'http://localhost:4200',
+        responseType: 'token id_token',
+        scope: 'profile'
+    });
 
-        this.lock.on(`authenticated`, (authResult) => {
-            localStorage.setItem('id_token', authResult.idToken);
+    constructor(@Inject(UserService) private userService: UserService,
+                private router: Router) {
+        this.handleAuthentication();
+    }
 
-            (<any>this.lock).getUserInfo(authResult.accessToken, (error, profile) => {
-                if (error) {
-                    console.log(error);
-                    return;
-                }
-
-                const socialId: string = profile['user_id'];
-                this.userService.getUserBySocialId(socialId)
-                    .subscribe(profile => {
-                        console.log('Profile from DB', profile);
-                        this.userProfile = profile;
-                        localStorage.setItem('profile', JSON.stringify(profile));
-                    });
-            });
+    public handleAuthentication(): void {
+        this.auth0.parseHash((err, authResult) => {
+            if (authResult && authResult.accessToken && authResult.idToken) {
+                window.location.hash = '';
+                this.setUser(authResult);
+                this.router.navigate(['/']);
+            } else if (authResult && authResult.error) {
+                alert('Error: ' + authResult.error);
+            }
         });
     }
 
-    public authenticated() {
-        // Check if there's an unexpired JWT
-        // This searches for an item in localStorage with key == 'id_token'
+    public socialLogin(connection: string): void {
+        this.auth0.authorize({
+            connection
+        });
+    }
+
+    public isAuthenticated(): boolean {
+        // Check whether the id_token is expired or not
         return tokenNotExpired();
     }
 
-    public logout() {
-        // Remove token from localStorage
-        console.log(localStorage.getItem('id_token'));
-        console.log('Logout');
+    public logout(): void {
+        this.userProfile = null;
+        localStorage.removeItem('socialId');
+        localStorage.removeItem('access_token');
         localStorage.removeItem('id_token');
-        localStorage.removeItem('profile');
-        console.log(localStorage.getItem('id_token'));
+        this.router.navigate(['/login']);
     }
 
-    // public socialLogin(connection: string) {
-    //     this.auth0.login({
-    //         connection
-    //     }, (err) => {
-    //         if (err) {
-    //             console.log('Woops', err);
-    //         }
-    //     });
-    // }
+    private setUser(authResult): void {
+        const socialId: string = authResult.idTokenPayload.user_id;
+
+        this.userService.getUserBySocialId(socialId)
+            .subscribe(dbUser => {
+                this.userProfile = dbUser;
+            });
+
+        localStorage.setItem('socialId', socialId);
+        localStorage.setItem('access_token', authResult.accessToken);
+        localStorage.setItem('id_token', authResult.idToken);
+    }
 }
