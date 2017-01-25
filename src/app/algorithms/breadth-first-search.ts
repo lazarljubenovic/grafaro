@@ -39,7 +39,7 @@ export class BreadthFirstSearchState extends AlgorithmState {
 export class BreadthFirstSearchAlgorithm extends AlgorithmBase {
 
     public trackedVariables: string[] = [
-        'root', 'solution', 'queue', 'visited', 'neighbors'
+        'root', 'solution', 'queue', 'visited', 'neighbors', 'currentNode', 'neighbor',
     ];
 
     public code: string = `function BreadthFirstSearch(graph, root) {

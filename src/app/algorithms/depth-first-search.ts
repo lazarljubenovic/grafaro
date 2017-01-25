@@ -43,7 +43,7 @@ export class DepthFirstSearchState extends AlgorithmState {
 export class DepthFirstSearchAlgorithm extends AlgorithmBase {
 
     public trackedVariables: string[] = [
-        'neighbors', 'visited', 'solution', 'stack', 'root', 'neighbor',
+        'neighbors', 'visited', 'solution', 'stack', 'root', 'neighbor', 'currentNode'
     ];
 
     public code: string = `function DepthFirstSearch(graph, root) {
