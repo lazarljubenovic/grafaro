@@ -2,6 +2,7 @@
              (graphClick)="onGraphClick($event)"
              (graphDragEnd)="onGraphDragEnd($event)"
              (graphDragging)="dragging($event)"
+             (graphAfterDrawing)="afterDrawing($event)"
 >
   <vis-network-node *ngFor="let node of nodes"
                     [options]="node | graphNodeOptionsTransform"

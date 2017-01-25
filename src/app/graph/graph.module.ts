@@ -6,6 +6,12 @@ import {GraphNodeOptionsTransformPipe} from './graph-node-options-transform.pipe
 import {GraphEdgeOptionsTransformPipe} from './graph-edge-options-transform.pipe';
 import {ColorThemeService} from '../color-theme.service';
 
+export interface GrfGraphNodeAnnotationOptions {
+    position: string; // 'n' | 'e' | 'w' | 's' | 'ne' | 'nw' | 'se' | 'sw';
+    text: string;
+    style: string;
+}
+
 export interface GrfGraphNodeOptions {
     id: string;
     label: string;
@@ -19,6 +25,7 @@ export interface GrfGraphNodeOptions {
     isPrimaryColor: boolean;
     isSecondaryColor: boolean;
     isDimmedColor: boolean;
+    annotations?: GrfGraphNodeAnnotationOptions[];
 }
 
 export interface GrfGraphEdgeOptions {

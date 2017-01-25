@@ -1,18 +1,9 @@
-import {
-    Component,
-    OnInit,
-    Input,
-    Output,
-    EventEmitter,
-    ViewChild
-} from '@angular/core';
-import {
-    VisNgNetworkOptions,
-    VisNgNetworkEventArgument
-} from '@lazarljubenovic/vis-ng/core';
+import {Component, OnInit, Input, Output, EventEmitter, ViewChild} from '@angular/core';
+import {VisNgNetworkOptions, VisNgNetworkEventArgument} from '@lazarljubenovic/vis-ng/core';
 import {GrfGraphEdgeOptions, GrfGraphNodeOptions} from './graph.module';
 import * as deepAssign from 'deep-assign';
 import {GraphOptionsService} from '../graph-options.service';
+import {VisNetworkComponent} from '@lazarljubenovic/vis-ng/core/vis-network/vis-network.component';
 
 @Component({
     selector: 'grf-graph',
@@ -21,7 +12,7 @@ import {GraphOptionsService} from '../graph-options.service';
 })
 export class GraphComponent implements OnInit {
 
-    @ViewChild('network') public visNetworkComponentInstance;
+    @ViewChild('network') public visNetworkComponentInstance: VisNetworkComponent;
 
     @Input() public nodes: GrfGraphNodeOptions[] = [];
     @Input() public edges: GrfGraphEdgeOptions[] = [];
@@ -82,6 +73,46 @@ export class GraphComponent implements OnInit {
     public dragging(event: VisNgNetworkEventArgument): void {
         // todo maybe?
         // console.log(event);
+    }
+
+    public afterDrawing(ctx: CanvasRenderingContext2D) {
+        this.nodes.forEach(node => {
+            if (node.annotations) {
+                node.annotations.forEach(annotation => {
+                    ctx.save();
+                    const network = this.visNetworkComponentInstance.rawNetworkInstance;
+                    const nodePos = network.getPositions([node.id])[node.id];
+                    ctx.translate(nodePos.x, nodePos.y);
+                    const offset = 20;
+                    let x: number = 0, y: number = 0;
+                    ctx.textBaseline = 'center';
+                    ctx.textAlign = 'center';
+                    if (annotation.position.includes('s')) {
+                        y += offset;
+                        ctx.textBaseline = 'top';
+                    }
+                    if (annotation.position.includes('n')) {
+                        y -= offset;
+                        ctx.textBaseline = 'bottom';
+                    }
+                    if (annotation.position.includes('e')) {
+                        x += offset;
+                        ctx.textAlign = 'left';
+                    }
+                    if (annotation.position.includes('w')) {
+                        x -= offset;
+                        ctx.textAlign = 'right';
+                    }
+                    ctx.fillStyle = annotation.style;
+                    ctx.fillText(annotation.text, x, y);
+                    ctx.beginPath();
+                    ctx.arc(x, y, 2, 0, Math.PI * 2);
+                    ctx.stroke();
+                    ctx.closePath();
+                    ctx.restore();
+                });
+            }
+        });
     }
 
 }
