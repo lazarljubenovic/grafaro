@@ -50,7 +50,6 @@ export class BreadthFirstSearchAlgorithm extends AlgorithmBase {
   let queue = new Queue();
   queue.enqueue(root);
   let visited = new Set();
-  visited.add(root);
   while (!queue.isEmpty()) {
     let currentNode = queue.deque();
     let neighbors = graph.neighbors(currentNode);
@@ -139,41 +138,38 @@ export class BreadthFirstSearchAlgorithm extends AlgorithmBase {
         let visited: string[] = [];
         states.push(this.createNewState(undefined, undefined, solution, graph, visited, queue, rootId, 6));
 
-        visited = [rootId];
-        states.push(this.createNewState(undefined, undefined, solution, graph, visited, queue, rootId, 7));
-
         while (!queue.isEmpty) {
-            states.push(this.createNewState(undefined, undefined, solution, graph, visited, queue, rootId, 8));
+            states.push(this.createNewState(undefined, undefined, solution, graph, visited, queue, rootId, 7));
 
             let currentNode: string = queue.deque();
-            states.push(this.createNewState(currentNode, undefined, solution, graph, visited, queue, rootId, 9));
+            states.push(this.createNewState(currentNode, undefined, solution, graph, visited, queue, rootId, 8));
 
             let neighbors: string[] = graph.getSources(currentNode).map(edge => edge.to);
-            states.push(this.createNewState(currentNode, neighbors, solution, graph, visited, queue, rootId, 10));
+            states.push(this.createNewState(currentNode, neighbors, solution, graph, visited, queue, rootId, 9));
 
             visited.push(currentNode);
-            states.push(this.createNewState(currentNode, neighbors, solution, graph, visited, queue, rootId, 12));
+            states.push(this.createNewState(currentNode, neighbors, solution, graph, visited, queue, rootId, 11));
 
             neighbors = neighbors.filter(neighbor => visited.indexOf(neighbor) == -1);
-            states.push(this.createNewState(currentNode, neighbors, solution, graph, visited, queue, rootId, 13));
+            states.push(this.createNewState(currentNode, neighbors, solution, graph, visited, queue, rootId, 12));
 
             neighbors = neighbors.filter(neighbor => !queue.contains(neighbor));
-            states.push(this.createNewState(currentNode, neighbors, solution, graph, visited, queue, rootId, 14));
+            states.push(this.createNewState(currentNode, neighbors, solution, graph, visited, queue, rootId, 13));
 
             neighbors.forEach((neighbor, i) => {
                 queue.enqueue(neighbor);
                 states.push(this.createNewState(
-                    currentNode, neighbors, solution, graph, visited, queue, rootId, 14, neighbor
+                    currentNode, neighbors, solution, graph, visited, queue, rootId, 13, neighbor
                 ));
             });
-            states.push(this.createNewState(currentNode, neighbors, solution, graph, visited, queue, rootId, 15));
+            states.push(this.createNewState(currentNode, neighbors, solution, graph, visited, queue, rootId, 14));
 
             solution.push(currentNode);
-            states.push(this.createNewState(currentNode, neighbors, solution, graph, visited, queue, rootId, 7));
+            states.push(this.createNewState(currentNode, neighbors, solution, graph, visited, queue, rootId, 6));
 
         }
 
-        states.push(this.createNewState(undefined, undefined, solution, graph, visited, queue, rootId, 17));
+        states.push(this.createNewState(undefined, undefined, solution, graph, visited, queue, rootId, 16));
         return states;
     }
 
