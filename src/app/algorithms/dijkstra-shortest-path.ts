@@ -1,7 +1,7 @@
 /* tslint:disable */
 import {
     AlgorithmBase, AlgorithmState, TrackedVariable, getLabelIfDefined,
-    ColorExporter
+    ColorExporter, KindExporter
 } from './algorithm-base';
 import {NormalizedState} from './algorithm.service';
 import {Graph, GraphEdge} from '../models/graph.model';
@@ -11,14 +11,14 @@ import {VisNgNetworkOptionsEdges} from '@lazarljubenovic/vis-ng/core';
 
 export class DijkstraShortestPathState extends AlgorithmState {
 
-    @TrackedVariable() @ColorExporter([], () => 'default') public root: string;
-    @TrackedVariable() public Q: string[];
-    @TrackedVariable() public distance: string[][];
-    @TrackedVariable() public previous: string[][];
-    @TrackedVariable() public u: string;
-    @TrackedVariable() public neighborEdges: string[];
-    @TrackedVariable() public edge: string[];
-    @TrackedVariable() public alt: number;
+    @KindExporter('node') @TrackedVariable() @ColorExporter([], () => 'default') public root: string;
+    @KindExporter('node') @TrackedVariable() public Q: string[];
+    @KindExporter('node-number') @TrackedVariable() public distance: string[][];
+    @KindExporter('node-node') @TrackedVariable() public previous: string[][];
+    @KindExporter('node') @TrackedVariable() public u: string;
+    @KindExporter('edge') @TrackedVariable() public neighborEdges: string[];
+    @KindExporter('edge') @TrackedVariable() public edge: string[];
+    @KindExporter('number') @TrackedVariable() public alt: number;
 
 }
 

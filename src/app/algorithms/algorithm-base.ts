@@ -32,16 +32,20 @@ export function getLabelIfDefined(graph: Graph, id: any): any {
     }
 }
 
-export function mergeArrays(name1: string, name2: string, arr1: any[], arr2: any[]): any[] {
-    return arr1.map((x, i) => ({
-        [name1]: x,
-        [name2]: arr2[i],
-    }));
+export function mergeArrays(names: string[], arrays: any[][]): any[] {
+    return arrays.map((x, i) => {
+        let o = {};
+        names.forEach(name => o[name] = arrays[i]);
+        return o;
+    });
 }
+
+export type DebugDataValueKind = 'node' | 'edge' | 'node-node' | 'node-number' | 'number';
 
 export interface DebugDataValue {
     value: any;
     color: string;
+    kind: DebugDataValueKind;
 }
 
 export interface DebugData {
@@ -69,6 +73,15 @@ export function ColorExporter(params: string[], fn: Function) {
     };
 }
 
+export function KindExporter(kind: DebugDataValueKind) {
+    return function (target: AlgorithmState, key: string) {
+        if (!target._kinds) {
+            target._kinds = new Map<string, string>();
+        }
+        target._kinds.set(key, kind);
+    };
+}
+
 export abstract class AlgorithmState {
 
     /**
@@ -82,6 +95,12 @@ export abstract class AlgorithmState {
      * @internal
      */
     public _exportFunctions: Map<string, {params: string[], fn: Function}>;
+
+    /**
+     * Filled with decorators.
+     * @internal
+     */
+    public _kinds: Map<string, string>;
 
     public graphJson: GraphJson;
     public lineNumber: number;
@@ -114,6 +133,10 @@ export abstract class AlgorithmState {
         return Array.isArray(trackedVar) ? 'array' : 'single';
     };
 
+    public getDebugKind: (trackedVarName: any) => any = (trackedVarName) => {
+        return this._kinds.get(trackedVarName);
+    };
+
     public getDebugColor(trackedVarName: string): any {
         const varVal = this[trackedVarName];
         if (varVal == null) {
@@ -135,14 +158,15 @@ export abstract class AlgorithmState {
             const value = this[name];
             const isInScope = this.getDefaultDebugScope(value);
             const type = this.getDefaultDebugType(value);
+            const kind = this.getDebugKind(name);
 
             let data;
             if (type == 'single') {
                 const color = this.getDebugColor(name);
-                data = {value, color};
+                data = {value, color, kind};
             } else if (type == 'array') {
                 const color = this.getDebugColor(name);
-                data = mergeArrays('value', 'color', value, color);
+                data = mergeArrays(['value', 'color', 'kind'], [value, color, kind]);
             }
 
             return {type, name, isInScope, data};
