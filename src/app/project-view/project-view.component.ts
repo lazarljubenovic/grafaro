@@ -21,7 +21,7 @@ import {GraphSocketService} from './graph-socket.service';
 @Component({
     selector: 'grf-user-interface',
     templateUrl: 'project-view.component.html',
-    styleUrls: ['project-view.component.scss']
+    styleUrls: ['project-view.component.scss'],
 })
 export class ProjectViewComponent implements OnInit {
 

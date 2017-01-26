@@ -7,6 +7,10 @@
     <input type="radio" value="dfs" formControlName="algorithm">
     <span>Depth First Search</span>
   </label>
+  <label>
+    <input type="radio" value="dijkstra" formControlName="algorithm">
+    <span>Dijkstra Shortest Path</span>
+  </label>
   <div formGroupName="options">
     <label *ngFor="let node of nodes">
       <input type="radio" [value]="node" formControlName="root">

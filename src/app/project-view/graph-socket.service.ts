@@ -20,21 +20,33 @@ export class GraphSocketService {
                 {
                     id: 'node-0',
                     label: 'A',
-                    position: {
-                        x: 100,
-                        y: 100
-                    },
-                    weight: 1
+                    position: {x: 0, y: 0},
+                    weight: 1,
                 },
                 {
                     id: 'node-1',
                     label: 'B',
-                    position: {
-                        x: 150,
-                        y: 150
-                    },
-                    weight: 1
-                }
+                    position: {x: 100, y: 0},
+                    weight: 1,
+                },
+                {
+                    id: 'node-2',
+                    label: 'C',
+                    position: {x: 100, y: 100},
+                    weight: 1,
+                },
+                {
+                    id: 'node-3',
+                    label: 'D',
+                    position: {x: -100, y: 100},
+                    weight: 1,
+                },
+                {
+                    id: 'node-4',
+                    label: 'E',
+                    position: {x: -100, y: 200},
+                    weight: 1,
+                },
             ],
             edges: [
                 {
@@ -42,8 +54,36 @@ export class GraphSocketService {
                     from: 'node-0',
                     to: 'node-1',
                     label: '1',
-                    weight: 1
-                }
+                    weight: 1,
+                },
+                {
+                    id: 'edge-1',
+                    from: 'node-0',
+                    to: 'node-2',
+                    label: '2',
+                    weight: 2,
+                },
+                {
+                    id: 'edge-2',
+                    from: 'node-1',
+                    to: 'node-4',
+                    label: '4',
+                    weight: 4,
+                },
+                {
+                    id: 'edge-3',
+                    from: 'node-2',
+                    to: 'node-3',
+                    label: '1',
+                    weight: 1,
+                },
+                {
+                    id: 'edge-4',
+                    from: 'node-4',
+                    to: 'node-0',
+                    label: '2',
+                    weight: 2,
+                },
             ],
             nextNodeId: 2,
             nextEdgeId: 1,
@@ -51,9 +91,9 @@ export class GraphSocketService {
         algorithm: {
             id: 'bfs',
             options: {
-                root: 'node-0'
-            }
-        }
+                root: 'node-0',
+            },
+        },
     };
 
 

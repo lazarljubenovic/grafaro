@@ -1,17 +1,16 @@
 import {Injectable} from '@angular/core';
-import {BreadthFirstSearchState} from './breadth-first-search';
 import {VisNgNetworkOptionsEdges} from '@lazarljubenovic/vis-ng/core';
 import {GrfGraphNodeOptions} from '../graph/graph.module';
 import {ReplaySubject} from 'rxjs';
 import {ClickPosition} from '../project-view/toolbar/toolbar.component';
 import {Graph} from '../models/graph.model';
-import {AlgorithmBase} from './algorithm-base';
+import {AlgorithmBase, AlgorithmState} from './algorithm-base';
 import {DepthFirstSearchAlgorithm} from './depth-first-search';
 
 export interface NormalizedState {
     nodes: GrfGraphNodeOptions[];
     edges: VisNgNetworkOptionsEdges[];
-    solution: string[];
+    solution?: string[];
     stack?: string[];
     queue?: string[];
     accentColor?: string[];
@@ -36,7 +35,7 @@ export class AlgorithmService {
     }
 
     public algorithmStrategy: AlgorithmBase;
-    private states: BreadthFirstSearchState[];
+    private states: AlgorithmState[];
     private normalizedStates: NormalizedState[];
 
     private _currentStateIndex: number = 0;
@@ -58,7 +57,7 @@ export class AlgorithmService {
     }
 
     public currentNormalizedState$ = new ReplaySubject<NormalizedState>(1);
-    public currentState$ = new ReplaySubject<BreadthFirstSearchState>(1);
+    public currentState$ = new ReplaySubject<AlgorithmState>(1);
 
     public graphState$ = new ReplaySubject<Graph>(1);
 
@@ -242,7 +241,7 @@ export class AlgorithmService {
         this.setGraph();
     }
 
-    private getNormalizedState(state: BreadthFirstSearchState): NormalizedState {
+    private getNormalizedState(state: AlgorithmState): NormalizedState {
         return this.algorithmStrategy.normalize(state);
     }
 

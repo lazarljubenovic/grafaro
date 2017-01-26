@@ -85,15 +85,7 @@ export class BreadthFirstSearchAlgorithm extends AlgorithmBase {
         const primaryColor: string[] = [state.neighbor];
         const secondaryColor: string[] = [];
 
-        return {
-            nodes,
-            edges,
-            queue,
-            solution,
-            accentColor,
-            primaryColor,
-            secondaryColor,
-        };
+        return {nodes, edges, queue, solution, accentColor, primaryColor, secondaryColor};
     }
 
     private createNewState(currentNode: string,
@@ -116,7 +108,7 @@ export class BreadthFirstSearchAlgorithm extends AlgorithmBase {
         return state;
     }
 
-    algorithmFunction(graph: Graph, rootId: string): BreadthFirstSearchState[] {
+    public algorithmFunction(graph: Graph, rootId: string): BreadthFirstSearchState[] {
         if (!graph.hasNodeId(rootId)) {
             throw new Error(`Node with id ${rootId} (root) doesn't exist on graph!`);
         }

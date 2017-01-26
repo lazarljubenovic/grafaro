@@ -3,12 +3,6 @@ import {Graph, GraphJson} from '../models/graph.model';
 import * as Esprima from 'esprima';
 
 function _getLabelIfDefined(graph: Graph, nodeId: string): any {
-    if (nodeId === undefined) {
-        return undefined;
-    }
-    if (nodeId === null) {
-        return null;
-    }
     try {
         return graph.getNodeLabel(nodeId);
     } catch (e) {
@@ -17,12 +11,6 @@ function _getLabelIfDefined(graph: Graph, nodeId: string): any {
 }
 
 function _getLabelsIfDefined(graph: Graph, nodeIds: string[]): any {
-    if (nodeIds === undefined) {
-        return undefined;
-    }
-    if (nodeIds === null) {
-        return null;
-    }
     try {
         return nodeIds.map(nodeId => graph.getNodeLabel(nodeId));
     } catch (e) {
@@ -30,11 +18,17 @@ function _getLabelsIfDefined(graph: Graph, nodeIds: string[]): any {
     }
 }
 
-export function getLabelIfDefined(graph: Graph, nodeId: string | string[]): any {
-    if (Array.isArray(nodeId)) {
-        return _getLabelsIfDefined(graph, nodeId);
+export function getLabelIfDefined(graph: Graph, id: any): any {
+    if (Array.isArray(id)) {
+        if (Array.isArray(id[0])) {
+            // eg. [['node-0', 42], ['node-1', 48]]
+            return;
+        } else {
+            // eg. ['node-0', 'node-1']
+            return _getLabelsIfDefined(graph, id);
+        }
     } else {
-        return _getLabelIfDefined(graph, nodeId);
+        return _getLabelIfDefined(graph, id);
     }
 }
 
@@ -171,7 +165,7 @@ export abstract class AlgorithmBase {
 
     public abstract normalize(state: AlgorithmState): NormalizedState;
 
-    public abstract algorithmFunction(graph: Graph, rootId: string);
+    public abstract algorithmFunction(graph: Graph, rootId: string): AlgorithmState[];
 
     public getCodeJson(state: AlgorithmState, trackedVariables: string[]): CodeJson {
         const tokens = Esprima.tokenize(this.code, {loc: true});

@@ -3,6 +3,7 @@ import {FormGroup, FormBuilder} from '@angular/forms';
 import {AlgorithmService} from '../../algorithms/algorithm.service';
 import {BreadthFirstSearchAlgorithm} from '../../algorithms/breadth-first-search';
 import {DepthFirstSearchAlgorithm} from '../../algorithms/depth-first-search';
+import {DijkstraShortestPathAlgorithm} from '../../algorithms/dijkstra-shortest-path';
 
 @Component({
     selector: 'grf-algorithm-picker',
@@ -12,7 +13,7 @@ import {DepthFirstSearchAlgorithm} from '../../algorithms/depth-first-search';
 export class AlgorithmPickerComponent implements OnInit {
 
     public form: FormGroup = this.formBuilder.group({
-        algorithm: 'dfs',
+        algorithm: 'bfs',
         options: this.formBuilder.group({
             root: 'A',
         }),
@@ -21,8 +22,7 @@ export class AlgorithmPickerComponent implements OnInit {
     public nodes = [];
 
     constructor(private formBuilder: FormBuilder,
-                private algorithmService: AlgorithmService
-    ) {
+                private algorithmService: AlgorithmService) {
     }
 
     ngOnInit() {
@@ -37,6 +37,9 @@ export class AlgorithmPickerComponent implements OnInit {
                     break;
                 case 'dfs':
                     this.algorithmService.setAlgorithm(new DepthFirstSearchAlgorithm());
+                    break;
+                case 'dijkstra':
+                    this.algorithmService.setAlgorithm(new DijkstraShortestPathAlgorithm());
                     break;
                 default:
                     throw 'TODO';

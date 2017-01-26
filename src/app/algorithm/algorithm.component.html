@@ -1,9 +1,9 @@
 <div #box class="algorithm-with-line-numbers">
-  <div class="line-number-indicator" [style.top]="lineNumber$ | async | lineNumberStyle : box : 18">
+  <div class="line-number-indicator" [style.top]="lineNumber$ | async | lineNumberStyle : box : (code$ | async)?.length">
     ➡
   </div>
   <div class="line-numbers">
-    <span *ngFor="let i of 19 | orderedArray | slice : 1">{{i}}</span>
+    <span *ngFor="let i of ((code$ | async)?.length + 1) | orderedArray | slice : 1">{{i}}</span>
   </div>
   <div class="code">
     <div class="line-of-code" *ngFor="let line of code$ | async; trackBy: trackByIndex">
