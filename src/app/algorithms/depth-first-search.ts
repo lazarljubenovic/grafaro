@@ -9,33 +9,33 @@ import {
     TrackedVariable,
     ColorExporter,
     AlgorithmState,
-    getLabelIfDefined
+    getLabelIfDefined, KindExporter
 } from './algorithm-base';
 
 export class DepthFirstSearchState extends AlgorithmState {
 
     @TrackedVariable()
-    public currentNode: string;
+    @KindExporter('node') public currentNode: string;
 
     @ColorExporter(['neighbor'], (ns, n) => ns.map(x => x == n ? 'primary' : 'default'))
     @TrackedVariable()
-    public neighbors: string[];
+    @KindExporter('node') public neighbors: string[];
 
     @ColorExporter([], () => 'primary')
     @TrackedVariable()
-    public neighbor: string;
+    @KindExporter('node') public neighbor: string;
 
     @TrackedVariable()
-    public visited: string[];
+    @KindExporter('node') public visited: string[];
 
     @TrackedVariable()
-    public solution: string[];
+    @KindExporter('node') public solution: string[];
 
     @TrackedVariable()
-    public stack: string[];
+    @KindExporter('node') public stack: string[];
 
     @TrackedVariable()
-    public root: string;
+    @KindExporter('node') public root: string;
 
 }
 

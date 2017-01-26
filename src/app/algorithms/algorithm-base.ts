@@ -20,24 +20,32 @@ function _getLabelsIfDefined(graph: Graph, nodeIds: string[]): any {
 
 export function getLabelIfDefined(graph: Graph, id: any): any {
     if (Array.isArray(id)) {
-        if (Array.isArray(id[0])) {
+        // if (Array.isArray(id[0])) {
             // eg. [['node-0', 42], ['node-1', 48]]
-            return;
-        } else {
+            // return;
+        // } else {
             // eg. ['node-0', 'node-1']
             return _getLabelsIfDefined(graph, id);
-        }
+        // }
     } else {
         return _getLabelIfDefined(graph, id);
     }
 }
 
+function transpose(arr: any[][]): any[][] {
+    return arr[0].map((_, i) => arr.map(x => x[i]));
+}
+
+function attachNames(names, arr) {
+    let o = {};
+    for (let i = 0; i < arr.length; i++) {
+        o[names[i]] = arr[i];
+    }
+    return o;
+}
+
 export function mergeArrays(names: string[], arrays: any[][]): any[] {
-    return arrays.map((x, i) => {
-        let o = {};
-        names.forEach(name => o[name] = arrays[i]);
-        return o;
-    });
+    return transpose(arrays).map((arr) => attachNames(names, arr));
 }
 
 export type DebugDataValueKind = 'node' | 'edge' | 'node-node' | 'node-number' | 'number';
@@ -133,12 +141,37 @@ export abstract class AlgorithmState {
         return Array.isArray(trackedVar) ? 'array' : 'single';
     };
 
+    public getDefaultDebugKind: (trackedVar: any) => any = (trackedVar) => {
+        if (trackedVar == null) {
+            if (Array.isArray(trackedVar)) {
+                return ['node'];
+            } else {
+                return 'node';
+            }
+        }
+        console.log('checking if ... is array', trackedVar);
+        if (Array.isArray(trackedVar)) {
+            return trackedVar.map(_ => 'node');
+        } else {
+            return 'node';
+        }
+    };
+
     public getDebugKind: (trackedVarName: any) => any = (trackedVarName) => {
-        return this._kinds.get(trackedVarName);
+        if (!this._kinds) {
+            return this.getDefaultDebugKind(this[trackedVarName]);
+        }
+        if (Array.isArray(this[trackedVarName])) {
+            return this[trackedVarName].map(_ => this._kinds.get(trackedVarName));
+        }
+            return this._kinds.get(trackedVarName);
     };
 
     public getDebugColor(trackedVarName: string): any {
         const varVal = this[trackedVarName];
+        if (!this._exportFunctions) {
+            return this.getDefaultDebugColor(varVal);
+        }
         if (varVal == null) {
             return this.getDefaultDebugColor(varVal);
         }
@@ -166,6 +199,7 @@ export abstract class AlgorithmState {
                 data = {value, color, kind};
             } else if (type == 'array') {
                 const color = this.getDebugColor(name);
+                console.log('~~~~~~~~~~~~~~~~~~', value, color, kind);
                 data = mergeArrays(['value', 'color', 'kind'], [value, color, kind]);
             }
 

@@ -11,7 +11,7 @@ import {VisNgNetworkOptionsEdges} from '@lazarljubenovic/vis-ng/core';
 
 export class DijkstraShortestPathState extends AlgorithmState {
 
-    @KindExporter('node') @TrackedVariable() @ColorExporter([], () => 'default') public root: string;
+    @KindExporter('node') @TrackedVariable() public root: string;
     @KindExporter('node') @TrackedVariable() public Q: string[];
     @KindExporter('node-number') @TrackedVariable() public distance: string[][];
     @KindExporter('node-node') @TrackedVariable() public previous: string[][];

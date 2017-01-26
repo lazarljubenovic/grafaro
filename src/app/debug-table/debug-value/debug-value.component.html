@@ -1,2 +1,7 @@
-<grf-node *ngIf="isSingleValue" [data]="data"></grf-node>
-<grf-array-of-nodes *ngIf="isArray" [data]="data"></grf-array-of-nodes>
+<ng-container *ngIf="isSingleValue">
+  <grf-node [data]="data"></grf-node>
+</ng-container>
+
+<ng-container *ngIf="isArray">
+  <grf-array-of-nodes [data]="data"></grf-array-of-nodes>
+</ng-container>
