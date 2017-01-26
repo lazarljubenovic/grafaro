@@ -23,6 +23,11 @@ export class JoinService {
             .map((msg: Message<JoinMessageInfo>) => {
                 this.isMaster = msg.payload.isMaster;
                 return msg.payload;
+            })
+            .catch(error => {
+                console.log('Join error');
+                this.isMaster = true;
+                return Observable.of({roomId: '2323', isMaster: true});
             });
 
         return this.joinSubject;

@@ -1,9 +1,10 @@
 import {Injectable} from '@angular/core';
-import {Observable, Subject} from 'rxjs/Rx';
+import {Observable, Subject, Observer} from 'rxjs/Rx';
 import {Message} from '../message';
 
 @Injectable()
 export class WebSocketService {
+
     private wsSubject: Subject<any>; // todo type
     private _roomId: string = '';
     public set roomId(value: string) {
@@ -21,9 +22,30 @@ export class WebSocketService {
     }
 
     public create(url: string): Observable<Message<any>> {
-        this.wsSubject = Observable.webSocket(url);
+        let ws = new WebSocket(url);
 
+        let observable = Observable.create(
+            (obs: Observer<any>) => {
+                ws.onmessage = obs.next.bind(obs);
+                ws.onerror = obs.error.bind(obs);
+                ws.onclose = obs.complete.bind(obs);
+
+                return ws.close.bind(ws);
+            }
+        );
+
+        let observer = {
+            next: (data: any) => {
+                if (ws.readyState == WebSocket.OPEN) {
+                    ws.send(JSON.stringify(data));
+                }
+            }
+        };
+        this.wsSubject = Subject.create(observer, observable);
         return this.wsSubject;
+        // this.wsSubject = Observable.webSocket(url);
+        //
+        // return this.wsSubject;
     }
 
     public getWebSocket(): Observable<Message<any>> {

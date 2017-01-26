@@ -105,7 +105,9 @@ export class ChatComponent implements OnInit {
 
     ngOnInit() {
         this.chatMessageFactory = this.cfr.resolveComponentFactory(ChatMessageComponent);
-        this.chatMessages$ = this.chatService.create();
+        this.chatMessages$ = this.chatService.create().catch(e => {
+            return Observable.from(this.chatService.dummyMessages);
+        });
 
         this.chatMessages$.subscribe((message: ChatMessageInfo) => {
             this.createChatMessage(message);

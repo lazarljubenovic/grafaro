@@ -131,11 +131,16 @@ export class ProjectViewComponent implements OnInit {
     ngOnInit() {
         const roomId = this.activeRoute.snapshot.params['id'];
         this.joinService.joinRoom(roomId);
-        this.graphSocketService.create().subscribe(roomGraph => {
-            this.algorithmService.graph.readJson(roomGraph.graph);
-            this.algorithmService.root = roomGraph.algorithm.options.root;
-            this.algorithmService.setGraph();
-        });
+        this.graphSocketService.create()
+            .catch(error => {
+                console.log('Graph error', error);
+                return Observable.of(this.graphSocketService.mockGraphInfoMessage);
+            })
+            .subscribe(roomGraph => {
+                this.algorithmService.graph.readJson(roomGraph.graph);
+                this.algorithmService.root = roomGraph.algorithm.options.root;
+                this.algorithmService.setGraph();
+            });
 
         this.algorithmService.graphState$.subscribe(graph => {
             if (this.joinService.isMaster) {
