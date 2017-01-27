@@ -18,7 +18,7 @@ export class WebSocketService {
             roomId: this._roomId
         };
 
-        this.wsSubject.next(JSON.stringify(messageToSend));
+        this.wsSubject.next(messageToSend);
     }
 
     public create(url: string): Observable<Message<any>> {
@@ -26,7 +26,11 @@ export class WebSocketService {
 
         let observable = Observable.create(
             (obs: Observer<any>) => {
-                ws.onmessage = obs.next.bind(obs);
+                ws.onmessage = (message) => {
+                    let data = JSON.parse(message.data);
+                    obs.next(data);
+                    // this.wsSubject.next(data);
+                };
                 ws.onerror = obs.error.bind(obs);
                 ws.onclose = obs.complete.bind(obs);
 
