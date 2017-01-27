@@ -1,8 +1,7 @@
 import {Injectable, Inject} from '@angular/core';
-import {WebSocketService} from '../core/websocket.service';
+import {WebSocketService} from '../websocket.service';
 import {GraphJson} from '../models/graph.model';
 import {Observable} from 'rxjs';
-import {Message} from '../message';
 
 export interface GraphInfoMessage {
     graph: GraphJson;
@@ -11,7 +10,7 @@ export interface GraphInfoMessage {
 
 @Injectable()
 export class GraphSocketService {
-    private graphSubject: Observable<GraphInfoMessage>;
+    // private graphSubject: Observable<GraphInfoMessage>;
     private algorithm: any = {}; // todo something with this
 
     public mockGraphInfoMessage: GraphInfoMessage = {
@@ -101,18 +100,19 @@ export class GraphSocketService {
     }
 
     public create(): Observable <GraphInfoMessage> {
-        this.graphSubject = this.webSocketService.getWebSocket()
-            .filter((msg: Message<GraphInfoMessage>) => msg.type == 'graph')
-            .map((msg: Message<GraphInfoMessage>) => {
-                this.algorithm = msg.payload.algorithm;
-                return msg.payload;
-            })
-            .catch(error => {
-                console.log('Graph info service');
-                return Observable.of(this.mockGraphInfoMessage);
-            });
+        console.log('Graph Ovde?');
+        // this.graphSubject = this.webSocketService.getWebSocket()
+        //     .filter((msg: Message<GraphInfoMessage>) => msg.type == 'graph')
+        //     .map((msg: Message<GraphInfoMessage>) => {
+        //         this.algorithm = msg.payload.algorithm;
+        //         return msg.payload;
+        //     })
+        //     .catch(error => {
+        //         console.log('Graph info service');
+        //         return Observable.of(this.mockGraphInfoMessage);
+        //     });
 
-        return this.graphSubject;
+        return Observable.empty();
     }
 
     public changeGraphAndAlgorithm(graph: GraphJson, algorithm?: any): void {

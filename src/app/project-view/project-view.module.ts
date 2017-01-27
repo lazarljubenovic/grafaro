@@ -7,7 +7,7 @@ import {SidebarComponent} from './sidebar/sidebar.component';
 import {ControlsComponent} from './controls/controls.component';
 import {TabsModule} from '../shared/tabs/tabs.module';
 import {ChatModule} from '../shared/chat/chat.module';
-import {WebSocketService} from '../core/websocket.service';
+import {WebSocketService} from '../websocket.service';
 import {MatrixModule} from '../matrix/matrix.module';
 import {JdenticonModule} from '../jdenticon/jdenticon.module';
 import {PopupRenameComponent} from './popup-rename/popup-rename.component';

@@ -1,12 +1,11 @@
 import {Injectable, Inject} from '@angular/core';
-import {WebSocketService} from '../../core/websocket.service';
+import {WebSocketService} from '../../websocket.service';
 import {ChatMessageInfo} from './chat-message/chat-message.component';
 import {Observable} from 'rxjs';
-import {Message} from '../../message';
 
 @Injectable()
 export class ChatService {
-    private chatSubject: Observable<ChatMessageInfo>;
+    // private chatSubject: Observable<ChatMessageInfo>;
     public dummyMessages: ChatMessageInfo[] = [
         {
             timeStamp: new Date(),
@@ -49,13 +48,15 @@ export class ChatService {
     }
 
     public create(): Observable<ChatMessageInfo> {
-        this.chatSubject = this.webSocketService.getWebSocket()
-            .filter((msg: Message<ChatMessageInfo>) => msg.type == 'chat')
-            .map((msg: Message<ChatMessageInfo>) => {
-                return msg.payload;
-            });
+        console.log('Chat Ovde?');
+        // this.chatSubject = this.webSocketService.getWebSocket()
+        //     .filter((msg: Message<ChatMessageInfo>) => msg.type == 'chat')
+        //     .map((msg: Message<ChatMessageInfo>) => {
+        //         return msg.payload;
+        //     });
 
-        return this.chatSubject;
+        // return this.chatSubject;
+        return Observable.empty();
     }
 
     public send(chatMessage: ChatMessageInfo): void {

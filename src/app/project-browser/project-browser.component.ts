@@ -15,11 +15,11 @@ import {Router} from '@angular/router';
 })
 export class ProjectBrowserComponent implements OnInit {
 
-    public projects$: Observable<Project[]>;
+    public projects$: Observable<Project[]> = null;
 
     public queryForm: FormGroup;
 
-    public roomsInfo: RoomInfo[];
+    public roomsInfo: RoomInfo[] = [];
 
     constructor(private _projectsService: ProjectsService,
                 private _formBuilder: FormBuilder,
