@@ -3,7 +3,7 @@ import {Observable} from 'rxjs';
 import {AlgorithmService} from '../algorithms/algorithm.service';
 import {NotifyService} from './notify.service';
 import {DebugTableService} from '../debug-table/debug-table.service';
-import {DepthFirstSearchAlgorithm} from '../algorithms/depth-first-search';
+import {DijkstraShortestPathAlgorithm} from '../algorithms/dijkstra-shortest-path';
 
 @Component({
     selector: 'grf-algorithm',
@@ -28,7 +28,7 @@ export class AlgorithmComponent implements OnInit {
     constructor(private algorithmService: AlgorithmService,
                 private notifyService: NotifyService,
                 private debugTableService: DebugTableService) {
-        algorithmService.setAlgorithm(new DepthFirstSearchAlgorithm()); // init algorithm
+        algorithmService.setAlgorithm(new DijkstraShortestPathAlgorithm()); // init algorithm
         this.currentState$ = algorithmService.currentState$;
     }
 
