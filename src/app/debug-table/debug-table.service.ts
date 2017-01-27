@@ -15,6 +15,7 @@ export class DebugTableService {
 
     public setVisibleVariables(values: string[]): void {
         this._visibleVariables = values;
+        this.emitVisibleVariable();
     }
 
     public toggleVariable(varName: string): void {
@@ -33,6 +34,10 @@ export class DebugTableService {
     constructor(algorithmService: AlgorithmService) {
         this._visibleVariables = algorithmService.algorithmStrategy.trackedVariables;
         this.visibleVariables$ = new BehaviorSubject<string[]>(this._visibleVariables);
+
+        algorithmService.algorithmStrategy$.subscribe(strategy => {
+            this.setVisibleVariables([...strategy.trackedVariables]);
+        });
     }
 
 }

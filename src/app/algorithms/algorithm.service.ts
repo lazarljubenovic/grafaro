@@ -35,6 +35,8 @@ export class AlgorithmService {
     }
 
     public algorithmStrategy: AlgorithmBase;
+    public algorithmStrategy$ = new ReplaySubject<AlgorithmBase>();
+
     private states: AlgorithmState[];
     private normalizedStates: NormalizedState[];
 
@@ -64,6 +66,7 @@ export class AlgorithmService {
     public setAlgorithm(algorithmStrategy: AlgorithmBase): void {
         this.algorithmStrategy = algorithmStrategy;
         this.setGraph();
+        this.algorithmStrategy$.next(this.algorithmStrategy);
     }
 
     public getCodeJson() {
