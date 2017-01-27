@@ -3,8 +3,8 @@ import {DebugDataValue} from '../../algorithms/algorithm-base';
 
 @Component({
     selector: 'grf-array-of-nodes',
-    templateUrl: './array-of-nodes.component.html',
-    styleUrls: ['../node/node.component.scss', './array-of-nodes.component.scss'],
+    templateUrl: 'debug-value-array.component.html',
+    styleUrls: ['debug-value-array.component.scss'],
     animations: [
         trigger('element', [
             state('void', style({
