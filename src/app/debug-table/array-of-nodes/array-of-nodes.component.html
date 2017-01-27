@@ -1,12 +1,6 @@
-<ul class="array" *ngIf="data.length">
-  <li *ngFor="let d of data; trackBy: trackBy" [@element]="true">
-    <div [class]="'outer ' + d.color">
-      <div [class]="'inner ' + d.color">
-        {{d.value}}
-      </div>
-    </div>
-  </li>
-</ul>
+<div class="wrapper" *ngIf="data.length">
+  <grf-node *ngFor="let d of data; trackBy: track" [@element]="true" [data]="d"></grf-node>
+</div>
 
 <div class="empty-array" *ngIf="!data.length">
   <span>empty</span>

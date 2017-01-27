@@ -1,20 +1,37 @@
 @import '../../global';
 
+$marble-size: 18px;
+
 :host {
   display: inline-flex;
 
-  .node {
-    display: inline-block;
-    background-color: rgba(black, .06);
-    border: solid 1px rgba(black, .4);
-    color: $black;
-    border-radius: 50%;
-    text-align: center;
-    font-size: 12px;
-    width: 18px;
-    height: 18px;
-    line-height: 18px;
-    @include all-background-colors;
+  .debug {
+
+    &.node {
+      width: $marble-size;
+      height: $marble-size;
+      line-height: $marble-size;
+
+      .outer {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        width: $marble-size;
+        height: $marble-size;
+        line-height: $marble-size;
+        background-color: rgba(black, .06);
+        border: solid 1px rgba(black, .4);
+        color: $black;
+        border-radius: 50%;
+        text-align: center;
+        font-size: 12px;
+        @include all-background-colors;
+
+        .inner {
+          display: inline-block;
+        }
+      }
+    }
   }
 
   .null {
