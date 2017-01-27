@@ -218,6 +218,9 @@ export type CodeJson = CodeJsonElement[][];
 
 export abstract class AlgorithmBase {
 
+    public abstract name: string;
+    public abstract abbr: string;
+
     public abstract code: string;
     public abstract trackedVariables: string[];
 

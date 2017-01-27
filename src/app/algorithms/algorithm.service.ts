@@ -248,7 +248,6 @@ export class AlgorithmService {
         return this.algorithmStrategy.normalize(state);
     }
 
-
     constructor() {
         this.setAlgorithm(new DepthFirstSearchAlgorithm());
     }

@@ -41,6 +41,10 @@ export class BreadthFirstSearchState extends AlgorithmState {
 
 export class BreadthFirstSearchAlgorithm extends AlgorithmBase {
 
+    public abbr: string = 'bfs';
+
+    public name: string = 'Breadth First Search';
+
     public trackedVariables: string[] = [
         'root', 'solution', 'queue', 'visited', 'neighbors', 'currentNode', 'neighbor',
     ];

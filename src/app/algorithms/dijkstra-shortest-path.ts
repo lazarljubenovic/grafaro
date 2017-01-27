@@ -24,6 +24,10 @@ export class DijkstraShortestPathState extends AlgorithmState {
 
 export class DijkstraShortestPathAlgorithm extends AlgorithmBase {
 
+    public name: string = 'Dijkstra Shortest Path';
+
+    public abbr: string = 'dsp';
+
     public code: string = `function DijkstraShortestPath(graph, root) {
   let Q = new Set();
   let distance = new Map();
