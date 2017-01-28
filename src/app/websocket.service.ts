@@ -26,8 +26,9 @@ export class WebSocketService {
 
         if (this.ws.readyState == WebSocket.OPEN) {
             this.ws.send(JSON.stringify(messageToSend));
-        } else {
+        } else if (type == 'join') {
             (<MockMessageStream>this.stream).createChatMessages();
+            (<MockMessageStream>this.stream).returnJoin();
         }
     }
 

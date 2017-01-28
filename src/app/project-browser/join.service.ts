@@ -18,7 +18,12 @@ export class JoinService {
 
     public create(): Observable<JoinMessageInfo> {
         console.log('Join Ovde?');
-        return this.webSocketService.subscribeTo('join');
+        let stream = this.webSocketService.subscribeTo('join');
+        stream.subscribe((message: JoinMessageInfo) => {
+            console.log('~~~~~~~~~~~~~master?', message.isMaster);
+            this.isMaster = message.isMaster;
+        });
+        return stream;
     }
 
     public newRoom(): void {

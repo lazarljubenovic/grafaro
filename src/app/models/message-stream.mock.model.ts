@@ -3,6 +3,7 @@ import {ReplaySubject} from 'rxjs';
 import {ChatMessageInfo} from '../shared/chat/chat-message/chat-message.component';
 import {Message} from '../message';
 import {RoomInfoMessage} from '../project-browser/room-info.interface';
+import {JoinMessageInfo} from '../project-browser/join.service';
 
 const dummyMessages: ChatMessageInfo[] = [
     {
@@ -59,25 +60,39 @@ const dummyRooms: RoomInfoMessage = {
         }
     ]
 };
+const dummyJoinMessage: JoinMessageInfo = {
+    roomId: '123456',
+    isMaster: true
+};
 
 export class MockMessageStream extends AbstractMessageStream {
     public createStream(ws: WebSocket) {
         this._message$ = new ReplaySubject<Message<any>>();
+
         (<ReplaySubject<Message<any>>>this._message$).next({
             roomId: '',
             type: 'roomInfo',
             payload: dummyRooms
         });
+
         return this._message$;
     }
 
     public createChatMessages() {
         dummyMessages.forEach(message =>
             (<ReplaySubject<Message<any>>>this._message$).next({
-                roomId: '1111',
+                roomId: '123456',
                 type: 'chat',
                 payload: message
             }));
+    }
+
+    public returnJoin() {
+        (<ReplaySubject<Message<any>>>this._message$).next({
+            roomId: '123456',
+            payload: dummyJoinMessage,
+            type: 'join'
+        });
     }
 
     constructor(ws: WebSocket) {
