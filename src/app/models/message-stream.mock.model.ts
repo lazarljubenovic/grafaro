@@ -1,6 +1,7 @@
 import {AbstractMessageStream} from './message-stream.abstract.model';
 import {ReplaySubject} from 'rxjs';
 import {ChatMessageInfo} from '../shared/chat/chat-message/chat-message.component';
+import {Message} from '../message';
 
 const dummyMessages: ChatMessageInfo[] = [
     {
@@ -42,8 +43,13 @@ const dummyMessages: ChatMessageInfo[] = [
 
 export class MockMessageStream extends AbstractMessageStream {
     public createStream(ws: WebSocket) {
-        this._message$ = new ReplaySubject<any>();
-        dummyMessages.forEach(message => (<ReplaySubject<any>>this._message$).next(message));
+        this._message$ = new ReplaySubject<Message<any>>();
+        dummyMessages.forEach(message =>
+            (<ReplaySubject<Message<any>>>this._message$).next({
+                roomId: '1111',
+                type: 'chat',
+                payload: message
+            }));
         return this._message$;
     }
 

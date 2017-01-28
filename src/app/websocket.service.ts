@@ -32,7 +32,7 @@ export class WebSocketService {
         this.ws.onopen = (event) => {
             console.log('Socket open');
             let stream = new MessageStream(this.ws);
-            stream.message$.subscribe(message => this.messages.next(message.payload));
+            stream.message$.subscribe(message => this.messages.next(message));
         };
         this.ws.onclose = (event) => {
             console.log('Socket closed');
@@ -46,7 +46,7 @@ export class WebSocketService {
         return this.messages;
     }
 
-    public subscribeTo(type: string): Observable<Message<any>> {
+    public subscribeTo(type: string): Observable<any> {
         return this.messages.filter((msg: Message<any>) => msg.type == type)
             .map((msg: Message<any>) => {
                 return msg.payload;

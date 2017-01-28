@@ -28,7 +28,7 @@ const dummyMessages: ChatMessageInfo[] = [
         senderHandle: `lazarljubenovic`,
         senderName: `Lazar Ljubenović`,
         senderHash: `ff8adece0631821959f443c9d956fc39`,
-        message: `Hello World!`,
+        message: `Hello World from server side!!`,
     },
     {
         timeStamp: new Date(),
@@ -49,7 +49,7 @@ const dummyMessages: ChatMessageInfo[] = [
         senderHandle: `pritilender`,
         senderName: `Mihajlo Ilijić`,
         senderHash: `ff8adece0631821959f443c9d956fc39`,
-        message: `Hello World! :) :* ;) :(`,
+        message: `Hello World from priti side! :) :* ;) :(`,
     },
     {
         timeStamp: new Date(),
