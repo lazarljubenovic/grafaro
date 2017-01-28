@@ -18,19 +18,7 @@ export class JoinService {
 
     public create(): Observable<JoinMessageInfo> {
         console.log('Join Ovde?');
-        // this.joinSubject = this.webSocketService.getWebSocket()
-        //     .filter((msg: Message<JoinMessageInfo>) => msg.type == 'join')
-        //     .map((msg: Message<JoinMessageInfo>) => {
-        //         this.isMaster = msg.payload.isMaster;
-        //         return msg.payload;
-        //     })
-        //     .catch(error => {
-        //         console.log('Join error');
-        //         this.isMaster = true;
-        //         return Observable.of({roomId: '2323', isMaster: true});
-        //     });
-
-        return Observable.empty();
+        return this.webSocketService.subscribeTo('join');
     }
 
     public newRoom(): void {

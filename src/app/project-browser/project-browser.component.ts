@@ -53,6 +53,7 @@ export class ProjectBrowserComponent implements OnInit {
         });
 
         this.roomInfoService.create().subscribe((roomInfo) => {
+            console.log('Room info in project browser', roomInfo);
             this.roomsInfo = roomInfo.info;
         });
     }
