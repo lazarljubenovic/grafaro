@@ -28,7 +28,11 @@ export class ArrayOfNodesComponent implements OnInit {
     @Input() public data: DebugDataValue[];
 
     public track(index: number, item: DebugDataValue) {
-        return item.value;
+        if (Array.isArray(item.value)) {
+            return item.value[0];
+        } else {
+            return item.value;
+        }
     }
 
     constructor() {

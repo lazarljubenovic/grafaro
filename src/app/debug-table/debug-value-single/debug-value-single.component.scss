@@ -8,16 +8,14 @@ $marble-size: 18px;
   .debug {
 
     &.node {
-      width: $marble-size;
-      height: $marble-size;
+      @include force-square($marble-size);
       line-height: $marble-size;
 
       .outer {
         display: inline-flex;
         justify-content: center;
         align-items: center;
-        width: $marble-size;
-        height: $marble-size;
+        @include force-square($marble-size);
         line-height: $marble-size;
         background-color: rgba(black, .06);
         border: solid 1px rgba(black, .4);
@@ -32,9 +30,126 @@ $marble-size: 18px;
         }
       }
     }
+
+    &.edge {
+      $edge-size: 5px;
+      @include force-square($marble-size);
+      line-height: $marble-size;
+
+      .outer {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 -1px rgba(black, .5) inset;
+        @include force-square($marble-size);
+        position: relative;
+        font-size: $marble-size * .75;
+        color: rgba(black, .7);
+
+        &:after,
+        &:before {
+          content: '';
+          position: absolute;
+          bottom: - $edge-size / 2;
+          @include force-square($edge-size - 2px); // 2px = 2 * border;
+          background-color: mix(black, white, 6%);
+          border: solid 1px mix(black, white, 40%);
+          border-radius: 50%;
+        }
+
+        &:after {
+          left: - $edge-size / 2;
+        }
+
+        &:before {
+          right: - $edge-size / 2;
+        }
+
+        .inner {
+          display: inline-block;
+        }
+      }
+    }
+
+    &.node-node {
+      @include force-width(2 *  $marble-size);
+      @include force-height($marble-size);
+      line-height: $marble-size;
+      display: flex;
+
+      .outer {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        @include force-square($marble-size);
+        line-height: $marble-size;
+        background-color: rgba(black, .06);
+        border: solid 1px rgba(black, .4);
+        color: $black;
+        text-align: center;
+        font-size: 12px;
+        @include all-background-colors;
+
+        &.left {
+          border-top-left-radius: 50%;
+          border-bottom-left-radius: 50%;
+        }
+
+        &.right {
+          border-left: none;
+          border-top-right-radius: 50%;
+          border-bottom-right-radius: 50%;
+        }
+
+        .inner {
+          display: inline-block;
+        }
+      }
+    }
+
+    &.node-number {
+      $border-radius: $marble-size / 2;
+      @include force-width(2 *  $marble-size);
+      @include force-height($marble-size);
+      line-height: $marble-size;
+      display: flex;
+      border: solid 1px mix(black, white, 40%);
+      border-top-left-radius: $border-radius;
+      border-bottom-left-radius: $border-radius;
+
+      .outer {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        @include force-square($marble-size);
+        line-height: $marble-size;
+        color: $black;
+        text-align: center;
+        font-size: 12px;
+        border-radius: 50%;
+        @include all-background-colors;
+
+        &.left {
+          border: solid 1px mix(black, white, 40%);
+          border-left: none;
+          margin: -1px;
+          margin-left: 0;
+          background-color: rgba(black, .06);
+        }
+
+        &.right {
+
+        }
+
+        .inner {
+          display: inline-block;
+        }
+      }
+    }
   }
 
   .null {
+    display: inline-block;
     color: rgba(black, .4);
     font-family: $font-monospace;
     font-size: .8em;

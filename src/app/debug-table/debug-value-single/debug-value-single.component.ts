@@ -1,4 +1,5 @@
 import {Component, OnInit, Input} from '@angular/core';
+import {DebugDataValue} from '../../algorithms/algorithm-base';
 
 @Component({
     selector: 'grf-node',
@@ -7,7 +8,7 @@ import {Component, OnInit, Input} from '@angular/core';
 })
 export class NodeComponent implements OnInit {
 
-    @Input() data: {value: any, color: string};
+    @Input() data: DebugDataValue;
 
     constructor() {
     }
