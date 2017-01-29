@@ -1,11 +1,11 @@
 /* tslint:disable:no-unused-variable */
 
 import { TestBed, async } from '@angular/core/testing';
-import { ArrayOfNodesComponent } from './array-of-nodes.component';
+import { NodeComponent } from './debug-value-single.component';
 
-describe('Component: ArrayOfNodes', () => {
+describe('Component: Node', () => {
   it('should create an instance', () => {
-    let component = new ArrayOfNodesComponent();
+    let component = new NodeComponent();
     expect(component).toBeTruthy();
   });
 });

@@ -41,6 +41,9 @@ export class DepthFirstSearchState extends AlgorithmState {
 
 export class DepthFirstSearchAlgorithm extends AlgorithmBase {
 
+    public name: string = 'Depth First Search';
+    public abbr: string = 'dfs';
+
     public trackedVariables: string[] = [
         'neighbors', 'visited', 'solution', 'stack', 'root', 'neighbor', 'currentNode'
     ];

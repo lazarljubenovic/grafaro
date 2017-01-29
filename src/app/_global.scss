@@ -68,6 +68,11 @@ $header-color: get-color('secondary');
   @include force-height($size);
 }
 
+@mixin square($size) {
+  width: $size;
+  height: $size;
+}
+
 body {
   background: #e2e1e0;
   text-align: center;

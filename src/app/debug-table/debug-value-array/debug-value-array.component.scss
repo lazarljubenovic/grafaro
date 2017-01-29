@@ -1,0 +1,26 @@
+@import '../../global';
+
+$marble-size: 18px;
+$marble-between: $marble-size / 3;
+
+:host {
+  display: inline-flex;
+
+  .wrapper {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    margin-right: -$marble-between;
+
+    grf-node {
+      padding-right: $marble-between;
+    }
+  }
+
+  .empty-array {
+    color: rgba(black, .4);
+    font-family: $font-monospace;
+    font-size: .8em;
+    text-transform: uppercase;
+  }
+}

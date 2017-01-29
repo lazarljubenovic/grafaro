@@ -24,6 +24,10 @@ export class DijkstraShortestPathState extends AlgorithmState {
 
 export class DijkstraShortestPathAlgorithm extends AlgorithmBase {
 
+    public name: string = 'Dijkstra Shortest Path';
+
+    public abbr: string = 'dsp';
+
     public code: string = `function DijkstraShortestPath(graph, root) {
   let Q = new Set();
   let distance = new Map();
@@ -98,14 +102,31 @@ export class DijkstraShortestPathAlgorithm extends AlgorithmBase {
                 root: string): DijkstraShortestPathState {
         let state = new DijkstraShortestPathState(graph, lineNumber);
         state.Q = getLabelIfDefined(graph, Q ? Array.from(Q) : undefined);
-        state.distance = getLabelIfDefined(graph, distance ? Array.from(distance) : undefined);
-        state.previous = getLabelIfDefined(graph, previous ? Array.from(previous) : undefined);
+
+        if (distance == null) {
+            state.distance = <null|undefined>distance;
+        } else {
+            state.distance = Array.from(distance).map((dist: [string, number]) => {
+                return [
+                    graph.getNodeLabel(dist[0]),
+                    dist[1].toString(),
+                ];
+            });
+        }
+
+        if (previous == null) {
+            state.previous = <null|undefined>previous;
+        } else {
+            state.previous = Array.from(previous).map((prev: [string, string]) => {
+                return prev.map(p => getLabelIfDefined(graph, p));
+            })
+        }
+
         state.u = getLabelIfDefined(graph, u);
         state.neighborEdges = neighborEdges ? neighborEdges.map(edge => edge.label) : <any>neighborEdges;
-        state.edge = getLabelIfDefined(graph, edge);
+        state.edge = edge ? graph.getEdgeLabel(edge) : <any>edge;
         state.alt = alt;
         state.root = getLabelIfDefined(graph, root);
-        // console.log('state', state);
         return state;
     }
 

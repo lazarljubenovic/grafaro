@@ -13,7 +13,7 @@ import {DijkstraShortestPathAlgorithm} from '../../algorithms/dijkstra-shortest-
 export class AlgorithmPickerComponent implements OnInit {
 
     public form: FormGroup = this.formBuilder.group({
-        algorithm: 'bfs',
+        algorithm: '',
         options: this.formBuilder.group({
             root: 'A',
         }),
@@ -23,6 +23,11 @@ export class AlgorithmPickerComponent implements OnInit {
 
     constructor(private formBuilder: FormBuilder,
                 private algorithmService: AlgorithmService) {
+        this.algorithmService.algorithmStrategy$.subscribe(strategy => {
+            if (this.form.value.algorithm != strategy.abbr) {
+                this.form.patchValue({algorithm: strategy.abbr});
+            }
+        });
     }
 
     ngOnInit() {
@@ -38,7 +43,7 @@ export class AlgorithmPickerComponent implements OnInit {
                 case 'dfs':
                     this.algorithmService.setAlgorithm(new DepthFirstSearchAlgorithm());
                     break;
-                case 'dijkstra':
+                case 'dsp':
                     this.algorithmService.setAlgorithm(new DijkstraShortestPathAlgorithm());
                     break;
                 default:

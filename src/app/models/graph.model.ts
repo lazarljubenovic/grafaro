@@ -166,6 +166,30 @@ export class Graph {
         return this;
     }
 
+    public getEdgeLabel(edgeId: string): string {
+        const edge = this._edges.find(edge => edge.id == edgeId);
+        if (edge == null) {
+            throw new Error(`Edge with id ${edgeId} doesn't exist`);
+        }
+        return edge.label;
+    }
+
+    public getEdgeId(edgeLabel: string): string {
+        const edge = this._edges.find(edge => edge.label == edgeLabel);
+        if (edge == null) {
+            throw new Error(`Edge with label ${edgeLabel} doesn't exist`);
+        }
+        return edge.id;
+    }
+
+    public getEdgeWeight(edgeId: string): number {
+        const edge = this._edges.find(edge => edge.id == edgeId);
+        if (edge == null) {
+            throw new Error(`Edge with id ${edgeId} doesn't exist`);
+        }
+        return edge.weight;
+    }
+
     public changeNodeLabel(nodeId: NodeId, newLabel: NodeLabel): this {
         if (!this.hasNodeId(nodeId)) {
             throw new Error(`Node with id ${nodeId} doesn't exist`);
