@@ -40,7 +40,6 @@ export class MessageRoom {
             payload: {
                 graph,
                 algorithm,
-                type: 'graph'
             },
             roomId
         });

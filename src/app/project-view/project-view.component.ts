@@ -133,10 +133,6 @@ export class ProjectViewComponent implements OnInit {
         // todo break down next line -> join has to create first and then join
         this.joinService.joinRoom(roomId);
         this.graphSocketService.create()
-            .catch(error => {
-                console.log('Graph error', error);
-                return Observable.of(this.graphSocketService.mockGraphInfoMessage);
-            })
             .subscribe(roomGraph => {
                 this.algorithmService.graph.readJson(roomGraph.graph);
                 this.algorithmService.root = roomGraph.algorithm.options.root;

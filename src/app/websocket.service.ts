@@ -29,6 +29,7 @@ export class WebSocketService {
         } else if (type == 'join') {
             (<MockMessageStream>this.stream).createChatMessages();
             (<MockMessageStream>this.stream).returnJoin();
+            (<MockMessageStream>this.stream).createGraph();
         }
     }
 
@@ -45,6 +46,7 @@ export class WebSocketService {
         };
         this.ws.onerror = (event) => {
             console.log('Socket error');
+            this.stream.message$.subscribe(message => this.messages.next(message));
         };
         this.stream = new MockMessageStream(this.ws);
 
