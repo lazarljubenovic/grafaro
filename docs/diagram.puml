@@ -1,5 +1,12 @@
 @startuml
 
+'providers and declarations belong to the module
+'imports are dependencies
+'module classes aren't shown
+'components have <<component>> stereotype
+'services have <<injectable>> stereotype
+'our own interfaces have <<interface>> stereotype without I icon
+
 together {
     interface Message<Type> <<interface>> {
         payload: Type
@@ -39,10 +46,24 @@ together {
         currentNeighbor?: string
         lineNumber: number
     }
-}
 
+    interface DebugDataValue <<interface>> {
+        value: any
+        color: string
+        kind: DebugDataValueKind
+    }
 
-class WebSocketService {
+    interface DebugData <<interface>> {
+        type: 'single' | 'array'
+        name: string
+        data: DebugDataValue | DebugDataValue[]
+        isInScope: boolean
+    }
+
+    interface CodeJsonElement <<interface>> {
+        text: string
+        type: string
+    }
 }
 
 class ColorThemeService <<Injectable>> {
@@ -59,70 +80,124 @@ package AngularCore <<Folder>> {
     interface OnInit
     interface AfterViewInit
     interface PipeTransform
+    interface OnChanges
+    interface OnDestroy
 }
 
 package BrowserModule{}
 package FormsModule{}
 package HttpModule{}
 package StepperModule{}
-package ProjectViewModel{}
+package ProjectViewModule{}
 package ProjectBrowserModule{}
-package FourOhFourModule{}
 package RouterModule{}
 package CommonModule{}
-package UtilPipesModule{}
+package GraphModule{}
+package JdenticonModule{}
+package MatrixModule{}
+package ChatModule{}
+package TabsModule{}
+package ToastModule{}
+package UserInterfaceModule{}
+
+package FourOhFourModule {
+    class FourOhFourComponent <<Component>> implements OnInit {
+        +constructor() -empty
+        +ngOnInit() -empty
+    }
+}
+
+package UtilPipesModule {
+    class ContainsPipe <<Pipe>> implements PipeTransform{
+        +transform(array: any[], element: any): any
+    }
+
+    class OrderedArrayPipe <<Pipe>> implements PipeTransform{
+        +transform(length: number): number[]
+    }
+
+    class PercentagePipe <<Pipe>> implements PipeTransform{
+        +transform(value: number, totalValue: number): string
+    }
+
+    class ObjectPipe <<Pipe>> implements PipeTransform{
+        +transform(object: {}): {key: string, value: any}[]
+    }
+
+    class OnlyKeysPipe <<Pipe>> implements PipeTransform{
+        +transform(keyValuePairs: {key: string, value: any}[], forbiddenKeys: string[]): {key: string, value: any}[]
+    }
+}
 
 package AppModule <<Folder>> {
     class AppComponent <<Component>> implements OnInit {
-        +constructor()
+        'TODO represent DI somehow
+        -webSocket: WebSocketService
+        -auth: Auth0Service
+        +constructor(webSocket: WebSocketService, auth: Auth0Service)
         +ngOnInit()
     }
 
     class AlgorithmService <<Injectable>> {
-        + graph = new Graph();    
-        + root: string = 'node-0';    
-        - algorithm: Function = breadthFirstSearch;
-        - states: BreadthFirstSearchState[];
-        - normalizedStates: NormalizedState[];    
-        - _currentStateIndex: number = 0;
-        + currentNormalizedState$: ReplaySubject<NormalizedState> = 1;
-        + currentState$: ReplaySubject<BreadthFirstSearchState> = 1;
-        + graphState$: ReplaySubject<Graph> = 1;
+        +graph: Graph
+        +algorithmStrategy: AlgorithmBase
+        +algorithmStrategy$: ReplaySubject<AlgorithmBase>
+        +currentNormalizedState$: ReplaySubject<NormalizedState>
+        +currentState$: ReplaySubject<AlgorithmState>
+        +graphState$: ReplaySubject<Graph>
+        -_root: string
+        -states: AlgorithmState[]
+        -normalizedStates: NormalizedState[]
+        -_currentStateIndex: number
         __
-        - onGraphChange()
-        - currentStateIndexInc()
-        - currentStateIndexDec()
-        - currentStateIndexFirst()
-        - currentStateIndexLast()
-        - fixCurrentStateIndex()
-        - existsNodeWithLabel(nodeLabel: string): boolean
-        - getNormalizedState(state: BreadthFirstSearchState): NormalizedState
-        + setGraph()
-        + updateStateNumber(action: string)
-        + getNodeId(nodeLabel: string): string
-        + getNodeLabel(nodeId: string): string
-        + suggestNewNodeName(): string
-        + addNode(position: ClickPosition)
-        + addNodeOnRandomPlace()
-        + removeNode(nodeId: string)
-        + renameNode(oldNodeLabel: string, newNodeLabel: string)
-        + linkNodes(nodeA: string, nodeB: string)
-        + linkNodesByLabel(labelA: string, labelB: string)
-        + unlinkNodes(nodeA: string, nodeB: string)
-        + unlinkNodesByLabel(labelA: string, labelB: string)
-        + removeEdge(edgeId: string)
-        + setPosition(nodeLabel: string, position: ClickPosition)
-        + moveNode(nodeId: string, position: ClickPosition)
-        + constructor()
-        ..State index getter and setter..
-        - set currentStateIndex(currentStateIndex: number);
-        - get currentStateIndex(): number;
+        +setAlgorithm(algorithmStrategy: AlgorithmBase): void
+        +getCodeJson(): CodeJson
+        +setGraph(): void
+        +onGraphChange(): void
+        +currentStateIndexInc(): void
+        +currentStateIndexDec(): void
+        +currentStateIndexFirst(): void
+        +currentStateIndexLast(): void
+        +updateStateNumber(action: string): void
+        -fixCurrentStateIndex(): void
+        +getAllNodes(): string[]
+        +getNodeId(nodeLabel: string): string
+        +getNodeLabel(nodeId: string): string
+        -existsNodeWithLabel(nodeLabel: string): boolean
+        +suggestNewNodeName(): string
+        +addNode(position: ClickPosition): void
+        +addNodeOnRandomPlace(): void
+        +removeNode(nodeId: string): void
+        +renameNode(oldNodeLabel: string, newNodeLabel: string): void
+        +linkNodes(nodeA: string, nodeB: string)
+        +linkNodesByLabel(labelA: string, labelB: string)
+        +unlinkNodes(nodeA: string, nodeB: string)
+        +unlinkNodesByLabel(labelA: string, labelB: string)
+        +removeEdge(edgeId: string)
+        +setPosition(nodeLabel: string, position: ClickPosition): void
+        +moveNode(nodeId: string, position: ClickPosition): void
+        +getNormaliedState(state: AlgorithmState): NormalizedState
+        +constructor()
+        .. Root ..
+        +get root(): string
+        +set root(value: string)
+        ..State index..
+        + set currentStateIndex(currentStateIndex: number)
+        + get currentStateIndex(): number
+        +get totalNumberOfStates(): number
     }
 
     class MarkdownService <<Injectable>> {
+        transform(str: string): string
     }
 
     class EmojiService <<Injectable>> {
+        +emojiList: Object
+        -existsEmoji(emojiName: string): boolean
+        -getEmoji(emojiName: string): string
+        +transformTextLike(text: string): string
+        +transformUtf8(text: string): string
+        +transform(text: string): string
     }
 
     class GraphOptionsService <<Injectable>> {
@@ -130,9 +205,9 @@ package AppModule <<Folder>> {
         +optionsChange$: Subject<VisNgNetworkOptions>
         __
         +hasOption(optionName: string): any
-        +constructor()
+        +renewOptions(options: VisNgNewtorkOptions): void
         .. Options getter ..
-        +options(): VisNgNetworkOptions
+        +get options(): VisNgNetworkOptions
         +getOption(optionName: string): any
         .. Options setter ..
         +setOptions(optionName: string, value: any)
@@ -140,63 +215,323 @@ package AppModule <<Folder>> {
         +setOptions(first: {name: string, value: any}[] | string, second?: any)
     }
 
-
-    class Auth0Service {
-        +lock: Auth0Lock
-        +userProfile: Object
+    class WebSocketService {
+        -ws: WebSocket
+        -message: ReplaySubject<Message<any>>
+        -stream: AbstractMessageStream
+        -_roomId: string
         +constructor()
-        +login()
-        +authenticated()
-        +logout()
+        +send(message: any, type: string): void
+        +connect(url: string): ReplaySubject<Message<any>>
+        +subscribeTo(type: string): Observable<any>
+        .. roomId setter ..
+        +roomId(value: string)
     }
+
+    class NotifyService {
+        +stateChange$: ReplaySubject<any>
+    }
+
+    class AuthHttp
+
+}
+
+abstract class AnnotationBase {
+    +value: any
+    +box: HTMLElement
+    +snippet: HTMLelement
+    ..Dependancy Injection..
+    +cdr: ChangeDetectorRef
+    +onChange(): void
+    +constructor(cdr)
 }
 
 package AlgorithmModule {
-    class AlgorithmComponent <<Component>> implements OnInit, AfterViewInit {
+    class AlgorithmComponent <<Component>> implements OnInit {
+        +code$
         -currentState$: Observable<any>
-        +varSolution$: Observable<string[]>
-        +varQueue$
-        +varRoot$
-        +varVisited$
-        +varNeighbors$
-        +varCurrentNode$
-        +varCurrentNeighbor$
-        +lineNumber$: Observable<number>
-        +isOpenSolution$: BehaviorSubject<boolean> = false
-        +isOpenQueue$: BehaviorSubject<boolean> = false
-        +isOpenRoot$: BehaviorSubject<boolean> = false
-        +isOpenVisited$: BehaviorSubject<boolean> = false
-        +isOpenNeighbors$: BehaviorSubject<boolean> = false
-        +isOpenCurrentNode$: BehaviorSubject<boolean> = false
-        +isOpenCurrentNeighbor$: BehaviorSubject<boolean> = false
+        ..Dependency Injection..
+        -algorithmService: AlgorithmService
+        -notifyService: NotifyService
+        -debugTableService: DebugTableService
+        __
+        +lineNumber$: Observable<number
+        +toggle()
+        +trackByIndex(index, item)
+        +constructor(algorithmService, notifyService, debugTableService)
+        +toggleTrackedVariableVisibility(varName: string): void
         +ngOnInit()
-        +ngAfterViewInit()
     }
 
     class LineNumberStylePipe <<Pipe>> implements PipeTransform {
         transform(lineNumber: number, box: HTMLElement, totalLineNumber: number): string
     }
 
-    class PopupComponent <<Component>> {
-        +componentAnimation <<HostBinding>>: boolean = true
-        +x <<HostBinding>>: string = '0px'
-        +y <<HostBinding>>: string = '0px'
-        +name <<Input>>: string = 'Popup name'
-        .. Position setter ..
-        +position(position: Position)
+    class AnnotationDirective <<Directive>> implements OnChanges {
+        +instance: AnnotationBase
+        -_grfAnnotation: any
+        -_box: HTMLElement
+        ..DependencyInjection..
+        -elementRef: ElementRef
+        -cfr: ComponentFactoryResolver
+        -vcRef: ViewContainerRef
+        -notifyService: NotifyService -unused
+        __
+        +constructor(elementRef, cfr, vcRef, notifyService)
+        +ngOnChanges(): void
+        +create(annotation = this._grfAnnotation): void
+        -createAnnotation(klass, value): void
+        ..Inputs..
+        +set grfAnnotation(annotation: any) -unused
+        +set box(value: HTMLElement)
+        ..HostListener('click')..
+        +onClick(): void -unused
     }
-    
-    class PopupPositionPipe <<Pipe>> implements PipeTransform {
-        -getSize(element: HTMLElement): Size
-        -getCenter(element: HTMLElement): Position
-        -getTopCenter(element: HTMLElement, margin: number = 8) : Position
-        +transform(element: HTMLElement, margin: number = 8): Position
+
+    class ArrayComponent <<Component>> extends AnnotationBase {
+        +value: string[]
+        +highlightedLetters: string[]
+        +onChange(): void
+        +constructor(cdr)
+    }
+
+    class SingleItemComponent <<Component>> extends AnnotationBase implements OnInit {
+        +value: string
+        +onChange()
+        +ngOnInit() -empty
+        +constructor(cdr)
+    }
+
+    class EmptyComponent <<Component>> implements OnInit {
+        +constructor() -empty
+        +ngOnInit() -empty
+    }
+
+    class NullComponent <<Component>> implements OnInit {
+        +constructor() -empty
+        +ngOnInit() -empty
+    }
+}
+
+package DoWeNeedIt? {
+
+    class PopupComponent <<Component DoWeNeedIt?>>
+    class PopupPositionPipe <<Pipe DoWeNeedIt?>>
+
+    package AnnotationModule {
+    '    do we need this?
+        class AnnotationComponent <<Component>> {
+        }
+
+        class LineComponent <<Component>> {
+        }
+
+        class PolyLineComponent <<Component>> {
+        }
+
+        class CalloutLineComponent <<Component>> {
+        }
+
+        class ElementPositionPipe <<Pipe>> {
+        }
+
+        class GeometryService <<Injectable>> {
+        }
+
+        class CalloutLineService <<Injectable>>{
+        }
+
+        class ElementPositionService <<Injectable>> {
+        }
+    }
+}
+
+together {
+    abstract class AlgorithmState {
+        +_trackedVarsNames: string[]
+        +_exportFunctions: Map<string, {params: string[], fn: Function}>
+        +_kinds: Map<string, string>
+        +graphJson: GraphJson
+        +lineNumber: number
+        __
+        +constructor(graph: Graph, lineNumber: number)
+        +getDebugColor(trackedVarName: string): any
+        +getDebugData(): DebugData[]
+        ..
+        +getDefaultDebugColor(trackedVar: any)
+        +getDefaultDebugScope(trackedVar: any)
+        +getDefaultDebugType(trackedVar: any)
+        +getDefaultDebugKind(trackedVar: any)
+        +getDebugKind(trackedVar: any)
+    }
+
+    abstract class AlgorithmBase {
+        +name: string
+        +abbr: string
+        +code: string
+        +trackedVariables: string[]
+        +normalize(state: AlgorithmState): NormalizedState
+        +algorithmFunction(graph: Graph, rootId: string): AlgorithmState[]
+        +getCodeJson(state: AlgorithmState, trackedVariables: string[]): CodeJson
+    }
+
+    class BreadhFirstSearchState extends AlgorithmState {
+    '    how to annote decorators???
+        +currentNode: string
+        +neighbors: string[]
+        +neighbor: string
+        +visited: string[]
+        +solution: string[]
+        +queue: string[]
+        +root: string
+    }
+
+    class BreadthFirstSearch extends AlgorithmBase {
+        +normalize(state: BreadthFirstSearchState): NormalizedState
+        -createNewState(currentNode: string,\
+neighbors: string[],\
+solution: string[],\
+graph: Graph,\
+visited: string[],\
+queue: Queue<string>,\
+root: string,\
+lineNumber: number,\
+currentNeighbor: string = undefined): BreadthFirstSearchState
+        +algorithmFunction(graph: Graph, rootId: string): BreadthFirstSearchState[]
+    }
+
+    class DepthFirstSearchState extends AlgorithmState {
+        +currentNode: string
+        +neighbors: string[]
+        +neighbor: string
+        +visited: string[]
+        +solution: string[]
+        +stack: string[]
+        +root: string
+    }
+
+    class DepthFirstSearch extends AlgorithmBase {
+        +normalize(state: DepthFirstSearchState): NormalizedState
+        +algorithmFunction(graph: Graph, rootId: string): DepthFirstSearchState[]
+        -createNewState(currentNode: string,\
+neighbors: string[],\
+solution: string[],\
+graph: Graph,\
+visited: string[],\
+queue: Queue<string>,\
+root: string,\
+lineNumber: number,\
+currentNeighbor: string = undefined): DepthFirstSearchState
+    }
+
+    class DijkstraShortestPathDState extends AlgorithmState {
+'        how to annote decorators???
+        +root: string
+        +Q: string[]
+        +distance: string[][]
+        +previous: string[][]
+        +u: string
+        +neighborEdges: string[]
+        +edge: string[]
+        +alt: number
+    }
+
+    class DijkstraShortestPath extends AlgorithmBase {
+        +normalize(state: DijkstraShortestPathState): NormalizedState
+        -cns(graph: Graph,\
+lineNumber: number,\
+Q: Set<string>,\
+distance: Map<string, number>,\
+previous: Map<string, string>,\
+u: string,\
+neighborEdges: GraphEdge[],\
+edge: string,\
+alt: number,\
+root: string): DijkstraShortestPathState
+
+    +algorithmFunction(graph: Graph, rootId: string): DijkstraShortestPathState[]
+    }
+
+}
+
+package CoreModule {
+    class Auth0Service <<Injectable>> {
+        +user$: ReplaySubject<Profile>
+        +auth0
+        ..Dependency Injection..
+        -userService: UserService
+        -router: Router
+        __
+        +constructor(userService, router)
+        +handleAuthentication(): void
+        +socialLogin(connection: string): void
+        +isAuthenticated(): boolean -unused
+        +logout(): void
+        +setUser(authResult): void
+        +changeDisplayName(newName: string): void
     }
 }
 
 
-package AnnotationModule {
+package LoginPageModule {
+}
 
+package DebugTableModule {
+    class DebugTableComponent <<Component>> implements OnInit, OnDestroy{
+        +debugData: any
+        +trackedVars: string[]
+        ..Dependency Injection..
+        -_service: DebugTableService
+        ..Input..
+        +set state(state: any)
+        __
+        +trackBy(index: number, item: any): any
+        +constructor(_service)
+        +ngOnInit()
+        +ngOnDestroy()
+    }
+
+    class NodeComponent <<Component>> implements OnInit{
+        ..Input..
+        +data: DebugDataValue
+        __
+        +constructor() -empty
+        +ngOnInit() -empty
+    }
+
+    class ArrayOfNodesComponent <<Component>> implements OnInit {
+        ..Input..
+        +data: DebugDataValue[]
+        __
+        +track(index: number, item: DebugDataValue)
+        +constructor() -empty
+        +ngOnInit() -empty
+    }
+
+    class DebugValueComponent <<Component>> implements OnChanges {
+        +isSingleValue: boolean
+        +isArray: boolean
+        ..Input..
+        +data: any
+        +constructor() -empty
+        +ngOnChanges(): void
+    }
+
+    class FilterPipe <<Pipe>> implements PipeTransform {
+        transform(debugData: DebugData[], names: string[]): DebugData[]
+    }
+
+    class DebugTableService <<Injectable>> {
+        -_visibleVariables: string[]
+        +visibleVariables$: BehaviorSubject<string[]>
+        ..Dependency Injection..
+        +algorithmService: AlgorithmService
+        __
+        -emitVisibleVariable(): void
+        +setVisibleVariables(values: string[]): void
+        +toggleVariable(varName: string): void
+        +constructor(algorithmService)
+    }
 }
 
 AppModule ..> BrowserModule : <<imports>>
@@ -207,16 +542,28 @@ AppModule ..> ProjectViewModel : <<imports>>
 AppModule ..> ProjectBrowserModule : <<imports>>
 AppModule ..> FourOhFourModule : <<imports>>
 AppModule ..> RouterModule : <<imports>>
+AppModule ..> LoginPageModule : <<imports>>
 
 AlgorithmModule ..> CommonModule : <<imports>>
 AlgorithmModule ..> UtilPipesModule : <<imports>>
-AlgorithmModule ..> AnnotationModule : <<imports>>
+AlgorithmModule ..> AnnotationModule : <<imports Is this needed?>>
+AlgorithmModule ..> DebugTableModule : <<imports>>
+
+DebugTableModule ..> CommonModule : <<imports>>
+DebugTableModule ..> UtilPipesModule : <<imports>>
 
 AppComponent ..> WebSocketService
 AppComponent ..> Auth0Service
 
 AlgorithmComponent ..> AlgorithmService
 
+AuthHttp ..> Http
+AuthHttp ..> RequestOptions
+
+UtilPipesModule ..> CommonModule
+
+FourOhFourModule ..> CommonModule : <<imports>>
+FourOhFourModule ..> RouterModule : <<imports>>
 
 hide <<interface>> circle
 hide <<interface>> methods
