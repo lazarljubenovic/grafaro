@@ -22,6 +22,19 @@ export class DijkstraShortestPathState extends AlgorithmState {
 
 }
 
+interface CreateNewStateObject {
+    graph?: Graph,
+    lineNumber?: number,
+    Q?: Set<string>,
+    distance?: Map<string, number>,
+    previous?: Map<string, string>,
+    u?: string,
+    neighborEdges?: GraphEdge[],
+    edge?: string,
+    alt?: number,
+    root?: string,
+}
+
 export class DijkstraShortestPathAlgorithm extends AlgorithmBase {
 
     public name: string = 'Dijkstra Shortest Path';
@@ -90,110 +103,101 @@ export class DijkstraShortestPathAlgorithm extends AlgorithmBase {
         return {nodes, edges, accentColor, primaryColor, secondaryColor};
     }
 
-    private cns(graph: Graph,
-                lineNumber: number,
-                Q: Set<string>,
-                distance: Map<string, number>,
-                previous: Map<string, string>,
-                u: string,
-                neighborEdges: GraphEdge[],
-                edge: string,
-                alt: number,
-                root: string): DijkstraShortestPathState {
-        let state = new DijkstraShortestPathState(graph, lineNumber);
-        state.Q = getLabelIfDefined(graph, Q ? Array.from(Q) : undefined);
+    private cns(o: CreateNewStateObject): DijkstraShortestPathState {
+        let state = new DijkstraShortestPathState(o.graph, o.lineNumber);
+        state.Q = getLabelIfDefined(o.graph, o.Q ? Array.from(o.Q) : undefined);
 
-        if (distance == null) {
-            state.distance = <null|undefined>distance;
+        if (o.distance == null) {
+            state.distance = <null|undefined>o.distance;
         } else {
-            state.distance = Array.from(distance).map((dist: [string, number]) => {
+            state.distance = Array.from(o.distance).map((dist: [string, number]) => {
                 return [
-                    graph.getNodeLabel(dist[0]),
+                    o.graph.getNodeLabel(dist[0]),
                     dist[1].toString(),
                 ];
             });
         }
 
-        if (previous == null) {
-            state.previous = <null|undefined>previous;
+        if (o.previous == null) {
+            state.previous = <null|undefined>o.previous;
         } else {
-            state.previous = Array.from(previous).map((prev: [string, string]) => {
-                return prev.map(p => getLabelIfDefined(graph, p));
+            state.previous = Array.from(o.previous).map((prev: [string, string]) => {
+                return prev.map(p => getLabelIfDefined(o.graph, p));
             })
         }
 
-        state.u = getLabelIfDefined(graph, u);
-        state.neighborEdges = neighborEdges ? neighborEdges.map(edge => edge.label) : <any>neighborEdges;
-        state.edge = edge ? graph.getEdgeLabel(edge) : <any>edge;
-        state.alt = alt;
-        state.root = getLabelIfDefined(graph, root);
+        state.u = getLabelIfDefined(o.graph, o.u);
+        state.neighborEdges = o.neighborEdges ? o.neighborEdges.map(edge => edge.label) : <any>o.neighborEdges;
+        state.edge = o.edge ? o.graph.getEdgeLabel(o.edge) : <any>o.edge;
+        state.alt = o.alt;
+        state.root = getLabelIfDefined(o.graph, o.root);
         return state;
     }
 
-    public algorithmFunction(graph: Graph, rootId: string): DijkstraShortestPathState[] {
+    public algorithmFunction(graph: Graph, root: string): DijkstraShortestPathState[] {
         let states: DijkstraShortestPathState[] = [];
 
-        states.push(this.cns(graph, 1, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined));
-        states.push(this.cns(graph, 2, undefined, undefined, undefined, undefined, undefined, undefined, undefined, rootId));
+        states.push(this.cns({graph, lineNumber: 1}));
+        states.push(this.cns({graph, lineNumber: 2, root}));
 
         let Q = new Set<string>();
-        states.push(this.cns(graph, 3, Q, undefined, undefined, undefined, undefined, undefined, undefined, rootId));
+        states.push(this.cns({graph, lineNumber: 3, Q, root}));
 
         let distance = new Map<string, number>();
-        states.push(this.cns(graph, 4, Q, distance, undefined, undefined, undefined, undefined, undefined, rootId));
+        states.push(this.cns({graph, lineNumber: 4, Q, distance, root}));
 
         let previous = new Map<string, string>();
-        states.push(this.cns(graph, 5, Q, distance, previous, undefined, undefined, undefined, undefined, rootId));
+        states.push(this.cns({graph, lineNumber: 5, Q, distance, previous, root}));
 
         graph.nodes.forEach(node => {
             distance.set(node.id, Infinity);
             previous.set(node.id, null);
             Q.add(node.id);
         });
-        states.push(this.cns(graph, 10, Q, distance, previous, undefined, undefined, undefined, undefined, rootId));
+        states.push(this.cns({graph, lineNumber: 10, Q, distance, previous, root}));
 
-        distance.set(rootId, 0);
-        states.push(this.cns(graph, 12, Q, distance, previous, undefined, undefined, undefined, undefined, rootId));
+        distance.set(root, 0);
+        states.push(this.cns({graph, lineNumber: 12, Q, distance, previous, root}));
 
         let i = 1000;
 
         while (Q.size != 0 && i-- > 0) {
-            states.push(this.cns(graph, 13, Q, distance, previous, undefined, undefined, undefined, undefined, rootId));
+            states.push(this.cns({graph, lineNumber: 13, Q, distance, previous, root}));
 
             const distanceArr = Array.from(distance).filter(kv => Q.has(kv[0]));
             let u: string = Min(new Map(distanceArr), (a, b) => a[1] > b[1] ? 1 : -1)[0];
-            states.push(this.cns(graph, 14, Q, distance, previous, u, undefined, undefined, undefined, rootId));
+            states.push(this.cns({graph, lineNumber: 14, Q, distance, previous, u, root}));
 
             Q.delete(u);
-            states.push(this.cns(graph, 16, Q, distance, previous, u, undefined, undefined, undefined, rootId));
+            states.push(this.cns({graph, lineNumber: 16, Q, distance, previous, u, root}));
 
-            let neighborsEdges: GraphEdge[] = graph.getSources(u);
-            states.push(this.cns(graph, 17, Q, distance, previous, u, neighborsEdges, undefined, undefined, rootId));
+            let neighborEdges: GraphEdge[] = graph.getSources(u);
+            states.push(this.cns({graph, lineNumber: 17, Q, distance, previous, u, neighborEdges, root}));
 
-            neighborsEdges = neighborsEdges.filter(edge => Q.has(edge.to));
-            states.push(this.cns(graph, 18, Q, distance, previous, u, neighborsEdges, undefined, undefined, rootId));
+            neighborEdges = neighborEdges.filter(edge => Q.has(edge.to));
+            states.push(this.cns({graph, lineNumber: 18, Q, distance, previous, u, neighborEdges, root}));
 
-            neighborsEdges
+            neighborEdges
                 .forEach(edge => {
-                    states.push(this.cns(graph, 19, Q, distance, previous, u, neighborsEdges, edge.id, undefined, rootId));
+                    states.push(this.cns({graph, lineNumber: 19, Q, distance, previous, u, neighborEdges, edge: edge.id, root}));
 
                     let alt = distance.get(u) + edge.weight;
-                    states.push(this.cns(graph, 20, Q, distance, previous, u, neighborsEdges, edge.id, undefined, rootId));
+                    states.push(this.cns({graph, lineNumber: 20, Q, distance, previous, u, neighborEdges, edge: edge.id, root}));
 
                     if (alt < distance.get(edge.to)) {
 
                         distance.set(edge.to, alt);
-                        states.push(this.cns(graph, 21, Q, distance, previous, u, neighborsEdges, edge.id, alt, rootId));
+                        states.push(this.cns({graph, lineNumber: 21, Q, distance, previous, u, neighborEdges, edge: edge.id, alt, root}));
 
                         previous.set(edge.to, u);
-                        states.push(this.cns(graph, 22, Q, distance, previous, u, neighborsEdges, edge.id, undefined, rootId));
+                        states.push(this.cns({graph, lineNumber: 22, Q, distance, previous, u, neighborEdges, edge: edge.id, root}));
                     }
-                    states.push(this.cns(graph, 18, Q, distance, previous, u, neighborsEdges, edge.id, undefined, rootId));
+                    states.push(this.cns({graph, lineNumber: 18, Q, distance, previous, u, neighborEdges, edge: edge.id, root}));
                 });
-            states.push(this.cns(graph, 12, Q, distance, previous, u, neighborsEdges, undefined, undefined, rootId));
+            states.push(this.cns({graph, lineNumber: 12, Q, distance, previous, u, neighborEdges, root}));
         }
 
-        states.push(this.cns(graph, 27, Q, distance, previous, undefined, undefined, undefined, undefined, rootId));
+        states.push(this.cns({graph, lineNumber: 27, Q, distance, previous, root}));
 
         return states;
     }

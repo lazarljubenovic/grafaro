@@ -39,6 +39,18 @@ export class DepthFirstSearchState extends AlgorithmState {
 
 }
 
+interface CreateNewStateObject {
+    currentNode?: string,
+    neighbors?: string[],
+    solution?: string[],
+    graph?: Graph,
+    visited?: string[],
+    stack?: Stack<string>,
+    root?: string,
+    lineNumber?: number,
+    neighbor?: string,
+}
+
 export class DepthFirstSearchAlgorithm extends AlgorithmBase {
 
     public name: string = 'Depth First Search';
@@ -99,80 +111,70 @@ export class DepthFirstSearchAlgorithm extends AlgorithmBase {
         };
     }
 
-    private createNewState(currentNode: string,
-                           neighbors: string[],
-                           solution: string[],
-                           graph: Graph,
-                           visited: string[],
-                           stack: Stack<string>,
-                           root: string,
-                           lineNumber: number,
-                           currentNeighbor: string = undefined): DepthFirstSearchState {
-        let state = new DepthFirstSearchState(graph, lineNumber);
-        state.currentNode = getLabelIfDefined(graph, currentNode);
-        state.neighbors = getLabelIfDefined(graph, neighbors);
-        state.neighbor = getLabelIfDefined(graph, currentNeighbor);
-        state.solution = getLabelIfDefined(graph, solution);
-        state.visited = getLabelIfDefined(graph, visited);
-        state.stack = getLabelIfDefined(graph, stack ? stack.toArray() : undefined);
-        state.root = getLabelIfDefined(graph, root);
+    private cns(o: CreateNewStateObject): DepthFirstSearchState {
+        let state = new DepthFirstSearchState(o.graph, o.lineNumber);
+        state.currentNode = getLabelIfDefined(o.graph, o.currentNode);
+        state.neighbors = getLabelIfDefined(o.graph, o.neighbors);
+        state.neighbor = getLabelIfDefined(o.graph, o.neighbor);
+        state.solution = getLabelIfDefined(o.graph, o.solution);
+        state.visited = getLabelIfDefined(o.graph, o.visited);
+        state.stack = getLabelIfDefined(o.graph, o.stack ? o.stack.toArray() : undefined);
+        state.root = getLabelIfDefined(o.graph, o.root);
         return state;
     }
 
-    algorithmFunction(graph: Graph, rootId: string): DepthFirstSearchState[] {
-        if (!graph.hasNodeId(rootId)) {
-            throw new Error(`Node with id ${rootId} (root) doesn't exist on graph!`);
+    algorithmFunction(graph: Graph, root: string): DepthFirstSearchState[] {
+        if (!graph.hasNodeId(root)) {
+            throw new Error(`Node with id ${root} (root) doesn't exist on graph!`);
         }
 
         let states: DepthFirstSearchState[] = [];
 
-        states.push(this.createNewState(undefined, undefined, undefined, graph, undefined, undefined, undefined, 1));
-        states.push(this.createNewState(undefined, undefined, undefined, graph, undefined, undefined, rootId, 2));
+        states.push(this.cns({graph, lineNumber: 1}));
+        states.push(this.cns({graph, root, lineNumber: 2}));
 
         let solution: string[] = [];
-        states.push(this.createNewState(undefined, undefined, solution, graph, undefined, undefined, rootId, 3));
+        states.push(this.cns({solution, graph, root, lineNumber: 3}));
 
         let stack = new Stack<string>();
-        states.push(this.createNewState(undefined, undefined, solution, graph, undefined, stack, rootId, 4));
+        states.push(this.cns({solution, graph, stack, root, lineNumber: 4}));
 
-        stack.push(rootId);
-        states.push(this.createNewState(undefined, undefined, solution, graph, undefined, stack, rootId, 5));
+        stack.push(root);
+        states.push(this.cns({solution, graph, stack, root, lineNumber: 5}));
 
         let visited: string[] = [];
-        states.push(this.createNewState(undefined, undefined, solution, graph, visited, stack, rootId, 6));
+        states.push(this.cns({solution, graph, visited, stack, root, lineNumber: 6}));
 
         while (!stack.isEmpty) {
-            states.push(this.createNewState(undefined, undefined, solution, graph, visited, stack, rootId, 7));
+            states.push(this.cns({solution, graph, visited, stack, root, lineNumber: 7}));
 
             let currentNode: string = stack.pop();
-            states.push(this.createNewState(currentNode, undefined, solution, graph, visited, stack, rootId, 8));
+            states.push(this.cns({currentNode, solution, graph, visited, stack, root, lineNumber: 8}));
 
             let neighbors: string[] = graph.getSources(currentNode).map(edge => edge.to);
-            states.push(this.createNewState(currentNode, neighbors, solution, graph, visited, stack, rootId, 9));
+            states.push(this.cns({currentNode, neighbors, solution, graph, visited, stack, root, lineNumber: 9}));
 
             visited.push(currentNode);
-            states.push(this.createNewState(currentNode, neighbors, solution, graph, visited, stack, rootId, 11));
+            states.push(this.cns({currentNode, neighbors, solution, graph, visited, stack, root, lineNumber: 11}));
 
             neighbors = neighbors.filter(neighbor => visited.indexOf(neighbor) == -1);
-            states.push(this.createNewState(currentNode, neighbors, solution, graph, visited, stack, rootId, 12));
+            states.push(this.cns({currentNode, neighbors, solution, graph, visited, stack, root, lineNumber: 12}));
 
             neighbors = neighbors.filter(neighbor => !stack.contains(neighbor));
-            states.push(this.createNewState(currentNode, neighbors, solution, graph, visited, stack, rootId, 13));
+            states.push(this.cns({currentNode, neighbors, solution, graph, visited, stack, root, lineNumber: 13}));
 
             neighbors.forEach((neighbor, i) => {
                 stack.push(neighbor);
-                states.push(this.createNewState(
-                    currentNode, neighbors, solution, graph, visited, stack, rootId, 13, neighbor
-                ));
+                states.push(this.cns({currentNode, neighbors, solution, graph, visited, stack, root, lineNumber: 13, neighbor}));
             });
-            states.push(this.createNewState(currentNode, neighbors, solution, graph, visited, stack, rootId, 14));
+            states.push(this.cns({currentNode, neighbors, solution, graph, visited, stack, root, lineNumber: 14}));
 
             solution.push(currentNode);
-            states.push(this.createNewState(currentNode, neighbors, solution, graph, visited, stack, rootId, 6));
+            states.push(this.cns({currentNode, neighbors, solution, graph, visited, stack, root, lineNumber: 6}));
 
         }
 
-        states.push(this.createNewState(undefined, undefined, solution, graph, visited, stack, rootId, 16));
+        states.push(this.cns({solution, graph, visited, stack, root, lineNumber: 16}));
         return states;
     }
 
