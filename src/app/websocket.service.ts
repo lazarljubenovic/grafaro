@@ -46,7 +46,6 @@ export class WebSocketService {
         };
         this.ws.onerror = (event) => {
             console.log('Socket error');
-            this.stream.message$.subscribe(message => this.messages.next(message));
         };
         this.stream = new MockMessageStream(this.ws);
 
