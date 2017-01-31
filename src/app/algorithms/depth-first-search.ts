@@ -12,7 +12,7 @@ import {
     KindExporter
 } from './algorithm-base';
 
-export class DepthFirstSearchState extends AlgorithmState {
+class State extends AlgorithmState {
 
     @TrackedVariable() @KindExporter('node') public currentNode: string;
 
@@ -82,7 +82,7 @@ export class DepthFirstSearchAlgorithm extends AlgorithmBase {
   return solution;
 }`;
 
-    public normalize(state: DepthFirstSearchState): NormalizedState {
+    public normalize(state: State): NormalizedState {
         const nodes: GrfGraphNodeOptions[] = state.graphJson.nodes.map(node => {
             return {
                 id: node.id,
@@ -115,47 +115,33 @@ export class DepthFirstSearchAlgorithm extends AlgorithmBase {
         };
     }
 
-    algorithmFunction(graph: Graph, root: string): DepthFirstSearchState[] {
+    algorithmFunction(graph: Graph, root: string): State[] {
         if (!graph.hasNodeId(root)) {
             throw new Error(`Node with id ${root} (root) doesn't exist on graph!`);
         }
 
-        let states: DepthFirstSearchState[] = [];
+        let states: State[] = [];
 
-        states.push(new DepthFirstSearchState({graph, lineNumber: 1}));
-        states.push(new DepthFirstSearchState({graph, root, lineNumber: 2}));
+        states.push(new State({graph, lineNumber: 1}));
+        states.push(new State({graph, root, lineNumber: 2}));
 
         let solution: string[] = [];
-        states.push(new DepthFirstSearchState({solution, graph, root, lineNumber: 3}));
+        states.push(new State({solution, graph, root, lineNumber: 3}));
 
         let stack = new Stack<string>();
-        states.push(new DepthFirstSearchState({solution, graph, stack, root, lineNumber: 4}));
+        states.push(new State({solution, graph, stack, root, lineNumber: 4}));
 
         stack.push(root);
-        states.push(new DepthFirstSearchState({solution, graph, stack, root, lineNumber: 5}));
+        states.push(new State({solution, graph, stack, root, lineNumber: 5}));
 
         let visited: string[] = [];
-        states.push(new DepthFirstSearchState({
-            solution,
-            graph,
-            visited,
-            stack,
-            root,
-            lineNumber: 6
-        }));
+        states.push(new State({solution, graph, visited, stack, root, lineNumber: 6}));
 
         while (!stack.isEmpty) {
-            states.push(new DepthFirstSearchState({
-                solution,
-                graph,
-                visited,
-                stack,
-                root,
-                lineNumber: 7
-            }));
+            states.push(new State({solution, graph, visited, stack, root, lineNumber: 7}));
 
             let currentNode: string = stack.pop();
-            states.push(new DepthFirstSearchState({
+            states.push(new State({
                 currentNode,
                 solution,
                 graph,
@@ -166,7 +152,7 @@ export class DepthFirstSearchAlgorithm extends AlgorithmBase {
             }));
 
             let neighbors: string[] = graph.getSources(currentNode).map(edge => edge.to);
-            states.push(new DepthFirstSearchState({
+            states.push(new State({
                 currentNode,
                 neighbors,
                 solution,
@@ -178,7 +164,7 @@ export class DepthFirstSearchAlgorithm extends AlgorithmBase {
             }));
 
             visited.push(currentNode);
-            states.push(new DepthFirstSearchState({
+            states.push(new State({
                 currentNode,
                 neighbors,
                 solution,
@@ -190,7 +176,7 @@ export class DepthFirstSearchAlgorithm extends AlgorithmBase {
             }));
 
             neighbors = neighbors.filter(neighbor => visited.indexOf(neighbor) == -1);
-            states.push(new DepthFirstSearchState({
+            states.push(new State({
                 currentNode,
                 neighbors,
                 solution,
@@ -202,7 +188,7 @@ export class DepthFirstSearchAlgorithm extends AlgorithmBase {
             }));
 
             neighbors = neighbors.filter(neighbor => !stack.contains(neighbor));
-            states.push(new DepthFirstSearchState({
+            states.push(new State({
                 currentNode,
                 neighbors,
                 solution,
@@ -215,7 +201,7 @@ export class DepthFirstSearchAlgorithm extends AlgorithmBase {
 
             neighbors.forEach((neighbor, i) => {
                 stack.push(neighbor);
-                states.push(new DepthFirstSearchState({
+                states.push(new State({
                     currentNode,
                     neighbors,
                     solution,
@@ -227,40 +213,20 @@ export class DepthFirstSearchAlgorithm extends AlgorithmBase {
                     neighbor
                 }));
             });
-            states.push(new DepthFirstSearchState({
-                currentNode,
-                neighbors,
-                solution,
-                graph,
-                visited,
-                stack,
-                root,
-                lineNumber: 14
+            states.push(new State({
+                currentNode, neighbors, solution, graph, visited, stack, root, lineNumber: 14
             }));
 
             solution.push(currentNode);
-            states.push(new DepthFirstSearchState({
-                currentNode,
-                neighbors,
-                solution,
-                graph,
-                visited,
-                stack,
-                root,
-                lineNumber: 6
+            states.push(new State({
+                currentNode, neighbors, solution, graph, visited, stack, root, lineNumber: 6
             }));
 
         }
 
-        states.push(new DepthFirstSearchState({
-            solution,
-            graph,
-            visited,
-            stack,
-            root,
-            lineNumber: 16
+        states.push(new State({
+            solution, graph, visited, stack, root, lineNumber: 16
         }));
-        console.log(this.algorithmFunction.toString());
         return states;
     }
 

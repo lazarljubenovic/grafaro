@@ -11,7 +11,7 @@ import {Min} from '../data-structures/util';
 import {GrfGraphNodeOptions} from '../graph/graph.module';
 import {VisNgNetworkOptionsEdges} from '@lazarljubenovic/vis-ng/core';
 
-export class DijkstraShortestPathState extends AlgorithmState {
+class State extends AlgorithmState {
 
     @KindExporter('node') @TrackedVariable() public root: string;
     @KindExporter('node') @TrackedVariable() public Q: string[];
@@ -107,7 +107,7 @@ export class DijkstraShortestPathAlgorithm extends AlgorithmBase {
     public trackedVariables: string[] = ['Q', 'distance', 'previous', 'u', 'neighborEdges',
         'edge', 'alt'];
 
-    public normalize(state: DijkstraShortestPathState): NormalizedState {
+    public normalize(state: State): NormalizedState {
 
         const nodes: GrfGraphNodeOptions[] = state.graphJson.nodes.map((node, i) => {
             return {
@@ -138,114 +138,54 @@ export class DijkstraShortestPathAlgorithm extends AlgorithmBase {
         return {nodes, edges, accentColor, primaryColor, secondaryColor};
     }
 
-    public algorithmFunction(graph: Graph, root: string): DijkstraShortestPathState[] {
-        let states: DijkstraShortestPathState[] = [];
+    public algorithmFunction(graph: Graph, root: string): State[] {
+        let states: State[] = [];
 
-        states.push(new DijkstraShortestPathState({graph, lineNumber: 1}));
-        states.push(new DijkstraShortestPathState({graph, lineNumber: 2, root}));
+        states.push(new State({graph, lineNumber: 1}));
+        states.push(new State({graph, lineNumber: 2, root}));
 
         let Q = new Set<string>();
-        states.push(new DijkstraShortestPathState({graph, lineNumber: 3, Q, root}));
+        states.push(new State({graph, lineNumber: 3, Q, root}));
 
         let distance = new Map<string, number>();
-        states.push(new DijkstraShortestPathState({graph, lineNumber: 4, Q, distance, root}));
+        states.push(new State({graph, lineNumber: 4, Q, distance, root}));
 
         let previous = new Map<string, string>();
-        states.push(new DijkstraShortestPathState({
-            graph,
-            lineNumber: 5,
-            Q,
-            distance,
-            previous,
-            root
-        }));
+        states.push(new State({graph, lineNumber: 5, Q, distance, previous, root}));
 
         graph.nodes.forEach(node => {
             distance.set(node.id, Infinity);
             previous.set(node.id, null);
             Q.add(node.id);
         });
-        states.push(new DijkstraShortestPathState({
-            graph,
-            lineNumber: 10,
-            Q,
-            distance,
-            previous,
-            root
-        }));
+        states.push(new State({graph, lineNumber: 10, Q, distance, previous, root}));
 
         distance.set(root, 0);
-        states.push(new DijkstraShortestPathState({
-            graph,
-            lineNumber: 12,
-            Q,
-            distance,
-            previous,
-            root
-        }));
+        states.push(new State({graph, lineNumber: 12, Q, distance, previous, root}));
 
-        let i = 1000;
-
-        while (Q.size != 0 && i-- > 0) {
-            states.push(new DijkstraShortestPathState({
-                graph,
-                lineNumber: 13,
-                Q,
-                distance,
-                previous,
-                root
-            }));
+        while (Q.size != 0) {
+            states.push(new State({graph, lineNumber: 13, Q, distance, previous, root}));
 
             const distanceArr = Array.from(distance).filter(kv => Q.has(kv[0]));
             let u: string = Min(new Map(distanceArr), (a, b) => a[1] > b[1] ? 1 : -1)[0];
-            states.push(new DijkstraShortestPathState({
-                graph,
-                lineNumber: 14,
-                Q,
-                distance,
-                previous,
-                u,
-                root
-            }));
+            states.push(new State({graph, lineNumber: 14, Q, distance, previous, u, root}));
 
             Q.delete(u);
-            states.push(new DijkstraShortestPathState({
-                graph,
-                lineNumber: 16,
-                Q,
-                distance,
-                previous,
-                u,
-                root
-            }));
+            states.push(new State({graph, lineNumber: 16, Q, distance, previous, u, root}));
 
             let neighborEdges: GraphEdge[] = graph.getSources(u);
-            states.push(new DijkstraShortestPathState({
-                graph,
-                lineNumber: 17,
-                Q,
-                distance,
-                previous,
-                u,
-                neighborEdges,
-                root
+            states.push(new State({
+                graph, lineNumber: 17, Q, distance, previous, u, neighborEdges, root
             }));
 
             neighborEdges = neighborEdges.filter(edge => Q.has(edge.to));
-            states.push(new DijkstraShortestPathState({
-                graph,
-                lineNumber: 18,
-                Q,
-                distance,
-                previous,
-                u,
-                neighborEdges,
-                root
+            states.push(new State({
+                graph, lineNumber: 18, Q, distance, previous, u, neighborEdges, root
             }));
 
             neighborEdges
                 .forEach(edge => {
-                    states.push(new DijkstraShortestPathState({
+                    states.push(new State({
                         graph,
                         lineNumber: 19,
                         Q,
@@ -258,7 +198,7 @@ export class DijkstraShortestPathAlgorithm extends AlgorithmBase {
                     }));
 
                     let alt = distance.get(u) + edge.weight;
-                    states.push(new DijkstraShortestPathState({
+                    states.push(new State({
                         graph,
                         lineNumber: 20,
                         Q,
@@ -273,7 +213,7 @@ export class DijkstraShortestPathAlgorithm extends AlgorithmBase {
                     if (alt < distance.get(edge.to)) {
 
                         distance.set(edge.to, alt);
-                        states.push(new DijkstraShortestPathState({
+                        states.push(new State({
                             graph,
                             lineNumber: 21,
                             Q,
@@ -287,7 +227,7 @@ export class DijkstraShortestPathAlgorithm extends AlgorithmBase {
                         }));
 
                         previous.set(edge.to, u);
-                        states.push(new DijkstraShortestPathState({
+                        states.push(new State({
                             graph,
                             lineNumber: 22,
                             Q,
@@ -299,7 +239,7 @@ export class DijkstraShortestPathAlgorithm extends AlgorithmBase {
                             root
                         }));
                     }
-                    states.push(new DijkstraShortestPathState({
+                    states.push(new State({
                         graph,
                         lineNumber: 18,
                         Q,
@@ -311,26 +251,12 @@ export class DijkstraShortestPathAlgorithm extends AlgorithmBase {
                         root
                     }));
                 });
-            states.push(new DijkstraShortestPathState({
-                graph,
-                lineNumber: 12,
-                Q,
-                distance,
-                previous,
-                u,
-                neighborEdges,
-                root
+            states.push(new State({
+                graph, lineNumber: 12, Q, distance, previous, u, neighborEdges, root
             }));
         }
 
-        states.push(new DijkstraShortestPathState({
-            graph,
-            lineNumber: 27,
-            Q,
-            distance,
-            previous,
-            root
-        }));
+        states.push(new State({graph, lineNumber: 27, Q, distance, previous, root}));
 
         return states;
     }
