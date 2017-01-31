@@ -1,4 +1,3 @@
-/* tslint:disable */
 import {NormalizedState} from './algorithm.service';
 import {VisNgNetworkOptionsEdges} from '@lazarljubenovic/vis-ng/core';
 import {GrfGraphNodeOptions} from '../graph/graph.module';
@@ -9,46 +8,51 @@ import {
     TrackedVariable,
     ColorExporter,
     AlgorithmState,
-    getLabelIfDefined, KindExporter
+    getLabelIfDefined,
+    KindExporter
 } from './algorithm-base';
 
 export class DepthFirstSearchState extends AlgorithmState {
 
-    @TrackedVariable()
-    @KindExporter('node') public currentNode: string;
+    @TrackedVariable() @KindExporter('node') public currentNode: string;
 
     @ColorExporter(['neighbor'], (ns, n) => ns.map(x => x == n ? 'primary' : 'default'))
-    @TrackedVariable()
-    @KindExporter('node') public neighbors: string[];
+    @TrackedVariable() @KindExporter('node') public neighbors: string[];
 
     @ColorExporter([], () => 'primary')
-    @TrackedVariable()
-    @KindExporter('node') public neighbor: string;
+    @TrackedVariable() @KindExporter('node') public neighbor: string;
 
-    @TrackedVariable()
-    @KindExporter('node') public visited: string[];
+    @TrackedVariable() @KindExporter('node') public visited: string[];
 
-    @TrackedVariable()
-    @KindExporter('node') public solution: string[];
+    @TrackedVariable() @KindExporter('node') public solution: string[];
 
-    @TrackedVariable()
-    @KindExporter('node') public stack: string[];
+    @TrackedVariable() @KindExporter('node') public stack: string[];
 
-    @TrackedVariable()
-    @KindExporter('node') public root: string;
+    @TrackedVariable() @KindExporter('node') public root: string;
+
+    constructor(o: CreateNewStateObject) {
+        super(o.graph, o.lineNumber);
+        this.currentNode = getLabelIfDefined(o.graph, o.currentNode);
+        this.neighbors = getLabelIfDefined(o.graph, o.neighbors);
+        this.neighbor = getLabelIfDefined(o.graph, o.neighbor);
+        this.solution = getLabelIfDefined(o.graph, o.solution);
+        this.visited = getLabelIfDefined(o.graph, o.visited);
+        this.stack = getLabelIfDefined(o.graph, o.stack ? o.stack.toArray() : undefined);
+        this.root = getLabelIfDefined(o.graph, o.root);
+    }
 
 }
 
 interface CreateNewStateObject {
-    currentNode?: string,
-    neighbors?: string[],
-    solution?: string[],
-    graph?: Graph,
-    visited?: string[],
-    stack?: Stack<string>,
-    root?: string,
-    lineNumber?: number,
-    neighbor?: string,
+    currentNode?: string;
+    neighbors?: string[];
+    solution?: string[];
+    graph?: Graph;
+    visited?: string[];
+    stack?: Stack<string>;
+    root?: string;
+    lineNumber?: number;
+    neighbor?: string;
 }
 
 export class DepthFirstSearchAlgorithm extends AlgorithmBase {
@@ -111,18 +115,6 @@ export class DepthFirstSearchAlgorithm extends AlgorithmBase {
         };
     }
 
-    private cns(o: CreateNewStateObject): DepthFirstSearchState {
-        let state = new DepthFirstSearchState(o.graph, o.lineNumber);
-        state.currentNode = getLabelIfDefined(o.graph, o.currentNode);
-        state.neighbors = getLabelIfDefined(o.graph, o.neighbors);
-        state.neighbor = getLabelIfDefined(o.graph, o.neighbor);
-        state.solution = getLabelIfDefined(o.graph, o.solution);
-        state.visited = getLabelIfDefined(o.graph, o.visited);
-        state.stack = getLabelIfDefined(o.graph, o.stack ? o.stack.toArray() : undefined);
-        state.root = getLabelIfDefined(o.graph, o.root);
-        return state;
-    }
-
     algorithmFunction(graph: Graph, root: string): DepthFirstSearchState[] {
         if (!graph.hasNodeId(root)) {
             throw new Error(`Node with id ${root} (root) doesn't exist on graph!`);
@@ -130,51 +122,145 @@ export class DepthFirstSearchAlgorithm extends AlgorithmBase {
 
         let states: DepthFirstSearchState[] = [];
 
-        states.push(this.cns({graph, lineNumber: 1}));
-        states.push(this.cns({graph, root, lineNumber: 2}));
+        states.push(new DepthFirstSearchState({graph, lineNumber: 1}));
+        states.push(new DepthFirstSearchState({graph, root, lineNumber: 2}));
 
         let solution: string[] = [];
-        states.push(this.cns({solution, graph, root, lineNumber: 3}));
+        states.push(new DepthFirstSearchState({solution, graph, root, lineNumber: 3}));
 
         let stack = new Stack<string>();
-        states.push(this.cns({solution, graph, stack, root, lineNumber: 4}));
+        states.push(new DepthFirstSearchState({solution, graph, stack, root, lineNumber: 4}));
 
         stack.push(root);
-        states.push(this.cns({solution, graph, stack, root, lineNumber: 5}));
+        states.push(new DepthFirstSearchState({solution, graph, stack, root, lineNumber: 5}));
 
         let visited: string[] = [];
-        states.push(this.cns({solution, graph, visited, stack, root, lineNumber: 6}));
+        states.push(new DepthFirstSearchState({
+            solution,
+            graph,
+            visited,
+            stack,
+            root,
+            lineNumber: 6
+        }));
 
         while (!stack.isEmpty) {
-            states.push(this.cns({solution, graph, visited, stack, root, lineNumber: 7}));
+            states.push(new DepthFirstSearchState({
+                solution,
+                graph,
+                visited,
+                stack,
+                root,
+                lineNumber: 7
+            }));
 
             let currentNode: string = stack.pop();
-            states.push(this.cns({currentNode, solution, graph, visited, stack, root, lineNumber: 8}));
+            states.push(new DepthFirstSearchState({
+                currentNode,
+                solution,
+                graph,
+                visited,
+                stack,
+                root,
+                lineNumber: 8
+            }));
 
             let neighbors: string[] = graph.getSources(currentNode).map(edge => edge.to);
-            states.push(this.cns({currentNode, neighbors, solution, graph, visited, stack, root, lineNumber: 9}));
+            states.push(new DepthFirstSearchState({
+                currentNode,
+                neighbors,
+                solution,
+                graph,
+                visited,
+                stack,
+                root,
+                lineNumber: 9
+            }));
 
             visited.push(currentNode);
-            states.push(this.cns({currentNode, neighbors, solution, graph, visited, stack, root, lineNumber: 11}));
+            states.push(new DepthFirstSearchState({
+                currentNode,
+                neighbors,
+                solution,
+                graph,
+                visited,
+                stack,
+                root,
+                lineNumber: 11
+            }));
 
             neighbors = neighbors.filter(neighbor => visited.indexOf(neighbor) == -1);
-            states.push(this.cns({currentNode, neighbors, solution, graph, visited, stack, root, lineNumber: 12}));
+            states.push(new DepthFirstSearchState({
+                currentNode,
+                neighbors,
+                solution,
+                graph,
+                visited,
+                stack,
+                root,
+                lineNumber: 12
+            }));
 
             neighbors = neighbors.filter(neighbor => !stack.contains(neighbor));
-            states.push(this.cns({currentNode, neighbors, solution, graph, visited, stack, root, lineNumber: 13}));
+            states.push(new DepthFirstSearchState({
+                currentNode,
+                neighbors,
+                solution,
+                graph,
+                visited,
+                stack,
+                root,
+                lineNumber: 13
+            }));
 
             neighbors.forEach((neighbor, i) => {
                 stack.push(neighbor);
-                states.push(this.cns({currentNode, neighbors, solution, graph, visited, stack, root, lineNumber: 13, neighbor}));
+                states.push(new DepthFirstSearchState({
+                    currentNode,
+                    neighbors,
+                    solution,
+                    graph,
+                    visited,
+                    stack,
+                    root,
+                    lineNumber: 13,
+                    neighbor
+                }));
             });
-            states.push(this.cns({currentNode, neighbors, solution, graph, visited, stack, root, lineNumber: 14}));
+            states.push(new DepthFirstSearchState({
+                currentNode,
+                neighbors,
+                solution,
+                graph,
+                visited,
+                stack,
+                root,
+                lineNumber: 14
+            }));
 
             solution.push(currentNode);
-            states.push(this.cns({currentNode, neighbors, solution, graph, visited, stack, root, lineNumber: 6}));
+            states.push(new DepthFirstSearchState({
+                currentNode,
+                neighbors,
+                solution,
+                graph,
+                visited,
+                stack,
+                root,
+                lineNumber: 6
+            }));
 
         }
 
-        states.push(this.cns({solution, graph, visited, stack, root, lineNumber: 16}));
+        states.push(new DepthFirstSearchState({
+            solution,
+            graph,
+            visited,
+            stack,
+            root,
+            lineNumber: 16
+        }));
+        console.log(this.algorithmFunction.toString());
         return states;
     }
 
