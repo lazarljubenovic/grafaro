@@ -19,7 +19,8 @@
     "serve": "nodemon ./server/index.js"
   },
   "pre-commit": [
-    "lint", "test-single"
+    "lint",
+    "test-single"
   ],
   "dependencies": {
     "@angular/common": "^2.4.4",
@@ -67,7 +68,7 @@
     "@types/mongoose": "^4.7.2",
     "@types/node": "^6.0.42",
     "@types/ws": "0.0.37",
-    "angular-cli": "^1.0.0-beta.26",
+    "angular-cli": "^1.0.0-beta.28.3",
     "codelyzer": "~0.0.26",
     "jasmine-core": "2.4.1",
     "jasmine-spec-reporter": "2.5.0",
