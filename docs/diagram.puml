@@ -64,6 +64,151 @@ together {
         text: string
         type: string
     }
+
+    interface CreateNewStateObject <<interface>> {
+        currentNode?: string
+        neighbors?: string[]
+        solution?: string[]
+        graph?: Graph
+        visited?: string[]
+        queue?: Queue<string>
+        root?: string
+        lineNumber?: number
+        neighbor?: string
+    }
+
+    interface GrfGraphNodeAnnotationOptions <<interface>> {
+        position: string
+        text: string
+        style: string
+    }
+
+    interface GrfGraphNodeOptions <<interface>> {
+        id: string
+        label: string
+        position: { x: number, y: number }
+        isStart: boolean
+        isEnd: boolean
+        isAccentColor: boolean
+        isPrimaryColor: boolean
+        isSecondaryColor: boolean
+        isDimmedColor: boolean
+        annotations?: GrfGraphNodeAnnotationOptions[]
+    }
+
+    interface GrfGraphEdgeOptions <<interface>> {
+        id: string
+        label: string
+        from: string
+        to: string
+    }
+
+    interface Profile <<interface>> {
+        _id: string
+        displayName: string
+        socialId: string
+    }
+
+    interface GraphNodePosition <<interface>> {
+            x: number
+            y: number
+    }
+
+    interface GraphNode <<interface>> {
+            id: NodeId
+            label: NodeLabel
+            weight: number
+            position: GraphNodePosition
+    }
+
+    interface GraphEdge <<interface>> {
+            id: EdgeId
+            label: EdgeLabel
+            from: NodeId
+            to: NodeId
+            weight: number
+    }
+
+    interface GraphJson <<interface>> {
+            nodes: GraphNode[]
+            edges: GraphEdge[]
+            nextEdgeId: number
+            nextNodeId: number
+    }
+
+}
+
+together {
+
+    class Graph {
+        -_nodes: GraphNode[]
+        -_edges: GraphEdge[]
+        -_nodeIdGenerator: IdGenerator
+        -_edgeIdGenerator: IdGenerator
+        +nodeLabelChange$: ReplaySubject<string[]>
+        ..Getters..
+        +get nodes(): GraphNode[]
+        +get edges(): GraphEdge[]
+        __
+        -emitNodeLabelChange()
+        +constructor()
+        +setNodeIdGeneratorId(value: number): void
+        +setEdgeIdGeneratorId(value: number): void
+        +writeJson(): GraphJson
+        +readJson(json: GraphJson): Graph
+        +hasNodeId(nodeId: NodeId): boolean
+        +getNodeId(nodeLabel: NodeLabel): NodeId
+        +getNodeLabel(nodeId: NodeId): NodeLabel
+        +addNode(label: NodeLabel, position: GraphNodePosition, weight: number = 1): Graph
+        +removeNode(nodeId: NodeId): Graph
+        +hasEdge(from: NodeId, to: NodeId): boolean
+        +addEdge(from: NodeId, to: NodeId, label: EdgeLabel, weight: number = 1): Graph
+        +addUndirectedEdge(from: NodeId, to: NodeId, label: EdgeLabel, weight: number = 1): Graph
+        +removeEdge(from: NodeId, to: NodeId): Graph
+        +getEdgeLabel(edgeId: string): string
+        +getEdgeId(edgeLabel: string): string
+        +getEdgeWeight(edgeId: string): number
+        +changeNodeLabel(nodeId: NodeId, newLabel: NodeLabel): Graph
+        +getSources(nodeId: NodeId): GraphEdge[]
+        +getSinks(nodeId: NodeId): GraphEdge[]
+        +getMatrix(): number[][]
+        +getEdge(edgeId: EdgeId): GraphEdge
+    }
+
+    class IdGenerator {
+        -_id: number
+        -_prefix: string
+        ..Getter..
+        +get id(): number
+        ..Setter..
+        +set id(value: number)
+        __
+        +constructor(prefix: string, initValue: number = 0)
+        +getNext(): string
+    }
+
+    abstract class AbstractMessageStream {
+        #_message$: Observable<Message<any>>
+        ..Getter..
+        +get message$(): Observable<Message<any>>
+        __
+        +constructor(ws: WebSocket)
+        +createStream(ws: WebSocket)
+    }
+
+    class MockMessageStream extends AbstractMessageStream {
+        +createStream(ws: WebSocket): Observable<Message<any>>
+        +createChatMessages()
+        +returnJoin()
+        +createGraph()
+        +constructor(ws: WebSocket)
+    }
+
+    class MessageStream extends AbstractMessageStream {
+        +createStream(ws: WebSocket)
+        +constructor(ws: WebSocket)
+    }
+
 }
 
 class ColorThemeService <<Injectable>> {
@@ -88,17 +233,151 @@ package BrowserModule{}
 package FormsModule{}
 package HttpModule{}
 package StepperModule{}
-package ProjectViewModule{}
-package ProjectBrowserModule{}
 package RouterModule{}
 package CommonModule{}
-package GraphModule{}
-package JdenticonModule{}
-package MatrixModule{}
 package ChatModule{}
 package TabsModule{}
 package ToastModule{}
 package UserInterfaceModule{}
+
+package ProjectViewModule{}
+
+package ProjectBrowserModule{
+    class ProjectBrowserComponent <<Component>> implements OnInit {
+        +projects$: Observable<Project[]>
+        +queryForm: FormGroup
+        +roomsInfo: RoomInfo[]
+        ..Dependency Injection..
+        -_projectsService: ProjectsService
+        -_formBuilder: FormBuilder
+        -joinService: JoinService
+        -roomInfoService: RoomInfoService
+        -router: Router
+        __
+        +constructor(DI)
+        +ngOnInit()
+        +createNewRoom()
+    }
+
+    class ProjectCardComponent <<Component>> implements OnInit {
+        ..Input..
+        +roomInfo: RoomInfo
+        __
+        +constructor() -empty
+        +ngOnInit() -empty
+    }
+
+    class ProjectsService <<Injectable>> extends GrafaroHttpService {
+'        todo
+    }
+
+    class JoinService <<Injectable>> {
+        +isMaster = false
+        ..Dependency Injection..
+        -webSocketService: WebSocketService
+        __
+        +create(): Observable<JoinMessageInfo>
+        +constructor(webSocketService)
+        +newRoom(): void
+        +joinRoom(id: string): void
+    }
+
+    class RoomInfoService <<Injectable>> {
+        ..Dependency Injection..
+        -webSocketService: WebSocketService
+        __
+        +create(): Observable<RoomInfoMessage>
+        +constructor(webSocketService)
+    }
+}
+
+package MatrixModule{
+    class MatrixComponent <<Component>> implements OnInit {
+        +data: number[][]
+        +labels: string[]
+        -graph: Graph
+        +highlightedIndexes: number[]
+        ..Dependency Injection..
+        -algorithmService: AlgorithmService
+        __
+        -graphToMatrix(): void
+        +highlight(row: number, column: number): void
+        +addNode(): void
+        +removeNode(): void
+        +connectNode(row: number, column: number)
+        +constructor(algorithmService)
+        +ngOnInit()
+    }
+
+    class MatrixWithLabelsPipe <<Pipe>> implements PipeTransform {
+        +transform(data: any[][], rowLabels: string[], colLabels: string[]): any[][]
+    }
+}
+
+package JdenticonModule{
+    class JDenticonComponent <<Component>> implements OnChanges {
+        ..Inputs..
+        +plaintext: string
+        +hash: string
+        +padding: number
+        ..ViewChild..
+        +elementRef: ElementRef
+        ..Dependency Injection..
+        -hashService: Sha1Service
+        __
+        +update(): void
+        +constructor(hashService)
+    }
+
+    class Sha1Service <<Injectable>> {
+        -algorithm
+        +convert(plaintext: string): string
+        +constructor() -empty
+    }
+}
+
+package GraphModule{
+    class GraphComponent <<Component>> {
+        -_defaultOptions: VisNgNetworkOptions
+        -_globalOptions: VisNgNetworkOptions
+        +resultingOptions: VisNgNetworkOptions
+        ..Inputs..
+        +nodes: GrfGraphNodeOptions[]
+        +edges: GrfGraphEdgeOptions[]
+        ..Outputs..
+        +graphClick: EventEmitter<VisNgNetworkEventArgument>
+        +graphNodeDragEnd: EventEmitter<VisNgNetworkEventArgument>
+        ..ViewChild..
+        +visNetworkComponentInstance: VisNetworkComponent
+        ..Dependency Injection..
+        -graphOptionsService: GraphOptionsService
+        __
+        -updateResultingOptions(): void
+        +onGraphClick(event: VisNgNetworkEventArgument): void
+        +onGraphDragEnd(event: VisNgNetworkEventArgument): void
+        +constructor(graphOptionsService)
+        +ngOnInit(): void
+        +dragging(event: VisNgNetworkEventArgument): void -todo
+        +afterDrawing(ctx: CanvasRenderingContext2D): void
+    }
+
+    class GraphNodeOptionsTransformPipe <<Pipe>> {
+        ..Dependency Injection..
+        -theme: ColorThemeService
+        __
+        +constructor(theme)
+        +transform(options: GrfGraphNodeOptions): VisNgNetworkOptionsNodes
+    }
+
+    class GraphEdgeOptionsTransformPipe <<Pipe>> implements PipeTransform {
+        +transform(value: GrfGraphEdgeOptions): VisNgNetworkOptionsEdges
+    }
+
+    class ColorThemeService <<Injectable>> {
+        +palette: any
+        +constructor() -empty
+    }
+}
 
 package FourOhFourModule {
     class FourOhFourComponent <<Component>> implements OnInit {
@@ -236,16 +515,6 @@ package AppModule <<Folder>> {
 
 }
 
-abstract class AnnotationBase {
-    +value: any
-    +box: HTMLElement
-    +snippet: HTMLelement
-    ..Dependancy Injection..
-    +cdr: ChangeDetectorRef
-    +onChange(): void
-    +constructor(cdr)
-}
-
 package AlgorithmModule {
     class AlgorithmComponent <<Component>> implements OnInit {
         +code$
@@ -267,86 +536,39 @@ package AlgorithmModule {
         transform(lineNumber: number, box: HTMLElement, totalLineNumber: number): string
     }
 
-    class AnnotationDirective <<Directive>> implements OnChanges {
-        +instance: AnnotationBase
-        -_grfAnnotation: any
-        -_box: HTMLElement
-        ..DependencyInjection..
-        -elementRef: ElementRef
-        -cfr: ComponentFactoryResolver
-        -vcRef: ViewContainerRef
-        -notifyService: NotifyService -unused
-        __
-        +constructor(elementRef, cfr, vcRef, notifyService)
-        +ngOnChanges(): void
-        +create(annotation = this._grfAnnotation): void
-        -createAnnotation(klass, value): void
-        ..Inputs..
-        +set grfAnnotation(annotation: any) -unused
-        +set box(value: HTMLElement)
-        ..HostListener('click')..
-        +onClick(): void -unused
-    }
-
-    class ArrayComponent <<Component>> extends AnnotationBase {
-        +value: string[]
-        +highlightedLetters: string[]
-        +onChange(): void
-        +constructor(cdr)
-    }
-
-    class SingleItemComponent <<Component>> extends AnnotationBase implements OnInit {
-        +value: string
-        +onChange()
-        +ngOnInit() -empty
-        +constructor(cdr)
-    }
-
-    class EmptyComponent <<Component>> implements OnInit {
-        +constructor() -empty
-        +ngOnInit() -empty
-    }
-
-    class NullComponent <<Component>> implements OnInit {
-        +constructor() -empty
-        +ngOnInit() -empty
-    }
-}
-
-package DoWeNeedIt? {
-
-    class PopupComponent <<Component DoWeNeedIt?>>
-    class PopupPositionPipe <<Pipe DoWeNeedIt?>>
-
-    package AnnotationModule {
-    '    do we need this?
-        class AnnotationComponent <<Component>> {
-        }
-
-        class LineComponent <<Component>> {
-        }
-
-        class PolyLineComponent <<Component>> {
-        }
-
-        class CalloutLineComponent <<Component>> {
-        }
-
-        class ElementPositionPipe <<Pipe>> {
-        }
-
-        class GeometryService <<Injectable>> {
-        }
-
-        class CalloutLineService <<Injectable>>{
-        }
-
-        class ElementPositionService <<Injectable>> {
-        }
-    }
 }
 
 together {
+
+    abstract class AlgorithmBase {
+        +name: string
+        +abbr: string
+        +code: string
+        +trackedVariables: string[]
+        +normalize(state: AlgorithmState): NormalizedState
+        +algorithmFunction(graph: Graph, rootId: string): AlgorithmState[]
+        +getCodeJson(state: AlgorithmState, trackedVariables: string[]): CodeJson
+    }
+
+    class BreadthFirstSearch extends AlgorithmBase {
+        +normalize(state: BreadthFirstSearchState): NormalizedState
+        +algorithmFunction(graph: Graph, rootId: string): BreadthFirstSearchState[]
+    }
+
+    class DepthFirstSearch extends AlgorithmBase {
+        +normalize(state: DepthFirstSearchState): NormalizedState
+        +algorithmFunction(graph: Graph, rootId: string): DepthFirstSearchState[]
+    }
+
+    class DijkstraShortestPath extends AlgorithmBase {
+        +normalize(state: DijkstraShortestPathState): NormalizedState
+        +algorithmFunction(graph: Graph, rootId: string): DijkstraShortestPathState[]
+    }
+
+}
+
+together {
+
     abstract class AlgorithmState {
         +_trackedVarsNames: string[]
         +_exportFunctions: Map<string, {params: string[], fn: Function}>
@@ -365,14 +587,28 @@ together {
         +getDebugKind(trackedVar: any)
     }
 
-    abstract class AlgorithmBase {
-        +name: string
-        +abbr: string
-        +code: string
-        +trackedVariables: string[]
-        +normalize(state: AlgorithmState): NormalizedState
-        +algorithmFunction(graph: Graph, rootId: string): AlgorithmState[]
-        +getCodeJson(state: AlgorithmState, trackedVariables: string[]): CodeJson
+    class DijkstraShortestPathState extends AlgorithmState {
+'        how to annote decorators???
+        +root: string
+        +Q: string[]
+        +distance: string[][]
+        +previous: string[][]
+        +u: string
+        +neighborEdges: string[]
+        +edge: string[]
+        +alt: number
+        +constructor(o: CreateNewStateObject)
+    }
+
+    class DepthFirstSearchState extends AlgorithmState {
+        +currentNode: string
+        +neighbors: string[]
+        +neighbor: string
+        +visited: string[]
+        +solution: string[]
+        +stack: string[]
+        +root: string
+        +constructor(o: CreateNewStateObject)
     }
 
     class BreadhFirstSearchState extends AlgorithmState {
@@ -384,74 +620,8 @@ together {
         +solution: string[]
         +queue: string[]
         +root: string
+        +constructor(o: CreateNewStateObject)
     }
-
-    class BreadthFirstSearch extends AlgorithmBase {
-        +normalize(state: BreadthFirstSearchState): NormalizedState
-        -createNewState(currentNode: string,\
-neighbors: string[],\
-solution: string[],\
-graph: Graph,\
-visited: string[],\
-queue: Queue<string>,\
-root: string,\
-lineNumber: number,\
-currentNeighbor: string = undefined): BreadthFirstSearchState
-        +algorithmFunction(graph: Graph, rootId: string): BreadthFirstSearchState[]
-    }
-
-    class DepthFirstSearchState extends AlgorithmState {
-        +currentNode: string
-        +neighbors: string[]
-        +neighbor: string
-        +visited: string[]
-        +solution: string[]
-        +stack: string[]
-        +root: string
-    }
-
-    class DepthFirstSearch extends AlgorithmBase {
-        +normalize(state: DepthFirstSearchState): NormalizedState
-        +algorithmFunction(graph: Graph, rootId: string): DepthFirstSearchState[]
-        -createNewState(currentNode: string,\
-neighbors: string[],\
-solution: string[],\
-graph: Graph,\
-visited: string[],\
-queue: Queue<string>,\
-root: string,\
-lineNumber: number,\
-currentNeighbor: string = undefined): DepthFirstSearchState
-    }
-
-    class DijkstraShortestPathDState extends AlgorithmState {
-'        how to annote decorators???
-        +root: string
-        +Q: string[]
-        +distance: string[][]
-        +previous: string[][]
-        +u: string
-        +neighborEdges: string[]
-        +edge: string[]
-        +alt: number
-    }
-
-    class DijkstraShortestPath extends AlgorithmBase {
-        +normalize(state: DijkstraShortestPathState): NormalizedState
-        -cns(graph: Graph,\
-lineNumber: number,\
-Q: Set<string>,\
-distance: Map<string, number>,\
-previous: Map<string, string>,\
-u: string,\
-neighborEdges: GraphEdge[],\
-edge: string,\
-alt: number,\
-root: string): DijkstraShortestPathState
-
-    +algorithmFunction(graph: Graph, rootId: string): DijkstraShortestPathState[]
-    }
-
 }
 
 package CoreModule {
@@ -474,6 +644,20 @@ package CoreModule {
 
 
 package LoginPageModule {
+    class LoginPageComponent <<Component>> implements OnInit {
+        +facebookLogin(): void
+        +twitterLogin(): void
+        +googleLogin(): void
+        +constructor() -empty
+        +ngOnInit() -empty
+    }
+
+    class UserService <<Injectable>> extends GrafaroHttpService {
+        -_user: Profile
+        +constructor(http: Http)
+        +getUserBySocialId(socialId: string): Observable<Profile>
+        +changeDisplayName(newName: string): Observable<Profile>
+    }
 }
 
 package DebugTableModule {
@@ -538,7 +722,7 @@ AppModule ..> BrowserModule : <<imports>>
 AppModule ..> FormsModule : <<imports>>
 AppModule ..> HttpModule : <<imports>>
 AppModule ..> StepperModule : <<imports>>
-AppModule ..> ProjectViewModel : <<imports>>
+AppModule ..> ProjectViewModule : <<imports>>
 AppModule ..> ProjectBrowserModule : <<imports>>
 AppModule ..> FourOhFourModule : <<imports>>
 AppModule ..> RouterModule : <<imports>>
@@ -546,7 +730,6 @@ AppModule ..> LoginPageModule : <<imports>>
 
 AlgorithmModule ..> CommonModule : <<imports>>
 AlgorithmModule ..> UtilPipesModule : <<imports>>
-AlgorithmModule ..> AnnotationModule : <<imports Is this needed?>>
 AlgorithmModule ..> DebugTableModule : <<imports>>
 
 DebugTableModule ..> CommonModule : <<imports>>
@@ -564,6 +747,25 @@ UtilPipesModule ..> CommonModule
 
 FourOhFourModule ..> CommonModule : <<imports>>
 FourOhFourModule ..> RouterModule : <<imports>>
+
+GraphModule ..> CommonModule : <<imports>>
+GraphModule ..> VisNetworkModule : <<imports>>
+
+Jdenticon ..> CommonModule : <<imports>>
+
+LoginPageModule ..> CommonModule : <<imports>>
+LoginPageModule ..> RouterModule : <<imports>>
+LoginPageModule ..> CoreModule : <<imports>>
+
+MatrixModule ..> CommonModule : <<imports>>
+
+ProjectBrowserModule ..> CommonModule : <<imports>>
+ProjectBrowserModule ..> RouterModule : <<imports>>
+ProjectBrowserModule ..> UserInterfaceModule : <<imports>>
+ProjectBrowserModule ..> JdenticonModule : <<imports>>
+ProjectBrowserModule ..> FormsModule : <<imports>>
+ProjectBrowserModule ..> ReactiveFormsModule : <<imports>>
+ProjectBrowserModule ..> UtilPipesModule : <<imports>>
 
 hide <<interface>> circle
 hide <<interface>> methods
