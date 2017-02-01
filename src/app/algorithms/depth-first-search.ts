@@ -57,6 +57,8 @@ interface CreateNewStateObject {
 
 export class DepthFirstSearchAlgorithm extends AlgorithmBase {
 
+    protected states: State[];
+
     public name: string = 'Depth First Search';
     public abbr: string = 'dfs';
 
@@ -227,6 +229,7 @@ export class DepthFirstSearchAlgorithm extends AlgorithmBase {
         states.push(new State({
             solution, graph, visited, stack, root, lineNumber: 16
         }));
+        this.states = states;
         return states;
     }
 

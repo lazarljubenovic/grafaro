@@ -221,6 +221,8 @@ export abstract class AlgorithmBase {
     public abstract name: string;
     public abstract abbr: string;
 
+    protected abstract states: AlgorithmState[];
+
     public abstract code: string;
     public abstract trackedVariables: string[];
 

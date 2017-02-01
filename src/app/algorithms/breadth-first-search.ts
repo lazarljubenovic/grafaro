@@ -56,6 +56,8 @@ interface CreateNewStateObject {
 
 export class BreadthFirstSearchAlgorithm extends AlgorithmBase {
 
+    protected states: State[];
+
     public abbr: string = 'bfs';
 
     public name: string = 'Breadth First Search';
@@ -217,6 +219,7 @@ export class BreadthFirstSearchAlgorithm extends AlgorithmBase {
         }
 
         states.push(new State({solution, graph, visited, queue, root, lineNumber: 16}));
+        this.states = states;
         return states;
     }
 

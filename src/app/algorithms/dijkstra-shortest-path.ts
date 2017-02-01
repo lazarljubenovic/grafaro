@@ -71,6 +71,8 @@ interface CreateNewStateObject {
 
 export class DijkstraShortestPathAlgorithm extends AlgorithmBase {
 
+    public states: AlgorithmState[];
+
     public name: string = 'Dijkstra Shortest Path';
 
     public abbr: string = 'dsp';
@@ -108,7 +110,6 @@ export class DijkstraShortestPathAlgorithm extends AlgorithmBase {
         'edge', 'alt'];
 
     public normalize(state: State): NormalizedState {
-
         const nodes: GrfGraphNodeOptions[] = state.graphJson.nodes.map((node, i) => {
             return {
                 id: node.id,
@@ -257,7 +258,7 @@ export class DijkstraShortestPathAlgorithm extends AlgorithmBase {
         }
 
         states.push(new State({graph, lineNumber: 27, Q, distance, previous, root}));
-
+        this.states = states;
         return states;
     }
 
