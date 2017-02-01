@@ -212,6 +212,7 @@ export abstract class AlgorithmState {
 export interface CodeJsonElement {
     text: string;
     type: string;
+    isTracked: boolean;
 }
 
 export type CodeJson = CodeJsonElement[][];
@@ -230,10 +231,10 @@ export abstract class AlgorithmBase {
 
     public abstract algorithmFunction(graph: Graph, rootId: string): AlgorithmState[];
 
-    public getCodeJson(state: AlgorithmState, trackedVariables: string[]): CodeJson {
+    public getCodeJson(trackedVariables: string[]): CodeJson {
         const tokens = Esprima.tokenize(this.code, {loc: true});
         const numberOfLines = this.code.split('\n').length;
-        let codeJson = Array(numberOfLines).fill(null).map(_ => []);
+        let codeJson: CodeJson = Array(numberOfLines).fill(null).map(_ => []);
         let previousLine = 0;
         let currentLine = 1;
         let currentColumn = 0;
@@ -264,7 +265,6 @@ export abstract class AlgorithmBase {
                 text: token.value,
                 type: token.type,
                 isTracked,
-                value: state[token.value],
             });
             previousLine = currentLine;
         }

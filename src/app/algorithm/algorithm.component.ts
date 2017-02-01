@@ -4,6 +4,7 @@ import {AlgorithmService} from '../algorithms/algorithm.service';
 import {NotifyService} from './notify.service';
 import {DebugTableService} from '../debug-table/debug-table.service';
 import {DijkstraShortestPathAlgorithm} from '../algorithms/dijkstra-shortest-path';
+import {CodeJson} from '../algorithms/algorithm-base';
 
 @Component({
     selector: 'grf-algorithm',
@@ -12,7 +13,7 @@ import {DijkstraShortestPathAlgorithm} from '../algorithms/dijkstra-shortest-pat
 })
 export class AlgorithmComponent implements OnInit {
 
-    public code$;
+    public code$: Observable<CodeJson>;
 
     private currentState$: Observable<any>;
 

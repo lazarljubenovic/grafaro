@@ -4,7 +4,7 @@ import {GrfGraphNodeOptions} from '../graph/graph.module';
 import {ReplaySubject} from 'rxjs';
 import {ClickPosition} from '../project-view/toolbar/toolbar.component';
 import {Graph} from '../models/graph.model';
-import {AlgorithmBase, AlgorithmState} from './algorithm-base';
+import {AlgorithmBase, AlgorithmState, CodeJson} from './algorithm-base';
 import {DepthFirstSearchAlgorithm} from './depth-first-search';
 
 export interface NormalizedState {
@@ -69,10 +69,9 @@ export class AlgorithmService {
         this.algorithmStrategy$.next(this.algorithmStrategy);
     }
 
-    public getCodeJson() {
-        const state = this.states[this.currentStateIndex];
+    public getCodeJson(): CodeJson {
         const tracked = this.algorithmStrategy.trackedVariables;
-        return this.algorithmStrategy.getCodeJson(state, tracked);
+        return this.algorithmStrategy.getCodeJson(tracked);
     }
 
     public setGraph() {
