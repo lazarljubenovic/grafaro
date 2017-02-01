@@ -15,6 +15,9 @@ import {StepperStepComponent} from './stepper-step/stepper-step.component';
     templateUrl: './stepper.component.html',
     styleUrls: ['./stepper.component.scss']
 })
+/**
+ * @deprecated // TODO can remove
+ */
 export class StepperComponent implements OnInit, AfterContentInit {
 
     @ContentChildren(StepperStepComponent)

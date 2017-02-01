@@ -5,6 +5,7 @@ import {DebugData} from '../algorithms/algorithm-base';
 export class FilterPipe implements PipeTransform {
 
     transform(debugData: DebugData[], names: string[]): DebugData[] {
+        console.log('pipe', debugData, names);
         if (debugData == null) {
             return [];
         }

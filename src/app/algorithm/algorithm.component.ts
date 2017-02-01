@@ -4,6 +4,8 @@ import {AlgorithmService} from '../algorithms/algorithm.service';
 import {NotifyService} from './notify.service';
 import {DebugTableService} from '../debug-table/debug-table.service';
 import {DijkstraShortestPathAlgorithm} from '../algorithms/dijkstra-shortest-path';
+import {CodeJson} from '../algorithms/algorithm-base';
+import {StateManagerObject} from '../algorithms/state-manager';
 
 @Component({
     selector: 'grf-algorithm',
@@ -12,9 +14,9 @@ import {DijkstraShortestPathAlgorithm} from '../algorithms/dijkstra-shortest-pat
 })
 export class AlgorithmComponent implements OnInit {
 
-    public code$;
+    public code$: Observable<CodeJson>;
 
-    private currentState$: Observable<any>;
+    private currentState$: Observable<StateManagerObject>;
 
     public lineNumber$: Observable<number>;
 
@@ -29,7 +31,7 @@ export class AlgorithmComponent implements OnInit {
                 private notifyService: NotifyService,
                 private debugTableService: DebugTableService) {
         algorithmService.setAlgorithm(new DijkstraShortestPathAlgorithm()); // init algorithm
-        this.currentState$ = algorithmService.currentState$;
+        this.currentState$ = algorithmService.state$;
     }
 
     public toggleTrackedVariableVisibility(varName: string): void {
@@ -37,12 +39,11 @@ export class AlgorithmComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.code$ = this.currentState$
-            .map(state => {
-                return this.algorithmService.getCodeJson();
-            });
+        this.code$ = this.algorithmService.codeJson$;
 
-        this.lineNumber$ = this.currentState$.map(state => state.lineNumber);
+        this.lineNumber$ = this.currentState$
+            .filter(state => !!state)
+            .map(state => state.index);
 
         this.currentState$.subscribe(state => {
             this.notifyService.stateChange$.next(true);

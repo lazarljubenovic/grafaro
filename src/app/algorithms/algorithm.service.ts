@@ -1,11 +1,13 @@
+/* tslint:disable */
 import {Injectable} from '@angular/core';
 import {VisNgNetworkOptionsEdges} from '@lazarljubenovic/vis-ng/core';
 import {GrfGraphNodeOptions} from '../graph/graph.module';
 import {ReplaySubject} from 'rxjs';
 import {ClickPosition} from '../project-view/toolbar/toolbar.component';
 import {Graph} from '../models/graph.model';
-import {AlgorithmBase, AlgorithmState} from './algorithm-base';
-import {DepthFirstSearchAlgorithm} from './depth-first-search';
+import {AlgorithmBase, CodeJson} from './algorithm-base';
+import {StateManagerObject, AlgorithmStateManager} from './state-manager';
+import {DijkstraShortestPathAlgorithm} from './dijkstra-shortest-path';
 
 export interface NormalizedState {
     nodes: GrfGraphNodeOptions[];
@@ -21,121 +23,57 @@ export interface NormalizedState {
 @Injectable()
 export class AlgorithmService {
 
-    public graph = new Graph();
-
-    private _root: string = 'node-0';
-
-    public get root(): string {
-        return this._root;
-    }
-
-    public set root(value: string) {
-        this._root = value;
-        this.setGraph();
-    }
-
-    public algorithmStrategy: AlgorithmBase;
-    public algorithmStrategy$ = new ReplaySubject<AlgorithmBase>();
-
-    private states: AlgorithmState[];
-    private normalizedStates: NormalizedState[];
-
-    private _currentStateIndex: number = 0;
-    public set currentStateIndex(currentStateIndex: number) {
-        this._currentStateIndex = currentStateIndex;
-        this.onGraphChange();
-    }
-
-    public get currentStateIndex(): number {
-        return this._currentStateIndex;
-    }
-
-    public get totalNumberOfStates(): number {
-        if (this.states) {
-            return this.states.length;
-        } else {
-            return 0;
-        }
-    }
-
-    public currentNormalizedState$ = new ReplaySubject<NormalizedState>(1);
-    public currentState$ = new ReplaySubject<AlgorithmState>(1);
-
     public graphState$ = new ReplaySubject<Graph>(1);
+
+    public graph: Graph = new Graph();
+    public rootId: string;
+
+    public state$ = new ReplaySubject<StateManagerObject>();
+    public normalizedState$ = new ReplaySubject<NormalizedState>();
+    public algorithmStrategy$ = new ReplaySubject<AlgorithmBase>();
+    public codeJson$ = new ReplaySubject<CodeJson>();
+
+    private stateManager = new AlgorithmStateManager();
 
     public setAlgorithm(algorithmStrategy: AlgorithmBase): void {
         this.algorithmStrategy = algorithmStrategy;
-        this.setGraph();
         this.algorithmStrategy$.next(this.algorithmStrategy);
+        this.codeJson$.next(this.algorithmStrategy.getCodeJson());
+        this.stateManager.setAlgorithm(algorithmStrategy);
     }
 
-    public getCodeJson() {
-        const state = this.states[this.currentStateIndex];
-        const tracked = this.algorithmStrategy.trackedVariables;
-        return this.algorithmStrategy.getCodeJson(state, tracked);
-    }
-
-    public setGraph() {
-        try {
-            this.states = this.algorithmStrategy.algorithmFunction(this.graph, this._root);
-            this.normalizedStates = this.states.map(state => this.getNormalizedState(state));
-            this.fixCurrentStateIndex();
-            this.onGraphChange();
-        } catch (e) {
-            console.log(e); // todo
-        }
-    }
-
-    private onGraphChange(): void {
-        this.currentState$.next(this.states[this.currentStateIndex]);
-        this.currentNormalizedState$.next(this.normalizedStates[this.currentStateIndex]);
+    public setGraph(graph: Graph = this.graph, rootId: string = this.rootId) {
+        this.graph = graph;
+        this.rootId = rootId;
         this.graphState$.next(this.graph);
+        this.stateManager.setGraph(graph, rootId);
     }
 
-    private currentStateIndexInc() {
-        if (this.currentStateIndex < this.normalizedStates.length - 1) {
-            this.currentStateIndex++;
-        }
+    constructor() {
+        this.stateManager.state$.subscribe(state => {
+            this.state$.next(state);
+        });
+        this.stateManager.state$.filter(state => !!state).subscribe(state => {
+            this.normalizedState$.next(this.algorithmStrategy.normalize(state.state));
+        });
     }
 
-    private currentStateIndexDec() {
-        if (this.currentStateIndex > 0) {
-            this.currentStateIndex--;
-        }
-    }
-
-    private currentStateIndexFirst() {
-        this.currentStateIndex = 0;
-    }
-
-    private currentStateIndexLast() {
-        this.currentStateIndex = this.normalizedStates.length - 1;
-
-    }
+    public algorithmStrategy: AlgorithmBase = new DijkstraShortestPathAlgorithm();
 
     public updateStateNumber(action: string): void {
         switch (action) {
             case 'next':
-                this.currentStateIndexInc();
+                this.stateManager.goToNext();
                 break;
             case 'prev':
-                this.currentStateIndexDec();
+                this.stateManager.goToPrevious();
                 break;
             case 'first':
-                this.currentStateIndexFirst();
+                this.stateManager.goToFirst();
                 break;
             case 'last':
-                this.currentStateIndexLast();
+                this.stateManager.goToLast();
                 break;
-        }
-    }
-
-    private fixCurrentStateIndex(): void {
-        if (this.currentStateIndex > this.normalizedStates.length - 1) {
-            this.currentStateIndex = this.normalizedStates.length - 1;
-        }
-        if (this.currentStateIndex < 0) {
-            this.currentStateIndex = 0;
         }
     }
 
@@ -185,8 +123,8 @@ export class AlgorithmService {
 
     public removeNode(nodeId: string): void {
         this.graph.removeNode(nodeId);
-        if (nodeId == this._root) {
-            this._root = this.graph.nodes[0].id;
+        if (nodeId == this.rootId) {
+            this.rootId = this.graph.nodes[0].id;
         }
         this.setGraph();
     }
@@ -211,7 +149,6 @@ export class AlgorithmService {
     public linkNodesByLabel(labelA: string, labelB: string) {
         const nodeA: string = this.getNodeId(labelA);
         const nodeB: string = this.getNodeId(labelB);
-
         this.linkNodes(nodeA, nodeB);
     }
 
@@ -234,22 +171,13 @@ export class AlgorithmService {
     }
 
     public setPosition(nodeLabel: string, position: ClickPosition): void {
-        this.normalizedStates[this.currentStateIndex].nodes
-            .find(node => node.label == nodeLabel).position = position;
-        this.onGraphChange();
+        this.graph.nodes.find(node => node.label == nodeLabel).position = position;
+        this.setGraph();
     }
 
     public moveNode(nodeId: string, position: ClickPosition): void {
         this.graph.nodes.find(node => node.id == nodeId).position = position;
         this.setGraph();
-    }
-
-    private getNormalizedState(state: AlgorithmState): NormalizedState {
-        return this.algorithmStrategy.normalize(state);
-    }
-
-    constructor() {
-        this.setAlgorithm(new DepthFirstSearchAlgorithm());
     }
 
 }

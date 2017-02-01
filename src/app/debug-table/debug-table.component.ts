@@ -1,5 +1,6 @@
 import {Component, OnInit, Input, OnDestroy} from '@angular/core';
 import {DebugTableService} from './debug-table.service';
+import {StateManagerObject} from '../algorithms/state-manager';
 
 @Component({
     selector: 'grf-debug-table',
@@ -13,24 +14,26 @@ export class DebugTableComponent implements OnInit, OnDestroy {
     public trackedVars: string[] = [];
 
     @Input()
-    public set state(state: any) {
+    public set state(state: StateManagerObject) {
         if (state != null) {
-            this.debugData = state.getDebugData();
+            this.debugData = state.state.getDebugData();
         }
     }
 
-    public trackBy(index: number, item: any): any {
+    public trackBy(index: number, item: any): number {
         return index;
     }
 
     constructor(private _service: DebugTableService) {
     }
 
-    ngOnInit() {
-        this._service.visibleVariables$.subscribe(vars => this.trackedVars = vars);
+    public ngOnInit(): void {
+        this._service.visibleVariables$.subscribe(vars => {
+            this.trackedVars = vars;
+        });
     }
 
-    ngOnDestroy() {
+    public ngOnDestroy(): void {
         this._service.visibleVariables$.unsubscribe();
     }
 

@@ -7,13 +7,13 @@
 
   <div id="graph">
     <div class="graph-inner">
-      <grf-graph [nodes]="(algorithmService.currentNormalizedState$ | async)?.nodes"
-                 [edges]="(algorithmService.currentNormalizedState$ | async)?.edges"
+      <grf-graph [nodes]="(algorithmService.normalizedState$ | async)?.nodes"
+                 [edges]="(algorithmService.normalizedState$ | async)?.edges"
                  (graphClick)="click$.next($event)"
                  (graphNodeDragEnd)="onMoveNode($event)"></grf-graph>
       <grf-controls (stateNumberChange)="updateStateNumber($event)"
-                    [current]="algorithmService.currentStateIndex"
-                    [total]="algorithmService.totalNumberOfStates"
+                    [current]="(currentState$ | async)?.index"
+                    [total]="(currentState$ | async)?.total"
       ></grf-controls>
     </div>
     <div class="debug-table-wrapper">

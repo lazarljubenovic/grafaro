@@ -11,7 +11,7 @@ import {
     getLabelIfDefined
 } from './algorithm-base';
 
-export class BreadthFirstSearchState extends AlgorithmState {
+class State extends AlgorithmState {
 
     @TrackedVariable() public currentNode: string;
 
@@ -56,6 +56,8 @@ interface CreateNewStateObject {
 
 export class BreadthFirstSearchAlgorithm extends AlgorithmBase {
 
+    public states: State[];
+
     public abbr: string = 'bfs';
 
     public name: string = 'Breadth First Search';
@@ -82,7 +84,7 @@ export class BreadthFirstSearchAlgorithm extends AlgorithmBase {
   return solution;
 }`;
 
-    public normalize(state: BreadthFirstSearchState): NormalizedState {
+    public normalize(state: State): NormalizedState {
         const nodes: GrfGraphNodeOptions[] = state.graphJson.nodes.map((node, i) => {
             return {
                 id: node.id,
@@ -107,47 +109,33 @@ export class BreadthFirstSearchAlgorithm extends AlgorithmBase {
         return {nodes, edges, queue, solution, accentColor, primaryColor, secondaryColor};
     }
 
-    public algorithmFunction(graph: Graph, root: string): BreadthFirstSearchState[] {
+    public evaluateStatesFor(graph: Graph, root: string): State[] {
         if (!graph.hasNodeId(root)) {
             throw new Error(`Node with id ${root} (root) doesn't exist on graph!`);
         }
 
-        let states: BreadthFirstSearchState[] = [];
+        let states: State[] = [];
 
-        states.push(new BreadthFirstSearchState({graph, lineNumber: 1}));
-        states.push(new BreadthFirstSearchState({graph, lineNumber: 2}));
+        states.push(new State({graph, lineNumber: 1}));
+        states.push(new State({graph, lineNumber: 2}));
 
         let solution: string[] = [];
-        states.push(new BreadthFirstSearchState({solution, graph, root, lineNumber: 3}));
+        states.push(new State({solution, graph, root, lineNumber: 3}));
 
         let queue = new Queue<string>();
-        states.push(new BreadthFirstSearchState({solution, graph, queue, root, lineNumber: 4}));
+        states.push(new State({solution, graph, queue, root, lineNumber: 4}));
 
         queue.enqueue(root);
-        states.push(new BreadthFirstSearchState({solution, graph, queue, root, lineNumber: 5}));
+        states.push(new State({solution, graph, queue, root, lineNumber: 5}));
 
         let visited: string[] = [];
-        states.push(new BreadthFirstSearchState({
-            solution,
-            graph,
-            visited,
-            queue,
-            root,
-            lineNumber: 6
-        }));
+        states.push(new State({solution, graph, visited, queue, root, lineNumber: 6}));
 
         while (!queue.isEmpty) {
-            states.push(new BreadthFirstSearchState({
-                solution,
-                graph,
-                visited,
-                queue,
-                root,
-                lineNumber: 7
-            }));
+            states.push(new State({solution, graph, visited, queue, root, lineNumber: 7}));
 
             let currentNode: string = queue.deque();
-            states.push(new BreadthFirstSearchState({
+            states.push(new State({
                 currentNode,
                 solution,
                 graph,
@@ -158,7 +146,7 @@ export class BreadthFirstSearchAlgorithm extends AlgorithmBase {
             }));
 
             let neighbors: string[] = graph.getSources(currentNode).map(edge => edge.to);
-            states.push(new BreadthFirstSearchState({
+            states.push(new State({
                 currentNode,
                 neighbors,
                 solution,
@@ -170,7 +158,7 @@ export class BreadthFirstSearchAlgorithm extends AlgorithmBase {
             }));
 
             visited.push(currentNode);
-            states.push(new BreadthFirstSearchState({
+            states.push(new State({
                 currentNode,
                 neighbors,
                 solution,
@@ -182,31 +170,30 @@ export class BreadthFirstSearchAlgorithm extends AlgorithmBase {
             }));
 
             neighbors = neighbors.filter(neighbor => visited.indexOf(neighbor) == -1);
-            states.push(new BreadthFirstSearchState({
-                currentNode, neighbors, solution, graph, visited, queue,
-                root,
-                lineNumber: 12
+            states.push(new State({
+                currentNode, neighbors, solution, graph, visited, queue, root, lineNumber: 12
             }));
 
             neighbors = neighbors.filter(neighbor => !queue.contains(neighbor));
-            states.push(new BreadthFirstSearchState({
-                currentNode, neighbors, solution, graph, visited,
-                queue,
-                root,
-                lineNumber: 13
+            states.push(new State({
+                currentNode, neighbors, solution, graph, visited, queue, root, lineNumber: 13
             }));
 
             neighbors.forEach((neighbor, i) => {
                 queue.enqueue(neighbor);
-                states.push(new BreadthFirstSearchState({
-                    currentNode, neighbors, solution, graph, visited,
+                states.push(new State({
+                    currentNode,
+                    neighbors,
+                    solution,
+                    graph,
+                    visited,
                     queue,
                     root,
                     lineNumber: 13,
                     neighbor
                 }));
             });
-            states.push(new BreadthFirstSearchState({
+            states.push(new State({
                 currentNode,
                 neighbors,
                 solution,
@@ -218,7 +205,7 @@ export class BreadthFirstSearchAlgorithm extends AlgorithmBase {
             }));
 
             solution.push(currentNode);
-            states.push(new BreadthFirstSearchState({
+            states.push(new State({
                 currentNode,
                 neighbors,
                 solution,
@@ -231,14 +218,8 @@ export class BreadthFirstSearchAlgorithm extends AlgorithmBase {
 
         }
 
-        states.push(new BreadthFirstSearchState({
-            solution,
-            graph,
-            visited,
-            queue,
-            root,
-            lineNumber: 16
-        }));
+        states.push(new State({solution, graph, visited, queue, root, lineNumber: 16}));
+        this.states = states;
         return states;
     }
 
