@@ -57,7 +57,7 @@ interface CreateNewStateObject {
 
 export class DepthFirstSearchAlgorithm extends AlgorithmBase {
 
-    protected states: State[];
+    public states: State[];
 
     public name: string = 'Depth First Search';
     public abbr: string = 'dfs';
@@ -117,7 +117,7 @@ export class DepthFirstSearchAlgorithm extends AlgorithmBase {
         };
     }
 
-    algorithmFunction(graph: Graph, root: string): State[] {
+    evaluateStatesFor(graph: Graph, root: string): State[] {
         if (!graph.hasNodeId(root)) {
             throw new Error(`Node with id ${root} (root) doesn't exist on graph!`);
         }

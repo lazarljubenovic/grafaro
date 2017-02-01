@@ -222,16 +222,16 @@ export abstract class AlgorithmBase {
     public abstract name: string;
     public abstract abbr: string;
 
-    protected abstract states: AlgorithmState[];
+    public states: AlgorithmState[] = [];
 
     public abstract code: string;
     public abstract trackedVariables: string[];
 
     public abstract normalize(state: AlgorithmState): NormalizedState;
 
-    public abstract algorithmFunction(graph: Graph, rootId: string): AlgorithmState[];
+    public abstract evaluateStatesFor(graph: Graph, rootId: string): AlgorithmState[];
 
-    public getCodeJson(trackedVariables: string[]): CodeJson {
+    public getCodeJson(): CodeJson {
         const tokens = Esprima.tokenize(this.code, {loc: true});
         const numberOfLines = this.code.split('\n').length;
         let codeJson: CodeJson = Array(numberOfLines).fill(null).map(_ => []);
@@ -251,7 +251,7 @@ export abstract class AlgorithmBase {
             const whitespaceDiff: number = token.loc.start.column - currentColumn;
             currentColumn = token.loc.end.column;
 
-            const isTracked: boolean = trackedVariables.indexOf(token.value) != -1;
+            const isTracked: boolean = this.trackedVariables.indexOf(token.value) != -1;
 
             if (whitespaceDiff > 0) {
                 codeJson[currentLine].push({

@@ -56,7 +56,7 @@ interface CreateNewStateObject {
 
 export class BreadthFirstSearchAlgorithm extends AlgorithmBase {
 
-    protected states: State[];
+    public states: State[];
 
     public abbr: string = 'bfs';
 
@@ -109,7 +109,7 @@ export class BreadthFirstSearchAlgorithm extends AlgorithmBase {
         return {nodes, edges, queue, solution, accentColor, primaryColor, secondaryColor};
     }
 
-    public algorithmFunction(graph: Graph, root: string): State[] {
+    public evaluateStatesFor(graph: Graph, root: string): State[] {
         if (!graph.hasNodeId(root)) {
             throw new Error(`Node with id ${root} (root) doesn't exist on graph!`);
         }

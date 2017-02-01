@@ -102,7 +102,7 @@ export class ProjectViewComponent implements OnInit {
         this.projectService.saveProject(
             this.activeRoute.snapshot.params['id'],
             this.algorithmService.graph,
-            this.algorithmService.root
+            this.algorithmService.rootId
         );
     }
 
@@ -125,7 +125,7 @@ export class ProjectViewComponent implements OnInit {
         this.popupRenameComponentFactory =
             componentFactoryResolver.resolveComponentFactory(PopupRenameComponent);
 
-        this.currentState$ = algorithmService.currentState$;
+        this.currentState$ = algorithmService.state$;
     }
 
     ngOnInit() {
@@ -135,7 +135,8 @@ export class ProjectViewComponent implements OnInit {
         this.graphSocketService.create()
             .subscribe(roomGraph => {
                 this.algorithmService.graph.readJson(roomGraph.graph);
-                this.algorithmService.root = roomGraph.algorithm.options.root;
+                console.log('graphi is set', this.algorithmService);
+                this.algorithmService.rootId = roomGraph.algorithm.options.root;
                 this.algorithmService.setGraph();
             });
 

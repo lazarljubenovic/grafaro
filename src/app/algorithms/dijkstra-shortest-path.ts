@@ -139,7 +139,7 @@ export class DijkstraShortestPathAlgorithm extends AlgorithmBase {
         return {nodes, edges, accentColor, primaryColor, secondaryColor};
     }
 
-    public algorithmFunction(graph: Graph, root: string): State[] {
+    public evaluateStatesFor(graph: Graph, root: string): State[] {
         let states: State[] = [];
 
         states.push(new State({graph, lineNumber: 1}));
