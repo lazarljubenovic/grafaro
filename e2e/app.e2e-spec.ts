@@ -1,14 +1,16 @@
-import { GrafaroPage } from './app.po';
+import {Homepage} from './app.po';
 
-describe('grafaro App', function() {
-  let page: GrafaroPage;
+describe(`grafaro App`, function () {
 
-  beforeEach(() => {
-    page = new GrafaroPage();
-  });
+    let page: Homepage;
 
-  it('should display message saying app works', () => {
-    page.navigateTo();
-    expect(page.getParagraphText()).toEqual('app works!');
-  });
+    beforeEach(() => {
+        page = new Homepage();
+        page.navigateTo();
+    });
+
+    it(`should have logo`, () => {
+        expect(page.getLogoBackgroundImage()).toContain(`assets/logo.svg`);
+    });
+
 });

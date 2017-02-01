@@ -1,11 +1,13 @@
-import { browser, element, by } from 'protractor';
+import {browser} from 'protractor';
 
-export class GrafaroPage {
-  navigateTo() {
-    return browser.get('/');
-  }
+export class Homepage {
 
-  getParagraphText() {
-    return element(by.css('app-root h1')).getText();
-  }
+    public navigateTo() {
+        return browser.get('/');
+    }
+
+    public getLogoBackgroundImage() {
+        return browser.$('#logo').getCssValue('background-image');
+    }
+
 }
