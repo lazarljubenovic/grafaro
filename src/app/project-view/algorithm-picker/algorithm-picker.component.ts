@@ -19,7 +19,7 @@ export class AlgorithmPickerComponent implements OnInit {
         }),
     });
 
-    public nodes = [];
+    public nodes: string[] = [];
 
     constructor(private formBuilder: FormBuilder,
                 private algorithmService: AlgorithmService) {
@@ -49,7 +49,7 @@ export class AlgorithmPickerComponent implements OnInit {
                 default:
                     throw 'TODO';
             }
-            this.algorithmService.root = this.algorithmService.graph.getNodeId(form.options.root);
+            this.algorithmService.rootId = this.algorithmService.graph.getNodeId(form.options.root);
         });
     }
 

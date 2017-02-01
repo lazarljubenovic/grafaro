@@ -19,7 +19,7 @@ export class GraphOptionsService {
     }
 
     public setOptions(optionName: string, value: any): void;
-    public setOptions(options: {name: string, value: any}[]);
+    public setOptions(options: {name: string, value: any}[]): void;
     public setOptions(first: {name: string, value: any}[] | string, second?: any): void {
         if (typeof first === 'string') {
             // first = optionName, second = value

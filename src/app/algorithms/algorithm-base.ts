@@ -21,29 +21,32 @@ function _getLabelsIfDefined(graph: Graph, nodeIds: string[]): any {
 export function getLabelIfDefined(graph: Graph, id: any): any {
     if (Array.isArray(id)) {
         // if (Array.isArray(id[0])) {
-            // eg. [['node-0', 42], ['node-1', 48]]
-            // return;
+        // eg. [['node-0', 42], ['node-1', 48]]
+        // return;
         // } else {
-            // eg. ['node-0', 'node-1']
-            return _getLabelsIfDefined(graph, id);
+        // eg. ['node-0', 'node-1']
+        return _getLabelsIfDefined(graph, id);
         // }
     } else {
         return _getLabelIfDefined(graph, id);
     }
 }
 
+// todo generic function
 function transpose(arr: any[][]): any[][] {
     return arr[0].map((_, i) => arr.map(x => x[i]));
 }
 
-function attachNames(names, arr) {
-    let o = {};
+// todo generic function
+function attachNames(names: string[], arr: any[]): {[names: string]: any} {
+    let o: {[names: string]: any} = {};
     for (let i = 0; i < arr.length; i++) {
         o[names[i]] = arr[i];
     }
     return o;
 }
 
+// todo generic function
 export function mergeArrays(names: string[], arrays: any[][]): any[] {
     return transpose(arrays).map((arr) => attachNames(names, arr));
 }
@@ -126,10 +129,11 @@ export abstract class AlgorithmState {
                 return 'default';
             }
         }
+        // todo current node is expected to be found in the subclass. how to handle?
         if (Array.isArray(trackedVar)) {
-            return trackedVar.map(x => x == this['currentNode'] ? 'accent' : 'default');
+            return trackedVar.map(x => x == (<any>this)['currentNode'] ? 'accent' : 'default');
         } else {
-            return trackedVar == this['currentNode'] ? 'accent' : 'default';
+            return trackedVar == (<any>this)['currentNode'] ? 'accent' : 'default';
         }
     };
 
@@ -159,16 +163,17 @@ export abstract class AlgorithmState {
 
     public getDebugKind: (trackedVarName: any) => any = (trackedVarName) => {
         if (!this._kinds) {
-            return this.getDefaultDebugKind(this[trackedVarName]);
+            // todo create function to get this variables by name
+            return this.getDefaultDebugKind((<any>this)[trackedVarName]);
         }
-        if (Array.isArray(this[trackedVarName])) {
-            return this[trackedVarName].map(_ => this._kinds.get(trackedVarName));
+        if (Array.isArray((<any>this)[trackedVarName])) {
+            return (<any>this)[trackedVarName].map((_: any) => this._kinds.get(trackedVarName));
         }
-            return this._kinds.get(trackedVarName);
+        return this._kinds.get(trackedVarName);
     };
 
     public getDebugColor(trackedVarName: string): any {
-        const varVal = this[trackedVarName];
+        const varVal = (<any>this)[trackedVarName];
         if (!this._exportFunctions) {
             return this.getDefaultDebugColor(varVal);
         }
@@ -177,7 +182,8 @@ export abstract class AlgorithmState {
         }
         if (Array.from(this._exportFunctions.keys()).indexOf(trackedVarName) != -1) {
             const firstArg = varVal;
-            const restArgs = this._exportFunctions.get(trackedVarName).params.map(x => this[x]);
+            const restArgs = this._exportFunctions.get(trackedVarName)
+                .params.map(x => (<any>this)[x]);
             const args = [firstArg, ...restArgs];
             const fn = this._exportFunctions.get(trackedVarName).fn;
             return fn(...args);
@@ -188,12 +194,12 @@ export abstract class AlgorithmState {
 
     public getDebugData(): DebugData[] {
         return this._trackedVarsNames.map(name => {
-            const value = this[name];
+            const value = (<any>this)[name];
             const isInScope = this.getDefaultDebugScope(value);
             const type = this.getDefaultDebugType(value);
             const kind = this.getDebugKind(name);
 
-            let data;
+            let data: any;
             if (type == 'single') {
                 const color = this.getDebugColor(name);
                 data = {value, color, kind};
@@ -238,7 +244,7 @@ export abstract class AlgorithmBase {
         let previousLine = 0;
         let currentLine = 1;
         let currentColumn = 0;
-        let token;
+        let token: any; // bad typings
 
         for (let i = 0; i < tokens.length; i++) {
             token = tokens[i];

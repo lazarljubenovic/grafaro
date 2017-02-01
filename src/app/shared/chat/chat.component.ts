@@ -5,7 +5,7 @@ import {
     ViewChild,
     ComponentFactoryResolver,
     ComponentRef,
-    ElementRef
+    ElementRef, ComponentFactory
 } from '@angular/core';
 import {
     ChatMessageInfo,
@@ -27,7 +27,7 @@ export class ChatComponent implements OnInit {
     @ViewChild('messages')
     public messagesContainer: ElementRef;
 
-    private chatMessageFactory;
+    private chatMessageFactory: ComponentFactory<ChatMessageComponent>;
 
     public chatMessages$: Observable<any>;
 

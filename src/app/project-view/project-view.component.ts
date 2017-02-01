@@ -6,7 +6,7 @@ import {
     ViewContainerRef,
     ComponentFactory
 } from '@angular/core';
-import {Subject, Observable} from 'rxjs';
+import {Subject, Observable, ReplaySubject} from 'rxjs';
 import {Actions, ClickPosition} from './toolbar/toolbar.component';
 import {GraphOptionsService} from '../graph-options.service';
 import {VisNgNetworkEventArgument} from '@lazarljubenovic/vis-ng/core';
@@ -17,6 +17,7 @@ import {ProjectsService} from '../project-browser/projects.service';
 import {ActivatedRoute} from '@angular/router';
 import {JoinService} from '../project-browser/join.service';
 import {GraphSocketService} from './graph-socket.service';
+import {StateManagerObject} from '../algorithms/state-manager';
 
 @Component({
     selector: 'grf-user-interface',
@@ -28,7 +29,7 @@ export class ProjectViewComponent implements OnInit {
     public isSaveDialogOpen: boolean = false;
     public isLoadDialogOpen: boolean = false;
 
-    public currentState$;
+    public currentState$: ReplaySubject<StateManagerObject>;
 
     public chooseTool$ = new Subject<Actions>();
     public click$ = new Subject<VisNgNetworkEventArgument>();

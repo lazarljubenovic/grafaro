@@ -20,10 +20,7 @@ export class AlgorithmComponent implements OnInit {
 
     public lineNumber$: Observable<number>;
 
-    public toggle() {
-    }
-
-    public trackByIndex(index, item) {
+    public trackByIndex(index: number, item: any) {
         return index;
     }
 

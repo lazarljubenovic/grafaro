@@ -12,11 +12,15 @@ import {
     KindExporter
 } from './algorithm-base';
 
+function colorExporterNeighbors(ns: string[], n: string): string[] {
+    return ns.map(x => x == n ? 'primary' : 'default');
+}
+
 class State extends AlgorithmState {
 
     @TrackedVariable() @KindExporter('node') public currentNode: string;
 
-    @ColorExporter(['neighbor'], (ns, n) => ns.map(x => x == n ? 'primary' : 'default'))
+    @ColorExporter(['neighbor'], colorExporterNeighbors)
     @TrackedVariable() @KindExporter('node') public neighbors: string[];
 
     @ColorExporter([], () => 'primary')

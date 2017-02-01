@@ -154,7 +154,7 @@ export class ProjectsService extends GrafaroHttpService {
             .catch(e => this.handleError(e));
     }
 
-    public saveProject(id: string, graph: Graph, root) {
+    public saveProject(id: string, graph: Graph, root: string) {
         const obj = {
             data: {
                 graph: {

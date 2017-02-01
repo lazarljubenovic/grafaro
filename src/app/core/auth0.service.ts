@@ -26,7 +26,7 @@ export class Auth0Service {
     }
 
     public handleAuthentication(): void {
-        this.auth0.parseHash((err, authResult) => {
+        this.auth0.parseHash((err: string, authResult: any) => {
             if (authResult && authResult.accessToken && authResult.idToken) {
                 window.location.hash = '';
                 this.setUser(authResult);
@@ -56,7 +56,7 @@ export class Auth0Service {
         this.router.navigate(['/login']);
     }
 
-    private setUser(authResult): void {
+    private setUser(authResult: any): void {
         const socialId: string = authResult.idTokenPayload.user_id;
 
         this.userService.getUserBySocialId(socialId)

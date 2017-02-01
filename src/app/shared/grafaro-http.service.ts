@@ -11,7 +11,7 @@ export class GrafaroHttpService {
 
     protected responseToObject(response: Response): any {
         let jsonResponse = response.json();
-        let data;
+        let data: any;
 
         if (jsonResponse['error']) {
             this.handleError(jsonResponse['error']);
