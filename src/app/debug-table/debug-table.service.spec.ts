@@ -1,16 +1,15 @@
 /* tslint:disable:no-unused-variable */
+import {TestBed, inject} from '@angular/core/testing';
+import {DebugTableService} from './debug-table.service';
 
-import { TestBed, async, inject } from '@angular/core/testing';
-import { DebugTableService } from './debug-table.service';
-
-describe('Service: DebugTable', () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [DebugTableService]
+xdescribe('Service: DebugTable', () => {
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            providers: [DebugTableService]
+        });
     });
-  });
 
-  it('should ...', inject([DebugTableService], (service: DebugTableService) => {
-    expect(service).toBeTruthy();
-  }));
+    it('should ...', inject([DebugTableService], (service: DebugTableService) => {
+        expect(service).toBeTruthy();
+    }));
 });
