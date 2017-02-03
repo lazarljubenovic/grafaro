@@ -11,7 +11,6 @@ export class RoomInfoService {
     }
 
     public create(): Observable<RoomInfoMessage> {
-        console.log('Room info Ovde?');
         return this.webSocketService.subscribeTo('roomInfo');
     }
 

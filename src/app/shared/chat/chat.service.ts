@@ -10,7 +10,6 @@ export class ChatService {
     }
 
     public create(): Observable<ChatMessageInfo> {
-        console.log('Chat Ovde?');
         return this.webSocketService.subscribeTo('chat');
     }
 

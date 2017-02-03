@@ -187,6 +187,5 @@ export class MockMessageStream extends AbstractMessageStream {
 
     constructor(ws: WebSocket) {
         super(ws);
-        console.log('~~~Creating mock stream~~~');
     }
 }

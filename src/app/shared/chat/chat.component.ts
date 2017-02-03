@@ -107,7 +107,6 @@ export class ChatComponent implements OnInit {
         this.chatMessageFactory = this.cfr.resolveComponentFactory(ChatMessageComponent);
         this.chatMessages$ = this.chatService.create();
         this.chatMessages$.subscribe((message: ChatMessageInfo) => {
-            console.log('Chat poruke!~~~~~');
             this.createChatMessage(message);
         });
     }

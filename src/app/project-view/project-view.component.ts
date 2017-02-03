@@ -136,7 +136,6 @@ export class ProjectViewComponent implements OnInit {
         this.graphSocketService.create()
             .subscribe(roomGraph => {
                 this.algorithmService.graph.readJson(roomGraph.graph);
-                console.log('graphi is set', this.algorithmService);
                 this.algorithmService.rootId = roomGraph.algorithm.options.root;
                 this.algorithmService.setGraph();
             });
