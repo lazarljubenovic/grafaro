@@ -1,5 +1,15 @@
 import {browser, by} from 'protractor';
 
+function chunk<Type>(arr: Type[], len: number) {
+    const chunks = [];
+    let i = 0;
+    const n = arr.length;
+    while (i < n) {
+        chunks.push(arr.slice(i, i += len));
+    }
+    return chunks;
+}
+
 export class ProjectViewDummyRoomPage {
 
     public navigateTo() {
@@ -23,6 +33,10 @@ export class ProjectViewDummyRoomPage {
         this.chooseTab(1);
     }
 
+    public chooseTabMatrix() {
+        this.chooseTab(2);
+    }
+
     public chooseTabAlgorithm() {
         this.chooseTab(3);
     }
@@ -43,6 +57,18 @@ export class ProjectViewDummyRoomPage {
 
     public debugTableFirstVarName() {
         return browser.$('grf-debug-table table tr:first-child td:first-child').getText();
+    }
+
+    public getMatrix() {
+        const element = browser.$('grf-matrix table');
+        const row = element.all(by.tagName('tr'));
+        const cells = row.all(by.tagName('td'));
+        return cells.map(elm => elm.getText())
+            .then(values => {
+                const length = values.length;
+                let matrix = chunk<string>(values, Math.sqrt(length));
+                return matrix.slice(1).map(row => row.slice(1));
+            });
     }
 
 }
