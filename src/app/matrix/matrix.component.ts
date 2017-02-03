@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {AlgorithmService} from '../algorithms/algorithm.service';
-import {Graph} from '../models/graph.model';
+import {GraphManager} from '../managers/graph.manager';
 
 @Component({
     selector: 'grf-matrix',
@@ -13,8 +12,6 @@ export class MatrixComponent implements OnInit {
 
     public labels: string[] = [];
 
-    private graph: Graph;
-
     public highlightedIndexes: number[] = [-1, -1];
 
     public highlight(row: number, column: number): void {
@@ -22,39 +19,34 @@ export class MatrixComponent implements OnInit {
     }
 
     public addNode(): void {
-        this.algorithmService.addNodeOnRandomPlace();
+        this.graphManager.addNodeOnRandomPlace();
     }
 
     public removeNode(): void {
-        this.algorithmService.removeNode(this.algorithmService.getNodeId(this.labels.pop()));
+        this.graphManager.removeNode(this.graphManager.getNodeId(this.labels.pop()));
     }
 
     public connectNode(row: number, column: number) {
-        const nodeA = this.algorithmService.getNodeId(this.labels[row]);
-        const nodeB = this.algorithmService.getNodeId(this.labels[column]);
+        const nodeA = this.graphManager.getNodeId(this.labels[row]);
+        const nodeB = this.graphManager.getNodeId(this.labels[column]);
 
         if (this.data[row][column] == 0) {
-            this.algorithmService.linkNodes(nodeA, nodeB);
+            this.graphManager.linkNodes(nodeA, nodeB);
         } else {
-            this.algorithmService.unlinkNodes(nodeA, nodeB);
+            this.graphManager.unlinkNodes(nodeA, nodeB);
         }
     }
 
-    private graphToMatrix(): void {
-        let matrix: number[][] = this.algorithmService.graph.getMatrix();
-        matrix = matrix.map(row => row.map(entry => entry ? entry : 0));
-
-        this.data = matrix;
-        this.labels = this.algorithmService.graph.nodes.map(node => node.label);
-    }
-
-    constructor(private algorithmService: AlgorithmService) {
+    constructor(private graphManager: GraphManager) {
     }
 
     ngOnInit() {
-        this.algorithmService.graphState$.subscribe(graphState => {
-            this.graph = graphState;
-            this.graphToMatrix();
+        this.graphManager.graph$.subscribe(graph => {
+            let matrix: number[][] = graph.getMatrix();
+            matrix = matrix.map(row => row.map(entry => entry ? entry : 0));
+
+            this.data = matrix;
+            this.labels = graph.nodes.map(node => node.label);
         });
     }
 

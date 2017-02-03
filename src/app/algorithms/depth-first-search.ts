@@ -1,4 +1,4 @@
-import {NormalizedState} from './algorithm.service';
+import {NormalizedState} from './normalized-state.model';
 import {VisNgNetworkOptionsEdges} from '@lazarljubenovic/vis-ng/core';
 import {GrfGraphNodeOptions} from '../graph/graph.module';
 import {Graph} from '../models/graph.model';

@@ -1,6 +1,11 @@
 import {AlgorithmBase, AlgorithmState} from './algorithm-base';
 import {ReplaySubject} from 'rxjs';
 import {Graph} from '../models/graph.model';
+import {GraphManager} from '../managers/graph.manager';
+import {Optional} from '@angular/core';
+import {NormalizedState} from './normalized-state.model';
+import {AlgorithmManager} from '../managers/algorithm.manager';
+import {BreadthFirstSearchAlgorithm} from './breadth-first-search';
 
 export interface StateManagerObject {
     state: AlgorithmState;
@@ -11,6 +16,7 @@ export interface StateManagerObject {
 }
 
 export class AlgorithmStateManager {
+    private stateNo: number = 0; // todo test
 
     /**
      * We need these so we know which graph and root to evaluate a new algorithm when user changes
@@ -30,6 +36,10 @@ export class AlgorithmStateManager {
     private _currentStateIndex: number = 0;
 
     public state$ = new ReplaySubject<StateManagerObject>();
+
+    public getNormalizedState(): NormalizedState {
+        return this._algorithm.normalize(this._algorithm.states[this._currentStateIndex]);
+    }
 
     private _getTotalNumberOfStates(): number {
         if (this._algorithm.states) {
@@ -112,11 +122,19 @@ export class AlgorithmStateManager {
      */
     public setAlgorithm(algorithmStrategy: AlgorithmBase): void {
         this._algorithm = algorithmStrategy;
+        console.log('set algorithm state change');
         if (this._graph && this._rootId) {
             this._algorithm.evaluateStatesFor(this._graph, this._rootId);
             this._fixCurrentStateIndex();
-            this._emitState();
         }
+    }
+
+    /**
+     * Returns algorithm
+     * @returns {AlgorithmBase}
+     */
+    public getAlgorithm(): AlgorithmBase {
+        return this._algorithm;
     }
 
     /**
@@ -135,7 +153,6 @@ export class AlgorithmStateManager {
         this._rootId = rootId;
         this._algorithm.evaluateStatesFor(this._graph, this._rootId);
         this._fixCurrentStateIndex();
-        this._emitState();
     }
 
     /**
@@ -144,6 +161,7 @@ export class AlgorithmStateManager {
      * @private
      */
     private _emitState(): void {
+        console.log('state change number', this.stateNo++);
         if (this._algorithm != null) {
             const state = this._algorithm.states[this._currentStateIndex];
             if (state) {
@@ -157,6 +175,25 @@ export class AlgorithmStateManager {
             }
         }
 
+    }
+
+    constructor(@Optional() private graphManager: GraphManager,
+                @Optional() private algorithmManager: AlgorithmManager) {
+        // todo next two subscriptions fire themselves on any graph change
+        // shouldn't we combine them or something?
+        setTimeout(() => this.graphManager.graph$.subscribe(graph => {
+            this.setAlgorithm(new BreadthFirstSearchAlgorithm());
+            const root = this._rootId ? this._rootId : graph.nodes[0].id;
+            this.setGraph(graph, root);
+            this._emitState();
+        }));
+
+        this.algorithmManager.algorithmWithOptions$.subscribe(algorithmWithOptions => {
+            let rootId = this._graph.getNodeId(algorithmWithOptions.options.root);
+            this.setAlgorithm(algorithmWithOptions.algorithm);
+            this.setGraph(this._graph, rootId);
+            this._emitState();
+        });
     }
 
 }

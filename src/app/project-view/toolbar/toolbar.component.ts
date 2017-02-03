@@ -1,4 +1,5 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit, Output, EventEmitter, Inject, forwardRef} from '@angular/core';
+import {ToolbarService} from './toolbar.service';
 
 export interface ClickPosition {
     x: number;
@@ -17,12 +18,11 @@ export enum Actions {
 @Component({
     selector: 'grf-toolbar',
     templateUrl: './toolbar.component.html',
-    styleUrls: ['./toolbar.component.scss']
+    styleUrls: ['./toolbar.component.scss'],
 })
 export class ToolbarComponent implements OnInit {
 
-    @Input() public currentSelected: number = 0;
-    @Output() public currentSelectedChange = new EventEmitter<Actions>();
+    public currentSelected: number = 0;
 
     @Output() public load = new EventEmitter<void>();
     @Output() public save = new EventEmitter<void>();
@@ -60,7 +60,12 @@ export class ToolbarComponent implements OnInit {
         },
     ];
 
-    constructor() {
+    public toolSelected(tool: any) {
+        this.currentSelected = tool.action;
+        this._toolbarService.chooseTool$.next(tool.action);
+    }
+
+    constructor(@Inject(forwardRef(() => ToolbarService)) private _toolbarService: ToolbarService) {
     }
 
     ngOnInit() {

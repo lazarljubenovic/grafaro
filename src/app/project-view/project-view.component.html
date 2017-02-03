@@ -7,23 +7,16 @@
 
   <div id="graph">
     <div class="graph-inner">
-      <grf-graph [nodes]="(algorithmService.normalizedState$ | async)?.nodes"
-                 [edges]="(algorithmService.normalizedState$ | async)?.edges"
-                 (graphClick)="click$.next($event)"
+      <grf-graph (graphClick)="click$.next($event)"
                  (graphNodeDragEnd)="onMoveNode($event)"></grf-graph>
-      <grf-controls (stateNumberChange)="updateStateNumber($event)"
-                    [current]="(currentState$ | async)?.index"
-                    [total]="(currentState$ | async)?.total"
-      ></grf-controls>
+      <grf-controls></grf-controls>
     </div>
     <div class="debug-table-wrapper">
-      <grf-debug-table [state]="currentState$ | async"></grf-debug-table>
+      <grf-debug-table></grf-debug-table>
     </div>
   </div>
 
-  <grf-toolbar [currentSelected]="chooseTool$ | async"
-               (currentSelectedChange)="chooseTool$.next($event)"
-               (load)="loadDialogToggle()"
+  <grf-toolbar (load)="loadDialogToggle()"
                (save)="saveDialogToggle()"
   ></grf-toolbar>
 

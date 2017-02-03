@@ -18,8 +18,7 @@ import {DebugTableModule} from '../debug-table/debug-table.module';
     exports: [
         AlgorithmComponent,
     ],
-    entryComponents: [
-    ],
+    entryComponents: [],
 })
 export class AlgorithmModule {
 }

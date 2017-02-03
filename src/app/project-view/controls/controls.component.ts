@@ -1,4 +1,5 @@
-import {Component, OnInit, EventEmitter, Output, Input} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {AlgorithmStateManager} from '../../algorithms/state-manager';
 
 @Component({
     selector: 'grf-controls',
@@ -7,31 +8,33 @@ import {Component, OnInit, EventEmitter, Output, Input} from '@angular/core';
 })
 export class ControlsComponent implements OnInit {
 
-    @Input() public current: number;
-    @Input() public total: number;
-
-    @Output() public stateNumberChange = new EventEmitter<string>();
+    public current: number;
+    public total: number;
 
     public onNext(): void {
-        this.stateNumberChange.emit('next');
+        this._stateManager.goToNext();
     }
 
     public onPrev(): void {
-        this.stateNumberChange.emit('prev');
+        this._stateManager.goToPrevious();
     }
 
     public onFirst(): void {
-        this.stateNumberChange.emit('first');
+        this._stateManager.goToFirst();
     }
 
     public onLast(): void {
-        this.stateNumberChange.emit('last');
+        this._stateManager.goToLast();
     }
 
-    constructor() {
+    constructor(private _stateManager: AlgorithmStateManager) {
     }
 
     ngOnInit() {
+        this._stateManager.state$.subscribe(state => {
+            this.current = state.index;
+            this.total = state.total;
+        });
     }
 
 }

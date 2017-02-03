@@ -1,10 +1,4 @@
-import {
-    Component,
-    OnInit,
-    Output,
-    EventEmitter,
-    HostListener
-} from '@angular/core';
+import {Component, OnInit, Output, EventEmitter, HostListener} from '@angular/core';
 
 @Component({
     selector: 'grf-dialog',

@@ -1,11 +1,9 @@
 /* tslint:disable:no-unused-variable */
-
-import { TestBed, async } from '@angular/core/testing';
-import { LoginPageComponent } from './login-page.component';
+import {LoginPageComponent} from './login-page.component';
 
 xdescribe('Component: LoginPage', () => {
-  it('should create an instance', () => {
-    let component = new LoginPageComponent();
-    expect(component).toBeTruthy();
-  });
+    it('should create an instance', () => {
+        let component = new LoginPageComponent();
+        expect(component).toBeTruthy();
+    });
 });

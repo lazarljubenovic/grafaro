@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
-import {AlgorithmService} from '../algorithms/algorithm.service';
+import {AlgorithmStateManager} from '../algorithms/state-manager';
 
 @Injectable()
 export class DebugTableService {
@@ -8,6 +8,7 @@ export class DebugTableService {
     private _visibleVariables: string[] = [];
 
     public visibleVariables$: BehaviorSubject<string[]>;
+    public integer: number = 0;
 
     private emitVisibleVariable(): void {
         this.visibleVariables$.next(this._visibleVariables);
@@ -31,12 +32,17 @@ export class DebugTableService {
         this.emitVisibleVariable();
     }
 
-    constructor(algorithmService: AlgorithmService) {
-        this._visibleVariables = algorithmService.algorithmStrategy.trackedVariables;
+    constructor(private stateManager: AlgorithmStateManager) {
+        // this._visibleVariables = this.stateManager.getAlgorithm().trackedVariables;
+        this._visibleVariables = [];
         this.visibleVariables$ = new BehaviorSubject<string[]>(this._visibleVariables);
 
-        algorithmService.algorithmStrategy$.subscribe(strategy => {
-            this.setVisibleVariables([...strategy.trackedVariables]);
+        this.stateManager.state$.subscribe(state => {
+            if (++this.integer < 100) {
+                this.setVisibleVariables(state.state._trackedVarsNames);
+            } else {
+                console.log('integer ode');
+            }
         });
     }
 

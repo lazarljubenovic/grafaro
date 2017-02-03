@@ -1,4 +1,4 @@
-import {NormalizedState} from './algorithm.service';
+import {NormalizedState} from './normalized-state.model';
 import {Graph, GraphJson} from '../models/graph.model';
 import * as Esprima from 'esprima';
 
@@ -153,7 +153,6 @@ export abstract class AlgorithmState {
                 return 'node';
             }
         }
-        console.log('checking if ... is array', trackedVar);
         if (Array.isArray(trackedVar)) {
             return trackedVar.map(_ => 'node');
         } else {

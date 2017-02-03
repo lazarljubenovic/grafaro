@@ -20,7 +20,8 @@
       </div>
 
       <div class="col project-title" *ngIf="isTitleInEditMode">
-        <input #titleInput type="text" [(ngModel)]="newTitle" (keyup.esc)="discardTitle()" (keyup.enter)="submitTitle()">
+        <input #titleInput type="text" [(ngModel)]="newTitle" (keyup.esc)="discardTitle()"
+               (keyup.enter)="submitTitle()">
         <span class="icon edit"
               *ngIf="isMaster()"
               (click)="submitTitle()"
@@ -40,7 +41,9 @@
       </div>
 
       <div class="col project-description" *ngIf="isDescriptionInEditMode">
-        <input #descriptionInput type="text" [(ngModel)]="newDescription" (keyup.esc)="discardDescription()" (keyup.enter)="submitDescription()">
+        <input #descriptionInput type="text" [(ngModel)]="newDescription"
+               (keyup.esc)="discardDescription()"
+               (keyup.enter)="submitDescription()">
         <span class="icon edit"
               *ngIf="isMaster()"
               (click)="submitDescription()"
@@ -75,7 +78,8 @@
   </div>
 
   <div class="col display-name" *ngIf="isNameInEditMode">
-    <input #nameInput type="text" [(ngModel)]="newName" (keyup.esc)="discardName()" (keyup.enter)="submitName()">
+    <input #nameInput type="text" [(ngModel)]="newName" (keyup.esc)="discardName()"
+           (keyup.enter)="submitName()">
     <span class="icon edit"
           (click)="submitName()"
     >

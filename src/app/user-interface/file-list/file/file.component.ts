@@ -5,7 +5,8 @@ import {
     HostListener,
     AfterViewInit,
     ViewChild,
-    ElementRef, HostBinding
+    ElementRef,
+    HostBinding
 } from '@angular/core';
 import {FileListService} from '../file-list.service';
 

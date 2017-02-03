@@ -5,6 +5,7 @@ import {VisNetworkModule} from '@lazarljubenovic/vis-ng/core';
 import {GraphNodeOptionsTransformPipe} from './graph-node-options-transform.pipe';
 import {GraphEdgeOptionsTransformPipe} from './graph-edge-options-transform.pipe';
 import {ColorThemeService} from '../color-theme.service';
+import {AlgorithmStateManager} from '../algorithms/state-manager';
 
 export interface GrfGraphNodeAnnotationOptions {
     position: string; // 'n' | 'e' | 'w' | 's' | 'ne' | 'nw' | 'se' | 'sw';
@@ -50,6 +51,7 @@ export interface GrfGraphEdgeOptions {
     ],
     providers: [
         ColorThemeService,
+        AlgorithmStateManager,
     ],
 })
 export class GraphModule {

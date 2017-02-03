@@ -5,7 +5,7 @@ import {RoomInfoMessage} from './room-info.interface';
 
 @Injectable()
 export class RoomInfoService {
-   //  private roomInfoSubject: Observable<RoomInfoMessage>;
+    //  private roomInfoSubject: Observable<RoomInfoMessage>;
 
     constructor(@Inject(WebSocketService) private webSocketService: WebSocketService) {
     }

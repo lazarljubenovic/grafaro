@@ -5,7 +5,7 @@ import {
     getLabelIfDefined,
     KindExporter
 } from './algorithm-base';
-import {NormalizedState} from './algorithm.service';
+import {NormalizedState} from './normalized-state.model';
 import {Graph, GraphEdge} from '../models/graph.model';
 import {Min} from '../data-structures/util';
 import {GrfGraphNodeOptions} from '../graph/graph.module';

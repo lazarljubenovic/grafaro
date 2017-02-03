@@ -5,12 +5,10 @@ import {
     ViewChild,
     ComponentFactoryResolver,
     ComponentRef,
-    ElementRef, ComponentFactory
+    ElementRef,
+    ComponentFactory
 } from '@angular/core';
-import {
-    ChatMessageInfo,
-    ChatMessageComponent
-} from './chat-message/chat-message.component';
+import {ChatMessageInfo, ChatMessageComponent} from './chat-message/chat-message.component';
 import {ChatService} from './chat.service';
 import {Observable} from 'rxjs';
 

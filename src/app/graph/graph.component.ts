@@ -1,9 +1,11 @@
-import {Component, OnInit, Input, Output, EventEmitter, ViewChild} from '@angular/core';
+import {Component, OnInit, EventEmitter, ViewChild} from '@angular/core';
 import {VisNgNetworkOptions, VisNgNetworkEventArgument} from '@lazarljubenovic/vis-ng/core';
 import {GrfGraphEdgeOptions, GrfGraphNodeOptions} from './graph.module';
 import * as deepAssign from 'deep-assign';
 import {GraphOptionsService} from '../graph-options.service';
 import {VisNetworkComponent} from '@lazarljubenovic/vis-ng/core/vis-network/vis-network.component';
+import {ToolbarService} from '../project-view/toolbar/toolbar.service';
+import {AlgorithmStateManager} from '../algorithms/state-manager';
 
 @Component({
     selector: 'grf-graph',
@@ -14,11 +16,10 @@ export class GraphComponent implements OnInit {
 
     @ViewChild('network') public visNetworkComponentInstance: VisNetworkComponent;
 
-    @Input() public nodes: GrfGraphNodeOptions[] = [];
-    @Input() public edges: GrfGraphEdgeOptions[] = [];
+    public nodes: GrfGraphNodeOptions[] = [];
+    public edges: GrfGraphEdgeOptions[] = [];
 
-    @Output() public graphClick = new EventEmitter<VisNgNetworkEventArgument>();
-    @Output() public graphNodeDragEnd = new EventEmitter<VisNgNetworkEventArgument>();
+    public graphNodeDragEnd = new EventEmitter<VisNgNetworkEventArgument>();
 
     private _defaultOptions: VisNgNetworkOptions = {
         nodes: {
@@ -51,22 +52,37 @@ export class GraphComponent implements OnInit {
     }
 
     public onGraphClick(event: VisNgNetworkEventArgument): void {
-        this.graphClick.next(event);
+        this._toolbarService.click$.next(event);
+    }
+
+    public onMoveNode(arg: VisNgNetworkEventArgument) {
+        const nodeId = <string>arg.nodes[0];
+        const position = arg.pointer.canvas;
+
+        this._toolbarService.moveNode$.next({nodeId, position});
     }
 
     public onGraphDragEnd(event: VisNgNetworkEventArgument): void {
         if (event.nodes.length != 0) {
-            this.graphNodeDragEnd.next(event);
+            this.onMoveNode(event);
         }
     }
 
-    constructor(private graphOptionsService: GraphOptionsService) {
+    constructor(private graphOptionsService: GraphOptionsService,
+                private _toolbarService: ToolbarService,
+                private _stateManager: AlgorithmStateManager) {
     }
 
     ngOnInit() {
         this.graphOptionsService.optionsChange$.subscribe(options => {
             this._globalOptions = options;
             this.updateResultingOptions();
+        });
+
+        this._stateManager.state$.subscribe(state => {
+            const normalizedState = this._stateManager.getNormalizedState();
+            this.nodes = normalizedState.nodes;
+            this.edges = <any>normalizedState.edges;
         });
     }
 

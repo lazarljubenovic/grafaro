@@ -1,11 +1,4 @@
-import {
-    Component,
-    OnInit,
-    Input,
-    ViewEncapsulation,
-    ViewChild,
-    HostBinding
-} from '@angular/core';
+import {Component, OnInit, Input, ViewEncapsulation, ViewChild, HostBinding} from '@angular/core';
 import {MarkdownService} from '../../markdown.service';
 import {EmojiService} from '../../emoji.service';
 import {TabsService} from '../../tabs/tabs.service';

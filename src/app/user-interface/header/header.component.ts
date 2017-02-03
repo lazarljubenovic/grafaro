@@ -112,8 +112,7 @@ export class HeaderComponent implements OnInit {
 
     constructor(private roomEditService: RoomEditService,
                 private joinService: JoinService,
-                private auth0: Auth0Service
-    ) {
+                private auth0: Auth0Service) {
     }
 
     ngOnInit() {

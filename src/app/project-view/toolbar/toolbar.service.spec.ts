@@ -1,15 +1,15 @@
 /* tslint:disable:no-unused-variable */
 import {TestBed, inject} from '@angular/core/testing';
-import {RoomEditService} from './room-edit.service';
+import {ToolbarService} from './toolbar.service';
 
-xdescribe('Service: RoomEdit', () => {
+xdescribe('ToolbarService', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
-            providers: [RoomEditService]
+            providers: [ToolbarService]
         });
     });
 
-    it('should ...', inject([RoomEditService], (service: RoomEditService) => {
+    it('should ...', inject([ToolbarService], (service: ToolbarService) => {
         expect(service).toBeTruthy();
     }));
 });

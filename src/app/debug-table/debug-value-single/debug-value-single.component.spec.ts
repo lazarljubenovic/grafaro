@@ -1,11 +1,9 @@
 /* tslint:disable:no-unused-variable */
-
-import { TestBed, async } from '@angular/core/testing';
-import { NodeComponent } from './debug-value-single.component';
+import {NodeComponent} from './debug-value-single.component';
 
 describe('Component: Node', () => {
-  it('should create an instance', () => {
-    let component = new NodeComponent();
-    expect(component).toBeTruthy();
-  });
+    it('should create an instance', () => {
+        let component = new NodeComponent();
+        expect(component).toBeTruthy();
+    });
 });
