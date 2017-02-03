@@ -1,7 +1,7 @@
 <ul>
   <li *ngFor="let tool of tools; let i = index"
       [class.current]="i == currentSelected"
-      (click)="currentSelectedChange.next(tool.action)"
+      (click)="toolSelected(tool)"
   >
     <i class="fa {{tool.icon}}"></i>
   </li>

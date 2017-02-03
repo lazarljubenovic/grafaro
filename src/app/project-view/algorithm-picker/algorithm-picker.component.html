@@ -12,9 +12,9 @@
     <span>Dijkstra Shortest Path</span>
   </label>
   <div formGroupName="options">
-    <label *ngFor="let node of nodes">
-      <input type="radio" [value]="node" formControlName="root">
-      <span>{{node}}</span>
+    <label *ngFor="let label of nodeLabels">
+      <input type="radio" [value]="label" formControlName="root">
+      <span>{{label}}</span>
     </label>
   </div>
 </form>

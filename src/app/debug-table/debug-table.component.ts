@@ -1,6 +1,6 @@
 import {Component, OnInit, Input, OnDestroy} from '@angular/core';
 import {DebugTableService} from './debug-table.service';
-import {StateManagerObject} from '../algorithms/state-manager';
+import {StateManagerObject, AlgorithmStateManager} from '../algorithms/state-manager';
 
 @Component({
     selector: 'grf-debug-table',
@@ -24,7 +24,9 @@ export class DebugTableComponent implements OnInit, OnDestroy {
         return index;
     }
 
-    constructor(private _service: DebugTableService) {
+    constructor(private _service: DebugTableService,
+                private _stateManager: AlgorithmStateManager,
+    ) {
     }
 
     public ngOnInit(): void {

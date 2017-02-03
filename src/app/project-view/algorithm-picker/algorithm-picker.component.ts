@@ -1,9 +1,14 @@
 import {Component, OnInit} from '@angular/core';
 import {FormGroup, FormBuilder} from '@angular/forms';
-import {AlgorithmService} from '../../algorithms/algorithm.service';
-import {BreadthFirstSearchAlgorithm} from '../../algorithms/breadth-first-search';
-import {DepthFirstSearchAlgorithm} from '../../algorithms/depth-first-search';
-import {DijkstraShortestPathAlgorithm} from '../../algorithms/dijkstra-shortest-path';
+import {GraphManager} from '../../managers/graph.manager';
+import {AlgorithmManager} from '../../managers/algorithm.manager';
+
+export interface FormOptions {
+    options: {
+        root: string;
+    };
+    algorithm: string;
+}
 
 @Component({
     selector: 'grf-algorithm-picker',
@@ -13,43 +18,33 @@ import {DijkstraShortestPathAlgorithm} from '../../algorithms/dijkstra-shortest-
 export class AlgorithmPickerComponent implements OnInit {
 
     public form: FormGroup = this.formBuilder.group({
-        algorithm: '',
+        algorithm: 'bfs',
         options: this.formBuilder.group({
             root: 'A',
         }),
     });
 
-    public nodes: string[] = [];
+    public nodeLabels: string[] = [];
 
     constructor(private formBuilder: FormBuilder,
-                private algorithmService: AlgorithmService) {
-        this.algorithmService.algorithmStrategy$.subscribe(strategy => {
-            if (this.form.value.algorithm != strategy.abbr) {
-                this.form.patchValue({algorithm: strategy.abbr});
-            }
-        });
+                private _graphManager: GraphManager,
+                private _algorithmManager: AlgorithmManager) {
     }
 
     ngOnInit() {
-        this.algorithmService.graph.nodeLabelChange$.subscribe(nodes => {
-            this.nodes = nodes;
+        this._graphManager.graph$.subscribe(graph => {
+            this.nodeLabels = graph.nodes.map(node => node.label);
+            // todo read this from room socket
+            // also read algorithm
+            this.form.patchValue({
+                options: {
+                    root: this.nodeLabels[1]
+                }
+            });
         });
 
         this.form.valueChanges.subscribe(form => {
-            switch (form.algorithm) {
-                case 'bfs':
-                    this.algorithmService.setAlgorithm(new BreadthFirstSearchAlgorithm());
-                    break;
-                case 'dfs':
-                    this.algorithmService.setAlgorithm(new DepthFirstSearchAlgorithm());
-                    break;
-                case 'dsp':
-                    this.algorithmService.setAlgorithm(new DijkstraShortestPathAlgorithm());
-                    break;
-                default:
-                    throw 'TODO';
-            }
-            this.algorithmService.rootId = this.algorithmService.graph.getNodeId(form.options.root);
+            this._algorithmManager.setAndEmit(form);
         });
     }
 

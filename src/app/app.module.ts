@@ -20,6 +20,7 @@ import {LoginPageModule} from './login-page/login-page.module';
 import {LoginPageComponent} from './login-page/login-page.component';
 import {NotifyService} from './algorithm/notify.service';
 import {WebSocketService} from './websocket.service';
+import {GraphManager} from './managers/graph.manager';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     return new AuthHttp(new AuthConfig({}), http, options);
@@ -69,6 +70,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
         },
         NotifyService,
         WebSocketService,
+        GraphManager,
     ],
     bootstrap: [
         AppComponent,

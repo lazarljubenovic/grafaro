@@ -1,4 +1,4 @@
-import {NgModule} from '@angular/core';
+import {NgModule, forwardRef} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ProjectViewComponent} from './project-view.component';
 import {GraphModule} from '../graph/graph.module';
@@ -21,6 +21,10 @@ import {LoadDialogComponent} from './load-dialog/load-dialog.component';
 import {RoomEditService} from './room-edit.service';
 import {AlgorithmPickerComponent} from './algorithm-picker/algorithm-picker.component';
 import {DebugTableModule} from '../debug-table/debug-table.module';
+import {ToolbarService} from './toolbar/toolbar.service';
+import {GraphOptionsService} from '../graph-options.service';
+import {GraphManager} from '../managers/graph.manager';
+import {AlgorithmManager} from '../managers/algorithm.manager';
 
 @NgModule({
     imports: [
@@ -52,6 +56,10 @@ import {DebugTableModule} from '../debug-table/debug-table.module';
         WebSocketService,
         GraphSocketService,
         RoomEditService,
+        ToolbarService,
+        GraphManager,
+        GraphOptionsService,
+        AlgorithmManager,
     ],
     exports: [
         ProjectViewComponent,

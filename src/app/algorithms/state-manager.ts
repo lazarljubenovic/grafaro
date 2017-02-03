@@ -1,6 +1,11 @@
 import {AlgorithmBase, AlgorithmState} from './algorithm-base';
 import {ReplaySubject} from 'rxjs';
 import {Graph} from '../models/graph.model';
+import {GraphManager} from '../managers/graph.manager';
+import {Inject, ElementRef, Optional} from '@angular/core';
+import {NormalizedState} from './algorithm.service';
+import {AlgorithmManager} from '../managers/algorithm.manager';
+import {BreadthFirstSearchAlgorithm} from './breadth-first-search';
 
 export interface StateManagerObject {
     state: AlgorithmState;
@@ -30,6 +35,10 @@ export class AlgorithmStateManager {
     private _currentStateIndex: number = 0;
 
     public state$ = new ReplaySubject<StateManagerObject>();
+
+    public getNormalizedState(): NormalizedState {
+        return this._algorithm.normalize(this._algorithm.states[this._currentStateIndex]);
+    }
 
     private _getTotalNumberOfStates(): number {
         if (this._algorithm.states) {
@@ -120,6 +129,14 @@ export class AlgorithmStateManager {
     }
 
     /**
+     * Returns algorithm
+     * @returns {AlgorithmBase}
+     */
+    public getAlgorithm(): AlgorithmBase {
+        return this._algorithm;
+    }
+
+    /**
      * Evaluate states for the already given algorithm and given graph.
      *
      * @param graph
@@ -157,6 +174,22 @@ export class AlgorithmStateManager {
             }
         }
 
+    }
+
+    constructor(@Optional() private graphManager: GraphManager,
+                @Optional() private algorithmManager: AlgorithmManager
+    ) {
+        setTimeout(() => this.graphManager.graph$.subscribe(graph => {
+            this.setAlgorithm(new BreadthFirstSearchAlgorithm());
+            this.setGraph(graph, graph.nodes[0].id);
+        }));
+
+        this.algorithmManager.algorithmWithOptions$.subscribe(algorithmWithOptions => {
+            console.log('algorithm', algorithmWithOptions);
+            let rootId = this._graph.getNodeId(algorithmWithOptions.options.root);
+            this.setAlgorithm(algorithmWithOptions.algorithm);
+            this.setGraph(this._graph, rootId);
+        });
     }
 
 }

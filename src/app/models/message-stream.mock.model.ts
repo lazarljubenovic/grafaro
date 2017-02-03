@@ -65,7 +65,7 @@ const dummyJoinMessage: JoinMessageInfo = {
     roomId: '123456',
     isMaster: true
 };
-const dummyGraph: GraphInfoMessage = {
+export const dummyGraph: GraphInfoMessage = {
     graph: {
         nodes: [
             {
