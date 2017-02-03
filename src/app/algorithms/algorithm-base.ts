@@ -205,7 +205,6 @@ export abstract class AlgorithmState {
                 data = {value, color, kind};
             } else if (type == 'array') {
                 const color = this.getDebugColor(name);
-                console.log('~~~~~~~~~~~~~~~~~~', value, color, kind);
                 data = mergeArrays(['value', 'color', 'kind'], [value, color, kind]);
             }
 

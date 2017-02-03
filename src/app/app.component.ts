@@ -14,8 +14,7 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.webSocket.connect('ws://localhost:4000')
-            .subscribe(msg => console.log('from server', msg));
+        this.webSocket.connect('ws://localhost:4000');
     }
 
 }

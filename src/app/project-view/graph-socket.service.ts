@@ -17,7 +17,6 @@ export class GraphSocketService {
     }
 
     public create(): Observable <GraphInfoMessage> {
-        console.log('Graph Ovde?');
         let stream = this.webSocketService.subscribeTo('graph');
         stream.subscribe(message => this.algorithm = message.algorithm);
         return stream;
