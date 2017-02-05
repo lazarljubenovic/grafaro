@@ -1,8 +1,20 @@
-# Grafaro
+# [Grafaro](https://lazarljubenovic.github.io/grafaro/)
 
-This project was generated with [angular-cli](https://github.com/angular/angular-cli) version 1.0.0-beta.17.
+Grafaro is a web app for collaborative learning about graph algorithms. You can [view it online](https://lazarljubenovic.github.io/grafaro/), although this is usually not the latest build. Clone and run locally to see the latest versions (see below for instructions).
 
-## Running
+## Features
+
+ - Complete control over graph: add, delete, rename nodes and edges and move them around
+ - Choose an algorithm to inspect (more coming soon)
+ - View the code as it executes step-by-step
+ - Inspect current state of the algorithm with a list of variables and its contents
+ - The state is also visualized though colors on graph
+ - View the graph in its matrix representation (also editable)
+ - Configure additional algorithm options, such as the starting node (root)
+ - Invite others to join the room and watch the algorithm as it executes together (supported with live chat)
+ - Save your graphs and share them with others 
+
+## Running locally
 
 ```
 git clone https://github.com/lazarljubenovic/grafaro
@@ -11,3 +23,9 @@ ng serve
 ```
 
 Open `localhost:4200` in browser.
+
+---
+
+Project generated with [angular-cli](https://github.com/angular/angular-cli).
+
+
