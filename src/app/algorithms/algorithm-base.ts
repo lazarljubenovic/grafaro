@@ -1,6 +1,8 @@
 import {NormalizedState} from './normalized-state.model';
 import {Graph, GraphJson} from '../models/graph.model';
 import * as Esprima from 'esprima';
+import {GrfColor, GrfGraphNodeOptions, GrfRole} from '../graph/graph.module';
+import {VisNgNetworkOptionsEdges} from '@lazarljubenovic/vis-ng/core';
 
 function _getLabelIfDefined(graph: Graph, nodeId: string): any {
     try {
@@ -66,7 +68,7 @@ export interface DebugData {
     isInScope: boolean;
 }
 
-export function TrackedVariable() {
+export function TrackedVar() {
     return function (target: AlgorithmState, key: string) {
         if (!target._trackedVarsNames) {
             target._trackedVarsNames = [];
@@ -75,7 +77,7 @@ export function TrackedVariable() {
     };
 }
 
-export function ColorExporter(params: string[], fn: Function) {
+export function Color(params: string[], fn: Function) {
     return function (target: AlgorithmState, key: string) {
         if (!target._exportFunctions) {
             target._exportFunctions = new Map();
@@ -84,7 +86,7 @@ export function ColorExporter(params: string[], fn: Function) {
     };
 }
 
-export function KindExporter(kind: DebugDataValueKind) {
+export function Kind(kind: DebugDataValueKind) {
     return function (target: AlgorithmState, key: string) {
         if (!target._kinds) {
             target._kinds = new Map<string, string>();
@@ -124,16 +126,18 @@ export abstract class AlgorithmState {
     public getDefaultDebugColor: (trackedVar: any) => any = (trackedVar) => {
         if (trackedVar == null) {
             if (Array.isArray(trackedVar)) {
-                return ['default'];
+                return [GrfColor.DEFAULT];
             } else {
-                return 'default';
+                return GrfColor.DEFAULT;
             }
         }
         // todo current node is expected to be found in the subclass. how to handle?
         if (Array.isArray(trackedVar)) {
-            return trackedVar.map(x => x == (<any>this)['currentNode'] ? 'accent' : 'default');
+            return trackedVar.map(x => {
+                return x == (<any>this)['currentNode'] ? GrfColor.ACCENT : GrfColor.DEFAULT;
+            });
         } else {
-            return trackedVar == (<any>this)['currentNode'] ? 'accent' : 'default';
+            return trackedVar == (<any>this)['currentNode'] ? GrfColor.ACCENT : GrfColor.DEFAULT;
         }
     };
 
@@ -210,7 +214,6 @@ export abstract class AlgorithmState {
             return {type, name, isInScope, data};
         });
     }
-
 }
 
 export interface CodeJsonElement {
@@ -230,8 +233,6 @@ export abstract class AlgorithmBase {
 
     public abstract code: string;
     public abstract trackedVariables: string[];
-
-    public abstract normalize(state: AlgorithmState): NormalizedState;
 
     public abstract evaluateStatesFor(graph: Graph, rootId: string): AlgorithmState[];
 
@@ -275,4 +276,43 @@ export abstract class AlgorithmBase {
         return codeJson;
     }
 
+    public normalize(state: AlgorithmState): NormalizedState {
+        const nodeVars = state._trackedVarsNames
+            .filter(varName => state._kinds.get(varName) == 'node');
+
+        const nodes: GrfGraphNodeOptions[] = state.graphJson.nodes.map(node => {
+            let color = GrfColor.DEFAULT;
+            let role = GrfRole.DEFAULT;
+
+            nodeVars.forEach((nodeVar: string) => {
+                const varVal = (<any>state)[nodeVar];
+                if (varVal != null) {
+                    if (Array.isArray(varVal)) {
+                        const index = varVal.indexOf(node.label);
+                        if (index != -1) {
+                            color = state.getDebugColor(nodeVar)[index];
+                        }
+                    } else {
+                        if (varVal == node.label) {
+                            color = state.getDebugColor(nodeVar);
+                        }
+                    }
+                }
+            });
+
+            return {
+                id: node.id,
+                label: node.label,
+                position: node.position,
+                weight: node.weight,
+                role,
+                color,
+                annotations: [],
+            };
+        });
+
+        const edges: VisNgNetworkOptionsEdges[] = state.graphJson.edges;
+
+        return {nodes, edges};
+    }
 }

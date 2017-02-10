@@ -1,29 +1,29 @@
 import {
     AlgorithmBase,
     AlgorithmState,
-    TrackedVariable,
+    TrackedVar,
     getLabelIfDefined,
-    KindExporter
+    Kind
 } from './algorithm-base';
 import {NormalizedState} from './normalized-state.model';
 import {Graph, GraphEdge} from '../models/graph.model';
 import {Min} from '../data-structures/util';
 import {
-    GrfGraphNodeOptions, GrfGraphNodeOptionRole,
-    GrfGraphNodeOptionColor
+    GrfGraphNodeOptions, GrfRole,
+    GrfColor
 } from '../graph/graph.module';
 import {VisNgNetworkOptionsEdges} from '@lazarljubenovic/vis-ng/core';
 
 class State extends AlgorithmState {
 
-    @KindExporter('node') @TrackedVariable() public root: string;
-    @KindExporter('node') @TrackedVariable() public Q: string[];
-    @KindExporter('node-number') @TrackedVariable() public distance: string[][];
-    @KindExporter('node-node') @TrackedVariable() public previous: string[][];
-    @KindExporter('node') @TrackedVariable() public u: string;
-    @KindExporter('edge') @TrackedVariable() public neighborEdges: string[];
-    @KindExporter('edge') @TrackedVariable() public edge: string[];
-    @KindExporter('number') @TrackedVariable() public alt: number;
+    @Kind('node') @TrackedVar() public root: string;
+    @Kind('node') @TrackedVar() public Q: string[];
+    @Kind('node-number') @TrackedVar() public distance: string[][];
+    @Kind('node-node') @TrackedVar() public previous: string[][];
+    @Kind('node') @TrackedVar() public u: string;
+    @Kind('edge') @TrackedVar() public neighborEdges: string[];
+    @Kind('edge') @TrackedVar() public edge: string[];
+    @Kind('number') @TrackedVar() public alt: number;
 
     constructor(o: CreateNewStateObject) {
         super(o.graph, o.lineNumber);
@@ -112,10 +112,11 @@ export class DijkstraShortestPathAlgorithm extends AlgorithmBase {
     public trackedVariables: string[] = ['Q', 'distance', 'previous', 'u', 'neighborEdges',
         'edge', 'alt'];
 
+    // todo this!!!!
     public normalize(state: State): NormalizedState {
         const nodes: GrfGraphNodeOptions[] = state.graphJson.nodes.map((node, i) => {
-            const role = state.root == node.label ? GrfGraphNodeOptionRole.START
-                : GrfGraphNodeOptionRole.DEFAULT;
+            const role = state.root == node.label ? GrfRole.START
+                : GrfRole.DEFAULT;
 
             return {
                 id: node.id,
@@ -123,7 +124,7 @@ export class DijkstraShortestPathAlgorithm extends AlgorithmBase {
                 position: node.position,
                 weight: node.weight,
                 role,
-                color: GrfGraphNodeOptionColor.ACCENT,
+                color: GrfColor.ACCENT,
                 annotations: [
                     {
                         position: 'ne',

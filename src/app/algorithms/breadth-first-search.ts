@@ -1,40 +1,38 @@
 import {Queue} from '../data-structures/queue';
-import {NormalizedState} from './normalized-state.model';
-import {VisNgNetworkOptionsEdges} from '@lazarljubenovic/vis-ng/core';
-import {
-    GrfGraphNodeOptions, GrfGraphNodeOptionColor,
-    GrfGraphNodeOptionRole
-} from '../graph/graph.module';
+import {GrfColor} from '../graph/graph.module';
 import {Graph} from '../models/graph.model';
 import {
     AlgorithmBase,
     AlgorithmState,
-    TrackedVariable,
-    ColorExporter,
-    getLabelIfDefined
+    TrackedVar,
+    Color,
+    getLabelIfDefined,
+    Kind
 } from './algorithm-base';
 
-function colorExporterNeighbors(ns: string[], n: string): string[] {
-    return ns.map(x => x == n ? 'primary' : 'default');
+function colorExporterNeighbors(ns: string[], n: string): GrfColor[] {
+    return ns.map(x => x == n ? GrfColor.PRIMARY : GrfColor.DEFAULT);
 }
 
 class State extends AlgorithmState {
 
-    @TrackedVariable() public currentNode: string;
+    @Kind('node') @TrackedVar() public currentNode: string;
 
-    @ColorExporter(['neighbor'], colorExporterNeighbors)
-    @TrackedVariable() public neighbors: string[];
+    @Color(['neighbor'], colorExporterNeighbors)
+    @Kind('node') @TrackedVar() public neighbors: string[];
 
-    @ColorExporter([], () => 'primary')
-    @TrackedVariable() public neighbor: string;
+    @Color([], () => GrfColor.PRIMARY)
+    @Kind('node') @TrackedVar() public neighbor: string;
 
-    @TrackedVariable() public visited: string[];
+    @Color([], (v: any) => v.map((_: any) => GrfColor.DIMMED))
+    @Kind('node') @TrackedVar() public visited: string[];
 
-    @TrackedVariable() public solution: string[];
+    @Kind('node') @TrackedVar() public solution: string[];
 
-    @TrackedVariable() public queue: string[];
+    @Kind('node') @TrackedVar() public queue: string[];
 
-    @TrackedVariable() public root: string;
+    @Color([], () => GrfColor.SECONDARY)
+    @Kind('node') @TrackedVar() public root: string;
 
     constructor(o: CreateNewStateObject) {
         super(o.graph, o.lineNumber);
@@ -90,23 +88,6 @@ export class BreadthFirstSearchAlgorithm extends AlgorithmBase {
   }
   return solution;
 }`;
-
-    public normalize(state: State): NormalizedState {
-        const nodes: GrfGraphNodeOptions[] = state.graphJson.nodes.map((node, i) => {
-            return {
-                id: node.id,
-                label: node.label,
-                position: node.position,
-                weight: node.weight,
-                role: GrfGraphNodeOptionRole.DEFAULT,
-                color: GrfGraphNodeOptionColor.PRIMARY,
-                annotations: [],
-            };
-        });
-        const edges: VisNgNetworkOptionsEdges[] = state.graphJson.edges;
-
-        return {nodes, edges};
-    }
 
     public evaluateStatesFor(graph: Graph, root: string): State[] {
         if (!graph.hasNodeId(root)) {

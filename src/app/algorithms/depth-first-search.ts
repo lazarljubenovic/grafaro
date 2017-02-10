@@ -1,41 +1,38 @@
-import {NormalizedState} from './normalized-state.model';
-import {VisNgNetworkOptionsEdges} from '@lazarljubenovic/vis-ng/core';
-import {
-    GrfGraphNodeOptions, GrfGraphNodeOptionRole,
-    GrfGraphNodeOptionColor
-} from '../graph/graph.module';
+import {GrfColor} from '../graph/graph.module';
 import {Graph} from '../models/graph.model';
 import {Stack} from '../data-structures/stack';
 import {
     AlgorithmBase,
-    TrackedVariable,
-    ColorExporter,
+    TrackedVar,
+    Color,
     AlgorithmState,
     getLabelIfDefined,
-    KindExporter
+    Kind
 } from './algorithm-base';
 
-function colorExporterNeighbors(neighbors: string[], neighbor: string): string[] {
-    return neighbors.map(x => x == neighbor ? 'primary' : 'default');
+function colorExporterNeighbors(neighbors: string[], neighbor: string): GrfColor[] {
+    return neighbors.map(x => x == neighbor ? GrfColor.PRIMARY : GrfColor.DEFAULT);
 }
 
 class State extends AlgorithmState {
 
-    @TrackedVariable() @KindExporter('node') public currentNode: string;
+    @TrackedVar() @Kind('node') public currentNode: string;
 
-    @ColorExporter(['neighbor'], colorExporterNeighbors)
-    @TrackedVariable() @KindExporter('node') public neighbors: string[];
+    @Color(['neighbor'], colorExporterNeighbors)
+    @TrackedVar() @Kind('node') public neighbors: string[];
 
-    @ColorExporter([], () => 'primary')
-    @TrackedVariable() @KindExporter('node') public neighbor: string;
+    @Color([], () => GrfColor.ACCENT)
+    @TrackedVar() @Kind('node') public neighbor: string;
 
-    @TrackedVariable() @KindExporter('node') public visited: string[];
+    @Color([], (v: any) => v.map((_: any) => GrfColor.DIMMED))
+    @TrackedVar() @Kind('node') public visited: string[];
 
-    @TrackedVariable() @KindExporter('node') public solution: string[];
+    @TrackedVar() @Kind('node') public solution: string[];
 
-    @TrackedVariable() @KindExporter('node') public stack: string[];
+    @TrackedVar() @Kind('node') public stack: string[];
 
-    @TrackedVariable() @KindExporter('node') public root: string;
+    @Color([], () => GrfColor.SECONDARY)
+    @TrackedVar() @Kind('node') public root: string;
 
     constructor(o: CreateNewStateObject) {
         super(o.graph, o.lineNumber);
@@ -90,26 +87,6 @@ export class DepthFirstSearchAlgorithm extends AlgorithmBase {
   }
   return solution;
 }`;
-
-    public normalize(state: State): NormalizedState {
-        const nodes: GrfGraphNodeOptions[] = state.graphJson.nodes.map(node => {
-            const role = state.root == node.label ? GrfGraphNodeOptionRole.START
-                : GrfGraphNodeOptionRole.DEFAULT;
-
-            return {
-                id: node.id,
-                label: node.label,
-                position: node.position,
-                weight: node.weight,
-                role,
-                color: GrfGraphNodeOptionColor.ACCENT,
-                annotations: [],
-            };
-        });
-        const edges: VisNgNetworkOptionsEdges[] = state.graphJson.edges;
-
-        return {nodes, edges};
-    }
 
     evaluateStatesFor(graph: Graph, root: string): State[] {
         if (!graph.hasNodeId(root)) {
