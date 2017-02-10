@@ -1,11 +1,10 @@
 import {AlgorithmBase, AlgorithmState} from './algorithm-base';
-import {ReplaySubject} from 'rxjs';
+import {ReplaySubject, Observable} from 'rxjs';
 import {Graph} from '../models/graph.model';
 import {GraphManager} from '../managers/graph.manager';
 import {Optional} from '@angular/core';
 import {NormalizedState} from './normalized-state.model';
-import {AlgorithmManager} from '../managers/algorithm.manager';
-import {BreadthFirstSearchAlgorithm} from './breadth-first-search';
+import {AlgorithmManager, AlgorithmWithOptions} from '../managers/algorithm.manager';
 
 export interface StateManagerObject {
     state: AlgorithmState;
@@ -16,7 +15,10 @@ export interface StateManagerObject {
 }
 
 export class AlgorithmStateManager {
-    private stateNo: number = 0; // todo test
+    /**
+     * Combined graph and algorithm options state for better manipulation.
+     */
+    private _combine$: Observable<[Graph, AlgorithmWithOptions]>;
 
     /**
      * We need these so we know which graph and root to evaluate a new algorithm when user changes
@@ -116,20 +118,6 @@ export class AlgorithmStateManager {
     }
 
     /**
-     * Changes the current algorithm whose states are being managed. Note that this also includes
-     * any change to the graph or its options.
-     * @param algorithmStrategy
-     */
-    public setAlgorithm(algorithmStrategy: AlgorithmBase): void {
-        this._algorithm = algorithmStrategy;
-        console.log('set algorithm state change');
-        if (this._graph && this._rootId) {
-            this._algorithm.evaluateStatesFor(this._graph, this._rootId);
-            this._fixCurrentStateIndex();
-        }
-    }
-
-    /**
      * Returns algorithm
      * @returns {AlgorithmBase}
      */
@@ -138,30 +126,11 @@ export class AlgorithmStateManager {
     }
 
     /**
-     * Evaluate states for the already given algorithm and given graph.
-     *
-     * @param graph
-     * @param rootId
-     *
-     * @throws Throws if algorithm is not set.
-     */
-    public setGraph(graph: Graph, rootId: string): void {
-        if (!this._algorithm) {
-            throw new Error(`Must set algorithm before setting graph and additional options`);
-        }
-        this._graph = graph;
-        this._rootId = rootId;
-        this._algorithm.evaluateStatesFor(this._graph, this._rootId);
-        this._fixCurrentStateIndex();
-    }
-
-    /**
      * Emits the current state along with some additional helping data (index, isLast, isFirst).
      * Emits null if no algorithm is given at the moment.
      * @private
      */
     private _emitState(): void {
-        console.log('state change number', this.stateNo++);
         if (this._algorithm != null) {
             const state = this._algorithm.states[this._currentStateIndex];
             if (state) {
@@ -179,19 +148,20 @@ export class AlgorithmStateManager {
 
     constructor(@Optional() private graphManager: GraphManager,
                 @Optional() private algorithmManager: AlgorithmManager) {
-        // todo next two subscriptions fire themselves on any graph change
-        // shouldn't we combine them or something?
-        setTimeout(() => this.graphManager.graph$.subscribe(graph => {
-            this.setAlgorithm(new BreadthFirstSearchAlgorithm());
-            const root = this._rootId ? this._rootId : graph.nodes[0].id;
-            this.setGraph(graph, root);
-            this._emitState();
-        }));
 
-        this.algorithmManager.algorithmWithOptions$.subscribe(algorithmWithOptions => {
-            let rootId = this._graph.getNodeId(algorithmWithOptions.options.root);
-            this.setAlgorithm(algorithmWithOptions.algorithm);
-            this.setGraph(this._graph, rootId);
+        // Changes happen only when both are present, so we eliminate the possibility of 'property
+        // is undefined' error.
+        this._combine$ = Observable.combineLatest(
+            this.graphManager.graph$,
+            this.algorithmManager.algorithmWithOptions$
+        );
+
+        this._combine$.subscribe(combined => {
+            this._graph = combined[0];
+            this._rootId = this._graph.getNodeId(combined[1].options.root);
+            this._algorithm = combined[1].algorithm;
+            this._algorithm.evaluateStatesFor(this._graph, this._rootId);
+            this._fixCurrentStateIndex();
             this._emitState();
         });
     }
