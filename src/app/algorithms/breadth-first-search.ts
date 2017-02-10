@@ -1,7 +1,10 @@
 import {Queue} from '../data-structures/queue';
 import {NormalizedState} from './normalized-state.model';
 import {VisNgNetworkOptionsEdges} from '@lazarljubenovic/vis-ng/core';
-import {GrfGraphNodeOptions} from '../graph/graph.module';
+import {
+    GrfGraphNodeOptions, GrfGraphNodeOptionColor,
+    GrfGraphNodeOptionRole
+} from '../graph/graph.module';
 import {Graph} from '../models/graph.model';
 import {
     AlgorithmBase,
@@ -95,22 +98,14 @@ export class BreadthFirstSearchAlgorithm extends AlgorithmBase {
                 label: node.label,
                 position: node.position,
                 weight: node.weight,
-                isStart: state.root == node.id,
-                isEnd: false,
-                isAccentColor: state.currentNode == node.id,
-                isPrimaryColor: state.neighbor == node.id,
-                isSecondaryColor: false,
-                isDimmedColor: !state.visited ? false : state.visited.indexOf(node.label) != -1,
+                role: GrfGraphNodeOptionRole.DEFAULT,
+                color: GrfGraphNodeOptionColor.PRIMARY,
+                annotations: [],
             };
         });
         const edges: VisNgNetworkOptionsEdges[] = state.graphJson.edges;
-        const queue: string[] = state.queue;
-        const solution: string[] = state.solution;
-        const accentColor: string[] = [state.currentNode];
-        const primaryColor: string[] = [state.neighbor];
-        const secondaryColor: string[] = [];
 
-        return {nodes, edges, queue, solution, accentColor, primaryColor, secondaryColor};
+        return {nodes, edges};
     }
 
     public evaluateStatesFor(graph: Graph, root: string): State[] {

@@ -13,6 +13,18 @@ export interface GrfGraphNodeAnnotationOptions {
     style: string;
 }
 
+export enum GrfGraphNodeOptionRole {
+    START,
+    END,
+    DEFAULT,
+}
+
+export enum GrfGraphNodeOptionColor {
+    ACCENT,
+    PRIMARY,
+    SECONDARY,
+}
+
 export interface GrfGraphNodeOptions {
     id: string;
     label: string;
@@ -20,13 +32,9 @@ export interface GrfGraphNodeOptions {
         x: number;
         y: number;
     };
-    isStart: boolean;
-    isEnd: boolean;
-    isAccentColor: boolean;
-    isPrimaryColor: boolean;
-    isSecondaryColor: boolean;
-    isDimmedColor: boolean;
-    annotations?: GrfGraphNodeAnnotationOptions[];
+    role: GrfGraphNodeOptionRole;
+    color: GrfGraphNodeOptionColor;
+    annotations: GrfGraphNodeAnnotationOptions[];
 }
 
 export interface GrfGraphEdgeOptions {

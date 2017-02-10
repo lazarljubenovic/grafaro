@@ -8,7 +8,10 @@ import {
 import {NormalizedState} from './normalized-state.model';
 import {Graph, GraphEdge} from '../models/graph.model';
 import {Min} from '../data-structures/util';
-import {GrfGraphNodeOptions} from '../graph/graph.module';
+import {
+    GrfGraphNodeOptions, GrfGraphNodeOptionRole,
+    GrfGraphNodeOptionColor
+} from '../graph/graph.module';
 import {VisNgNetworkOptionsEdges} from '@lazarljubenovic/vis-ng/core';
 
 class State extends AlgorithmState {
@@ -111,17 +114,16 @@ export class DijkstraShortestPathAlgorithm extends AlgorithmBase {
 
     public normalize(state: State): NormalizedState {
         const nodes: GrfGraphNodeOptions[] = state.graphJson.nodes.map((node, i) => {
+            const role = state.root == node.label ? GrfGraphNodeOptionRole.START
+                : GrfGraphNodeOptionRole.DEFAULT;
+
             return {
                 id: node.id,
                 label: node.label,
                 position: node.position,
                 weight: node.weight,
-                isStart: state.root == node.id,
-                isEnd: false,
-                isAccentColor: state.u == node.id,
-                isPrimaryColor: false,
-                isSecondaryColor: false,
-                isDimmedColor: false,
+                role,
+                color: GrfGraphNodeOptionColor.ACCENT,
                 annotations: [
                     {
                         position: 'ne',
@@ -132,11 +134,8 @@ export class DijkstraShortestPathAlgorithm extends AlgorithmBase {
             };
         });
         const edges: VisNgNetworkOptionsEdges[] = state.graphJson.edges;
-        const accentColor: string[] = [];
-        const primaryColor: string[] = [];
-        const secondaryColor: string[] = [];
 
-        return {nodes, edges, accentColor, primaryColor, secondaryColor};
+        return {nodes, edges};
     }
 
     public evaluateStatesFor(graph: Graph, root: string): State[] {

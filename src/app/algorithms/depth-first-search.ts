@@ -1,6 +1,9 @@
 import {NormalizedState} from './normalized-state.model';
 import {VisNgNetworkOptionsEdges} from '@lazarljubenovic/vis-ng/core';
-import {GrfGraphNodeOptions} from '../graph/graph.module';
+import {
+    GrfGraphNodeOptions, GrfGraphNodeOptionRole,
+    GrfGraphNodeOptionColor
+} from '../graph/graph.module';
 import {Graph} from '../models/graph.model';
 import {Stack} from '../data-structures/stack';
 import {
@@ -12,8 +15,8 @@ import {
     KindExporter
 } from './algorithm-base';
 
-function colorExporterNeighbors(ns: string[], n: string): string[] {
-    return ns.map(x => x == n ? 'primary' : 'default');
+function colorExporterNeighbors(neighbors: string[], neighbor: string): string[] {
+    return neighbors.map(x => x == neighbor ? 'primary' : 'default');
 }
 
 class State extends AlgorithmState {
@@ -90,35 +93,22 @@ export class DepthFirstSearchAlgorithm extends AlgorithmBase {
 
     public normalize(state: State): NormalizedState {
         const nodes: GrfGraphNodeOptions[] = state.graphJson.nodes.map(node => {
+            const role = state.root == node.label ? GrfGraphNodeOptionRole.START
+                : GrfGraphNodeOptionRole.DEFAULT;
+
             return {
                 id: node.id,
                 label: node.label,
                 position: node.position,
                 weight: node.weight,
-                isStart: state.root == node.label,
-                isEnd: false,
-                isAccentColor: state.currentNode == node.label,
-                isPrimaryColor: state.neighbor == node.label,
-                isSecondaryColor: false,
-                isDimmedColor: !state.visited ? false : state.visited.indexOf(node.label) != -1,
+                role,
+                color: GrfGraphNodeOptionColor.ACCENT,
+                annotations: [],
             };
         });
         const edges: VisNgNetworkOptionsEdges[] = state.graphJson.edges;
-        const stack: string[] = state.stack;
-        const solution: string[] = state.solution;
-        const accentColor: string[] = [state.currentNode];
-        const primaryColor: string[] = [state.neighbor];
-        const secondaryColor: string[] = [];
 
-        return {
-            nodes,
-            edges,
-            stack,
-            solution,
-            accentColor,
-            primaryColor,
-            secondaryColor,
-        };
+        return {nodes, edges};
     }
 
     evaluateStatesFor(graph: Graph, root: string): State[] {
@@ -230,9 +220,7 @@ export class DepthFirstSearchAlgorithm extends AlgorithmBase {
 
         }
 
-        states.push(new State({
-            solution, graph, visited, stack, root, lineNumber: 16
-        }));
+        states.push(new State({solution, graph, visited, stack, root, lineNumber: 16}));
         this.states = states;
         return states;
     }
