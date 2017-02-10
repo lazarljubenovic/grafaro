@@ -72,7 +72,7 @@ describe(`Graph`, () => {
         const graph = new Graph();
         graph.addNode('A', {x: 0, y: 0});
         expect(graph.getNodeId('A')).toBe('node-0');
-        expect(() => graph.getNodeId('xxx')).toThrow();
+        expect(graph.getNodeId('xxx')).toBeFalsy();
     });
 
     it(`should change node's label`, () => {
@@ -80,7 +80,7 @@ describe(`Graph`, () => {
         graph.addNode('A', {x: 0, y: 0});
         expect(graph.getNodeId('A')).toBe('node-0');
         graph.changeNodeLabel('node-0', 'B');
-        expect(() => graph.getNodeId('A')).toThrow();
+        expect(graph.getNodeId('A')).toBeFalsy();
         expect(graph.hasNodeId('node-0')).toBe(true);
         expect(graph.getNodeLabel('node-0')).toBe('B');
         expect(graph.getNodeId('B')).toBe('node-0');
