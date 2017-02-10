@@ -1,9 +1,8 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
-import {Graph} from '../models/graph.model';
+import {Graph, GraphJson} from '../models/graph.model';
 import {ClickPosition} from '../project-view/toolbar/toolbar.component';
 import {ToolbarService} from '../project-view/toolbar/toolbar.service';
-import {dummyGraph} from '../models/message-stream.mock.model';
 
 @Injectable()
 export class GraphManager {
@@ -13,8 +12,6 @@ export class GraphManager {
     public graph$: BehaviorSubject<Graph>;
 
     constructor(private _toolbarService: ToolbarService) {
-        this._graph.readJson(dummyGraph.graph);
-
         this.graph$ = new BehaviorSubject(this._graph);
 
         _toolbarService.addNode$.subscribe(x => {
@@ -154,6 +151,11 @@ export class GraphManager {
 
     public moveNode(nodeId: string, position: ClickPosition): void {
         this._graph.nodes.find(node => node.id == nodeId).position = position;
+        this.emit();
+    }
+
+    public graphFromSocket(graphJson: GraphJson) {
+        this._graph.readJson(graphJson);
         this.emit();
     }
 

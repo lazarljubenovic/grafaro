@@ -139,12 +139,12 @@ export const dummyGraph: GraphInfoMessage = {
         nextNodeId: 5,
         nextEdgeId: 5,
     },
-    algorithm: {
-        id: 'bfs',
-        options: {
-            root: 'node-0',
-        },
-    },
+    // algorithm: {
+    //     id: 'bfs',
+    //     options: {
+    //         root: 'node-0',
+    //     },
+    // },
 };
 
 export class MockMessageStream extends AbstractMessageStream {

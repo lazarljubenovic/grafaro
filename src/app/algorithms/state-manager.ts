@@ -158,11 +158,18 @@ export class AlgorithmStateManager {
 
         this._combine$.subscribe(combined => {
             this._graph = combined[0];
-            this._rootId = this._graph.getNodeId(combined[1].options.root);
             this._algorithm = combined[1].algorithm;
-            this._algorithm.evaluateStatesFor(this._graph, this._rootId);
-            this._fixCurrentStateIndex();
-            this._emitState();
+
+            if (this._graph.nodes.length > 0) {
+                this._rootId = this._graph.getNodeId(combined[1].options.root);
+                this._algorithm.evaluateStatesFor(this._graph, this._rootId);
+                this._fixCurrentStateIndex();
+                this._emitState();
+            } else {
+                this._algorithm.states = [];
+                this._currentStateIndex = 0;
+                this._emitState();
+            }
         });
     }
 

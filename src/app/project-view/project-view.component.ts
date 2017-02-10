@@ -52,8 +52,7 @@ export class ProjectViewComponent implements OnInit {
                 private activeRoute: ActivatedRoute,
                 private joinService: JoinService,
                 private graphSocketService: GraphSocketService,
-                private _graphManager: GraphManager
-    ) {
+                private _graphManager: GraphManager) {
         this.popupRenameComponentFactory =
             componentFactoryResolver.resolveComponentFactory(PopupRenameComponent);
 
@@ -63,20 +62,16 @@ export class ProjectViewComponent implements OnInit {
         const roomId = this.activeRoute.snapshot.params['id'];
         // todo break down next line -> join has to create first and then join
         this.joinService.joinRoom(roomId);
+
         this.graphSocketService.create()
-            .subscribe(roomGraph => {
-                // todo
-                console.log('Here comes graph from socket');
-                // this.algorithmService.graph.readJson(roomGraph.graph);
-                // this.algorithmService.rootId = roomGraph.algorithm.options.root;
-                // this.algorithmService.setGraph();
+            .subscribe(graphJson => {
+                this._graphManager.graphFromSocket(graphJson.graph);
             });
 
-        // todo see where to put this
         this._graphManager.graph$.subscribe(graph => {
             if (this.joinService.isMaster) {
                 const graphJson = graph.writeJson();
-                this.graphSocketService.changeGraphAndAlgorithm(graphJson);
+                this.graphSocketService.send(graphJson);
             }
         });
 
