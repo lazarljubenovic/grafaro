@@ -3,6 +3,7 @@ import {Graph, GraphJson} from '../models/graph.model';
 import * as Esprima from 'esprima';
 import {GrfColor, GrfGraphNodeOptions, GrfRole} from '../graph/graph.module';
 import {VisNgNetworkOptionsEdges} from '@lazarljubenovic/vis-ng/core';
+import {DebugDataValueKind, DebugData} from './debug-data.interface';
 
 function _getLabelIfDefined(graph: Graph, nodeId: string): any {
     try {
@@ -51,21 +52,6 @@ function attachNames(names: string[], arr: any[]): {[names: string]: any} {
 // todo generic function
 export function mergeArrays(names: string[], arrays: any[][]): any[] {
     return transpose(arrays).map((arr) => attachNames(names, arr));
-}
-
-export type DebugDataValueKind = 'node' | 'edge' | 'node-node' | 'node-number' | 'number';
-
-export interface DebugDataValue {
-    value: any;
-    color: string;
-    kind: DebugDataValueKind;
-}
-
-export interface DebugData {
-    type: 'single' | 'array';
-    name: string;
-    data: DebugDataValue | DebugDataValue[];
-    isInScope: boolean;
 }
 
 export function TrackedVar() {

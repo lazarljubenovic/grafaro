@@ -1,5 +1,5 @@
 import {Component, OnInit, Input, trigger, state, style, transition, animate} from '@angular/core';
-import {DebugDataValue} from '../../algorithms/algorithm-base';
+import {DebugDataValue} from '../../algorithms/debug-data.interface';
 
 @Component({
     selector: 'grf-array-of-nodes',

@@ -1,5 +1,5 @@
 import {Pipe, PipeTransform} from '@angular/core';
-import {DebugData} from '../algorithms/algorithm-base';
+import {DebugData} from '../algorithms/debug-data.interface';
 
 @Pipe({name: 'filter'})
 export class FilterPipe implements PipeTransform {
