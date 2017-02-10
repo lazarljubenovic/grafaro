@@ -3,83 +3,9 @@ import {Graph, GraphJson} from '../models/graph.model';
 import * as Esprima from 'esprima';
 import {GrfColor, GrfGraphNodeOptions, GrfRole} from '../graph/graph.module';
 import {VisNgNetworkOptionsEdges} from '@lazarljubenovic/vis-ng/core';
-import {DebugDataValueKind, DebugData} from './debug-data.interface';
+import {DebugData} from './debug-data.interface';
+import {mergeArrays} from './utils';
 
-function _getLabelIfDefined(graph: Graph, nodeId: string): any {
-    try {
-        return graph.getNodeLabel(nodeId);
-    } catch (e) {
-        return nodeId;
-    }
-}
-
-function _getLabelsIfDefined(graph: Graph, nodeIds: string[]): any {
-    try {
-        return nodeIds.map(nodeId => graph.getNodeLabel(nodeId));
-    } catch (e) {
-        return nodeIds;
-    }
-}
-
-export function getLabelIfDefined(graph: Graph, id: any): any {
-    if (Array.isArray(id)) {
-        // if (Array.isArray(id[0])) {
-        // eg. [['node-0', 42], ['node-1', 48]]
-        // return;
-        // } else {
-        // eg. ['node-0', 'node-1']
-        return _getLabelsIfDefined(graph, id);
-        // }
-    } else {
-        return _getLabelIfDefined(graph, id);
-    }
-}
-
-// todo generic function
-function transpose(arr: any[][]): any[][] {
-    return arr[0].map((_, i) => arr.map(x => x[i]));
-}
-
-// todo generic function
-function attachNames(names: string[], arr: any[]): {[names: string]: any} {
-    let o: {[names: string]: any} = {};
-    for (let i = 0; i < arr.length; i++) {
-        o[names[i]] = arr[i];
-    }
-    return o;
-}
-
-// todo generic function
-export function mergeArrays(names: string[], arrays: any[][]): any[] {
-    return transpose(arrays).map((arr) => attachNames(names, arr));
-}
-
-export function TrackedVar() {
-    return function (target: AlgorithmState, key: string) {
-        if (!target._trackedVarsNames) {
-            target._trackedVarsNames = [];
-        }
-        target._trackedVarsNames.push(key);
-    };
-}
-
-export function Color(params: string[], fn: Function) {
-    return function (target: AlgorithmState, key: string) {
-        if (!target._exportFunctions) {
-            target._exportFunctions = new Map();
-        }
-        target._exportFunctions.set(key, {params, fn});
-    };
-}
-
-export function Kind(kind: DebugDataValueKind) {
-    return function (target: AlgorithmState, key: string) {
-        if (!target._kinds) {
-            target._kinds = new Map<string, string>();
-        }
-        target._kinds.set(key, kind);
-    };
-}
 
 export abstract class AlgorithmState {
 
@@ -262,6 +188,7 @@ export abstract class AlgorithmBase {
         return codeJson;
     }
 
+    // TODO This should be method in AlgorithmState class
     public normalize(state: AlgorithmState): NormalizedState {
         const nodeVars = state._trackedVarsNames
             .filter(varName => state._kinds.get(varName) == 'node');

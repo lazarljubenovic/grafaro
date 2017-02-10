@@ -1,14 +1,9 @@
 import {GrfColor} from '../graph/graph.module';
 import {Graph} from '../models/graph.model';
 import {Stack} from '../data-structures/stack';
-import {
-    AlgorithmBase,
-    TrackedVar,
-    Color,
-    AlgorithmState,
-    getLabelIfDefined,
-    Kind
-} from './algorithm-base';
+import {AlgorithmState, AlgorithmBase} from './algorithm-base';
+import {TrackedVar, Kind, Color} from './decorators';
+import {getLabelIfDefined} from './utils';
 
 function colorExporterNeighbors(neighbors: string[], neighbor: string): GrfColor[] {
     return neighbors.map(x => x == neighbor ? GrfColor.PRIMARY : GrfColor.DEFAULT);

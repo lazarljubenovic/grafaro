@@ -1,18 +1,11 @@
-import {
-    AlgorithmBase,
-    AlgorithmState,
-    TrackedVar,
-    getLabelIfDefined,
-    Kind
-} from './algorithm-base';
+import {AlgorithmBase, AlgorithmState} from './algorithm-base';
 import {NormalizedState} from './normalized-state.model';
 import {Graph, GraphEdge} from '../models/graph.model';
 import {Min} from '../data-structures/util';
-import {
-    GrfGraphNodeOptions, GrfRole,
-    GrfColor
-} from '../graph/graph.module';
+import {GrfGraphNodeOptions, GrfRole, GrfColor} from '../graph/graph.module';
 import {VisNgNetworkOptionsEdges} from '@lazarljubenovic/vis-ng/core';
+import {Kind, TrackedVar} from './decorators';
+import {getLabelIfDefined} from './utils';
 
 class State extends AlgorithmState {
 
