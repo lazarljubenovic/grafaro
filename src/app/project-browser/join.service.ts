@@ -1,27 +1,18 @@
-import {Injectable, Inject} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {WebSocketService} from '../websocket.service';
 import {Observable} from 'rxjs';
 
 export interface JoinMessageInfo {
     roomId: string;
-    isMaster: boolean;
+    error: string;
 }
 
 @Injectable()
-export class JoinService {
-    // todo factory? or something?
-    // private joinSubject: Observable<JoinMessageInfo>;
-    public isMaster = false;
+export class JoinSocketService {
+    public joinSocket$: Observable<JoinMessageInfo>;
 
-    constructor(@Inject(WebSocketService) private webSocketService: WebSocketService) {
-    }
-
-    public create(): Observable<JoinMessageInfo> {
-        let stream = this.webSocketService.subscribeTo('join');
-        stream.subscribe((message: JoinMessageInfo) => {
-            this.isMaster = message.isMaster;
-        });
-        return stream;
+    constructor(private webSocketService: WebSocketService) {
+        this.joinSocket$ = this.webSocketService.subscribeTo('join');
     }
 
     public newRoom(): void {
@@ -29,8 +20,11 @@ export class JoinService {
     }
 
     public joinRoom(id: string): void {
+        this.webSocketService.send({roomId: id}, 'join');
+    }
+
+    public setRoom(id: string): void {
         this.webSocketService.roomId = id;
-        this.webSocketService.send({id}, 'join');
     }
 
 }

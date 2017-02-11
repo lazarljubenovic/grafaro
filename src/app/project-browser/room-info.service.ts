@@ -4,14 +4,11 @@ import {Observable} from 'rxjs';
 import {RoomInfoMessage} from './room-info.interface';
 
 @Injectable()
-export class RoomInfoService {
-    //  private roomInfoSubject: Observable<RoomInfoMessage>;
+export class RoomInfoSocketService {
+    public roomInfo$: Observable<RoomInfoMessage>;
 
     constructor(@Inject(WebSocketService) private webSocketService: WebSocketService) {
-    }
-
-    public create(): Observable<RoomInfoMessage> {
-        return this.webSocketService.subscribeTo('roomInfo');
+        this.roomInfo$ = this.webSocketService.subscribeTo('roomInfo');
     }
 
 }

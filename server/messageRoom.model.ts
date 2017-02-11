@@ -1,5 +1,15 @@
 import * as ws from 'ws';
-import {RoomInfo, Message, RoomInfoMessage, Graph, RoomEdit} from './interfaces';
+import {
+    RoomInfo,
+    Message,
+    RoomInfoMessage,
+    Graph,
+    RoomEdit,
+    JoinMessage,
+    MasterMessage,
+    GraphMessage,
+    AlgorithmMessage
+} from './interfaces';
 import {Room} from './room.model';
 
 export class MessageRoom {
@@ -30,36 +40,62 @@ export class MessageRoom {
     }
 
     public addUserToRoom(roomId: string, user: ws): void {
-        console.log('User joined the room', roomId);
-        this.rooms.get(roomId).addUser(user);
+        try {
+            this.rooms.get(roomId).addUser(user);
+            console.log('User joined the room', roomId);
+            this.sendJoinMessage(user, roomId);
 
-        const graph = this.rooms.get(roomId).graph;
-        const algorithm = this.rooms.get(roomId).algorithm;
-        this.returnMessage(user, {
-            type: 'graph',
-            payload: {
+            const graph = this.rooms.get(roomId).graph;
+            const graphMessage: GraphMessage = {
                 graph,
-                algorithm,
-            },
-            roomId
-        });
+            };
+
+            const algorithm = this.rooms.get(roomId).algorithm;
+            const algorithmMessage: AlgorithmMessage = {
+                info: algorithm
+            };
+
+            const roomInfo: RoomEdit = this.getRoomEdit(roomId);
+
+            this.sendMessage(user, 'graph', graphMessage, roomId);
+            this.sendMessage(user, 'algorithm', algorithmMessage, roomId);
+            this.sendMessage(user, 'roomEdit', roomInfo, roomId);
+        } catch (exception) {
+            console.log(`Room ${roomId} not found.`);
+            throw new Error();
+        }
     }
 
     public removeUserFromRoom(roomId: string, user: ws): void {
-        this.rooms.get(roomId).removeUser(user);
+        const room = this.rooms.get(roomId);
+        let wasMaster: boolean = room.removeUser(user);
+        let isEmpty: boolean = room.users.size == 0;
+
+        if (isEmpty) {
+            this.deleteRoom(roomId);
+        } else if (wasMaster) {
+            let newMaster = room.master;
+            this.sendMasterMessage(newMaster, roomId);
+        }
     }
 
-    public sendMessageToRoom(roomId: string, user: ws, message: any): void {
+    public sendMessageToRoom(roomId: string, user: ws, message: Message<any>): void {
         this.rooms.get(roomId).users
             .forEach(client => client != user && client.send(JSON.stringify(message)));
     }
 
-    public returnMessage(user: ws, message: any): void {
+    public returnMessage(user: ws, message: Message<any>): void {
         user.send(JSON.stringify(message));
     }
 
-    public hasRoom(roomId: string): boolean {
-        return this.rooms.has(roomId);
+    public sendMessage(user: ws, type: string, payload: any, roomId: string): void {
+        const message: Message<any> = {
+            roomId,
+            payload,
+            type,
+        };
+
+        this.returnMessage(user, message);
     }
 
     public userHasRoom(user: ws): string {
@@ -99,10 +135,6 @@ export class MessageRoom {
         user.send(JSON.stringify(roomInfoMessage));
     }
 
-    public getRoomUserCount(roomId: string): number {
-        return this.rooms.get(roomId).users.size;
-    }
-
     public setRoomGraph(roomId: string, graph: Graph) {
         this.rooms.get(roomId).graph = graph;
     }
@@ -126,6 +158,24 @@ export class MessageRoom {
     public setRoomEdit(roomId: string, roomEdit: RoomEdit): void {
         this.rooms.get(roomId).name = roomEdit.name;
         this.rooms.get(roomId).description = roomEdit.description;
+    }
+
+    public sendJoinMessage(ws: ws, roomId: string, error: string = ''): void {
+        const joinMessage: JoinMessage = {
+            roomId,
+            error
+        };
+
+        this.sendMessage(ws, 'join', joinMessage, roomId);
+    }
+
+    public sendMasterMessage(ws: ws, roomId: string): void {
+        const isMaster = this.getRoomMaster(roomId) == ws;
+        const masterMessage: MasterMessage = {
+            isMaster,
+        };
+
+        this.sendMessage(ws, 'master', masterMessage, roomId);
     }
 
     private constructor() {

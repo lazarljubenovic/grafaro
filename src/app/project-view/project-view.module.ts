@@ -19,18 +19,18 @@ import {GraphSocketService} from './graph-socket.service';
 import {SaveDialogComponent} from './save-dialog/save-dialog.component';
 import {LoadDialogComponent} from './load-dialog/load-dialog.component';
 import {RoomEditService} from './room-edit.service';
-import {AlgorithmPickerComponent} from './algorithm-picker/algorithm-picker.component';
 import {DebugTableModule} from '../debug-table/debug-table.module';
 import {ToolbarService} from './toolbar/toolbar.service';
 import {GraphOptionsService} from '../graph-options.service';
 import {GraphManager} from '../managers/graph.manager';
 import {AlgorithmManager} from '../managers/algorithm.manager';
+import {MasterSocketService} from './master-socket.service';
+import {AlgorithmPickerModule} from './algorithm-picker/algorithm-picker.module';
 
 @NgModule({
     imports: [
         CommonModule,
         FormsModule,
-        ReactiveFormsModule,
         ReactiveFormsModule,
         GraphModule,
         TabsModule,
@@ -41,6 +41,7 @@ import {AlgorithmManager} from '../managers/algorithm.manager';
         AlgorithmModule,
         UserInterfaceModule,
         DebugTableModule,
+        AlgorithmPickerModule,
     ],
     declarations: [
         ProjectViewComponent,
@@ -50,7 +51,6 @@ import {AlgorithmManager} from '../managers/algorithm.manager';
         PopupRenameComponent,
         SaveDialogComponent,
         LoadDialogComponent,
-        AlgorithmPickerComponent,
     ],
     providers: [
         WebSocketService,
@@ -60,6 +60,7 @@ import {AlgorithmManager} from '../managers/algorithm.manager';
         GraphManager,
         GraphOptionsService,
         AlgorithmManager,
+        MasterSocketService,
     ],
     exports: [
         ProjectViewComponent,

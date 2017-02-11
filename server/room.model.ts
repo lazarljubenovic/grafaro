@@ -13,9 +13,9 @@ export class Room {
         this._users = new Set();
         this.graph = defaultGraph;
         this.algorithm = {
-            id: 'bfs',
+            algorithm: 'dfs',
             options: {
-                root: 'node-0'
+                root: 'A'
             }
         };
         this._master = null;
@@ -34,12 +34,18 @@ export class Room {
         }
     }
 
-    public removeUser(user: ws): void {
+    public removeUser(user: ws): boolean {
+        let wasMaster = false;
+
         this.users.delete(user);
-        if (this._master == user) {
+
+        if (this._master == user && this._users.size > 0) {
+            wasMaster = true;
             console.log('The master left. Long live the master!');
             this._master = this.users.values().next().value;
         }
+
+        return wasMaster;
     }
 
     public set graph(value: Graph) {

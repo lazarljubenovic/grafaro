@@ -24,8 +24,7 @@ export class DebugTableComponent implements OnInit, OnDestroy {
     }
 
     constructor(private _service: DebugTableService,
-                private _stateManager: AlgorithmStateManager
-    ) {
+                private _stateManager: AlgorithmStateManager) {
     }
 
     public ngOnInit(): void {

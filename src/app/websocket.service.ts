@@ -13,6 +13,8 @@ export class WebSocketService {
         this._roomId = value;
     }
 
+    private messageBuffer: Message<any>[] = [];
+
     public constructor() {
         this.messages = new ReplaySubject<Message<any>>(5);
     }
@@ -24,7 +26,9 @@ export class WebSocketService {
             roomId: this._roomId
         };
 
-        if (this.ws.readyState == WebSocket.OPEN) {
+        if (this.ws.readyState == WebSocket.CONNECTING) {
+            this.messageBuffer.push(messageToSend);
+        } else if (this.ws.readyState == WebSocket.OPEN) {
             this.ws.send(JSON.stringify(messageToSend));
         } else if (type == 'join') {
             (<MockMessageStream>this.stream).createChatMessages();
@@ -33,10 +37,15 @@ export class WebSocketService {
         }
     }
 
-    public connect(url: string): ReplaySubject<Message<any>> {
+    private connect(url: string): void {
         this.ws = new WebSocket(url);
         this.ws.onopen = (event) => {
             console.log('Socket open');
+            this.messageBuffer.forEach(message => {
+                console.log('sending', message);
+                this.ws.send(JSON.stringify(message));
+            });
+            this.messageBuffer = [];
             this.stream = new MessageStream(this.ws);
             this.stream.message$.subscribe(message => this.messages.next(message));
         };
@@ -48,11 +57,12 @@ export class WebSocketService {
             console.log('Socket error');
         };
         this.stream = new MockMessageStream(this.ws);
-
-        return this.messages;
     }
 
     public subscribeTo(type: string): Observable<any> {
+        if (this.ws == null) {
+            this.connect('ws://localhost:4000');
+        }
         return this.messages.filter((msg: Message<any>) => msg.type == type)
             .map((msg: Message<any>) => {
                 return msg.payload;

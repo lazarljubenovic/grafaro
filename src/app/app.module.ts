@@ -8,17 +8,16 @@ import {ProjectViewModel} from './project-view/project-view.module';
 import {MarkdownService} from './shared/markdown.service';
 import {EmojiService} from './shared/emoji.service';
 import {GraphOptionsService} from './graph-options.service';
-import {ProjectBrowserModule} from './project-browser/project-browser.module';
+import {RoomBrowserModule} from './project-browser/room-browser.module';
 import {RouterModule} from '@angular/router';
 import {ProjectViewComponent} from './project-view/project-view.component';
-import {ProjectBrowserComponent} from './project-browser/project-browser.component';
+import {RoomBrowserComponent} from './project-browser/room-browser.component';
 import {FourOhFourModule} from './four-oh-four/four-oh-four.module';
 import {FourOhFourComponent} from './four-oh-four/four-oh-four.component';
 import {AuthHttp, AuthConfig} from 'angular2-jwt';
 import {LoginPageModule} from './login-page/login-page.module';
 import {LoginPageComponent} from './login-page/login-page.component';
 import {NotifyService} from './algorithm/notify.service';
-import {WebSocketService} from './websocket.service';
 import {GraphManager} from './managers/graph.manager';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
@@ -35,13 +34,13 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
         HttpModule,
         StepperModule,
         ProjectViewModel,
-        ProjectBrowserModule,
+        RoomBrowserModule,
         FourOhFourModule,
         LoginPageModule,
         RouterModule.forRoot([
             {
                 path: '',
-                component: ProjectBrowserComponent,
+                component: RoomBrowserComponent,
             },
             {
                 path: 'login',
@@ -67,7 +66,6 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
             deps: [Http, RequestOptions],
         },
         NotifyService,
-        WebSocketService,
         GraphManager,
     ],
     bootstrap: [

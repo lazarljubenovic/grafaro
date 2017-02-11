@@ -12,7 +12,7 @@
       <div class="col project-title" *ngIf="!isTitleInEditMode">
         <span class="text">{{projectTitle}}</span>
         <span class="icon edit"
-              *ngIf="isMaster()"
+              *ngIf="(isMaster$ | async)"
               (click)="openTitleEditMode()"
         >
           <i class="fa fa-pencil"></i>
@@ -23,7 +23,7 @@
         <input #titleInput type="text" [(ngModel)]="newTitle" (keyup.esc)="discardTitle()"
                (keyup.enter)="submitTitle()">
         <span class="icon edit"
-              *ngIf="isMaster()"
+              *ngIf="(isMaster$ | async)"
               (click)="submitTitle()"
         >
           <i class="fa fa-check"></i>
@@ -33,7 +33,7 @@
       <div class="col project-description" *ngIf="!isDescriptionInEditMode">
         <span class="text">{{projectDescription}}</span>
         <span class="icon edit"
-              *ngIf="isMaster()"
+              *ngIf="(isMaster$ | async)"
               (click)="openDescriptionEditMode()"
         >
           <i class="fa fa-pencil"></i>
@@ -45,7 +45,7 @@
                (keyup.esc)="discardDescription()"
                (keyup.enter)="submitDescription()">
         <span class="icon edit"
-              *ngIf="isMaster()"
+              *ngIf="(isMaster$ | async)"
               (click)="submitDescription()"
         >
           <i class="fa fa-check"></i>

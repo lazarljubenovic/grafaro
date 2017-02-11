@@ -1,0 +1,13 @@
+<grf-header [isProjectViewMode]="false"></grf-header>
+
+<main>
+  <ul>
+    <li *ngFor="let room of (roomsInfo$ | async)">
+      <grf-room-card [roomInfo]="room"></grf-room-card>
+    </li>
+  </ul>
+
+  <aside>
+    <button (click)="createNewRoom()">New room</button>
+  </aside>
+</main>

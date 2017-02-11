@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {Auth0Service} from './core/auth0.service';
-import {WebSocketService} from './websocket.service';
 
 @Component({
     selector: 'grf-app',
@@ -9,12 +8,11 @@ import {WebSocketService} from './websocket.service';
 })
 export class AppComponent implements OnInit {
 
-    constructor(private webSocket: WebSocketService,
-                private auth: Auth0Service) {
+    constructor(private auth: Auth0Service) {
     }
 
     ngOnInit() {
-        this.webSocket.connect('ws://localhost:4000');
+
     }
 
 }

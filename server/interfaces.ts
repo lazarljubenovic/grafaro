@@ -16,6 +16,10 @@ export interface Message<Type> {
 
 export interface JoinMessage {
     roomId: string;
+    error: string;
+}
+
+export interface MasterMessage {
     isMaster: boolean;
 }
 
@@ -38,11 +42,17 @@ export interface RoomInfoMessage {
 
 export interface GraphMessage {
     graph: Graph;
-    algorithm: any;
+}
+
+export interface AlgorithmMessage {
+    info: {
+        algorithm: string;
+        options: any;
+    };
 }
 
 export interface IUser extends Document {
-    //_id: string;
+    // _id: string;
     _graphIds: string[];
     displayName: string; // from social networks
     socialId: string;

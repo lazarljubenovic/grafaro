@@ -10,10 +10,11 @@ import {GraphOptionsService} from '../graph-options.service';
 import {PopupRenameComponent} from './popup-rename/popup-rename.component';
 import {ToastService} from '../toast/toast.service';
 import {ProjectsService} from '../project-browser/projects.service';
-import {ActivatedRoute} from '@angular/router';
-import {JoinService} from '../project-browser/join.service';
+import {ActivatedRoute, Router} from '@angular/router';
+import {JoinSocketService} from '../project-browser/join.service';
 import {GraphSocketService} from './graph-socket.service';
 import {GraphManager} from '../managers/graph.manager';
+import {MasterSocketService} from './master-socket.service';
 
 @Component({
     selector: 'grf-user-interface',
@@ -50,29 +51,43 @@ export class ProjectViewComponent implements OnInit {
                 private toastService: ToastService,
                 public projectService: ProjectsService,
                 private activeRoute: ActivatedRoute,
-                private joinService: JoinService,
+                private _joinService: JoinSocketService,
                 private graphSocketService: GraphSocketService,
-                private _graphManager: GraphManager) {
+                private _graphManager: GraphManager,
+                private _masterSocket: MasterSocketService,
+                private _router: Router) {
         this.popupRenameComponentFactory =
             componentFactoryResolver.resolveComponentFactory(PopupRenameComponent);
 
     }
 
     ngOnInit() {
-        const roomId = this.activeRoute.snapshot.params['id'];
-        // todo break down next line -> join has to create first and then join
-        this.joinService.joinRoom(roomId);
+        this._joinService.joinSocket$
+            .subscribe(joinMessage => {
+                // On error, change route to 404
+                if (joinMessage.error != '') {
+                    this._router.navigate(['/error']);
+                    console.log('TODO: better error handling');
+                    console.error(joinMessage.error);
+                } else {
+                    this._joinService.setRoom(joinMessage.roomId);
+                }
+            });
 
-        this.graphSocketService.create()
-            .subscribe(graphJson => {
-                this._graphManager.graphFromSocket(graphJson.graph);
+        const roomId = this.activeRoute.snapshot.params['id'];
+        this._joinService.joinRoom(roomId);
+
+        this.graphSocketService.graphSocket$.subscribe(graphMessage => {
+            this._graphManager.graphFromSocket(graphMessage.graph);
+        });
+
+        this._masterSocket.masterSocket$
+            .subscribe(masterMessage => {
+                this.graphSocketService.canSend = masterMessage.isMaster;
             });
 
         this._graphManager.graph$.subscribe(graph => {
-            if (this.joinService.isMaster) {
-                const graphJson = graph.writeJson();
-                this.graphSocketService.send(graphJson);
-            }
+            this.graphSocketService.send(graph.writeJson());
         });
 
         // Initial settings

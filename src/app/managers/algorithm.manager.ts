@@ -18,7 +18,7 @@ export class AlgorithmManager {
 
     private _algorithmWithOptions: AlgorithmWithOptions = {
         options: {
-            root: 'B',
+            root: 'A',
         },
         algorithm: new BreadthFirstSearchAlgorithm(),
     };
@@ -29,10 +29,12 @@ export class AlgorithmManager {
     public setAndEmit(formOptions: FormOptions): void {
         let algorithm: AlgorithmBase;
         algorithm = this.algorithmFactory.getAlgorithm(formOptions.algorithm);
-        // todo after node addition, root reverts to 'B'
         this._algorithmWithOptions.options = formOptions.options;
         this._algorithmWithOptions.algorithm = algorithm;
         this.algorithmWithOptions$.next(this._algorithmWithOptions);
+    }
+
+    constructor() {
     }
 
 }

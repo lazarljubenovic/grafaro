@@ -1,16 +1,21 @@
 import {Injectable, Inject} from '@angular/core';
 import {WebSocketService} from '../../websocket.service';
-import {ChatMessageInfo} from './chat-message/chat-message.component';
 import {Observable} from 'rxjs';
+
+export interface ChatMessageInfo {
+    timeStamp: Date;
+    senderName: string;
+    senderHandle: string;
+    senderHash: string;
+    message: string;
+}
 
 @Injectable()
 export class ChatService {
-    // private chatSubject: Observable<ChatMessageInfo>;
-    constructor(@Inject(WebSocketService) private webSocketService: WebSocketService) {
-    }
+    public chatSocket$: Observable<ChatMessageInfo>;
 
-    public create(): Observable<ChatMessageInfo> {
-        return this.webSocketService.subscribeTo('chat');
+    constructor(@Inject(WebSocketService) private webSocketService: WebSocketService) {
+        this.chatSocket$ = this.webSocketService.subscribeTo('chat');
     }
 
     public send(chatMessage: ChatMessageInfo): void {

@@ -8,9 +8,8 @@ import {
     ElementRef,
     ComponentFactory
 } from '@angular/core';
-import {ChatMessageInfo, ChatMessageComponent} from './chat-message/chat-message.component';
-import {ChatService} from './chat.service';
-import {Observable} from 'rxjs';
+import {ChatMessageComponent} from './chat-message/chat-message.component';
+import {ChatService, ChatMessageInfo} from './chat.service';
 
 @Component({
     selector: 'grf-chat',
@@ -26,8 +25,6 @@ export class ChatComponent implements OnInit {
     public messagesContainer: ElementRef;
 
     private chatMessageFactory: ComponentFactory<ChatMessageComponent>;
-
-    public chatMessages$: Observable<any>;
 
     public currentTypedMessage: string = '';
 
@@ -103,8 +100,7 @@ export class ChatComponent implements OnInit {
 
     ngOnInit() {
         this.chatMessageFactory = this.cfr.resolveComponentFactory(ChatMessageComponent);
-        this.chatMessages$ = this.chatService.create();
-        this.chatMessages$.subscribe((message: ChatMessageInfo) => {
+        this.chatService.chatSocket$.subscribe((message: ChatMessageInfo) => {
             this.createChatMessage(message);
         });
     }

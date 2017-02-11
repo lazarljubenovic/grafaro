@@ -3,31 +3,23 @@ import {WebSocketService} from '../websocket.service';
 import {GraphJson} from '../models/graph.model';
 import {Observable} from 'rxjs';
 
-// todo algorithm to seperate message
-export interface GraphInfoMessage {
+export interface GraphMessage {
     graph: GraphJson;
-    // algorithm: any;
 }
 
 @Injectable()
 export class GraphSocketService {
+    public graphSocket$: Observable<GraphMessage>;
+    public canSend: boolean = false;
 
-    constructor(private webSocketService: WebSocketService) {
-    }
-
-    public create(): Observable <GraphInfoMessage> {
-        console.log('creating graph socket');
-        let stream = this.webSocketService.subscribeTo('graph');
-        return stream;
+    constructor(private _webSocketService: WebSocketService) {
+        this.graphSocket$ = this._webSocketService.subscribeTo('graph');
     }
 
     public send(graph: GraphJson): void {
-        const message: GraphInfoMessage = {
-            graph,
-            // algorithm: this.algorithm
-        };
-
-        this.webSocketService.send(message, 'graph');
+        if (this.canSend) {
+            this._webSocketService.send({graph}, 'graph');
+        }
     }
 
 }

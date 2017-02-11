@@ -1,15 +1,15 @@
 /* tslint:disable:no-unused-variable */
 import {TestBed, inject} from '@angular/core/testing';
-import {JoinService} from './join.service';
+import {JoinSocketService} from './join.service';
 
 xdescribe('Service: Join', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
-            providers: [JoinService]
+            providers: [JoinSocketService]
         });
     });
 
-    it('should ...', inject([JoinService], (service: JoinService) => {
+    it('should ...', inject([JoinSocketService], (service: JoinSocketService) => {
         expect(service).toBeTruthy();
     }));
 });

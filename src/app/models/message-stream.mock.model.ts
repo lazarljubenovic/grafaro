@@ -1,10 +1,11 @@
 import {AbstractMessageStream} from './message-stream.abstract.model';
 import {ReplaySubject} from 'rxjs';
-import {ChatMessageInfo} from '../shared/chat/chat-message/chat-message.component';
 import {Message} from '../message';
 import {RoomInfoMessage} from '../project-browser/room-info.interface';
 import {JoinMessageInfo} from '../project-browser/join.service';
-import {GraphInfoMessage} from '../project-view/graph-socket.service';
+import {GraphMessage} from '../project-view/graph-socket.service';
+import {MasterMessage} from '../project-view/master-socket.service';
+import {ChatMessageInfo} from '../shared/chat/chat.service';
 
 const dummyMessages: ChatMessageInfo[] = [
     {
@@ -63,9 +64,12 @@ const dummyRooms: RoomInfoMessage = {
 };
 const dummyJoinMessage: JoinMessageInfo = {
     roomId: '123456',
-    isMaster: true
+    error: '',
 };
-export const dummyGraph: GraphInfoMessage = {
+const dummMasterMessage: MasterMessage = {
+    isMaster: true,
+};
+export const dummyGraph: GraphMessage = {
     graph: {
         nodes: [
             {
@@ -174,6 +178,11 @@ export class MockMessageStream extends AbstractMessageStream {
             roomId: '123456',
             payload: dummyJoinMessage,
             type: 'join'
+        });
+        (<ReplaySubject<Message<any>>>this._message$).next({
+            roomId: '123456',
+            payload: dummMasterMessage,
+            type: 'master'
         });
     }
 

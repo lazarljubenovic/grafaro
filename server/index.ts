@@ -1,4 +1,4 @@
-import {ChatMessageInfo, Message, JoinMessage, GraphMessage, RoomEdit} from './interfaces';
+import {ChatMessageInfo, Message, JoinMessage, GraphMessage, AlgorithmMessage} from './interfaces';
 import * as bodyParser from 'body-parser';
 import * as http from 'http';
 import * as ws from 'ws';
@@ -83,55 +83,52 @@ wss.on('connection', ws => {
     ws.on('message', (message: string) => {
         let messageObj: Message<any> = JSON.parse(message);
         let roomId = messageObj.roomId;
+        console.log('message', messageObj);
 
-        if (messageObj.type == 'create') {
-            const roomId = messageRooms.createNewRoom();
-            const joinMessage: Message<JoinMessage> = {
-                type: 'join',
-                payload: {
-                    roomId,
-                    isMaster: true
-                },
-                roomId
-            };
-            messageRooms.returnMessage(ws, joinMessage);
-        } else if (messageObj.type == 'join') {
-            if (!messageRooms.hasRoom(roomId)) {
-                // Create new room if it doesn't exist
-                console.log('No such room', roomId);
-            }
-
-            let lobbyInd = lobby.findIndex(client => client == ws);
-            messageRooms.addUserToRoom(roomId, ws);
-            lobby.splice(lobbyInd, 1);
-            (<JoinMessage>messageObj.payload).roomId = roomId;
-            (<JoinMessage>messageObj.payload).isMaster = messageRooms.getRoomMaster(roomId) == ws;
-            messageRooms.returnMessage(ws, messageObj);
-
-            // Send room name and description
-            const roomNameDesc: Message<RoomEdit> = {
-                payload: messageRooms.getRoomEdit(roomId),
-                type: 'roomEdit',
-                roomId
-            };
-            messageRooms.returnMessage(ws, roomNameDesc);
-
-            // Update room list
-            lobby.forEach(client => messageRooms.sendRoomsInfo(client));
-        } else if (messageObj.type == 'roomEdit'){
-            const roomEdit: RoomEdit = messageObj.payload;
-            messageRooms.setRoomEdit(roomId, roomEdit);
-            messageRooms.sendMessageToRoom(roomId, ws, messageObj);
-            lobby.forEach(client => messageRooms.sendRoomsInfo(client));
-        } else {
-            if (messageObj.type == 'graph' && messageRooms.getRoomMaster(roomId) == ws) {
-                const graphMessage = <GraphMessage>messageObj.payload;
-                messageRooms.setRoomGraph(messageObj.roomId, graphMessage.graph);
-                messageRooms.setRoomAlgorithm(messageObj.roomId, graphMessage.algorithm);
-            }
-            console.log(messageObj, 'to room', roomId);
-            // Broadcast message to other users in the same room
-            messageRooms.sendMessageToRoom(roomId, ws, messageObj);
+        switch (messageObj.type) {
+            case 'create':
+                roomId = messageRooms.createNewRoom();
+                messageRooms.sendJoinMessage(ws, roomId);
+                lobby.forEach(user => messageRooms.sendRoomsInfo(user));
+                break;
+            case 'join':
+                try {
+                    console.log('Join sector');
+                    roomId = (<JoinMessage>messageObj.payload).roomId;
+                    messageRooms.addUserToRoom(roomId, ws);
+                    messageRooms.sendMasterMessage(ws, roomId);
+                    let lobbyIndex = lobby.findIndex(user => ws == user);
+                    lobby.splice(lobbyIndex, 1);
+                    lobby.forEach(user => messageRooms.sendRoomsInfo(user));
+                } catch (exception) {
+                    messageRooms.sendJoinMessage(ws, roomId, `No room ${roomId} found!`);
+                }
+                break;
+            case 'roomEdit':
+                let roomEdit = messageObj.payload;
+                messageRooms.setRoomEdit(roomId, roomEdit);
+                messageRooms.sendMessageToRoom(roomId, ws, messageObj);
+                lobby.forEach(user => messageRooms.sendRoomsInfo(user));
+                break;
+            case 'graph':
+                let graphMessage: GraphMessage = messageObj.payload;
+                messageRooms.setRoomGraph(roomId, graphMessage.graph);
+                messageRooms.sendMessageToRoom(roomId, ws, messageObj);
+                break;
+            case 'algorithm':
+                let algorithmMessage: AlgorithmMessage = messageObj.payload;
+                messageRooms.setRoomAlgorithm(roomId, algorithmMessage);
+                messageRooms.sendMessageToRoom(roomId, ws, messageObj);
+                break;
+            case 'state':
+                console.log('TODO: state');
+                break;
+            case 'chat':
+                messageRooms.sendMessageToRoom(roomId, ws, messageObj);
+                break;
+            default:
+                console.log('TODO: New type?', messageObj.type);
+                break;
         }
     });
 
@@ -140,31 +137,16 @@ wss.on('connection', ws => {
     });
 
     ws.on('close', () => {
-        let lobbyInd = lobby.findIndex(client => client == ws);
+        let lobbyIndex = lobby.findIndex(client => client == ws);
         let userRoom = messageRooms.userHasRoom(ws);
 
-        // if (!!userRoom) {
-        //     let roomMaster = messageRooms.getRoomMaster(userRoom);
-        //     messageRooms.removeUserFromRoom(userRoom, ws);
-        //     if (messageRooms.getRoomUserCount(userRoom) == 0) {
-        //         messageRooms.deleteRoom(userRoom);
-        //         console.log('Room', userRoom, 'is deleted.');
-        //     } else if (roomMaster == ws) {
-        //         const newMaster = messageRooms.getRoomMaster(userRoom);
-        //         const joinMessage: Message<JoinMessage> = {
-        //             type: 'join',
-        //             payload: {
-        //                 roomId: userRoom,
-        //                 isMaster: true
-        //             },
-        //             roomId: userRoom
-        //         };
-        //         messageRooms.returnMessage(newMaster, joinMessage);
-        //     }
-        //     lobby.forEach(client => messageRooms.sendRoomsInfo(client));
-        // } else if (lobbyInd > -1) {
-        //     lobby.splice(lobbyInd, 1);
-        // }
+        if (lobbyIndex > -1) {
+            // User was in lobby, just remove it from lobby
+            lobby.splice(lobbyIndex, 1);
+        } else {
+            messageRooms.removeUserFromRoom(userRoom, ws);
+            lobby.forEach(user => messageRooms.sendRoomsInfo(user));
+        }
     });
 
     setTimeout(() => {

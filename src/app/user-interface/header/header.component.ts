@@ -1,7 +1,8 @@
 import {Component, OnInit, Input, ViewChild, ElementRef} from '@angular/core';
 import {RoomEditService} from '../../project-view/room-edit.service';
-import {JoinService} from '../../project-browser/join.service';
 import {Auth0Service} from '../../core/auth0.service';
+import {MasterSocketService} from '../../project-view/master-socket.service';
+import {Observable} from 'rxjs';
 
 @Component({
     selector: 'grf-header',
@@ -30,6 +31,8 @@ export class HeaderComponent implements OnInit {
     public displayName: string = '';
     public newName: string;
     public isNameInEditMode: boolean = false;
+
+    public isMaster$: Observable<boolean>;
 
     public openTitleEditMode() {
         this.isTitleInEditMode = true;
@@ -102,16 +105,12 @@ export class HeaderComponent implements OnInit {
         this.auth0.changeDisplayName(this.newName);
     }
 
-    public isMaster(): boolean {
-        return this.joinService.isMaster;
-    }
-
     public logout(): void {
         this.auth0.logout();
     }
 
     constructor(private roomEditService: RoomEditService,
-                private joinService: JoinService,
+                private _masterSocket: MasterSocketService,
                 private auth0: Auth0Service) {
     }
 
@@ -131,5 +130,8 @@ export class HeaderComponent implements OnInit {
             this.displayName = user.displayName;
             this.newName = this.displayName;
         });
+
+        this.isMaster$ = this._masterSocket.masterSocket$
+            .map(message => message.isMaster);
     }
 }
