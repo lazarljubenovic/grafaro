@@ -1,8 +1,7 @@
 import {NormalizedState} from './normalized-state.model';
 import {Graph, GraphJson} from '../models/graph.model';
 import * as Esprima from 'esprima';
-import {GrfColor, GrfGraphNodeOptions, GrfRole} from '../graph/graph.module';
-import {VisNgNetworkOptionsEdges} from '@lazarljubenovic/vis-ng/core';
+import {GrfColor, GrfGraphNodeOptions, GrfRole, GrfGraphEdgeOptions} from '../graph/graph.module';
 import {DebugData} from './debug-data.interface';
 import {mergeArrays} from './utils';
 import {
@@ -155,6 +154,26 @@ export abstract class AlgorithmState {
         });
         return annotationsTextsAndPositions;
     }
+
+    public getAnnotationsForEdgeLabel(edgeLabel: string): AnnotationTextAndPosition[] {
+        const _annotationRules: AnnotationDecoratorParameter =
+            (this.constructor as any)._annotationRules;
+        if (_annotationRules == null) {
+            return [];
+        }
+
+        let annotationsTextsAndPositions: AnnotationTextAndPosition[] = [];
+        _annotationRules.edges.forEach(_annotationRule => {
+            const annotationRuleFn: AnnotationDecoratorRuleFunction = _annotationRule.ruleFunction;
+            const text = annotationRuleFn(this, edgeLabel);
+            annotationsTextsAndPositions.push({
+                position: _annotationRule.position,
+                text,
+                style: _annotationRule.style,
+            });
+        });
+        return annotationsTextsAndPositions;
+    }
 }
 
 export interface CodeJsonElement {
@@ -236,7 +255,19 @@ export abstract class AlgorithmBase {
             };
         });
 
-        const edges: VisNgNetworkOptionsEdges[] = state.graphJson.edges;
+        const edges: GrfGraphEdgeOptions[] = state.graphJson.edges.map(edge => {
+            const annotations: AnnotationTextAndPosition[] =
+                state.getAnnotationsForEdgeLabel(edge.label);
+
+            return {
+                id: edge.id,
+                from: edge.from,
+                to: edge.to,
+                label: edge.label,
+                weight: edge.weight,
+                annotations,
+            };
+        });
 
         return {nodes, edges};
     }

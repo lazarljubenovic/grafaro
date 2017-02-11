@@ -111,9 +111,40 @@ export class GraphComponent implements OnInit {
 
                             ctx.fillStyle = annotation.style;
                             ctx.fillText(annotation.text, x, y);
-
-                            ctx.restore();
                         }
+                        ctx.restore();
+                    });
+                }
+            });
+        }
+
+        if (this.edges) {
+            this.edges.forEach(edge => {
+                if (edge.annotations) {
+                    edge.annotations.forEach(annotation => {
+                        ctx.save();
+                        const network = this.visNetworkComponentInstance.rawNetworkInstance;
+                        const nodePositions: any = network.getPositions([edge.from, edge.to]);
+                        if (nodePositions) {
+                            const {x: x1, y: y1} = nodePositions[edge.from];
+                            const {x: x2, y: y2} = nodePositions[edge.to];
+
+                            const middleX = (x1 + x2) / 2;
+                            const middleY = (y1 + y2) / 2;
+
+                            ctx.translate(middleX, middleY);
+
+                            ctx.textBaseline = 'center';
+                            ctx.textAlign = 'center';
+
+                            const {r, phi} = annotation.position;
+                            const x = r * Math.cos(phi * 0.0174533);
+                            const y = r * Math.sin(phi * 0.0174533);
+
+                            ctx.fillStyle = annotation.style;
+                            ctx.fillText(annotation.text, x, y);
+                        }
+                        ctx.restore();
                     });
                 }
             });

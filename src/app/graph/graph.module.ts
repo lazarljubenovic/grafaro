@@ -45,6 +45,7 @@ export interface GrfGraphEdgeOptions {
     label: string;
     from: string;
     to: string;
+    annotations: AnnotationTextAndPosition[];
 }
 
 @NgModule({

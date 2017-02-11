@@ -2,7 +2,10 @@ import {AlgorithmBase, AlgorithmState} from './algorithm-base';
 import {Graph, GraphEdge} from '../models/graph.model';
 import {Min} from '../data-structures/util';
 import {GrfColor} from '../graph/graph.module';
-import {Kind, TrackedVar, Color, NodeWeightAnnotationFunction, Annotations} from './decorators';
+import {
+    Kind, TrackedVar, Color, NodeWeightAnnotationFunction, Annotations,
+    EdgeWeightAnnotationFunction
+} from './decorators';
 import {getLabelIfDefined} from './utils';
 
 
@@ -30,7 +33,13 @@ import {getLabelIfDefined} from './utils';
             }
         }
     ],
-    edges: [],
+    edges: [
+        {
+            position: {r: 24, phi: -45},
+            style: 'green',
+            ruleFunction: EdgeWeightAnnotationFunction,
+        },
+    ],
 })
 @Color({
     nodes: [
