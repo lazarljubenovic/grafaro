@@ -101,32 +101,17 @@ export class GraphComponent implements OnInit {
                         const nodePos = network.getPositions([node.id])[node.id];
                         if (nodePos) {
                             ctx.translate(nodePos.x, nodePos.y);
-                            const offset = 20;
-                            let x: number = 0, y: number = 0;
+
                             ctx.textBaseline = 'center';
                             ctx.textAlign = 'center';
-                            if (annotation.position.includes('s')) {
-                                y += offset;
-                                ctx.textBaseline = 'top';
-                            }
-                            if (annotation.position.includes('n')) {
-                                y -= offset;
-                                ctx.textBaseline = 'bottom';
-                            }
-                            if (annotation.position.includes('e')) {
-                                x += offset;
-                                ctx.textAlign = 'left';
-                            }
-                            if (annotation.position.includes('w')) {
-                                x -= offset;
-                                ctx.textAlign = 'right';
-                            }
+
+                            const {r, phi} = annotation.position;
+                            const x = r * Math.cos(phi * 0.0174533);
+                            const y = r * Math.sin(phi * 0.0174533);
+
                             ctx.fillStyle = annotation.style;
                             ctx.fillText(annotation.text, x, y);
-                            ctx.beginPath();
-                            ctx.arc(x, y, 2, 0, Math.PI * 2);
-                            ctx.stroke();
-                            ctx.closePath();
+
                             ctx.restore();
                         }
                     });

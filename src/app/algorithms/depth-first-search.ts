@@ -5,6 +5,7 @@ import {AlgorithmState, AlgorithmBase} from './algorithm-base';
 import {TrackedVar, Kind, Color} from './decorators';
 import {getLabelIfDefined} from './utils';
 
+
 @Color({
     nodes: [
         (state: State, nodeLabel: string) =>

@@ -5,13 +5,36 @@ import {GrfColor, GrfGraphNodeOptions, GrfRole} from '../graph/graph.module';
 import {VisNgNetworkOptionsEdges} from '@lazarljubenovic/vis-ng/core';
 import {DebugData} from './debug-data.interface';
 import {mergeArrays} from './utils';
-import {ColorDecoratorParameter, ColorDecoratorFunction} from './decorators';
+import {
+    ColorDecoratorParameter,
+    ColorDecoratorFunction,
+    AnnotationDecoratorParameter,
+    AnnotationDecoratorRuleFunction
+} from './decorators';
+
+
+export interface AnnotationTextAndPosition {
+    text: string;
+
+    // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle
+    style: string;
+
+    position: {
+        r: number;
+        phi: number; // in degrees
+    };
+}
 
 
 export abstract class AlgorithmState {
 
     /** Filled with decorators. */
     public static _colorRules: ColorDecoratorParameter;
+
+    /**
+     * Filled with decorators.
+     */
+    public static _annotationRules: AnnotationDecoratorParameter;
 
     /**
      * Filled with decorators.
@@ -112,6 +135,26 @@ export abstract class AlgorithmState {
             return {type, name, isInScope, data};
         });
     }
+
+    public getAnnotationsForNodeLabel(nodeLabel: string): AnnotationTextAndPosition[] {
+        const _annotationRules: AnnotationDecoratorParameter =
+            (this.constructor as any)._annotationRules;
+        if (_annotationRules == null) {
+            return [];
+        }
+
+        let annotationsTextsAndPositions: AnnotationTextAndPosition[] = [];
+        _annotationRules.nodes.forEach(_annotationRule => {
+            const annotationRuleFn: AnnotationDecoratorRuleFunction = _annotationRule.ruleFunction;
+            const text = annotationRuleFn(this, nodeLabel);
+            annotationsTextsAndPositions.push({
+                position: _annotationRule.position,
+                text,
+                style: _annotationRule.style,
+            });
+        });
+        return annotationsTextsAndPositions;
+    }
 }
 
 export interface CodeJsonElement {
@@ -177,8 +220,10 @@ export abstract class AlgorithmBase {
     // TODO This should be method in AlgorithmState class
     public normalize(state: AlgorithmState): NormalizedState {
         const nodes: GrfGraphNodeOptions[] = state.graphJson.nodes.map(node => {
-            let color = state.getColorForNodeLabel(node.label);
-            let role = GrfRole.DEFAULT;
+            const color: GrfColor = state.getColorForNodeLabel(node.label);
+            const role: GrfRole = GrfRole.DEFAULT;
+            const annotations: AnnotationTextAndPosition[] =
+                state.getAnnotationsForNodeLabel(node.label);
 
             return {
                 id: node.id,
@@ -187,7 +232,7 @@ export abstract class AlgorithmBase {
                 weight: node.weight,
                 role,
                 color,
-                annotations: [],
+                annotations,
             };
         });
 

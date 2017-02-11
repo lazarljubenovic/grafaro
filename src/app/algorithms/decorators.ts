@@ -12,6 +12,7 @@ export function TrackedVar() {
     };
 }
 
+
 export type ColorDecoratorFunction = (state: AlgorithmState, label: string) => (GrfColor | null);
 
 export interface ColorDecoratorParameter {
@@ -26,6 +27,37 @@ export function Color(param: ColorDecoratorParameter) {
         target._colorRules = param;
     };
 }
+
+
+export type AnnotationDecoratorRuleFunction  = (state: AlgorithmState, label: string) => string;
+
+export interface AnnotationDecoratorRule {
+    position: {r: number, phi: number};
+    style: string;
+    ruleFunction: AnnotationDecoratorRuleFunction;
+}
+
+export interface AnnotationDecoratorParameter {
+    nodes: AnnotationDecoratorRule[];
+    edges: AnnotationDecoratorRule[];
+}
+
+export function Annotations(param: AnnotationDecoratorParameter) {
+    return function (target: any) {
+        target._annotationRules = param;
+    };
+}
+
+export const NodeWeightAnnotationFunction: AnnotationDecoratorRuleFunction =
+    (state: AlgorithmState, nodeLabel: string) => {
+        return state.graphJson.nodes.find(node => node.label == nodeLabel).weight.toString();
+    };
+
+export const EdgeWeightAnnotationFunction: AnnotationDecoratorRuleFunction =
+    (state: AlgorithmState, edgeLabel: string) => {
+        return state.graphJson.edges.find(edge => edge.label == edgeLabel).weight.toString();
+    };
+
 
 export function Kind(kind: DebugDataValueKind) {
     return function (target: AlgorithmState, key: string) {

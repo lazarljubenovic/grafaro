@@ -6,6 +6,7 @@ import {GraphNodeOptionsTransformPipe} from './graph-node-options-transform.pipe
 import {GraphEdgeOptionsTransformPipe} from './graph-edge-options-transform.pipe';
 import {ColorThemeService} from '../color-theme.service';
 import {AlgorithmStateManager} from '../algorithms/state-manager';
+import {AnnotationTextAndPosition} from '../algorithms/algorithm-base';
 
 export interface GrfGraphNodeAnnotationOptions {
     position: string; // 'n' | 'e' | 'w' | 's' | 'ne' | 'nw' | 'se' | 'sw';
@@ -36,7 +37,7 @@ export interface GrfGraphNodeOptions {
     };
     role: GrfRole;
     color: GrfColor;
-    annotations: GrfGraphNodeAnnotationOptions[];
+    annotations: AnnotationTextAndPosition[];
 }
 
 export interface GrfGraphEdgeOptions {
