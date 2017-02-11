@@ -5,29 +5,39 @@ import {AlgorithmBase, AlgorithmState} from './algorithm-base';
 import {Kind, TrackedVar, Color} from './decorators';
 import {getLabelIfDefined} from './utils';
 
-function colorExporterNeighbors(ns: string[], n: string): GrfColor[] {
-    return ns.map(x => x == n ? GrfColor.PRIMARY : GrfColor.DEFAULT);
-}
-
+@Color({
+    nodes: [
+        (state: State, nodeLabel: string) =>
+            state.currentNode == nodeLabel ? GrfColor.ACCENT : null,
+        (state: State, nodeLabel: string) =>
+            state.neighbor == nodeLabel ? GrfColor.PRIMARY : null,
+        (state: State, nodeLabel: string) =>
+            state.neighbors && state.neighbors.indexOf(nodeLabel) != -1 ? GrfColor.SECONDARY : null,
+        (state: State, nodeLabel: string) =>
+            state.visited && state.visited.indexOf(nodeLabel) != -1 ? GrfColor.DIMMED : null,
+        (state: State, nodeLabel: string) =>
+            GrfColor.DEFAULT,
+    ],
+    edges: [
+        (state: State, edgeLabel: string) =>
+            GrfColor.DEFAULT,
+    ],
+})
 class State extends AlgorithmState {
 
-    @Kind('node') @TrackedVar() public currentNode: string;
+    @TrackedVar() @Kind('node') public currentNode: string;
 
-    @Color(['neighbor'], colorExporterNeighbors)
-    @Kind('node') @TrackedVar() public neighbors: string[];
+    @TrackedVar() @Kind('node') public neighbors: string[];
 
-    @Color([], () => GrfColor.PRIMARY)
-    @Kind('node') @TrackedVar() public neighbor: string;
+    @TrackedVar() @Kind('node') public neighbor: string;
 
-    @Color([], (v: any) => v.map((_: any) => GrfColor.DIMMED))
-    @Kind('node') @TrackedVar() public visited: string[];
+    @TrackedVar() @Kind('node') public visited: string[];
 
-    @Kind('node') @TrackedVar() public solution: string[];
+    @TrackedVar() @Kind('node') public solution: string[];
 
-    @Kind('node') @TrackedVar() public queue: string[];
+    @TrackedVar() @Kind('node') public queue: string[];
 
-    @Color([], () => GrfColor.SECONDARY)
-    @Kind('node') @TrackedVar() public root: string;
+    @TrackedVar() @Kind('node') public root: string;
 
     constructor(o: CreateNewStateObject) {
         super(o.graph, o.lineNumber);
@@ -111,37 +121,17 @@ export class BreadthFirstSearchAlgorithm extends AlgorithmBase {
 
             let currentNode: string = queue.deque();
             states.push(new State({
-                currentNode,
-                solution,
-                graph,
-                visited,
-                queue,
-                root,
-                lineNumber: 8
+                currentNode, solution, graph, visited, queue, root, lineNumber: 8
             }));
 
             let neighbors: string[] = graph.getSources(currentNode).map(edge => edge.to);
             states.push(new State({
-                currentNode,
-                neighbors,
-                solution,
-                graph,
-                visited,
-                queue,
-                root,
-                lineNumber: 9
+                currentNode, neighbors, solution, graph, visited, queue, root, lineNumber: 9
             }));
 
             visited.push(currentNode);
             states.push(new State({
-                currentNode,
-                neighbors,
-                solution,
-                graph,
-                visited,
-                queue,
-                root,
-                lineNumber: 11
+                currentNode, neighbors, solution, graph, visited, queue, root, lineNumber: 11
             }));
 
             neighbors = neighbors.filter(neighbor => visited.indexOf(neighbor) == -1);
@@ -169,26 +159,12 @@ export class BreadthFirstSearchAlgorithm extends AlgorithmBase {
                 }));
             });
             states.push(new State({
-                currentNode,
-                neighbors,
-                solution,
-                graph,
-                visited,
-                queue,
-                root,
-                lineNumber: 14
+                currentNode, neighbors, solution, graph, visited, queue, root, lineNumber: 14
             }));
 
             solution.push(currentNode);
             states.push(new State({
-                currentNode,
-                neighbors,
-                solution,
-                graph,
-                visited,
-                queue,
-                root,
-                lineNumber: 6
+                currentNode, neighbors, solution, graph, visited, queue, root, lineNumber: 6
             }));
 
         }

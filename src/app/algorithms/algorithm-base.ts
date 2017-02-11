@@ -5,9 +5,13 @@ import {GrfColor, GrfGraphNodeOptions, GrfRole} from '../graph/graph.module';
 import {VisNgNetworkOptionsEdges} from '@lazarljubenovic/vis-ng/core';
 import {DebugData} from './debug-data.interface';
 import {mergeArrays} from './utils';
+import {ColorDecoratorParameter, ColorDecoratorFunction} from './decorators';
 
 
 export abstract class AlgorithmState {
+
+    /** Filled with decorators. */
+    public static _colorRules: ColorDecoratorParameter;
 
     /**
      * Filled with decorators.
@@ -35,33 +39,35 @@ export abstract class AlgorithmState {
         this.lineNumber = lineNumber;
     }
 
-    public getDefaultDebugColor: (trackedVar: any) => any = (trackedVar) => {
-        if (trackedVar == null) {
-            if (Array.isArray(trackedVar)) {
-                return [GrfColor.DEFAULT];
-            } else {
-                return GrfColor.DEFAULT;
+    public getColorForNodeLabel(nodeLabel: string): GrfColor {
+        const colorRules: ColorDecoratorFunction[] = (this.constructor as any)._colorRules.nodes;
+        for (let colorRule of colorRules) {
+            const color: GrfColor | null = colorRule(this, nodeLabel);
+            if (color != null) {
+                return color;
             }
         }
-        // todo current node is expected to be found in the subclass. how to handle?
-        if (Array.isArray(trackedVar)) {
-            return trackedVar.map(x => {
-                return x == (<any>this)['currentNode'] ? GrfColor.ACCENT : GrfColor.DEFAULT;
-            });
-        } else {
-            return trackedVar == (<any>this)['currentNode'] ? GrfColor.ACCENT : GrfColor.DEFAULT;
-        }
-    };
+    }
 
-    public getDefaultDebugScope: (trackedVar: any) => any = (trackedVar) => {
+    public getColorForEdgeLabel(edgeLabel: string): GrfColor {
+        const colorRules: ColorDecoratorFunction[] = (this.constructor as any)._colorRules.edges;
+        for (let colorRule of colorRules) {
+            const color: GrfColor | null = colorRule(this, edgeLabel);
+            if (color != null) {
+                return color;
+            }
+        }
+    }
+
+    private getDefaultDebugScope: (trackedVar: any) => any = (trackedVar) => {
         return trackedVar !== undefined;
     };
 
-    public getDefaultDebugType: (trackedVar: any) => any = (trackedVar) => {
+    private getDefaultDebugType: (trackedVar: any) => any = (trackedVar) => {
         return Array.isArray(trackedVar) ? 'array' : 'single';
     };
 
-    public getDefaultDebugKind: (trackedVar: any) => any = (trackedVar) => {
+    private getDefaultDebugKind: (trackedVar: any) => any = (trackedVar) => {
         if (trackedVar == null) {
             if (Array.isArray(trackedVar)) {
                 return ['node'];
@@ -76,7 +82,7 @@ export abstract class AlgorithmState {
         }
     };
 
-    public getDebugKind: (trackedVarName: any) => any = (trackedVarName) => {
+    private getDebugKind: (trackedVarName: any) => any = (trackedVarName) => {
         if (!this._kinds) {
             // todo create function to get this variables by name
             return this.getDefaultDebugKind((<any>this)[trackedVarName]);
@@ -87,26 +93,6 @@ export abstract class AlgorithmState {
         return this._kinds.get(trackedVarName);
     };
 
-    public getDebugColor(trackedVarName: string): any {
-        const varVal = (<any>this)[trackedVarName];
-        if (!this._exportFunctions) {
-            return this.getDefaultDebugColor(varVal);
-        }
-        if (varVal == null) {
-            return this.getDefaultDebugColor(varVal);
-        }
-        if (Array.from(this._exportFunctions.keys()).indexOf(trackedVarName) != -1) {
-            const firstArg = varVal;
-            const restArgs = this._exportFunctions.get(trackedVarName)
-                .params.map(x => (<any>this)[x]);
-            const args = [firstArg, ...restArgs];
-            const fn = this._exportFunctions.get(trackedVarName).fn;
-            return fn(...args);
-        } else {
-            return this.getDefaultDebugColor(varVal);
-        }
-    }
-
     public getDebugData(): DebugData[] {
         return this._trackedVarsNames.map(name => {
             const value = (<any>this)[name];
@@ -116,10 +102,10 @@ export abstract class AlgorithmState {
 
             let data: any;
             if (type == 'single') {
-                const color = this.getDebugColor(name);
+                const color = this.getColorForNodeLabel(value);
                 data = {value, color, kind};
             } else if (type == 'array') {
-                const color = this.getDebugColor(name);
+                const color = value.map((v: string) => this.getColorForNodeLabel(v));
                 data = mergeArrays(['value', 'color', 'kind'], [value, color, kind]);
             }
 
@@ -190,28 +176,9 @@ export abstract class AlgorithmBase {
 
     // TODO This should be method in AlgorithmState class
     public normalize(state: AlgorithmState): NormalizedState {
-        const nodeVars = state._trackedVarsNames
-            .filter(varName => state._kinds.get(varName) == 'node');
-
         const nodes: GrfGraphNodeOptions[] = state.graphJson.nodes.map(node => {
-            let color = GrfColor.DEFAULT;
+            let color = state.getColorForNodeLabel(node.label);
             let role = GrfRole.DEFAULT;
-
-            nodeVars.forEach((nodeVar: string) => {
-                const varVal = (<any>state)[nodeVar];
-                if (varVal != null) {
-                    if (Array.isArray(varVal)) {
-                        const index = varVal.indexOf(node.label);
-                        if (index != -1) {
-                            color = state.getDebugColor(nodeVar)[index];
-                        }
-                    } else {
-                        if (varVal == node.label) {
-                            color = state.getDebugColor(nodeVar);
-                        }
-                    }
-                }
-            });
 
             return {
                 id: node.id,

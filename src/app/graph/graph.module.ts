@@ -14,17 +14,17 @@ export interface GrfGraphNodeAnnotationOptions {
 }
 
 export enum GrfRole {
+    DEFAULT,
     START,
     END,
-    DEFAULT,
 }
 
 export enum GrfColor {
-    ACCENT,
-    PRIMARY,
-    SECONDARY,
     DEFAULT,
     DIMMED,
+    SECONDARY,
+    PRIMARY,
+    ACCENT,
 }
 
 export interface GrfGraphNodeOptions {

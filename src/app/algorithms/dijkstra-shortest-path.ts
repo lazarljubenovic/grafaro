@@ -1,12 +1,22 @@
 import {AlgorithmBase, AlgorithmState} from './algorithm-base';
-import {NormalizedState} from './normalized-state.model';
 import {Graph, GraphEdge} from '../models/graph.model';
 import {Min} from '../data-structures/util';
-import {GrfGraphNodeOptions, GrfRole, GrfColor} from '../graph/graph.module';
-import {VisNgNetworkOptionsEdges} from '@lazarljubenovic/vis-ng/core';
-import {Kind, TrackedVar} from './decorators';
+import {GrfColor} from '../graph/graph.module';
+import {Kind, TrackedVar, Color} from './decorators';
 import {getLabelIfDefined} from './utils';
 
+@Color({
+    nodes: [
+        (state: State, nodeLabel: string) =>
+            state.u == nodeLabel ? GrfColor.ACCENT : null,
+        (state: State, nodeLabel: string) =>
+            GrfColor.DEFAULT,
+    ],
+    edges: [
+        (state: State, edgeLabel: string) =>
+            GrfColor.DEFAULT,
+    ],
+})
 class State extends AlgorithmState {
 
     @Kind('node') @TrackedVar() public root: string;
@@ -104,33 +114,6 @@ export class DijkstraShortestPathAlgorithm extends AlgorithmBase {
 
     public trackedVariables: string[] = ['Q', 'distance', 'previous', 'u', 'neighborEdges',
         'edge', 'alt'];
-
-    // todo this!!!!
-    public normalize(state: State): NormalizedState {
-        const nodes: GrfGraphNodeOptions[] = state.graphJson.nodes.map((node, i) => {
-            const role = state.root == node.label ? GrfRole.START
-                : GrfRole.DEFAULT;
-
-            return {
-                id: node.id,
-                label: node.label,
-                position: node.position,
-                weight: node.weight,
-                role,
-                color: GrfColor.ACCENT,
-                annotations: [
-                    {
-                        position: 'ne',
-                        text: node.weight.toString(),
-                        style: 'black',
-                    },
-                ],
-            };
-        });
-        const edges: VisNgNetworkOptionsEdges[] = state.graphJson.edges;
-
-        return {nodes, edges};
-    }
 
     public evaluateStatesFor(graph: Graph, root: string): State[] {
         let states: State[] = [];

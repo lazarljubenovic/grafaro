@@ -1,5 +1,6 @@
 import {AlgorithmState} from './algorithm-base';
 import {DebugDataValueKind} from './debug-data.interface';
+import {GrfColor} from '../graph/graph.module';
 
 
 export function TrackedVar() {
@@ -11,12 +12,16 @@ export function TrackedVar() {
     };
 }
 
-export function Color(params: string[], fn: Function) {
-    return function (target: AlgorithmState, key: string) {
-        if (!target._exportFunctions) {
-            target._exportFunctions = new Map();
-        }
-        target._exportFunctions.set(key, {params, fn});
+export type ColorDecoratorFunction = (state: AlgorithmState, label: string) => (GrfColor | null);
+
+export interface ColorDecoratorParameter {
+    nodes: ColorDecoratorFunction[];
+    edges: ColorDecoratorFunction[];
+}
+
+export function Color(param: ColorDecoratorParameter) {
+    return function (target: any) {
+        target._colorRules = param;
     };
 }
 
