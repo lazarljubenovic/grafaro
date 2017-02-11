@@ -3,7 +3,10 @@ import {Graph, GraphEdge} from '../models/graph.model';
 import {Min} from '../data-structures/util';
 import {GrfColor} from '../graph/graph.module';
 import {
-    Kind, TrackedVar, Color, NodeWeightAnnotationFunction, Annotations,
+    TrackedVar,
+    Color,
+    NodeWeightAnnotationFunction,
+    Annotations,
     EdgeWeightAnnotationFunction
 } from './decorators';
 import {getLabelIfDefined} from './utils';
@@ -50,14 +53,14 @@ import {getLabelIfDefined} from './utils';
 })
 class State extends AlgorithmState {
 
-    @Kind('node') @TrackedVar() public root: string;
-    @Kind('node') @TrackedVar() public Q: string[];
-    @Kind('node-number') @TrackedVar() public distance: string[][];
-    @Kind('node-node') @TrackedVar() public previous: string[][];
-    @Kind('node') @TrackedVar() public u: string;
-    @Kind('edge') @TrackedVar() public neighborEdges: string[];
-    @Kind('edge') @TrackedVar() public edge: string[];
-    @Kind('number') @TrackedVar() public alt: number;
+    @TrackedVar('node') public root: string;
+    @TrackedVar('node') public Q: string[];
+    @TrackedVar('node-number') public distance: string[][];
+    @TrackedVar('node-node') public previous: string[][];
+    @TrackedVar('node') public u: string;
+    @TrackedVar('edge') public neighborEdges: string[];
+    @TrackedVar('edge') public edge: string[];
+    @TrackedVar('number') public alt: number;
 
     constructor(o: CreateNewStateObject) {
         super(o.graph, o.lineNumber);

@@ -2,7 +2,7 @@ import {Queue} from '../data-structures/queue';
 import {GrfColor} from '../graph/graph.module';
 import {Graph} from '../models/graph.model';
 import {AlgorithmBase, AlgorithmState} from './algorithm-base';
-import {Kind, TrackedVar, Color} from './decorators';
+import {TrackedVar, Color} from './decorators';
 import {getLabelIfDefined} from './utils';
 
 
@@ -21,19 +21,19 @@ import {getLabelIfDefined} from './utils';
 })
 class State extends AlgorithmState {
 
-    @TrackedVar() @Kind('node') public currentNode: string;
+    @TrackedVar('node') public currentNode: string;
 
-    @TrackedVar() @Kind('node') public neighbors: string[];
+    @TrackedVar('node') public neighbors: string[];
 
-    @TrackedVar() @Kind('node') public neighbor: string;
+    @TrackedVar('node') public neighbor: string;
 
-    @TrackedVar() @Kind('node') public visited: string[];
+    @TrackedVar('node') public visited: string[];
 
-    @TrackedVar() @Kind('node') public solution: string[];
+    @TrackedVar('node') public solution: string[];
 
-    @TrackedVar() @Kind('node') public queue: string[];
+    @TrackedVar('node') public queue: string[];
 
-    @TrackedVar() @Kind('node') public root: string;
+    @TrackedVar('node') public root: string;
 
     constructor(o: CreateNewStateObject) {
         super(o.graph, o.lineNumber);

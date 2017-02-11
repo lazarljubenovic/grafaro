@@ -3,12 +3,20 @@ import {DebugDataValueKind} from './debug-data.interface';
 import {GrfColor} from '../graph/graph.module';
 
 
-export function TrackedVar() {
+export function TrackedVar(kind: DebugDataValueKind) {
     return function (target: AlgorithmState, key: string) {
+        // tracking the variable
+        // TODO This can be removed now since we already have these in _kinds.keys()
         if (!target._trackedVarsNames) {
             target._trackedVarsNames = [];
         }
         target._trackedVarsNames.push(key);
+
+        // kinds
+        if (!target._kinds) {
+            target._kinds = new Map<string, string>();
+        }
+        target._kinds.set(key, kind);
     };
 }
 
@@ -57,13 +65,3 @@ export const EdgeWeightAnnotationFunction: AnnotationDecoratorRuleFunction =
     (state: AlgorithmState, edgeLabel: string) => {
         return state.graphJson.edges.find(edge => edge.label == edgeLabel).weight.toString();
     };
-
-
-export function Kind(kind: DebugDataValueKind) {
-    return function (target: AlgorithmState, key: string) {
-        if (!target._kinds) {
-            target._kinds = new Map<string, string>();
-        }
-        target._kinds.set(key, kind);
-    };
-}
