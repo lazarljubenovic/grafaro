@@ -1,4 +1,65 @@
+@import '../../global';
+
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
 form {
   display: flex;
   flex-direction: column;
+  width: 100%;
+  height: 100%;
+  font-family: Roboto, sans-serif;
+  color: $black;
+
+  .title {
+    text-transform: uppercase;
+    color: get-color('secondary');
+    display: inline-block;
+    margin-bottom: 1em;
+    margin-top: 1ex;
+    position: relative;
+
+    &:after {
+      content: '';
+      height: 1px;
+      background-color: rgba(get-color('secondary'), .7);
+      bottom: -.33em;
+      left: 0;
+      width: 60px;
+      position: absolute;
+    }
+  }
+
+  .root, .algorithm {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .algorithm {
+    margin-bottom: 2em;
+
+    .options {
+      display: flex;
+      flex-direction: column;
+
+      label:not(:last-child) {
+        margin-bottom: .66ex;
+      }
+    }
+  }
+
+  .root {
+
+    .options {
+      display: flex;
+      flex-wrap: wrap;
+
+      label {
+        margin-right: 1em;
+      }
+    }
+  }
 }
