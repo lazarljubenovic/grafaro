@@ -41,6 +41,18 @@ export class ToolbarService {
             position: values.event.pointer.DOM,
         }));
 
+    public renameEdge$: Observable<{edge: string, position: ClickPosition}> = this.actions$
+        .filter(values => {
+            const isRename: boolean = values.action == Actions.rename;
+            const isNotNode: boolean = values.event.nodes.length == 0;
+            const isEdge: boolean = values.event.edges.length == 1;
+            return isRename && isNotNode && isEdge;
+        })
+        .map(values => ({
+            edge: values.event.edges[0].toString(),
+            position: values.event.pointer.DOM,
+        }));
+
     public linkNodesNode$: Observable<string> = this.actions$
         .filter(values => values.action == Actions.connect && values.event.nodes.length != 0)
         .map(values => values.event.nodes[0].toString());

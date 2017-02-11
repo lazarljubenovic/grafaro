@@ -94,7 +94,6 @@ export class Graph {
         const node = this._nodes.find(node => node.label == nodeLabel);
         if (node == null) {
             return <null | undefined>node;
-            // throw new Error(`Node with label ${nodeLabel} doesn't exist`);
         }
         return node.id;
     }
@@ -138,6 +137,10 @@ export class Graph {
         return this._edges.find(edge => edge.from == from && edge.to == to) != null;
     }
 
+    public hasEdgeId(edgeId: EdgeId): boolean {
+        return this._edges.find(edge => edge.id == edgeId) != null;
+    }
+
     public addEdge(from: NodeId, to: NodeId, label: EdgeLabel, weight: number = 1): this {
         this._edges.push({
             id: this._edgeIdGenerator.getNext(),
@@ -177,7 +180,7 @@ export class Graph {
     public getEdgeId(edgeLabel: string): string {
         const edge = this._edges.find(edge => edge.label == edgeLabel);
         if (edge == null) {
-            throw new Error(`Edge with label ${edgeLabel} doesn't exist`);
+            return <null | undefined>edge;
         }
         return edge.id;
     }
@@ -195,6 +198,14 @@ export class Graph {
             throw new Error(`Node with id ${nodeId} doesn't exist`);
         }
         this._nodes.find(node => node.id == nodeId).label = newLabel;
+        return this;
+    }
+
+    public changeEdgeLabel(edgeId: EdgeId, newLabel: EdgeLabel): this {
+        if (!this.hasEdgeId(edgeId)) {
+            throw new Error(`Edge with id ${edgeId} doesn't exist`);
+        }
+        this._edges.find(edge => edge.id == edgeId).label = newLabel;
         return this;
     }
 
