@@ -15,13 +15,8 @@ import {getLabelIfDefined} from './utils';
             state.neighbors && state.neighbors.indexOf(nodeLabel) != -1 ? GrfColor.SECONDARY : null,
         (state: State, nodeLabel: string) =>
             state.visited && state.visited.indexOf(nodeLabel) != -1 ? GrfColor.DIMMED : null,
-        (state: State, nodeLabel: string) =>
-            GrfColor.DEFAULT,
     ],
-    edges: [
-        (state: State, edgeLabel: string) =>
-            GrfColor.DEFAULT,
-    ],
+    edges: [],
 })
 class State extends AlgorithmState {
 

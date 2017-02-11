@@ -9,13 +9,8 @@ import {getLabelIfDefined} from './utils';
     nodes: [
         (state: State, nodeLabel: string) =>
             state.u == nodeLabel ? GrfColor.ACCENT : null,
-        (state: State, nodeLabel: string) =>
-            GrfColor.DEFAULT,
     ],
-    edges: [
-        (state: State, edgeLabel: string) =>
-            GrfColor.DEFAULT,
-    ],
+    edges: [],
 })
 class State extends AlgorithmState {
 

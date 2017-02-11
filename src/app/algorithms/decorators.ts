@@ -21,6 +21,8 @@ export interface ColorDecoratorParameter {
 
 export function Color(param: ColorDecoratorParameter) {
     return function (target: any) {
+        param.nodes.push((state: AlgorithmState, nodeLabel: string) => GrfColor.DEFAULT);
+        param.edges.push((state: AlgorithmState, edgeLabel: string) => GrfColor.DEFAULT);
         target._colorRules = param;
     };
 }
