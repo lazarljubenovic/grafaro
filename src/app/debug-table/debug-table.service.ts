@@ -33,13 +33,12 @@ export class DebugTableService {
     }
 
     constructor(private stateManager: AlgorithmStateManager) {
-        // this._visibleVariables = this.stateManager.getAlgorithm().trackedVariables;
         this._visibleVariables = [];
         this.visibleVariables$ = new BehaviorSubject<string[]>(this._visibleVariables);
 
         this.stateManager.state$.subscribe(state => {
             if (++this.integer < 100) {
-                this.setVisibleVariables(state.state._trackedVarsNames);
+                this.setVisibleVariables(Array.from(state.state._kinds.keys()));
             } else {
                 console.log('integer ode');
             }

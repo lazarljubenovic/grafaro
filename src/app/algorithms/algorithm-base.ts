@@ -39,12 +39,6 @@ export abstract class AlgorithmState {
      * Filled with decorators.
      * @internal
      */
-    public _trackedVarsNames: string[];
-
-    /**
-     * Filled with decorators.
-     * @internal
-     */
     public _exportFunctions: Map<string, {params: string[], fn: Function}>;
 
     /**
@@ -116,7 +110,7 @@ export abstract class AlgorithmState {
     };
 
     public getDebugData(): DebugData[] {
-        return this._trackedVarsNames.map(name => {
+        return Array.from(this._kinds.keys()).map(name => {
             const value = (<any>this)[name];
             const isInScope = this.getDefaultDebugScope(value);
             const type = this.getDefaultDebugType(value);

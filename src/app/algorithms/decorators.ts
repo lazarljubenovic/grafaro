@@ -5,14 +5,6 @@ import {GrfColor} from '../graph/graph.module';
 
 export function TrackedVar(kind: DebugDataValueKind) {
     return function (target: AlgorithmState, key: string) {
-        // tracking the variable
-        // TODO This can be removed now since we already have these in _kinds.keys()
-        if (!target._trackedVarsNames) {
-            target._trackedVarsNames = [];
-        }
-        target._trackedVarsNames.push(key);
-
-        // kinds
         if (!target._kinds) {
             target._kinds = new Map<string, string>();
         }
