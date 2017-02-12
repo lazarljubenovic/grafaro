@@ -118,6 +118,15 @@ export class AlgorithmStateManager {
     }
 
     /**
+     * Command to directly change state to a given index.
+     * @param stateIndex
+     */
+    public goTo(stateIndex: number): void {
+        this._currentStateIndex = stateIndex;
+        this._emitState();
+    }
+
+    /**
      * Returns algorithm
      * @returns {AlgorithmBase}
      */

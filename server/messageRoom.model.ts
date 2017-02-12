@@ -178,6 +178,10 @@ export class MessageRoom {
         this.sendMessage(ws, 'master', masterMessage, roomId);
     }
 
+    public setRoomState(stateIndex: number, roomId: string): void {
+        this.rooms.get(roomId).stateIndex = stateIndex;
+    }
+
     private constructor() {
         this.rooms = new Map();
     }

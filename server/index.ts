@@ -121,7 +121,9 @@ wss.on('connection', ws => {
                 messageRooms.sendMessageToRoom(roomId, ws, messageObj);
                 break;
             case 'state':
-                console.log('TODO: state');
+                let stateIndex: number = messageObj.payload;
+                messageRooms.setRoomState(stateIndex, roomId);
+                messageRooms.sendMessageToRoom(roomId, ws, messageObj);
                 break;
             case 'chat':
                 messageRooms.sendMessageToRoom(roomId, ws, messageObj);

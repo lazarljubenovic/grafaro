@@ -51,6 +51,10 @@ export interface AlgorithmMessage {
     };
 }
 
+export interface StateMessage {
+    stateIndex: number
+}
+
 export interface IUser extends Document {
     // _id: string;
     _graphIds: string[];

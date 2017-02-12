@@ -8,6 +8,7 @@ export class Room {
     private _algorithm: any;
     private _name: string;
     private _description: string;
+    private _stateIndex: number;
 
     constructor(roomId: string) {
         this._users = new Set();
@@ -82,5 +83,14 @@ export class Room {
 
     public set description(value: string) {
         this._description = value;
+    }
+
+
+    public get stateIndex(): number {
+        return this._stateIndex;
+    }
+
+    public set stateIndex(value: number) {
+        this._stateIndex = value;
     }
 }

@@ -4,7 +4,6 @@ import {ProjectViewComponent} from './project-view.component';
 import {GraphModule} from '../graph/graph.module';
 import {ToolbarComponent} from './toolbar/toolbar.component';
 import {SidebarComponent} from './sidebar/sidebar.component';
-import {ControlsComponent} from './controls/controls.component';
 import {TabsModule} from '../shared/tabs/tabs.module';
 import {ChatModule} from '../shared/chat/chat.module';
 import {WebSocketService} from '../websocket.service';
@@ -26,6 +25,7 @@ import {GraphManager} from '../managers/graph.manager';
 import {AlgorithmManager} from '../managers/algorithm.manager';
 import {MasterSocketService} from './master-socket.service';
 import {AlgorithmPickerModule} from './algorithm-picker/algorithm-picker.module';
+import {ControlsModule} from './controls/controls.module';
 
 @NgModule({
     imports: [
@@ -42,12 +42,12 @@ import {AlgorithmPickerModule} from './algorithm-picker/algorithm-picker.module'
         UserInterfaceModule,
         DebugTableModule,
         AlgorithmPickerModule,
+        ControlsModule,
     ],
     declarations: [
         ProjectViewComponent,
         ToolbarComponent,
         SidebarComponent,
-        ControlsComponent,
         PopupRenameComponent,
         SaveDialogComponent,
         LoadDialogComponent,
