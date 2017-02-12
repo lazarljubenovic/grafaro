@@ -34,7 +34,7 @@ export class GraphComponent implements OnInit {
         edges: {
             smooth: false,
             font: {
-                align: 'top',
+                align: 'middle',
             },
         },
     };
