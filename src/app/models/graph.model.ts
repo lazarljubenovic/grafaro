@@ -209,6 +209,22 @@ export class Graph {
         return this;
     }
 
+    public changeNodeWeight(nodeId: NodeId, newWeight: number): this {
+        if (!this.hasNodeId(nodeId)) {
+            throw new Error(`Node with id ${nodeId} doesn't exist`);
+        }
+        this._nodes.find(node => node.id == nodeId).weight = newWeight;
+        return this;
+    }
+
+    public changeEdgeWeight(edgeId: EdgeId, newWeight: number): this {
+        if (!this.hasEdgeId(edgeId)) {
+            throw new Error(`Edge with id ${edgeId} doesn't exist`);
+        }
+        this._edges.find(edge => edge.id == edgeId).weight = newWeight;
+        return this;
+    }
+
     public getSources(nodeId: NodeId): GraphEdge[] {
         return this._edges.filter(edge => edge.from == nodeId);
     }
