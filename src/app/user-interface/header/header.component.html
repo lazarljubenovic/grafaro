@@ -67,8 +67,8 @@
 
 </ng-container>
 
-<div>
-  <div class="col display-name" *ngIf="!isNameInEditMode && displayName != ''">
+<div *ngIf="displayName != ''">
+  <div class="col display-name" *ngIf="!isNameInEditMode">
     <span class="text">{{displayName}}</span>
     <span class="icon edit"
           (click)="openNameEditMode()"

@@ -1,4 +1,4 @@
-import {Injectable, Inject} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {tokenNotExpired} from 'angular2-jwt';
 import {Router} from '@angular/router';
 import * as auth0 from 'auth0-js';
@@ -20,7 +20,7 @@ export class Auth0Service {
         scope: 'profile'
     });
 
-    constructor(@Inject(UserService) private userService: UserService,
+    constructor(private userService: UserService,
                 private router: Router) {
         this.handleAuthentication();
     }
@@ -33,6 +33,8 @@ export class Auth0Service {
                 this.router.navigate(['/']);
             } else if (authResult && authResult.error) {
                 alert('Error: ' + authResult.error);
+            } else if (this.isAuthenticated()) {
+                this.getAuthenticatedUser();
             }
         });
     }
@@ -49,7 +51,11 @@ export class Auth0Service {
     }
 
     public logout(): void {
-        this.user$.next(null);
+        this.user$.next({
+            _id: '',
+            socialId: '',
+            displayName: '',
+        });
         localStorage.removeItem('socialId');
         localStorage.removeItem('access_token');
         localStorage.removeItem('id_token');
@@ -60,6 +66,7 @@ export class Auth0Service {
         const socialId: string = authResult.idTokenPayload.user_id;
 
         this.userService.getUserBySocialId(socialId)
+            .take(1)
             .subscribe(dbUser => {
                 this.user$.next(dbUser);
             });
@@ -67,6 +74,16 @@ export class Auth0Service {
         localStorage.setItem('socialId', socialId);
         localStorage.setItem('access_token', authResult.accessToken);
         localStorage.setItem('id_token', authResult.idToken);
+    }
+
+    private getAuthenticatedUser(): void {
+        const socialId = localStorage.getItem('socialId');
+
+        this.userService.getUserBySocialId(socialId)
+            .take(1)
+            .subscribe(dbUser => {
+                this.user$.next(dbUser);
+            });
     }
 
     public changeDisplayName(newName: string): void {

@@ -130,3 +130,7 @@ $header-usable-space: $header-height - 2 * $header-margin;
   background-color: rgba(white, .2);
   margin-left: 2 * $header-margin;
 }
+
+.fa-sign-out {
+  color: red;
+}
