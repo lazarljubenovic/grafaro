@@ -25,37 +25,27 @@ db.once('open', () => console.log('Connected to DB'));
 const dummyMessages: ChatMessageInfo[] = [
     {
         timeStamp: new Date(),
-        senderHandle: `lazarljubenovic`,
         senderName: `Lazar Ljubenović`,
-        senderHash: `ff8adece0631821959f443c9d956fc39`,
         message: `Hello World from server side!!`,
     },
     {
         timeStamp: new Date(),
-        senderHandle: `pritilender`,
         senderName: `Mihajlo Ilijić`,
-        senderHash: `ff8adece0631821959f443c9d956fc39`,
         message: `Hello World! **bold** _italic_ ~~strike~~`,
     },
     {
         timeStamp: new Date(),
-        senderHandle: `lazarljubenovic`,
         senderName: `Lazar Ljubenović`,
-        senderHash: `ff8adece0631821959f443c9d956fc39`,
         message: `Hello World! [link](www.google.com)`,
     },
     {
         timeStamp: new Date(),
-        senderHandle: `pritilender`,
         senderName: `Mihajlo Ilijić`,
-        senderHash: `ff8adece0631821959f443c9d956fc39`,
         message: `Hello World from priti side! :) :* ;) :(`,
     },
     {
         timeStamp: new Date(),
-        senderHandle: `lazarljubenovic`,
         senderName: `Lazar Ljubenović`,
-        senderHash: `ff8adece0631821959f443c9d956fc39`,
         message: `Hello World! :joy: :heart: :sob: :+1:`,
     },
 ];
@@ -100,6 +90,14 @@ wss.on('connection', ws => {
                     let lobbyIndex = lobby.findIndex(user => ws == user);
                     lobby.splice(lobbyIndex, 1);
                     lobby.forEach(user => messageRooms.sendRoomsInfo(user));
+
+                    // Send dummy chat messages
+                    dummyMessages.forEach(dummyMessage => {
+                        ws.send(JSON.stringify({
+                            payload: dummyMessage,
+                            type: 'chat'
+                        }));
+                    });
                 } catch (exception) {
                     messageRooms.sendJoinMessage(ws, roomId, `No room ${roomId} found!`);
                 }
@@ -150,15 +148,6 @@ wss.on('connection', ws => {
             lobby.forEach(user => messageRooms.sendRoomsInfo(user));
         }
     });
-
-    setTimeout(() => {
-        dummyMessages.forEach(dummyMessage => {
-            ws.send(JSON.stringify({
-                payload: dummyMessage,
-                type: 'chat'
-            }));
-        });
-    }, 1000);
 });
 
 server.on('request', app);

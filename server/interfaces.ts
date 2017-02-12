@@ -3,8 +3,6 @@ import {Document} from 'mongoose';
 export interface ChatMessageInfo {
     timeStamp: Date;
     senderName: string;
-    senderHandle: string;
-    senderHash: string;
     message: string;
 }
 

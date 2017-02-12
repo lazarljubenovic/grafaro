@@ -10,6 +10,8 @@ import {
 } from '@angular/core';
 import {ChatMessageComponent} from './chat-message/chat-message.component';
 import {ChatService, ChatMessageInfo} from './chat.service';
+import {Auth0Service} from '../../core/auth0.service';
+import {Profile} from '../../login-page/user.service';
 
 @Component({
     selector: 'grf-chat',
@@ -17,6 +19,8 @@ import {ChatService, ChatMessageInfo} from './chat.service';
     styleUrls: ['./chat.component.scss'],
 })
 export class ChatComponent implements OnInit {
+
+    private _profile: Profile;
 
     @ViewChild('messageOutlet', {read: ViewContainerRef})
     public messageOutlet: any;
@@ -78,9 +82,7 @@ export class ChatComponent implements OnInit {
         }
         if (key == 'Enter') {
             let chatMessage: ChatMessageInfo = {
-                senderHandle: 'lazar',
-                senderHash: '231230213412',
-                senderName: 'Lazar Ljubenović',
+                senderName: this._profile.displayName,
                 timeStamp: new Date(),
                 message: this.currentTypedMessage
             };
@@ -95,7 +97,11 @@ export class ChatComponent implements OnInit {
     }
 
     constructor(private chatService: ChatService,
-                private cfr: ComponentFactoryResolver) {
+                private cfr: ComponentFactoryResolver,
+                private _auth0: Auth0Service) {
+        this._auth0.user$.subscribe(user => {
+            this._profile = user;
+        });
     }
 
     ngOnInit() {
