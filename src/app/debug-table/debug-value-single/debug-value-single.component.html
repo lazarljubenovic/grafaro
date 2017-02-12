@@ -1,6 +1,6 @@
 <div [class]="'debug ' + data?.kind" *ngIf="data?.value">
   <ng-container *ngIf="!data.kind.includes('-')">
-    <div [class]="'outer ' + data?.color">
+    <div [class]="'outer ' + (data?.color | colorEnum)">
       <div class="inner">
         {{data.value}}
       </div>
@@ -18,7 +18,6 @@
     </div>
   </ng-container>
 </div>
-
 
 <div class="null" *ngIf="data?.value === null">null</div>
 <div class="null" *ngIf="data?.value === undefined">undefined</div>

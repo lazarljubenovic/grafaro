@@ -13,6 +13,7 @@ export enum Actions {
     connect,
     disconnect,
     rename,
+    weight,
 }
 
 @Component({
@@ -58,6 +59,11 @@ export class ToolbarComponent implements OnInit {
             name: 'Rename',
             action: Actions.rename,
         },
+        {
+            icon: 'fa-balance-scale',
+            name: 'Weight',
+            action: Actions.weight,
+        }
     ];
 
     public toolSelected(tool: any) {

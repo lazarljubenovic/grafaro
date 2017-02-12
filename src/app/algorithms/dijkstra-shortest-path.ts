@@ -1,22 +1,66 @@
 import {AlgorithmBase, AlgorithmState} from './algorithm-base';
-import {NormalizedState} from './normalized-state.model';
 import {Graph, GraphEdge} from '../models/graph.model';
 import {Min} from '../data-structures/util';
-import {GrfGraphNodeOptions, GrfRole, GrfColor} from '../graph/graph.module';
-import {VisNgNetworkOptionsEdges} from '@lazarljubenovic/vis-ng/core';
-import {Kind, TrackedVar} from './decorators';
+import {GrfColor} from '../graph/graph.module';
+import {
+    TrackedVar,
+    Color,
+    NodeWeightAnnotationFunction,
+    Annotations,
+    EdgeWeightAnnotationFunction
+} from './decorators';
 import {getLabelIfDefined} from './utils';
 
+
+@Annotations({
+    nodes: [
+        {
+            position: {r: 24, phi: -45},
+            style: 'red',
+            ruleFunction: NodeWeightAnnotationFunction,
+        },
+        {
+            position: {r: 24, phi: 45},
+            style: 'blue',
+            ruleFunction: (state: State, nodeLabel: string) => {
+                if (!state.distance) {
+                    return '';
+                }
+                const pair: string[] = state.distance
+                    .find(nodeNumber => nodeNumber[0] == nodeLabel);
+                if (pair == null) {
+                    return '';
+                }
+                const n = pair[1];
+                return n === 'Infinity' ? '∞' : n;
+            }
+        }
+    ],
+    edges: [
+        {
+            position: {r: 24, phi: -45},
+            style: 'green',
+            ruleFunction: EdgeWeightAnnotationFunction,
+        },
+    ],
+})
+@Color({
+    nodes: [
+        (state: State, nodeLabel: string) =>
+            state.u == nodeLabel ? GrfColor.ACCENT : null,
+    ],
+    edges: [],
+})
 class State extends AlgorithmState {
 
-    @Kind('node') @TrackedVar() public root: string;
-    @Kind('node') @TrackedVar() public Q: string[];
-    @Kind('node-number') @TrackedVar() public distance: string[][];
-    @Kind('node-node') @TrackedVar() public previous: string[][];
-    @Kind('node') @TrackedVar() public u: string;
-    @Kind('edge') @TrackedVar() public neighborEdges: string[];
-    @Kind('edge') @TrackedVar() public edge: string[];
-    @Kind('number') @TrackedVar() public alt: number;
+    @TrackedVar('node') public root: string;
+    @TrackedVar('node') public Q: string[];
+    @TrackedVar('node-number') public distance: string[][];
+    @TrackedVar('node-node') public previous: string[][];
+    @TrackedVar('node') public u: string;
+    @TrackedVar('edge') public neighborEdges: string[];
+    @TrackedVar('edge') public edge: string[];
+    @TrackedVar('number') public alt: number;
 
     constructor(o: CreateNewStateObject) {
         super(o.graph, o.lineNumber);
@@ -104,33 +148,6 @@ export class DijkstraShortestPathAlgorithm extends AlgorithmBase {
 
     public trackedVariables: string[] = ['Q', 'distance', 'previous', 'u', 'neighborEdges',
         'edge', 'alt'];
-
-    // todo this!!!!
-    public normalize(state: State): NormalizedState {
-        const nodes: GrfGraphNodeOptions[] = state.graphJson.nodes.map((node, i) => {
-            const role = state.root == node.label ? GrfRole.START
-                : GrfRole.DEFAULT;
-
-            return {
-                id: node.id,
-                label: node.label,
-                position: node.position,
-                weight: node.weight,
-                role,
-                color: GrfColor.ACCENT,
-                annotations: [
-                    {
-                        position: 'ne',
-                        text: node.weight.toString(),
-                        style: 'black',
-                    },
-                ],
-            };
-        });
-        const edges: VisNgNetworkOptionsEdges[] = state.graphJson.edges;
-
-        return {nodes, edges};
-    }
 
     public evaluateStatesFor(graph: Graph, root: string): State[] {
         let states: State[] = [];

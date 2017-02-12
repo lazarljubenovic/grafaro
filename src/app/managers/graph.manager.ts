@@ -36,7 +36,7 @@ export class GraphManager {
             // popupRenameComponent.instance.direction = 'up';
             // popupRenameComponent.instance.previousValue = oldLabel;
             // popupRenameComponent.changeDetectorRef.detectChanges();
-            const newLabel = prompt(`New label for ${oldLabel}?`);
+            const newLabel = prompt(`New label for node ${oldLabel}?`);
             // popupRenameComponent.instance.name.subscribe(newLabel => {
             try {
                 this.renameNode(oldLabel, newLabel);
@@ -45,6 +45,49 @@ export class GraphManager {
                 // this.toastService.display(`Rename unsuccessful. ${e}`, this.toastOutlet);
             }
             // popupRenameComponent.destroy();
+        });
+
+        _toolbarService.changeWeightNode$.subscribe(x => {
+            const label = this.getNodeLabel(x.node);
+            const newWeightString: string = prompt(`New weight for node ${label}?`);
+            let newWeight: number;
+            try {
+                newWeight = parseInt(newWeightString, 10);
+            } catch (e) {
+                alert(`Rename unsuccessful. Weight has to be a number.`);
+            }
+            try {
+                this.changeNodeWeight(x.node, newWeight);
+            } catch (e) {
+                alert(`Rename unsuccessful. ${e}`);
+            }
+        });
+
+        _toolbarService.renameEdge$.subscribe(x => {
+            const id: string = x.edge;
+            const oldLabel: string = this.getEdgeLabel(id);
+            const newLabel = prompt(`New label for edge ${oldLabel}?`);
+            try {
+                this.renameEdge(oldLabel, newLabel);
+            } catch (e) {
+                alert(`Rename unsuccessful. ${e}`);
+            }
+        });
+
+        _toolbarService.changeWeightEdge$.subscribe(x => {
+            const label = this.getEdgeLabel(x.edge);
+            const newWeightString: string = prompt(`New weight for edge ${label}?`);
+            let newWeight: number;
+            try {
+                newWeight = parseInt(newWeightString, 10);
+            } catch (e) {
+                alert(`Rename unsuccessful. Weight has to be a number.`);
+            }
+            try {
+                this.changeEdgeWeight(x.edge, newWeight);
+            } catch (e) {
+                alert(`Rename unsuccessful. ${e}`);
+            }
         });
 
         _toolbarService.removeEdge$.subscribe(x => {
@@ -64,13 +107,26 @@ export class GraphManager {
         return this._graph.getNodeId(nodeLabel);
     }
 
+    public getEdgeId(edgeLabel: string): string {
+        return this._graph.getEdgeId(edgeLabel);
+    }
+
     public getNodeLabel(nodeId: string): string {
         return this._graph.getNodeLabel(nodeId);
+    }
+
+    public getEdgeLabel(edgeId: string): string {
+        return this._graph.getEdgeLabel(edgeId);
     }
 
     private existsNodeWithLabel(nodeLabel: string): boolean {
         const nodeId: string = this._graph.getNodeId(nodeLabel);
         return this._graph.hasNodeId(nodeId);
+    }
+
+    private existsEdgeWithLabel(edgeLabel: string): boolean {
+        const edgeId: string = this._graph.getEdgeId(edgeLabel);
+        return this._graph.hasEdgeId(edgeId);
     }
 
     public suggestNewNodeName(): string {
@@ -105,7 +161,7 @@ export class GraphManager {
     }
 
     public renameNode(oldNodeLabel: string, newNodeLabel: string): void {
-        if (newNodeLabel === '' || newNodeLabel == oldNodeLabel) {
+        if (newNodeLabel == null || newNodeLabel === '' || newNodeLabel == oldNodeLabel) {
             return;
         }
         if (this.existsNodeWithLabel(newNodeLabel)) {
@@ -113,6 +169,34 @@ export class GraphManager {
         }
         const id: string = this.getNodeId(oldNodeLabel);
         this._graph.changeNodeLabel(id, newNodeLabel);
+        this.emit();
+    }
+
+    public changeNodeWeight(nodeId: string, newWeight: number): void {
+        if (newWeight == null) {
+            return;
+        }
+        this._graph.changeNodeWeight(nodeId, newWeight);
+        this.emit();
+    }
+
+    public renameEdge(oldEdgeLabel: string, newEdgeLabel: string): void {
+        if (newEdgeLabel == null || newEdgeLabel === '' || newEdgeLabel == oldEdgeLabel) {
+            return;
+        }
+        if (this.existsEdgeWithLabel(newEdgeLabel)) {
+            throw new Error(`Edge with label ${newEdgeLabel} already exists.`);
+        }
+        const id: string = this.getEdgeId(oldEdgeLabel);
+        this._graph.changeEdgeLabel(id, newEdgeLabel);
+        this.emit();
+    }
+
+    public changeEdgeWeight(edgeId: string, newWeight: number): void {
+        if (newWeight == null) {
+            return;
+        }
+        this._graph.changeEdgeWeight(edgeId, newWeight);
         this.emit();
     }
 

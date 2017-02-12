@@ -25,10 +25,13 @@ ul {
     justify-content: center;
     align-items: center;
     height: $toolbar-usable-space;
-    margin-bottom: $toolbar-margin;
     border-radius: 50%;
     color: $white;
     cursor: pointer;
+
+    &:not(:last-child) {
+      margin-bottom: $toolbar-margin;
+    }
 
     &:hover {
       background-color: rgba(white, .1);

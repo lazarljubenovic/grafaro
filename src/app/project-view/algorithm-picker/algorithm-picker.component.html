@@ -1,22 +1,30 @@
 <form novalidate [formGroup]="form">
-  <label>
-    <input type="radio" value="bfs" formControlName="algorithm">
-    <span>Breadth First Search</span>
-  </label>
-  <label>
-    <input type="radio" value="dfs" formControlName="algorithm">
-    <span>Depth First Search</span>
-  </label>
-  <label>
-    <input type="radio" value="dsp" formControlName="algorithm">
-    <span>Dijkstra Shortest Path</span>
-  </label>
-  <div formGroupName="options">
-    <label *ngFor="let label of nodeLabels">
-      <input type="radio" [value]="label" formControlName="root">
-      <span>{{label}}</span>
-    </label>
+
+  <div class="algorithm">
+    <span class="title">Algorithm</span>
+    <div class="options">
+      <label>
+        <input type="radio" value="bfs" formControlName="algorithm">
+        <span>Breadth First Search</span>
+      </label>
+      <label>
+        <input type="radio" value="dfs" formControlName="algorithm">
+        <span>Depth First Search</span>
+      </label>
+      <label>
+        <input type="radio" value="dsp" formControlName="algorithm">
+        <span>Dijkstra Shortest Path</span>
+      </label>
+    </div>
+  </div>
+
+  <div class="root" formGroupName="options">
+    <span class="title">Root node</span>
+    <div class="options">
+      <label *ngFor="let label of nodeLabels">
+        <input type="radio" [value]="label" formControlName="root">
+        <span>{{label}}</span>
+      </label>
+    </div>
   </div>
 </form>
-
-<pre>{{form.value | json}}</pre>

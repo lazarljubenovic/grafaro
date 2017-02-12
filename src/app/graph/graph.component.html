@@ -9,6 +9,6 @@
   ></vis-network-node>
 
   <vis-network-edge *ngFor="let edge of edges"
-                    [options]="edge | graphEdgeOptionsTransform"
+                    [options]="edge | graphEdgeOptionsTransform : edges"
   ></vis-network-edge>
 </vis-network>

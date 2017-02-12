@@ -1,19 +1,39 @@
 import {NormalizedState} from './normalized-state.model';
 import {Graph, GraphJson} from '../models/graph.model';
 import * as Esprima from 'esprima';
-import {GrfColor, GrfGraphNodeOptions, GrfRole} from '../graph/graph.module';
-import {VisNgNetworkOptionsEdges} from '@lazarljubenovic/vis-ng/core';
+import {GrfColor, GrfGraphNodeOptions, GrfRole, GrfGraphEdgeOptions} from '../graph/graph.module';
 import {DebugData} from './debug-data.interface';
 import {mergeArrays} from './utils';
+import {
+    ColorDecoratorParameter,
+    ColorDecoratorFunction,
+    AnnotationDecoratorParameter,
+    AnnotationDecoratorRuleFunction
+} from './decorators';
+
+
+export interface AnnotationTextAndPosition {
+    text: string;
+
+    // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle
+    style: string;
+
+    position: {
+        r: number;
+        phi: number; // in degrees
+    };
+}
 
 
 export abstract class AlgorithmState {
 
+    /** Filled with decorators. */
+    public static _colorRules: ColorDecoratorParameter;
+
     /**
      * Filled with decorators.
-     * @internal
      */
-    public _trackedVarsNames: string[];
+    public static _annotationRules: AnnotationDecoratorParameter;
 
     /**
      * Filled with decorators.
@@ -35,33 +55,35 @@ export abstract class AlgorithmState {
         this.lineNumber = lineNumber;
     }
 
-    public getDefaultDebugColor: (trackedVar: any) => any = (trackedVar) => {
-        if (trackedVar == null) {
-            if (Array.isArray(trackedVar)) {
-                return [GrfColor.DEFAULT];
-            } else {
-                return GrfColor.DEFAULT;
+    public getColorForNodeLabel(nodeLabel: string): GrfColor {
+        const colorRules: ColorDecoratorFunction[] = (this.constructor as any)._colorRules.nodes;
+        for (let colorRule of colorRules) {
+            const color: GrfColor | null = colorRule(this, nodeLabel);
+            if (color != null) {
+                return color;
             }
         }
-        // todo current node is expected to be found in the subclass. how to handle?
-        if (Array.isArray(trackedVar)) {
-            return trackedVar.map(x => {
-                return x == (<any>this)['currentNode'] ? GrfColor.ACCENT : GrfColor.DEFAULT;
-            });
-        } else {
-            return trackedVar == (<any>this)['currentNode'] ? GrfColor.ACCENT : GrfColor.DEFAULT;
-        }
-    };
+    }
 
-    public getDefaultDebugScope: (trackedVar: any) => any = (trackedVar) => {
+    public getColorForEdgeLabel(edgeLabel: string): GrfColor {
+        const colorRules: ColorDecoratorFunction[] = (this.constructor as any)._colorRules.edges;
+        for (let colorRule of colorRules) {
+            const color: GrfColor | null = colorRule(this, edgeLabel);
+            if (color != null) {
+                return color;
+            }
+        }
+    }
+
+    private getDefaultDebugScope: (trackedVar: any) => any = (trackedVar) => {
         return trackedVar !== undefined;
     };
 
-    public getDefaultDebugType: (trackedVar: any) => any = (trackedVar) => {
+    private getDefaultDebugType: (trackedVar: any) => any = (trackedVar) => {
         return Array.isArray(trackedVar) ? 'array' : 'single';
     };
 
-    public getDefaultDebugKind: (trackedVar: any) => any = (trackedVar) => {
+    private getDefaultDebugKind: (trackedVar: any) => any = (trackedVar) => {
         if (trackedVar == null) {
             if (Array.isArray(trackedVar)) {
                 return ['node'];
@@ -76,7 +98,7 @@ export abstract class AlgorithmState {
         }
     };
 
-    public getDebugKind: (trackedVarName: any) => any = (trackedVarName) => {
+    private getDebugKind: (trackedVarName: any) => any = (trackedVarName) => {
         if (!this._kinds) {
             // todo create function to get this variables by name
             return this.getDefaultDebugKind((<any>this)[trackedVarName]);
@@ -87,28 +109,8 @@ export abstract class AlgorithmState {
         return this._kinds.get(trackedVarName);
     };
 
-    public getDebugColor(trackedVarName: string): any {
-        const varVal = (<any>this)[trackedVarName];
-        if (!this._exportFunctions) {
-            return this.getDefaultDebugColor(varVal);
-        }
-        if (varVal == null) {
-            return this.getDefaultDebugColor(varVal);
-        }
-        if (Array.from(this._exportFunctions.keys()).indexOf(trackedVarName) != -1) {
-            const firstArg = varVal;
-            const restArgs = this._exportFunctions.get(trackedVarName)
-                .params.map(x => (<any>this)[x]);
-            const args = [firstArg, ...restArgs];
-            const fn = this._exportFunctions.get(trackedVarName).fn;
-            return fn(...args);
-        } else {
-            return this.getDefaultDebugColor(varVal);
-        }
-    }
-
     public getDebugData(): DebugData[] {
-        return this._trackedVarsNames.map(name => {
+        return Array.from(this._kinds.keys()).map(name => {
             const value = (<any>this)[name];
             const isInScope = this.getDefaultDebugScope(value);
             const type = this.getDefaultDebugType(value);
@@ -116,15 +118,55 @@ export abstract class AlgorithmState {
 
             let data: any;
             if (type == 'single') {
-                const color = this.getDebugColor(name);
+                const color = this.getColorForNodeLabel(value);
                 data = {value, color, kind};
             } else if (type == 'array') {
-                const color = this.getDebugColor(name);
+                const color = value.map((v: string) => this.getColorForNodeLabel(v));
                 data = mergeArrays(['value', 'color', 'kind'], [value, color, kind]);
             }
 
             return {type, name, isInScope, data};
         });
+    }
+
+    public getAnnotationsForNodeLabel(nodeLabel: string): AnnotationTextAndPosition[] {
+        const _annotationRules: AnnotationDecoratorParameter =
+            (this.constructor as any)._annotationRules;
+        if (_annotationRules == null) {
+            return [];
+        }
+
+        let annotationsTextsAndPositions: AnnotationTextAndPosition[] = [];
+        _annotationRules.nodes.forEach(_annotationRule => {
+            const annotationRuleFn: AnnotationDecoratorRuleFunction = _annotationRule.ruleFunction;
+            const text = annotationRuleFn(this, nodeLabel);
+            annotationsTextsAndPositions.push({
+                position: _annotationRule.position,
+                text,
+                style: _annotationRule.style,
+            });
+        });
+        return annotationsTextsAndPositions;
+    }
+
+    public getAnnotationsForEdgeLabel(edgeLabel: string): AnnotationTextAndPosition[] {
+        const _annotationRules: AnnotationDecoratorParameter =
+            (this.constructor as any)._annotationRules;
+        if (_annotationRules == null) {
+            return [];
+        }
+
+        let annotationsTextsAndPositions: AnnotationTextAndPosition[] = [];
+        _annotationRules.edges.forEach(_annotationRule => {
+            const annotationRuleFn: AnnotationDecoratorRuleFunction = _annotationRule.ruleFunction;
+            const text = annotationRuleFn(this, edgeLabel);
+            annotationsTextsAndPositions.push({
+                position: _annotationRule.position,
+                text,
+                style: _annotationRule.style,
+            });
+        });
+        return annotationsTextsAndPositions;
     }
 }
 
@@ -190,28 +232,11 @@ export abstract class AlgorithmBase {
 
     // TODO This should be method in AlgorithmState class
     public normalize(state: AlgorithmState): NormalizedState {
-        const nodeVars = state._trackedVarsNames
-            .filter(varName => state._kinds.get(varName) == 'node');
-
         const nodes: GrfGraphNodeOptions[] = state.graphJson.nodes.map(node => {
-            let color = GrfColor.DEFAULT;
-            let role = GrfRole.DEFAULT;
-
-            nodeVars.forEach((nodeVar: string) => {
-                const varVal = (<any>state)[nodeVar];
-                if (varVal != null) {
-                    if (Array.isArray(varVal)) {
-                        const index = varVal.indexOf(node.label);
-                        if (index != -1) {
-                            color = state.getDebugColor(nodeVar)[index];
-                        }
-                    } else {
-                        if (varVal == node.label) {
-                            color = state.getDebugColor(nodeVar);
-                        }
-                    }
-                }
-            });
+            const color: GrfColor = state.getColorForNodeLabel(node.label);
+            const role: GrfRole = GrfRole.DEFAULT;
+            const annotations: AnnotationTextAndPosition[] =
+                state.getAnnotationsForNodeLabel(node.label);
 
             return {
                 id: node.id,
@@ -220,11 +245,23 @@ export abstract class AlgorithmBase {
                 weight: node.weight,
                 role,
                 color,
-                annotations: [],
+                annotations,
             };
         });
 
-        const edges: VisNgNetworkOptionsEdges[] = state.graphJson.edges;
+        const edges: GrfGraphEdgeOptions[] = state.graphJson.edges.map(edge => {
+            const annotations: AnnotationTextAndPosition[] =
+                state.getAnnotationsForEdgeLabel(edge.label);
+
+            return {
+                id: edge.id,
+                from: edge.from,
+                to: edge.to,
+                label: edge.label,
+                weight: edge.weight,
+                annotations,
+            };
+        });
 
         return {nodes, edges};
     }

@@ -2,32 +2,38 @@ import {GrfColor} from '../graph/graph.module';
 import {Graph} from '../models/graph.model';
 import {Stack} from '../data-structures/stack';
 import {AlgorithmState, AlgorithmBase} from './algorithm-base';
-import {TrackedVar, Kind, Color} from './decorators';
+import {TrackedVar, Color} from './decorators';
 import {getLabelIfDefined} from './utils';
 
-function colorExporterNeighbors(neighbors: string[], neighbor: string): GrfColor[] {
-    return neighbors.map(x => x == neighbor ? GrfColor.PRIMARY : GrfColor.DEFAULT);
-}
 
+@Color({
+    nodes: [
+        (state: State, nodeLabel: string) =>
+            state.currentNode == nodeLabel ? GrfColor.ACCENT : null,
+        (state: State, nodeLabel: string) =>
+            state.neighbor == nodeLabel ? GrfColor.PRIMARY : null,
+        (state: State, nodeLabel: string) =>
+            state.neighbors && state.neighbors.indexOf(nodeLabel) != -1 ? GrfColor.SECONDARY : null,
+        (state: State, nodeLabel: string) =>
+            state.visited && state.visited.indexOf(nodeLabel) != -1 ? GrfColor.DIMMED : null,
+    ],
+    edges: [],
+})
 class State extends AlgorithmState {
 
-    @TrackedVar() @Kind('node') public currentNode: string;
+    @TrackedVar('node') public currentNode: string;
 
-    @Color(['neighbor'], colorExporterNeighbors)
-    @TrackedVar() @Kind('node') public neighbors: string[];
+    @TrackedVar('node') public neighbors: string[];
 
-    @Color([], () => GrfColor.ACCENT)
-    @TrackedVar() @Kind('node') public neighbor: string;
+    @TrackedVar('node') public neighbor: string;
 
-    @Color([], (v: any) => v.map((_: any) => GrfColor.DIMMED))
-    @TrackedVar() @Kind('node') public visited: string[];
+    @TrackedVar('node') public visited: string[];
 
-    @TrackedVar() @Kind('node') public solution: string[];
+    @TrackedVar('node') public solution: string[];
 
-    @TrackedVar() @Kind('node') public stack: string[];
+    @TrackedVar('node') public stack: string[];
 
-    @Color([], () => GrfColor.SECONDARY)
-    @TrackedVar() @Kind('node') public root: string;
+    @TrackedVar('node') public root: string;
 
     constructor(o: CreateNewStateObject) {
         super(o.graph, o.lineNumber);
@@ -59,6 +65,7 @@ export class DepthFirstSearchAlgorithm extends AlgorithmBase {
     public states: State[];
 
     public name: string = 'Depth First Search';
+
     public abbr: string = 'dfs';
 
     public trackedVariables: string[] = [
@@ -110,61 +117,27 @@ export class DepthFirstSearchAlgorithm extends AlgorithmBase {
 
             let currentNode: string = stack.pop();
             states.push(new State({
-                currentNode,
-                solution,
-                graph,
-                visited,
-                stack,
-                root,
-                lineNumber: 8
+                currentNode, solution, graph, visited, stack, root, lineNumber: 8
             }));
 
             let neighbors: string[] = graph.getSources(currentNode).map(edge => edge.to);
             states.push(new State({
-                currentNode,
-                neighbors,
-                solution,
-                graph,
-                visited,
-                stack,
-                root,
-                lineNumber: 9
+                currentNode, neighbors, solution, graph, visited, stack, root, lineNumber: 9
             }));
 
             visited.push(currentNode);
             states.push(new State({
-                currentNode,
-                neighbors,
-                solution,
-                graph,
-                visited,
-                stack,
-                root,
-                lineNumber: 11
+                currentNode, neighbors, solution, graph, visited, stack, root, lineNumber: 11
             }));
 
             neighbors = neighbors.filter(neighbor => visited.indexOf(neighbor) == -1);
             states.push(new State({
-                currentNode,
-                neighbors,
-                solution,
-                graph,
-                visited,
-                stack,
-                root,
-                lineNumber: 12
+                currentNode, neighbors, solution, graph, visited, stack, root, lineNumber: 12
             }));
 
             neighbors = neighbors.filter(neighbor => !stack.contains(neighbor));
             states.push(new State({
-                currentNode,
-                neighbors,
-                solution,
-                graph,
-                visited,
-                stack,
-                root,
-                lineNumber: 13
+                currentNode, neighbors, solution, graph, visited, stack, root, lineNumber: 13
             }));
 
             neighbors.forEach((neighbor, i) => {
