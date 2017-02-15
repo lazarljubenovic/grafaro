@@ -11,8 +11,12 @@ export interface Profile {
 
 @Injectable()
 export class UserService extends GrafaroHttpService {
-    private _user: Profile;
-    private _userStream: BehaviorSubject<Profile> = new BehaviorSubject({
+    private _user: Profile = {
+        _id: '',
+        displayName: '',
+        socialId: '',
+    };
+    private _mockUserStream: BehaviorSubject<Profile> = new BehaviorSubject({
         _id: '1234',
         displayName: 'Isus',
         socialId: '12345',
@@ -24,14 +28,16 @@ export class UserService extends GrafaroHttpService {
     }
 
     public getUserBySocialId(socialId: string): Observable<Profile> {
-        return this._userStream;
-        // return this.http.get(`${this.url}/social/${socialId}`)
-        //     .map(x => {
-        //         const profile = this.responseToObject(x);
-        //         this._user = profile;
-        //         return profile;
-        //     })
-        //     .catch(err => this.handleError(err));
+        return this.http.get(`${this.url}/social/${socialId}`)
+            .map(x => {
+                const profile = this.responseToObject(x);
+                this._user = profile;
+                return profile;
+            })
+            .catch(err => {
+                this.handleError(err);
+                return this._mockUserStream;
+            });
     }
 
     public changeDisplayName(newName: string): Observable<Profile> {
@@ -41,20 +47,21 @@ export class UserService extends GrafaroHttpService {
             socialId: this._user.socialId
         };
 
-        this._userStream.next(user);
-        return this._userStream;
-
-        // return this.http.post(`${this.url}/${user._id}`, {data: user})
-        //     .map(x => {
-        //         const response = this.responseToObject(x);
-        //         if (response == 'success') {
-        //             this._user = user;
-        //             return this._user;
-        //         } else {
-        //             throw 'TODO';
-        //         }
-        //     })
-        //     .catch(err => this.handleError(err));
+        return this.http.post(`${this.url}/${user._id}`, {data: user})
+            .map(x => {
+                const response = this.responseToObject(x);
+                if (response == 'success') {
+                    this._user = user;
+                    return this._user;
+                } else {
+                    throw 'TODO';
+                }
+            })
+            .catch(err => {
+                this.handleError(err);
+                this._mockUserStream.next(user);
+                return this._mockUserStream;
+            });
     }
 
 }

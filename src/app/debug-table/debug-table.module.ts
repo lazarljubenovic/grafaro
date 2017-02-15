@@ -7,7 +7,7 @@ import {UtilPipesModule} from '../util-pipes/util-pipes.module';
 import {DebugValueComponent} from './debug-value/debug-value.component';
 import {DebugTableService} from './debug-table.service';
 import {FilterPipe} from './filter.pipe';
-import { ColorEnumPipe } from './color-enum.pipe';
+import {ColorEnumPipe} from './color-enum.pipe';
 
 @NgModule({
     imports: [

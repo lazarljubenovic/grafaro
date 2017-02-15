@@ -19,8 +19,7 @@ export class RoomBrowserComponent implements OnInit {
 
     constructor(private _joinService: JoinSocketService,
                 private _roomInfoSocket: RoomInfoSocketService,
-                private _router: Router
-    ) {
+                private _router: Router) {
     }
 
     /**
