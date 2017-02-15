@@ -55,9 +55,16 @@ export interface StateMessage {
 
 export interface IUser extends Document {
     // _id: string;
-    _graphIds: string[];
+    // _graphIds: string[];
     displayName: string; // from social networks
     socialId: string;
+    graph: DBGraph[];
+}
+
+export interface DBGraph {
+    graph: Graph;
+    lastModified: Date;
+    name: string;
 }
 
 export interface IProject extends Document {

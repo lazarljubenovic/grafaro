@@ -6,9 +6,30 @@ import * as mongoose from 'mongoose';
 export const databaseRoutes = express.Router();
 
 const userSchema = new mongoose.Schema({
-    _graphIds: [String],
     socialId: String,
     displayName: String,
+    graph: [{
+        lastModified: Date,
+        name: String,
+        graph: {
+            nodes: [{
+                id: String,
+                label: String,
+                position: {
+                    x: Number,
+                    y: Number,
+                },
+                weight: Number
+            }],
+            edges: [{
+                id: String,
+                from: String,
+                to: String,
+                label: String,
+                weight: String,
+            }]
+        }
+    }],
 });
 
 const projectSchema = new mongoose.Schema({
@@ -50,9 +71,17 @@ databaseRoutes.get('/user', (req, res) => {
         .catch(error => res.json({error: error}));
 });
 
+databaseRoutes.delete('/user', (req, res) => {
+    console.log('Deleting all users...');
+    User.find()
+        .remove()
+        .then((result) => res.json({status: 'succes'}))
+        .catch((error) => res.json({error}));
+});
+
 function createNewUser(socialId: string, success: Function, error: Function) {
     let newUser = new User({
-        _graphIds: [],
+        graph: [],
         displayName: socialId,
         socialId: socialId
     });
