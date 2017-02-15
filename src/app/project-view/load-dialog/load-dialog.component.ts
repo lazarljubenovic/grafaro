@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, Input} from '@angular/core';
 
 @Component({
     selector: 'grf-load-dialog',
@@ -6,6 +6,7 @@ import {Component, OnInit} from '@angular/core';
     styleUrls: ['./load-dialog.component.scss']
 })
 export class LoadDialogComponent implements OnInit {
+    @Input() folders: any[];
 
     public id: string;
     public filename: string;

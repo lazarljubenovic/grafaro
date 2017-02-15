@@ -27,7 +27,7 @@
 </grf-dialog>
 
 <grf-dialog *ngIf="isLoadDialogOpen" (close)="loadDialogToggle()">
-  <grf-load-dialog></grf-load-dialog>
+  <grf-load-dialog [folders]="graphTemplate$ | async"></grf-load-dialog>
 </grf-dialog>
 
 <template #toastOutlet></template>

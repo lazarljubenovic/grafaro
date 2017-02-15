@@ -1,16 +1,10 @@
 <grf-file-list (fileSelect)="onFileSelect($event)">
-  <grf-folder [name]="'Fajlovi'">
-    <grf-file [lastChange]="10000" [id]="1">prvi fajl</grf-file>
-    <grf-file [lastChange]="20000" [id]="2">drugi fajl</grf-file>
-    <grf-file [lastChange]="40000" [id]="3" [isSelected]="true">treci fajl</grf-file>
-    <grf-file [lastChange]="80000" [id]="4">cetvrti fajl</grf-file>
-  </grf-folder>
-  <grf-folder [name]="'Fajloj'">
-    <grf-file [lastChange]="10000000" [id]="5">fajlo unu</grf-file>
-    <grf-file [lastChange]="20000000" [id]="6">fajlo du</grf-file>
-    <grf-file [lastChange]="80000000" [id]="7" [isSelected]="true">fajlo tri</grf-file>
-    <grf-file [lastChange]="160000000" [id]="8">fajlo kvar</grf-file>
-    <grf-file [lastChange]="320000000" [id]="9  ">fajlo kvin</grf-file>
+  <grf-folder *ngFor="let folder of folders" [name]="folder.name">
+    <grf-file *ngFor="let file of folder.graph"
+              [lastChange]="file.lastChange"
+              [id]="file.id">
+      {{file.name}}
+    </grf-file>
   </grf-folder>
 </grf-file-list>
 

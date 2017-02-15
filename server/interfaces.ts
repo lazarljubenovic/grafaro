@@ -50,7 +50,7 @@ export interface AlgorithmMessage {
 }
 
 export interface StateMessage {
-    stateIndex: number
+    stateIndex: number;
 }
 
 export interface IUser extends Document {
@@ -63,8 +63,17 @@ export interface IUser extends Document {
 
 export interface DBGraph {
     graph: Graph;
-    lastModified: Date;
+    lastModified: number;
     name: string;
+}
+
+export interface GraphFileInfo {
+    name: string; // user's display name
+    graph: {
+        lastChange: number;
+        id: number; // whatever
+        name: string;
+    }[];
 }
 
 export interface IProject extends Document {

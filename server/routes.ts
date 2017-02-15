@@ -1,5 +1,5 @@
 import * as express from 'express';
-import {IUser, IProject, defaultGraph} from './interfaces';
+import {IUser, IProject, defaultGraph, DBGraph, GraphFileInfo} from './interfaces';
 import * as mongoose from 'mongoose';
 
 
@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
     socialId: String,
     displayName: String,
     graph: [{
-        lastModified: Date,
+        lastModified: Number,
         name: String,
         graph: {
             nodes: [{
@@ -27,8 +27,10 @@ const userSchema = new mongoose.Schema({
                 to: String,
                 label: String,
                 weight: String,
-            }]
-        }
+            }],
+            nextNodeId: Number,
+            nextEdgeId: Number,
+        },
     }],
 });
 
@@ -55,7 +57,9 @@ const projectSchema = new mongoose.Schema({
             label: String,
             directed: Boolean,
             weight: String,
-        }]
+        }],
+        nextNodeId: Number,
+        nextEdgeId: Number,
     },
     name: String,
     description: String,
@@ -142,6 +146,53 @@ databaseRoutes.delete('/user/:id', (req, res) => {
     User.findByIdAndRemove(id)
         .then(() => res.json({status: 'success'}))
         .catch((error) => res.json({error}));
+});
+
+databaseRoutes.put('/graph', (req, res) => {
+    const userId = req.body['userId'];
+    const graphName = req.body['graphName'];
+    const graphJson = req.body['graphJson'];
+
+    let newGraph: DBGraph = {
+        graph: graphJson,
+        lastModified: Date.now(),
+        name: graphName,
+    };
+
+    User.findById(userId)
+        .then(dbUser => {
+            let user = dbUser;
+            user.graph.push(newGraph);
+            User.findByIdAndUpdate(userId, user)
+                .then(() => res.json({status: 'success'}))
+                .catch((error) => res.json({error}));
+        });
+});
+
+databaseRoutes.get('/graph', (req, res) => {
+    User.find()
+        .then((dbUsers) => {
+            let fileInfo = [];
+
+            dbUsers.forEach(user => {
+                let graphsInfo: GraphFileInfo = {
+                    name: user.displayName,
+                    graph: [],
+                };
+                user.graph.forEach(graph => {
+                    graphsInfo.graph.push({
+                        id: 1,
+                        name: graph.name,
+                        lastChange: graph.lastModified
+                    });
+                });
+
+                fileInfo.push(graphsInfo);
+            });
+
+            res.json({data: fileInfo});
+        })
+        .catch(error => res.json({error}));
 });
 
 function getLastId(nodeEdgeObj: any): number {

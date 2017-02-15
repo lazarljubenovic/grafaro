@@ -9,12 +9,13 @@ import {
 import {GraphOptionsService} from '../graph-options.service';
 import {PopupRenameComponent} from './popup-rename/popup-rename.component';
 import {ToastService} from '../toast/toast.service';
-import {ProjectsService} from '../project-browser/projects.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {JoinSocketService} from '../project-browser/join.service';
 import {GraphSocketService} from './graph-socket.service';
 import {GraphManager} from '../managers/graph.manager';
 import {MasterSocketService} from './master-socket.service';
+import {GraphTemplateService} from './graph-template.service';
+import {Observable} from 'rxjs';
 
 @Component({
     selector: 'grf-user-interface',
@@ -22,6 +23,8 @@ import {MasterSocketService} from './master-socket.service';
     styleUrls: ['project-view.component.scss'],
 })
 export class ProjectViewComponent implements OnInit {
+
+    public graphTemplate$: Observable<any>;
 
     public isSaveDialogOpen: boolean = false;
     public isLoadDialogOpen: boolean = false;
@@ -49,7 +52,7 @@ export class ProjectViewComponent implements OnInit {
     constructor(private graphOptionsService: GraphOptionsService,
                 componentFactoryResolver: ComponentFactoryResolver,
                 private toastService: ToastService,
-                public projectService: ProjectsService,
+                private _graphTemplateService: GraphTemplateService,
                 private activeRoute: ActivatedRoute,
                 private _joinService: JoinSocketService,
                 private graphSocketService: GraphSocketService,
@@ -94,6 +97,8 @@ export class ProjectViewComponent implements OnInit {
         this.graphOptionsService.setOptions([
             {name: 'physics.enabled', value: false},
         ]);
+
+        this.graphTemplate$ = this._graphTemplateService.getGraphsInfo();
     }
 
 }
