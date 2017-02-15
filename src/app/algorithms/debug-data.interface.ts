@@ -1,4 +1,10 @@
-export type DebugDataValueKind = 'node' | 'edge' | 'node-node' | 'node-number' | 'number';
+export type DebugDataValueKind
+    = 'node'
+    | 'edge'
+    | 'node-node'
+    | 'mode-edge'
+    | 'node-number'
+    | 'number';
 
 export interface DebugDataValue {
     value: any;

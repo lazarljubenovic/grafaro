@@ -146,6 +146,59 @@ $marble-size: 18px;
         }
       }
     }
+
+    &.node-edge {
+      $border-radius: $marble-size / 2;
+      @include force-width(2 * $marble-size);
+      @include force-height($marble-size);
+      line-height: $marble-size;
+      display: flex;
+
+      .outer {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        @include force-square($marble-size);
+        line-height: $marble-size;
+        color: $black;
+
+        &.left {
+          border: solid 1px mix(black, white, 40%);
+          margin: -1px;
+          margin-left: 0;
+          background-color: rgba(black, .06);
+          border-radius: $marble-size / 2;
+          font-size: 12px;
+        }
+
+        &.right {
+          $edge-size: 5px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 -1px rgba(black, .5) inset;
+          @include force-square($marble-size);
+          position: relative;
+          font-size: $marble-size * .75;
+          color: rgba(black, .7);
+
+          &:after {
+            content: '';
+            position: absolute;
+            bottom: - $edge-size / 2;
+            @include force-square($edge-size - 2px); // 2px = 2 * border;
+            background-color: mix(black, white, 6%);
+            border: solid 1px mix(black, white, 40%);
+            border-radius: 50%;
+            right: - $edge-size / 2;
+          }
+        }
+
+        .inner {
+          display: inline-block;
+        }
+      }
+    }
   }
 
   .null {
