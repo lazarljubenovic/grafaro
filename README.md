@@ -16,13 +16,34 @@ Grafaro is a web app for collaborative learning about graph algorithms. You can 
 
 ## Running locally
 
+### Downloading source
+
 ```
 git clone https://github.com/lazarljubenovic/grafaro
 cd grafaro
+yarn # you can also use: npm install
+```
+
+### Running Angular
+
+You can run the application with a limited set of features without running the server.
+
+```
 ng serve
 ```
 
 Open `localhost:4200` in browser.
+
+### Running server
+
+For full set of features (collaboration and persistance), run the server as well.
+
+```
+npm run ts:build
+npm run serve
+```
+
+You might need to refresh the page if you run server after starting Angular.
 
 ---
 
