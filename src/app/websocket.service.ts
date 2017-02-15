@@ -51,6 +51,9 @@ export class WebSocketService {
         };
         this.ws.onclose = (event) => {
             console.log('Socket closed');
+            this.messageBuffer.forEach(message => {
+                this.send(message, message.type);
+            });
             this.stream.message$.subscribe(message => this.messages.next(message));
         };
         this.ws.onerror = (event) => {

@@ -37,6 +37,9 @@ export class GraphComponent implements OnInit {
                 align: 'middle',
             },
         },
+        interaction: {
+            selectConnectedEdges: false,
+        },
     };
 
     private _globalOptions: VisNgNetworkOptions;
