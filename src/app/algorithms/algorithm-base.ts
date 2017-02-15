@@ -56,7 +56,11 @@ export abstract class AlgorithmState {
     }
 
     public getColorForNodeLabel(nodeLabel: string): GrfColor {
-        const colorRules: ColorDecoratorFunction[] = (this.constructor as any)._colorRules.nodes;
+        const _colorRules = (this.constructor as any)._colorRules;
+        if (_colorRules == null) {
+            throw new Error(`Algorithm must have @Color decorator (even empty)`);
+        }
+        const colorRules: ColorDecoratorFunction[] = _colorRules.nodes;
         for (let colorRule of colorRules) {
             const color: GrfColor | null = colorRule(this, nodeLabel);
             if (color != null) {

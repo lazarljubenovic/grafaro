@@ -26,7 +26,7 @@ export class ToolbarService {
                 && values.event.edges.length == 0;
         })
         .map(values => ({
-            suggestedName: 'X', // TODO
+            suggestedName: '', // this will be populated later
             position: values.event.pointer.canvas,
         }));
 

@@ -2,7 +2,7 @@ export type DebugDataValueKind
     = 'node'
     | 'edge'
     | 'node-node'
-    | 'mode-edge'
+    | 'node-edge'
     | 'node-number'
     | 'number';
 

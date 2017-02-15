@@ -141,6 +141,18 @@ export class GraphManager {
         }
     }
 
+    public suggestNewEdgeName(): string {
+        const labels: string[] = this._graph.edges.map(edge => edge.label).sort();
+        const lastLabel: string = labels[labels.length - 1];
+        if (!Number.isNaN(Number.parseInt(lastLabel))) {
+            return lastLabel + 1;
+        } else {
+            const lastCharCode: number = lastLabel.slice(-1).charCodeAt(0);
+            const newLastChar: string = String.fromCharCode(lastCharCode + 1);
+            return lastLabel.slice(0, -1).concat(newLastChar);
+        }
+    }
+
     public addNode(position: ClickPosition): void {
         const label: string = this.suggestNewNodeName();
         this._graph.addNode(label, position);
@@ -201,7 +213,7 @@ export class GraphManager {
     }
 
     public linkNodes(nodeA: string, nodeB: string) {
-        this._graph.addEdge(nodeA, nodeB, 'foobar');
+        this._graph.addEdge(nodeA, nodeB, this.suggestNewEdgeName());
         this.emit();
     }
 

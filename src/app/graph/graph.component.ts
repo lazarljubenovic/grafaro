@@ -36,6 +36,9 @@ export class GraphComponent implements OnInit {
             font: {
                 align: 'middle',
             },
+            color: {
+                inherit: false,
+            },
         },
         interaction: {
             selectConnectedEdges: false,
