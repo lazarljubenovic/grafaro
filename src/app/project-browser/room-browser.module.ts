@@ -4,7 +4,6 @@ import {RoomBrowserComponent} from './room-browser.component';
 import {RouterModule} from '@angular/router';
 import {UserInterfaceModule} from '../user-interface/user-interface.module';
 import {ProjectCardComponent} from './room-card/room-card.component';
-import {ProjectsService} from './projects.service';
 import {JdenticonModule} from '../jdenticon/jdenticon.module';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {UtilPipesModule} from '../util-pipes/util-pipes.module';
@@ -28,7 +27,6 @@ import {MasterSocketService} from '../project-view/master-socket.service';
         ProjectCardComponent,
     ],
     providers: [
-        ProjectsService,
         JoinSocketService,
         RoomInfoSocketService,
         WebSocketService,

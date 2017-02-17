@@ -76,19 +76,6 @@ export interface GraphFileInfo {
     }[];
 }
 
-export interface IProject extends Document {
-    id: string;
-    creatorId: string;
-    algorithm: {
-        id: string,
-        options: any,
-    };
-    graph: Graph;
-    name: string;
-    description: string;
-    tags: string[]; // todo
-}
-
 export interface GraphNode {
     id: string;
     label: string;
