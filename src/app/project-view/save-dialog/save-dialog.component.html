@@ -1,12 +1,18 @@
-<!--<grf-file-list (fileSelect)="onFileSelect($event)">-->
-  <!--<grf-folder [name]="folder.name">-->
-    <!--<grf-file *ngFor="let file of folder.graph"-->
-              <!--[lastChange]="file.lastChange"-->
-              <!--[id]="file.id">-->
-      <!--{{file.name}}-->
-    <!--</grf-file>-->
-  <!--</grf-folder>-->
-<!--</grf-file-list>-->
+<grf-file-list *ngIf="folder?.graph"
+               (fileSelect)="onFileSelect($event)">
+  <grf-folder *ngIf="folder?.graph.length > 0"
+              [name]="'My graphs'">
+    <grf-file *ngFor="let file of folder?.graph"
+              [lastChange]="file?.lastChange"
+              [id]="file?.id">
+      {{file?.name}}
+    </grf-file>
+  </grf-folder>
+</grf-file-list>
+
+<span *ngIf="folder?.graph.length == 0">
+    There are no graphs to show. Why don't you save one?
+</span>
 
 <footer>
 

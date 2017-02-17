@@ -30,6 +30,7 @@ export class ProjectViewComponent implements OnInit {
     private _displayName: string;
 
     public graphTemplate$: Observable<GraphFolder[]>;
+    public currentUserTemplate$: Observable<GraphFolder>;
 
     public isSaveDialogOpen: boolean = false;
     public isLoadDialogOpen: boolean = false;
@@ -46,7 +47,7 @@ export class ProjectViewComponent implements OnInit {
         const graphJson = this._graphManager.graph$.getValue().writeJson();
         this._graphTemplateService.saveGraph(graphJson, path.filename, this._displayName)
             .subscribe(response => {
-                console.log(response);
+                // todo handle on error
                 this.saveDialogToggle();
             });
     }
@@ -119,6 +120,10 @@ export class ProjectViewComponent implements OnInit {
         ]);
 
         this.graphTemplate$ = this._graphTemplateService.getGraphsInfo();
+        this.currentUserTemplate$ = this.graphTemplate$.map(templates => {
+            let ind = templates.findIndex(template => template.name == this._displayName);
+            return ind == -1 ? {name: this._displayName, graph: []} : templates[ind];
+        });
 
         this._auth0.user$.subscribe(user => {
             this._displayName = user.displayName;

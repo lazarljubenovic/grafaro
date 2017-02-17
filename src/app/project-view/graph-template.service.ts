@@ -3,6 +3,7 @@ import {GrafaroHttpService} from '../shared/grafaro-http.service';
 import {Http} from '@angular/http';
 import {Observable} from 'rxjs';
 import {GraphJson} from '../models/graph.model';
+import {GraphFolder} from '../user-interface/file-list/file-list.component';
 
 @Injectable()
 export class GraphTemplateService extends GrafaroHttpService {
@@ -12,7 +13,7 @@ export class GraphTemplateService extends GrafaroHttpService {
         this.url += '/graph';
     }
 
-    public getGraphsInfo(): Observable<any> {
+    public getGraphsInfo(): Observable<GraphFolder[]> {
         return this.http.get(this.url)
             .map(response => this.responseToObject(response))
             .catch(err => this.handleError(err));

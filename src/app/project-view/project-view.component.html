@@ -24,7 +24,7 @@
 
 <grf-dialog *ngIf="isSaveDialogOpen"
             (close)="saveDialogToggle()">
-  <grf-save-dialog [folder]=""
+  <grf-save-dialog [folder]="currentUserTemplate$ | async"
                    (saveGraph)="save($event)"
   ></grf-save-dialog>
 </grf-dialog>
