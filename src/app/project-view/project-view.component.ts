@@ -17,6 +17,8 @@ import {MasterSocketService} from './master-socket.service';
 import {GraphTemplateService} from './graph-template.service';
 import {Observable} from 'rxjs';
 import {GraphPath} from '../user-interface/file-list/file-list.service';
+import {GraphFolder} from '../user-interface/file-list/file-list.component';
+import {Auth0Service} from '../core/auth0.service';
 
 @Component({
     selector: 'grf-user-interface',
@@ -25,7 +27,9 @@ import {GraphPath} from '../user-interface/file-list/file-list.service';
 })
 export class ProjectViewComponent implements OnInit {
 
-    public graphTemplate$: Observable<any>;
+    private _displayName: string;
+
+    public graphTemplate$: Observable<GraphFolder[]>;
 
     public isSaveDialogOpen: boolean = false;
     public isLoadDialogOpen: boolean = false;
@@ -38,8 +42,21 @@ export class ProjectViewComponent implements OnInit {
 
     public popupRenameComponentFactory: ComponentFactory<PopupRenameComponent>;
 
-    public save() {
-        console.log('TODO save graph');
+    public save(path: GraphPath) {
+        const graphJson = this._graphManager.graph$.getValue().writeJson();
+        this._graphTemplateService.saveGraph(graphJson, path.filename, this._displayName)
+            .subscribe(response => {
+                console.log(response);
+                this.saveDialogToggle();
+            });
+    }
+
+    public load(path: GraphPath): void {
+        this._graphTemplateService.getGraph(path.folder, path.filename)
+            .subscribe(graphJson => {
+                this._graphManager.graphFromSocket(graphJson);
+                this.loadDialogToggle();
+            });
     }
 
     public saveDialogToggle(): void {
@@ -48,14 +65,6 @@ export class ProjectViewComponent implements OnInit {
 
     public loadDialogToggle(): void {
         this.isLoadDialogOpen = !this.isLoadDialogOpen;
-    }
-
-    public loadGraph(path: GraphPath): void {
-        this._graphTemplateService.getGraph(path.folder, path.filename)
-            .subscribe(graphJson => {
-                this._graphManager.graphFromSocket(graphJson);
-                this.loadDialogToggle();
-            });
     }
 
     constructor(private graphOptionsService: GraphOptionsService,
@@ -67,7 +76,9 @@ export class ProjectViewComponent implements OnInit {
                 private graphSocketService: GraphSocketService,
                 private _graphManager: GraphManager,
                 private _masterSocket: MasterSocketService,
-                private _router: Router) {
+                private _router: Router,
+                private _auth0: Auth0Service
+    ) {
         this.popupRenameComponentFactory =
             componentFactoryResolver.resolveComponentFactory(PopupRenameComponent);
 
@@ -108,6 +119,10 @@ export class ProjectViewComponent implements OnInit {
         ]);
 
         this.graphTemplate$ = this._graphTemplateService.getGraphsInfo();
+
+        this._auth0.user$.subscribe(user => {
+            this._displayName = user.displayName;
+        });
     }
 
 }

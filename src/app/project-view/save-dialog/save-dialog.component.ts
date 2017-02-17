@@ -1,4 +1,6 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, Output, EventEmitter, Input} from '@angular/core';
+import {GraphPath} from '../../user-interface/file-list/file-list.service';
+import {GraphFolder} from '../../user-interface/file-list/file-list.component';
 
 @Component({
     selector: 'grf-save-dialog',
@@ -7,16 +9,17 @@ import {Component, OnInit} from '@angular/core';
 })
 export class SaveDialogComponent implements OnInit {
 
-    public id: string;
+    @Input() folder: GraphFolder;
+    @Output() saveGraph = new EventEmitter<GraphPath>();
+
     public filename: string;
 
-    public onFileSelect(file: {id: string, filename: string}): void {
+    public onFileSelect(file: GraphPath): void {
         this.filename = file.filename;
-        this.id = file.id;
     }
 
     public onSave() {
-        console.log(`TODO: Save ${this.filename} (id ${this.id})`);
+        this.saveGraph.emit({folder: '', filename: this.filename});
     }
 
     constructor() {

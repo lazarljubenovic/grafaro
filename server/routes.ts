@@ -154,22 +154,22 @@ databaseRoutes.delete('/user/:id', (req, res) => {
 
 databaseRoutes.put('/graph', (req, res) => {
     console.log('Adding graph');
-    const userId = req.body['userId'];
+    const userName = req.body['userName'];
     const graphName = req.body['graphName'];
     const graphJson = req.body['graphJson'];
 
-    if (userId && graphName && graphJson) {
+    if (userName && graphName && graphJson) {
         let newGraph: DBGraph = {
             graph: graphJson,
             lastModified: Date.now(),
             name: graphName,
         };
 
-        User.findById(userId)
+        User.findOne({displayName: userName})
             .then(dbUser => {
                 let user = dbUser;
                 user.graphs.push(newGraph);
-                User.findByIdAndUpdate(userId, user)
+                User.findOneAndUpdate({displayName: userName}, user)
                     .then(() => res.json({status: 'success'}))
                     .catch((error) => res.json({error}));
             });

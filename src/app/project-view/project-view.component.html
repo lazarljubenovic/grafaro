@@ -24,13 +24,15 @@
 
 <grf-dialog *ngIf="isSaveDialogOpen"
             (close)="saveDialogToggle()">
-  <grf-save-dialog></grf-save-dialog>
+  <grf-save-dialog [folder]=""
+                   (saveGraph)="save($event)"
+  ></grf-save-dialog>
 </grf-dialog>
 
 <grf-dialog *ngIf="isLoadDialogOpen"
             (close)="loadDialogToggle()">
   <grf-load-dialog [folders]="graphTemplate$ | async"
-                   (loadGraph)="loadGraph($event)"
+                   (loadGraph)="load($event)"
   ></grf-load-dialog>
 </grf-dialog>
 

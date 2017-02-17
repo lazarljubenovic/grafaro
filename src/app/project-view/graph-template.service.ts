@@ -24,13 +24,11 @@ export class GraphTemplateService extends GrafaroHttpService {
             .catch(err => this.handleError(err));
     }
 
-    public saveGraph(graphJson: GraphJson, graphName: string, userId: string): Observable<any> {
+    public saveGraph(graphJson: GraphJson, graphName: string, userName: string): Observable<any> {
         return this.http.put(this.url, {
-            data: {
-                userId,
-                graphName,
-                graphJson,
-            }
+            userName,
+            graphName,
+            graphJson,
         }).do(response => console.log('TODO'))
             .catch(err => this.handleError(err));
     }

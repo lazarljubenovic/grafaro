@@ -27,6 +27,7 @@ import {MasterSocketService} from './master-socket.service';
 import {AlgorithmPickerModule} from './algorithm-picker/algorithm-picker.module';
 import {ControlsModule} from './controls/controls.module';
 import {GraphTemplateService} from './graph-template.service';
+import {Auth0Service} from '../core/auth0.service';
 
 @NgModule({
     imports: [
@@ -63,6 +64,7 @@ import {GraphTemplateService} from './graph-template.service';
         AlgorithmManager,
         MasterSocketService,
         GraphTemplateService,
+        Auth0Service,
     ],
     exports: [
         ProjectViewComponent,
