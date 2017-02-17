@@ -1,5 +1,5 @@
 import {Component, OnInit, Output, EventEmitter} from '@angular/core';
-import {FileListService} from './file-list.service';
+import {FileListService, GraphPath} from './file-list.service';
 
 @Component({
     selector: 'grf-file-list',
@@ -9,7 +9,7 @@ import {FileListService} from './file-list.service';
 })
 export class FileListComponent implements OnInit {
 
-    @Output() public fileSelect = new EventEmitter<{id: string, filename: string}>();
+    @Output() public fileSelect = new EventEmitter<GraphPath>();
 
     constructor(private fileListService: FileListService) {
     }

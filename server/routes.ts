@@ -5,33 +5,37 @@ import * as mongoose from 'mongoose';
 
 export const databaseRoutes = express.Router();
 
+const graphSchema = new mongoose.Schema({
+    lastModified: Number,
+    name: String,
+    graph: {
+        nodes: [{
+            _id: false,
+            id: String,
+            label: String,
+            position: {
+                x: Number,
+                y: Number,
+            },
+            weight: Number
+        }],
+        edges: [{
+            _id: false,
+            id: String,
+            from: String,
+            to: String,
+            label: String,
+            weight: Number,
+        }],
+        nextNodeId: Number,
+        nextEdgeId: Number,
+    },
+}, {_id: false});
+
 const userSchema = new mongoose.Schema({
     socialId: String,
     displayName: String,
-    graph: [{
-        lastModified: Number,
-        name: String,
-        graph: {
-            nodes: [{
-                id: String,
-                label: String,
-                position: {
-                    x: Number,
-                    y: Number,
-                },
-                weight: Number
-            }],
-            edges: [{
-                id: String,
-                from: String,
-                to: String,
-                label: String,
-                weight: String,
-            }],
-            nextNodeId: Number,
-            nextEdgeId: Number,
-        },
-    }],
+    graphs: [graphSchema],
 });
 
 const projectSchema = new mongoose.Schema({
@@ -149,24 +153,47 @@ databaseRoutes.delete('/user/:id', (req, res) => {
 });
 
 databaseRoutes.put('/graph', (req, res) => {
+    console.log('Adding graph');
     const userId = req.body['userId'];
     const graphName = req.body['graphName'];
     const graphJson = req.body['graphJson'];
 
-    let newGraph: DBGraph = {
-        graph: graphJson,
-        lastModified: Date.now(),
-        name: graphName,
-    };
+    if (userId && graphName && graphJson) {
+        let newGraph: DBGraph = {
+            graph: graphJson,
+            lastModified: Date.now(),
+            name: graphName,
+        };
 
-    User.findById(userId)
+        User.findById(userId)
+            .then(dbUser => {
+                let user = dbUser;
+                user.graphs.push(newGraph);
+                User.findByIdAndUpdate(userId, user)
+                    .then(() => res.json({status: 'success'}))
+                    .catch((error) => res.json({error}));
+            });
+    } else {
+        res.json({error: 'Something is undefined!'});
+    }
+});
+
+databaseRoutes.get('/graph/:userName/:graphName', (req, res) => {
+    const userName = req.params['userName'];
+    const graphName = req.params['graphName'];
+
+    console.log('userName', userName);
+    console.log('graphName', graphName);
+
+    User.findOne({displayName: userName}, {_id: 0})
         .then(dbUser => {
-            let user = dbUser;
-            user.graph.push(newGraph);
-            User.findByIdAndUpdate(userId, user)
-                .then(() => res.json({status: 'success'}))
-                .catch((error) => res.json({error}));
-        });
+            const graph = dbUser.graphs
+                .find(dbGraph => dbGraph.name == graphName)
+                .graph;
+
+            res.json({data: graph});
+        })
+        .catch((error) => res.json({error}));
 });
 
 databaseRoutes.get('/graph', (req, res) => {
@@ -175,19 +202,21 @@ databaseRoutes.get('/graph', (req, res) => {
             let fileInfo = [];
 
             dbUsers.forEach(user => {
-                let graphsInfo: GraphFileInfo = {
-                    name: user.displayName,
-                    graph: [],
-                };
-                user.graph.forEach(graph => {
-                    graphsInfo.graph.push({
-                        id: 1,
-                        name: graph.name,
-                        lastChange: graph.lastModified
+                if (user.graphs.length > 0) {
+                    let graphsInfo: GraphFileInfo = {
+                        name: user.displayName,
+                        graph: [],
+                    };
+                    user.graphs.forEach(graph => {
+                        graphsInfo.graph.push({
+                            id: 1,
+                            name: graph.name,
+                            lastChange: graph.lastModified
+                        });
                     });
-                });
 
-                fileInfo.push(graphsInfo);
+                    fileInfo.push(graphsInfo);
+                }
             });
 
             res.json({data: fileInfo});
@@ -197,7 +226,7 @@ databaseRoutes.get('/graph', (req, res) => {
 
 function getLastId(nodeEdgeObj: any): number {
     return parseInt(nodeEdgeObj.sort((A, B) =>
-        parseInt(B.id.split('-')[1], 10) - parseInt(A.id.split('-')[1], 10))[0] // ensure ordering
+    parseInt(B.id.split('-')[1], 10) - parseInt(A.id.split('-')[1], 10))[0] // ensure ordering
         .id.split('-')[1], 10);
 }
 

@@ -58,7 +58,7 @@ export interface IUser extends Document {
     // _graphIds: string[];
     displayName: string; // from social networks
     socialId: string;
-    graph: DBGraph[];
+    graphs: DBGraph[];
 }
 
 export interface DBGraph {

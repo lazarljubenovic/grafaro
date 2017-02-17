@@ -18,6 +18,12 @@ export class GraphTemplateService extends GrafaroHttpService {
             .catch(err => this.handleError(err));
     }
 
+    public getGraph(userName: string, graphName: string): Observable<GraphJson> {
+        return this.http.get(`${this.url}/${userName}/${graphName}`)
+            .map(response => this.responseToObject(response))
+            .catch(err => this.handleError(err));
+    }
+
     public saveGraph(graphJson: GraphJson, graphName: string, userId: string): Observable<any> {
         return this.http.put(this.url, {
             data: {

@@ -16,6 +16,7 @@ import {GraphManager} from '../managers/graph.manager';
 import {MasterSocketService} from './master-socket.service';
 import {GraphTemplateService} from './graph-template.service';
 import {Observable} from 'rxjs';
+import {GraphPath} from '../user-interface/file-list/file-list.service';
 
 @Component({
     selector: 'grf-user-interface',
@@ -47,6 +48,14 @@ export class ProjectViewComponent implements OnInit {
 
     public loadDialogToggle(): void {
         this.isLoadDialogOpen = !this.isLoadDialogOpen;
+    }
+
+    public loadGraph(path: GraphPath): void {
+        this._graphTemplateService.getGraph(path.folder, path.filename)
+            .subscribe(graphJson => {
+                this._graphManager.graphFromSocket(graphJson);
+                this.loadDialogToggle();
+            });
     }
 
     constructor(private graphOptionsService: GraphOptionsService,

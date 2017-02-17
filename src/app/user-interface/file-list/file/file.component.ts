@@ -32,8 +32,10 @@ export class FileComponent implements OnInit, AfterViewInit {
     @HostListener('click')
     /* tslint:disable */
     private onFileSelect() {
-        const filename = `${this.parentPath}/${this.filename}`;
-        this.fileListService.fileSelect$.next({id: this.id, filename});
+        // TODO should be trimmed at edit
+        const filename = `${this.filename.trim()}`;
+        const folder = `${this.parentPath}`;
+        this.fileListService.fileSelect$.next({folder, filename});
     }
 
     constructor(private fileListService: FileListService) {

@@ -22,12 +22,16 @@
 
 </main>
 
-<grf-dialog *ngIf="isSaveDialogOpen" (close)="saveDialogToggle()">
+<grf-dialog *ngIf="isSaveDialogOpen"
+            (close)="saveDialogToggle()">
   <grf-save-dialog></grf-save-dialog>
 </grf-dialog>
 
-<grf-dialog *ngIf="isLoadDialogOpen" (close)="loadDialogToggle()">
-  <grf-load-dialog [folders]="graphTemplate$ | async"></grf-load-dialog>
+<grf-dialog *ngIf="isLoadDialogOpen"
+            (close)="loadDialogToggle()">
+  <grf-load-dialog [folders]="graphTemplate$ | async"
+                   (loadGraph)="loadGraph($event)"
+  ></grf-load-dialog>
 </grf-dialog>
 
 <template #toastOutlet></template>

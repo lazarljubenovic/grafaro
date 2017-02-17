@@ -1,4 +1,5 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {GraphPath} from '../../user-interface/file-list/file-list.service';
 
 @Component({
     selector: 'grf-load-dialog',
@@ -7,17 +8,21 @@ import {Component, OnInit, Input} from '@angular/core';
 })
 export class LoadDialogComponent implements OnInit {
     @Input() folders: any[];
+    @Output() loadGraph: EventEmitter<GraphPath> = new EventEmitter();
 
-    public id: string;
+    public folder: string;
     public filename: string;
 
-    public onFileSelect(file: {id: string, filename: string}): void {
+    public onFileSelect(file: GraphPath): void {
+        this.folder = file.folder;
         this.filename = file.filename;
-        this.id = file.id;
     }
 
     public onLoad() {
-        console.log(`TODO: Load ${this.filename} (id ${this.id})`);
+        this.loadGraph.emit({
+            folder: this.folder,
+            filename: this.filename
+        });
     }
 
     constructor() {
