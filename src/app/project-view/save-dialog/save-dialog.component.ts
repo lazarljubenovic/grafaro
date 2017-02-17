@@ -1,6 +1,6 @@
 import {Component, OnInit, Output, EventEmitter, Input} from '@angular/core';
 import {GraphPath} from '../../user-interface/file-list/file-list.service';
-import {GraphFolder} from '../../user-interface/file-list/file-list.component';
+import {GraphFolder} from '../../user-interface/file-list/file-list.interface';
 
 @Component({
     selector: 'grf-save-dialog',

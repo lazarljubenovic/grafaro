@@ -1,12 +1,8 @@
 import {Injectable} from '@angular/core';
 import {WebSocketService} from '../../websocket.service';
 import {Observable} from 'rxjs';
+import {ChatMessageInfo} from '../../../../server/interfaces';
 
-export interface ChatMessageInfo {
-    timeStamp: Date;
-    senderName: string;
-    message: string;
-}
 
 @Injectable()
 export class ChatService {

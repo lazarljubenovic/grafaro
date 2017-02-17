@@ -3,7 +3,7 @@ import {MarkdownService} from '../../markdown.service';
 import {EmojiService} from '../../emoji.service';
 import {TabsService} from '../../tabs/tabs.service';
 import {JdenticonComponent} from '../../../jdenticon/jdenticon.component';
-import {ChatMessageInfo} from '../chat.service';
+import {ChatMessageInfo} from '../chat-message-info.interface';
 
 
 @Component({
