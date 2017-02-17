@@ -3,6 +3,7 @@ import {BehaviorSubject} from 'rxjs';
 import {Graph, GraphJson} from '../models/graph.model';
 import {ClickPosition} from '../project-view/toolbar/toolbar.component';
 import {ToolbarService} from '../project-view/toolbar/toolbar.service';
+import {suggestNextName} from '../utils/name-suggester';
 
 @Injectable()
 export class GraphManager {
@@ -130,27 +131,13 @@ export class GraphManager {
     }
 
     public suggestNewNodeName(): string {
-        const labels: string[] = this._graph.nodes.map(node => node.label).sort();
-        const lastLabel: string = labels[labels.length - 1];
-        if (!Number.isNaN(Number.parseInt(lastLabel))) {
-            return lastLabel + 1;
-        } else {
-            const lastCharCode: number = lastLabel.slice(-1).charCodeAt(0);
-            const newLastChar: string = String.fromCharCode(lastCharCode + 1);
-            return lastLabel.slice(0, -1).concat(newLastChar);
-        }
+        const labels: string[] = this._graph.nodes.map(node => node.label);
+        return suggestNextName(labels);
     }
 
     public suggestNewEdgeName(): string {
-        const labels: string[] = this._graph.edges.map(edge => edge.label).sort();
-        const lastLabel: string = labels[labels.length - 1];
-        if (!Number.isNaN(Number.parseInt(lastLabel))) {
-            return lastLabel + 1;
-        } else {
-            const lastCharCode: number = lastLabel.slice(-1).charCodeAt(0);
-            const newLastChar: string = String.fromCharCode(lastCharCode + 1);
-            return lastLabel.slice(0, -1).concat(newLastChar);
-        }
+        const labels: string[] = this._graph.edges.map(edge => edge.label);
+        return suggestNextName(labels);
     }
 
     public addNode(position: ClickPosition): void {
