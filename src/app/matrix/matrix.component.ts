@@ -37,19 +37,19 @@ export class MatrixComponent implements OnInit {
     }
 
     public toggleEdge(row: number, column: number): void {
-        const nodeA = this.graphManager.getNodeId(this.labels[row]);
-        const nodeB = this.graphManager.getNodeId(this.labels[column]);
+        const from = this.graphManager.getNodeId(this.labels[row]);
+        const to = this.graphManager.getNodeId(this.labels[column]);
 
         if (this.data[row][column] == 0) {
-            this.graphManager.linkNodes(nodeA, nodeB);
+            this.graphManager.linkNodes(from, to);
         } else {
-            this.graphManager.unlinkNodes(nodeA, nodeB);
+            this.graphManager.unlinkNodes(from, to);
         }
     }
 
     public setWeight(row: number, column: number, weight: number): void {
-        const nodeA = this.graphManager.getNodeId(this.labels[row]);
-        const nodeB = this.graphManager.getNodeId(this.labels[column]);
+        const from = this.graphManager.getNodeId(this.labels[row]);
+        const to = this.graphManager.getNodeId(this.labels[column]);
 
         const previousValue = this.data[row][column];
 
@@ -57,13 +57,13 @@ export class MatrixComponent implements OnInit {
             if (weight == 0 || weight == null) {
                 return;
             } else {
-                this.graphManager.linkNodes(nodeA, nodeB, weight);
+                this.graphManager.linkNodes(from, to, weight);
             }
         } else {
             if (weight == 0 || weight == null) {
-                this.graphManager.unlinkNodes(nodeA, nodeB);
+                this.graphManager.unlinkNodes(from, to);
             } else {
-                const edgeId = this.graphManager.getEdgeByNodes(nodeA, nodeB).id;
+                const edgeId = this.graphManager.getEdgeByNodes(from, to).id;
                 this.graphManager.changeEdgeWeight(edgeId, weight);
             }
         }
