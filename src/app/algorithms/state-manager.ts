@@ -1,5 +1,5 @@
 import {AlgorithmBase, AlgorithmState} from './algorithm-base';
-import {ReplaySubject, Observable} from 'rxjs';
+import {ReplaySubject, Observable, BehaviorSubject} from 'rxjs';
 import {Graph} from '../models/graph.model';
 import {GraphManager} from '../managers/graph.manager';
 import {Optional} from '@angular/core';
@@ -15,6 +15,7 @@ export interface StateManagerObject {
 }
 
 export class AlgorithmStateManager {
+
     /**
      * Combined graph and algorithm options state for better manipulation.
      */
@@ -26,6 +27,10 @@ export class AlgorithmStateManager {
      */
     private _graph: Graph;
     private _rootId: string;
+
+    private _isPlaying$ = new BehaviorSubject<boolean>(false);
+
+    private _clock$ = Observable.interval(1000);
 
     /**
      * Concrete algorithm which is currently managed.
@@ -117,6 +122,14 @@ export class AlgorithmStateManager {
         }
     }
 
+    public play(): void {
+        this._isPlaying$.next(true);
+    }
+
+    public pause(): void {
+        this._isPlaying$.next(false);
+    }
+
     /**
      * Command to directly change state to a given index.
      * @param stateIndex
@@ -147,8 +160,8 @@ export class AlgorithmStateManager {
                     state,
                     index: this._currentStateIndex,
                     total: this._getTotalNumberOfStates(),
-                    isLast: this._currentStateIndex == this._algorithm.states.length - 1,
-                    isFirst: this._currentStateIndex == 0,
+                    isLast: this._isLast(),
+                    isFirst: this._isFirst(),
                 });
             }
         }
@@ -180,6 +193,15 @@ export class AlgorithmStateManager {
                 this._emitState();
             }
         });
+
+        this._clock$
+            .withLatestFrom(this._isPlaying$, (interval, isPlay) => isPlay)
+            .filter(isPlay => isPlay)
+            .subscribe(() => {
+                if (!this._isLast()) {
+                    this.goToNext();
+                }
+            });
     }
 
 }

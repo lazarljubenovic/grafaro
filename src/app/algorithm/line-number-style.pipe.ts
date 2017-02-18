@@ -10,7 +10,7 @@ export class LineNumberStylePipe implements PipeTransform {
             totalLineNumbers = 0;
         }
         lineNumber--;
-        const height = box.getBoundingClientRect().height;
+        const height = box.scrollHeight;
         const notch = height / totalLineNumbers;
         const yCenter = notch * lineNumber;
         return `${yCenter}px`;

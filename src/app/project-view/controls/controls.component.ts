@@ -29,6 +29,14 @@ export class ControlsComponent implements OnInit {
         this._stateManager.goToLast();
     }
 
+    public play(): void {
+        this._stateManager.play();
+    }
+
+    public pause(): void {
+        this._stateManager.pause();
+    }
+
     constructor(private _stateManager: AlgorithmStateManager,
                 private _stateSocket: StateSocketService,
                 private _masterSocket: MasterSocketService) {
