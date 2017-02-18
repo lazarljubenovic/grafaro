@@ -7,6 +7,8 @@ import {VisNetworkComponent} from '@lazarljubenovic/vis-ng/core/vis-network/vis-
 import {ToolbarService} from '../project-view/toolbar/toolbar.service';
 import {AlgorithmStateManager} from '../algorithms/state-manager';
 import {getPointAtRatio} from '../utils/get-point-at-ratio';
+import {getLineAngle} from '../utils/line-angle';
+import {movePoint} from '../utils/move-point';
 
 @Component({
     selector: 'grf-graph',
@@ -143,7 +145,7 @@ export class GraphComponent implements OnInit {
                             const getAt = getPointAtRatio.bind(null, x1, y1, x2, y2);
 
                             const ratio = .25;
-                            let pos: {x: number, y: number};
+                            let pos: {x: number, y: number, d1: number, d2: number};
                             if (annotation.side == 'from') {
                                 pos = getAt(ratio);
                             } else if (annotation.side == 'to') {
@@ -152,7 +154,22 @@ export class GraphComponent implements OnInit {
                                 throw new Error(`Edge annotation's side cannot be ` +
                                     `${annotation.side}; it must be 'from' or 'to'`);
                             }
-                            const {x, y} = pos;
+                            let {x, y, d1, d2} = pos;
+
+                            const edgesData: {[key: string]: any} = network.body.data.edges._data;
+                            let isCurved: boolean = false;
+
+                            if (edgesData[edge.id]) {
+                                isCurved = !!edgesData[edge.id].smooth;
+                            }
+
+                            // TODO Improve this ._.
+                            if (isCurved) {
+                                const phi = getLineAngle(x1, y1, x, y) + Math.PI;
+                                const newPos = movePoint(x, y, d1 / 3, phi);
+                                x = newPos.x;
+                                y = newPos.y;
+                            }
 
                             ctx.font = annotation.font;
                             ctx.textBaseline = 'center';

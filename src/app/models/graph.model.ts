@@ -137,6 +137,10 @@ export class Graph {
         return this._edges.find(edge => edge.from == from && edge.to == to) != null;
     }
 
+    public hasOppositeEdge(from: NodeId, to: NodeId): boolean {
+        return this._edges.find(edge => edge.from == to && edge.to == from) != null;
+    }
+
     public hasEdgeId(edgeId: EdgeId): boolean {
         return this._edges.find(edge => edge.id == edgeId) != null;
     }
