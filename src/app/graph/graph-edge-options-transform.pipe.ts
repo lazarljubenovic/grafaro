@@ -19,6 +19,9 @@ export class GraphEdgeOptionsTransformPipe implements PipeTransform {
             to: edge.to,
             label: edge.label,
             arrows: 'to',
+            color: {
+                inherit: false,
+            }
         };
         if (allEdges != null && existsInverseOf(edge.from, edge.to, allEdges)) {
             options.smooth = {
