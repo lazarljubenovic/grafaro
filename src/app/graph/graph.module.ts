@@ -6,7 +6,10 @@ import {GraphNodeOptionsTransformPipe} from './graph-node-options-transform.pipe
 import {GraphEdgeOptionsTransformPipe} from './graph-edge-options-transform.pipe';
 import {ColorThemeService} from '../color-theme.service';
 import {AlgorithmStateManager} from '../algorithms/state-manager';
-import {AnnotationTextAndPosition} from '../algorithms/algorithm-base';
+import {
+    AnnotationDecoratorNodeRuleWithText,
+    AnnotationDecoratorEdgeRuleWithText
+} from '../algorithms/algorithm-base';
 
 export interface GrfGraphNodeAnnotationOptions {
     position: string; // 'n' | 'e' | 'w' | 's' | 'ne' | 'nw' | 'se' | 'sw';
@@ -37,7 +40,7 @@ export interface GrfGraphNodeOptions {
     };
     role: GrfRole;
     color: GrfColor;
-    annotations: AnnotationTextAndPosition[];
+    annotations: AnnotationDecoratorNodeRuleWithText[];
 }
 
 export interface GrfGraphEdgeOptions {
@@ -45,7 +48,7 @@ export interface GrfGraphEdgeOptions {
     label: string;
     from: string;
     to: string;
-    annotations: AnnotationTextAndPosition[];
+    annotations: AnnotationDecoratorEdgeRuleWithText[];
 }
 
 @NgModule({

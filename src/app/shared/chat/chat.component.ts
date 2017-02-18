@@ -9,9 +9,10 @@ import {
     ComponentFactory
 } from '@angular/core';
 import {ChatMessageComponent} from './chat-message/chat-message.component';
-import {ChatService, ChatMessageInfo} from './chat.service';
+import {ChatService} from './chat.service';
 import {Auth0Service} from '../../core/auth0.service';
 import {Profile} from '../../login-page/user.service';
+import {ChatMessageInfo} from './chat-message-info.interface';
 
 @Component({
     selector: 'grf-chat',

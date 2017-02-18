@@ -31,15 +31,23 @@ export function Color(param: ColorDecoratorParameter) {
 
 export type AnnotationDecoratorRuleFunction  = (state: AlgorithmState, label: string) => string;
 
-export interface AnnotationDecoratorRule {
+export interface AnnotationDecoratorNodeRule {
     position: {r: number, phi: number};
     style: string;
+    font: string;
+    ruleFunction: AnnotationDecoratorRuleFunction;
+}
+
+export interface AnnotationDecoratorEdgeRule {
+    side: 'to' | 'from';
+    style: string;
+    font: string;
     ruleFunction: AnnotationDecoratorRuleFunction;
 }
 
 export interface AnnotationDecoratorParameter {
-    nodes: AnnotationDecoratorRule[];
-    edges: AnnotationDecoratorRule[];
+    nodes: AnnotationDecoratorNodeRule[];
+    edges: AnnotationDecoratorEdgeRule[];
 }
 
 export function Annotations(param: AnnotationDecoratorParameter) {

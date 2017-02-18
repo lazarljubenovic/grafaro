@@ -6,6 +6,7 @@ import {GraphOptionsService} from '../graph-options.service';
 import {VisNetworkComponent} from '@lazarljubenovic/vis-ng/core/vis-network/vis-network.component';
 import {ToolbarService} from '../project-view/toolbar/toolbar.service';
 import {AlgorithmStateManager} from '../algorithms/state-manager';
+import {getPointAtRatio} from '../utils/get-point-at-ratio';
 
 @Component({
     selector: 'grf-graph',
@@ -115,6 +116,10 @@ export class GraphComponent implements OnInit {
                             const x = r * Math.cos(phi * 0.0174533);
                             const y = r * Math.sin(phi * 0.0174533);
 
+                            ctx.font = annotation.font;
+                            ctx.lineWidth = 2;
+                            ctx.strokeStyle = 'white';
+                            ctx.strokeText(annotation.text, x, y);
                             ctx.fillStyle = annotation.style;
                             ctx.fillText(annotation.text, x, y);
                         }
@@ -135,18 +140,26 @@ export class GraphComponent implements OnInit {
                             const {x: x1, y: y1} = nodePositions[edge.from];
                             const {x: x2, y: y2} = nodePositions[edge.to];
 
-                            const middleX = (x1 + x2) / 2;
-                            const middleY = (y1 + y2) / 2;
+                            const getAt = getPointAtRatio.bind(null, x1, y1, x2, y2);
 
-                            ctx.translate(middleX, middleY);
+                            const ratio = .25;
+                            let pos: {x: number, y: number};
+                            if (annotation.side == 'from') {
+                                pos = getAt(ratio);
+                            } else if (annotation.side == 'to') {
+                                pos = getAt(1 - ratio);
+                            } else {
+                                throw new Error(`Edge annotation's side cannot be ` +
+                                    `${annotation.side}; it must be 'from' or 'to'`);
+                            }
+                            const {x, y} = pos;
 
+                            ctx.font = annotation.font;
                             ctx.textBaseline = 'center';
                             ctx.textAlign = 'center';
-
-                            const {r, phi} = annotation.position;
-                            const x = r * Math.cos(phi * 0.0174533);
-                            const y = r * Math.sin(phi * 0.0174533);
-
+                            ctx.lineWidth = 2;
+                            ctx.strokeStyle = 'white';
+                            ctx.strokeText(annotation.text, x, y);
                             ctx.fillStyle = annotation.style;
                             ctx.fillText(annotation.text, x, y);
                         }

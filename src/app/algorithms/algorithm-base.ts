@@ -8,22 +8,12 @@ import {
     ColorDecoratorParameter,
     ColorDecoratorFunction,
     AnnotationDecoratorParameter,
-    AnnotationDecoratorRuleFunction
+    AnnotationDecoratorRuleFunction, AnnotationDecoratorNodeRule, AnnotationDecoratorEdgeRule
 } from './decorators';
 
 
-export interface AnnotationTextAndPosition {
-    text: string;
-
-    // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle
-    style: string;
-
-    position: {
-        r: number;
-        phi: number; // in degrees
-    };
-}
-
+export type AnnotationDecoratorNodeRuleWithText = {text: string} & AnnotationDecoratorNodeRule;
+export type AnnotationDecoratorEdgeRuleWithText = {text: string} & AnnotationDecoratorEdgeRule;
 
 export abstract class AlgorithmState {
 
@@ -133,41 +123,45 @@ export abstract class AlgorithmState {
         });
     }
 
-    public getAnnotationsForNodeLabel(nodeLabel: string): AnnotationTextAndPosition[] {
+    public getAnnotationsForNodeLabel(nodeLabel: string): AnnotationDecoratorNodeRuleWithText[] {
         const _annotationRules: AnnotationDecoratorParameter =
             (this.constructor as any)._annotationRules;
         if (_annotationRules == null) {
             return [];
         }
 
-        let annotationsTextsAndPositions: AnnotationTextAndPosition[] = [];
+        let annotationsTextsAndPositions: AnnotationDecoratorNodeRuleWithText[] = [];
         _annotationRules.nodes.forEach(_annotationRule => {
             const annotationRuleFn: AnnotationDecoratorRuleFunction = _annotationRule.ruleFunction;
             const text = annotationRuleFn(this, nodeLabel);
             annotationsTextsAndPositions.push({
                 position: _annotationRule.position,
                 text,
+                font: _annotationRule.font,
                 style: _annotationRule.style,
+                ruleFunction: _annotationRule.ruleFunction,
             });
         });
         return annotationsTextsAndPositions;
     }
 
-    public getAnnotationsForEdgeLabel(edgeLabel: string): AnnotationTextAndPosition[] {
+    public getAnnotationsForEdgeLabel(edgeLabel: string): AnnotationDecoratorEdgeRuleWithText[] {
         const _annotationRules: AnnotationDecoratorParameter =
             (this.constructor as any)._annotationRules;
         if (_annotationRules == null) {
             return [];
         }
 
-        let annotationsTextsAndPositions: AnnotationTextAndPosition[] = [];
+        let annotationsTextsAndPositions: AnnotationDecoratorEdgeRuleWithText[] = [];
         _annotationRules.edges.forEach(_annotationRule => {
             const annotationRuleFn: AnnotationDecoratorRuleFunction = _annotationRule.ruleFunction;
             const text = annotationRuleFn(this, edgeLabel);
             annotationsTextsAndPositions.push({
-                position: _annotationRule.position,
+                side: _annotationRule.side,
                 text,
+                font: _annotationRule.font,
                 style: _annotationRule.style,
+                ruleFunction: _annotationRule.ruleFunction,
             });
         });
         return annotationsTextsAndPositions;
@@ -239,8 +233,7 @@ export abstract class AlgorithmBase {
         const nodes: GrfGraphNodeOptions[] = state.graphJson.nodes.map(node => {
             const color: GrfColor = state.getColorForNodeLabel(node.label);
             const role: GrfRole = GrfRole.DEFAULT;
-            const annotations: AnnotationTextAndPosition[] =
-                state.getAnnotationsForNodeLabel(node.label);
+            const annotations = state.getAnnotationsForNodeLabel(node.label);
 
             return {
                 id: node.id,
@@ -254,8 +247,7 @@ export abstract class AlgorithmBase {
         });
 
         const edges: GrfGraphEdgeOptions[] = state.graphJson.edges.map(edge => {
-            const annotations: AnnotationTextAndPosition[] =
-                state.getAnnotationsForEdgeLabel(edge.label);
+            const annotations = state.getAnnotationsForEdgeLabel(edge.label);
 
             return {
                 id: edge.id,

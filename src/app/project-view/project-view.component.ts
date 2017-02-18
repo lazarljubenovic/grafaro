@@ -17,8 +17,8 @@ import {MasterSocketService} from './master-socket.service';
 import {GraphTemplateService} from './graph-template.service';
 import {Observable} from 'rxjs';
 import {GraphPath} from '../user-interface/file-list/file-list.service';
-import {GraphFolder} from '../user-interface/file-list/file-list.component';
 import {Auth0Service} from '../core/auth0.service';
+import {GraphFolder} from '../user-interface/file-list/file-list.interface';
 
 @Component({
     selector: 'grf-user-interface',
@@ -78,8 +78,7 @@ export class ProjectViewComponent implements OnInit {
                 private _graphManager: GraphManager,
                 private _masterSocket: MasterSocketService,
                 private _router: Router,
-                private _auth0: Auth0Service
-    ) {
+                private _auth0: Auth0Service) {
         this.popupRenameComponentFactory =
             componentFactoryResolver.resolveComponentFactory(PopupRenameComponent);
 

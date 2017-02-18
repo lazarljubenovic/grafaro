@@ -15,13 +15,15 @@ import {getLabelIfDefined} from './utils';
 @Annotations({
     nodes: [
         {
-            position: {r: 24, phi: -45},
-            style: 'red',
+            position: {r: 20, phi: -90},
+            style: '#222',
+            font: '10pt Roboto',
             ruleFunction: NodeWeightAnnotationFunction,
         },
         {
-            position: {r: 24, phi: 45},
-            style: 'blue',
+            position: {r: 18, phi: 0},
+            style: '#70326a',
+            font: '9pt Roboto',
             ruleFunction: (state: State, nodeLabel: string) => {
                 if (!state.distance) {
                     return '';
@@ -38,8 +40,9 @@ import {getLabelIfDefined} from './utils';
     ],
     edges: [
         {
-            position: {r: 24, phi: -45},
-            style: 'green',
+            side: 'from',
+            style: '#777',
+            font: 'italic 10pt Roboto',
             ruleFunction: EdgeWeightAnnotationFunction,
         },
     ],

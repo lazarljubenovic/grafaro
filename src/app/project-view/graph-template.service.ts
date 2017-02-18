@@ -3,7 +3,7 @@ import {GrafaroHttpService} from '../shared/grafaro-http.service';
 import {Http} from '@angular/http';
 import {Observable} from 'rxjs';
 import {GraphJson} from '../models/graph.model';
-import {GraphFolder} from '../user-interface/file-list/file-list.component';
+import {GraphFolder} from '../user-interface/file-list/file-list.interface';
 
 @Injectable()
 export class GraphTemplateService extends GrafaroHttpService {

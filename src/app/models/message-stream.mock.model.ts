@@ -5,7 +5,7 @@ import {RoomInfoMessage} from '../project-browser/room-info.interface';
 import {JoinMessageInfo} from '../project-browser/join.service';
 import {GraphMessage} from '../project-view/graph-socket.service';
 import {MasterMessage} from '../project-view/master-socket.service';
-import {ChatMessageInfo} from '../shared/chat/chat.service';
+import {ChatMessageInfo} from '../shared/chat/chat-message-info.interface';
 
 const dummyMessages: ChatMessageInfo[] = [
     {
