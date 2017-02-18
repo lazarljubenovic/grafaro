@@ -86,7 +86,7 @@ wss.on('connection', ws => {
                     console.log('Join sector');
                     roomId = (<JoinMessage>messageObj.payload).roomId;
                     messageRooms.addUserToRoom(roomId, ws);
-                    messageRooms.sendMasterMessage(ws, roomId);
+                    // messageRooms.sendMasterMessage(ws, roomId);
                     let lobbyIndex = lobby.findIndex(user => ws == user);
                     lobby.splice(lobbyIndex, 1);
                     lobby.forEach(user => messageRooms.sendRoomsInfo(user));
@@ -125,6 +125,10 @@ wss.on('connection', ws => {
                 break;
             case 'chat':
                 messageRooms.sendMessageToRoom(roomId, ws, messageObj);
+                break;
+            case 'master':
+                // todo check if there is a roomId
+                messageRooms.sendMasterMessage(ws, roomId);
                 break;
             default:
                 console.log('TODO: New type?', messageObj.type);

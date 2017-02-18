@@ -3,7 +3,6 @@ import {ReplaySubject} from 'rxjs';
 import {Message} from '../message';
 import {RoomInfoMessage} from '../project-browser/room-info.interface';
 import {GraphMessage} from '../project-view/graph-socket.service';
-import {MasterMessage} from '../project-view/master-socket.service';
 
 const dummyRooms: RoomInfoMessage = {
     info: [
@@ -22,9 +21,6 @@ const dummyRooms: RoomInfoMessage = {
             userCount: 0
         }
     ]
-};
-const dummMasterMessage: MasterMessage = {
-    isMaster: true,
 };
 export const dummyGraph: GraphMessage = {
     graph: {
@@ -119,14 +115,6 @@ export class MockMessageStream extends AbstractMessageStream {
         });
 
         return this._message$;
-    }
-
-    public returnJoin() {
-        (<ReplaySubject<Message<any>>>this._message$).next({
-            roomId: '123456',
-            payload: dummMasterMessage,
-            type: 'master'
-        });
     }
 
     public createGraph() {

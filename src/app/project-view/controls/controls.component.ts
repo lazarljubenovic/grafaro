@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AlgorithmStateManager} from '../../algorithms/state-manager';
 import {StateSocketService} from './state-socket.service';
-import {MasterSocketService} from '../master-socket.service';
+import {MasterStorageService} from '../../shared/master-service/master-storage.service';
 
 @Component({
     selector: 'grf-controls',
@@ -39,7 +39,7 @@ export class ControlsComponent implements OnInit {
 
     constructor(private _stateManager: AlgorithmStateManager,
                 private _stateSocket: StateSocketService,
-                private _masterSocket: MasterSocketService) {
+                private _masterStorage: MasterStorageService) {
     }
 
     ngOnInit() {
@@ -50,7 +50,7 @@ export class ControlsComponent implements OnInit {
             this._stateSocket.send(this.current);
         });
 
-        this._masterSocket.masterSocket$
+        this._masterStorage.masterMessages$
             .subscribe(masterMessage => this._stateSocket.canSend = masterMessage.isMaster);
 
         this._stateSocket.stateSocket$

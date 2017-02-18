@@ -23,12 +23,12 @@ import {ToolbarService} from './toolbar/toolbar.service';
 import {GraphOptionsService} from '../graph-options.service';
 import {GraphManager} from '../managers/graph.manager';
 import {AlgorithmManager} from '../managers/algorithm.manager';
-import {MasterSocketService} from './master-socket.service';
 import {AlgorithmPickerModule} from './algorithm-picker/algorithm-picker.module';
 import {ControlsModule} from './controls/controls.module';
 import {GraphTemplateService} from './graph-template.service';
 import {Auth0Service} from '../core/auth0.service';
 import {JoinStorageService} from '../shared/join-service/join-storage.service';
+import {MasterStorageService} from '../shared/master-service/master-storage.service';
 
 @NgModule({
     imports: [
@@ -57,13 +57,13 @@ import {JoinStorageService} from '../shared/join-service/join-storage.service';
     ],
     providers: [
         WebSocketService,
+        MasterStorageService,
         GraphSocketService,
         RoomEditService,
         ToolbarService,
         GraphManager,
         GraphOptionsService,
         AlgorithmManager,
-        MasterSocketService,
         GraphTemplateService,
         Auth0Service,
         JoinStorageService,

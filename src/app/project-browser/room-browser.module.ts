@@ -9,8 +9,8 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {UtilPipesModule} from '../util-pipes/util-pipes.module';
 import {RoomInfoSocketService} from './room-info.service';
 import {WebSocketService} from '../websocket.service';
-import {MasterSocketService} from '../project-view/master-socket.service';
 import {JoinStorageService} from '../shared/join-service/join-storage.service';
+import {MasterStorageService} from '../shared/master-service/master-storage.service';
 
 @NgModule({
     imports: [
@@ -29,8 +29,8 @@ import {JoinStorageService} from '../shared/join-service/join-storage.service';
     providers: [
         WebSocketService,
         JoinStorageService,
+        MasterStorageService,
         RoomInfoSocketService,
-        MasterSocketService,
     ],
 })
 export class RoomBrowserModule {

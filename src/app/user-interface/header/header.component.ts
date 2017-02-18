@@ -1,8 +1,8 @@
 import {Component, OnInit, Input, ViewChild, ElementRef} from '@angular/core';
 import {RoomEditService} from '../../project-view/room-edit.service';
 import {Auth0Service} from '../../core/auth0.service';
-import {MasterSocketService} from '../../project-view/master-socket.service';
 import {Observable} from 'rxjs';
+import {MasterStorageService} from '../../shared/master-service/master-storage.service';
 
 @Component({
     selector: 'grf-header',
@@ -110,7 +110,7 @@ export class HeaderComponent implements OnInit {
     }
 
     constructor(private roomEditService: RoomEditService,
-                private _masterSocket: MasterSocketService,
+                private _masterSocket: MasterStorageService,
                 private auth0: Auth0Service) {
     }
 
@@ -131,7 +131,9 @@ export class HeaderComponent implements OnInit {
             this.newName = this.displayName;
         });
 
-        this.isMaster$ = this._masterSocket.masterSocket$
-            .map(message => message.isMaster);
+        this.isMaster$ = this._masterSocket.masterMessages$
+            .map(message => {
+                return message.isMaster;
+            });
     }
 }

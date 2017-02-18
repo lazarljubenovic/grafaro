@@ -3,7 +3,7 @@ import {FormGroup, FormBuilder} from '@angular/forms';
 import {GraphManager} from '../../managers/graph.manager';
 import {AlgorithmManager} from '../../managers/algorithm.manager';
 import {AlgorithmSocketService, AlgorithmMessage} from '../algorithm-socket.service';
-import {MasterSocketService} from '../master-socket.service';
+import {MasterStorageService} from '../../shared/master-service/master-storage.service';
 
 export interface FormOptions {
     options: {
@@ -32,7 +32,7 @@ export class AlgorithmPickerComponent implements OnInit {
                 private _graphManager: GraphManager,
                 private _algorithmManager: AlgorithmManager,
                 private _algorithmSocket: AlgorithmSocketService,
-                private _masterSocket: MasterSocketService) {
+                private _masterStorage: MasterStorageService) {
     }
 
     ngOnInit() {
@@ -49,7 +49,7 @@ export class AlgorithmPickerComponent implements OnInit {
             this.form.patchValue(message.info);
         });
 
-        this._masterSocket.masterSocket$
+        this._masterStorage.masterMessages$
             .subscribe(master => {
                 this._algorithmSocket.canSend = master.isMaster;
             });

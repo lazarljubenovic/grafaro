@@ -13,13 +13,13 @@ import {ToastService} from '../toast/toast.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {GraphSocketService} from './graph-socket.service';
 import {GraphManager} from '../managers/graph.manager';
-import {MasterSocketService} from './master-socket.service';
 import {GraphTemplateService} from './graph-template.service';
 import {Observable, Subscription} from 'rxjs';
 import {GraphPath} from '../user-interface/file-list/file-list.service';
 import {Auth0Service} from '../core/auth0.service';
 import {GraphFolder} from '../user-interface/file-list/file-list.interface';
 import {JoinStorageService} from '../shared/join-service/join-storage.service';
+import {MasterStorageService} from '../shared/master-service/master-storage.service';
 
 @Component({
     selector: 'grf-user-interface',
@@ -79,7 +79,7 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
                 private _joinStorage: JoinStorageService,
                 private graphSocketService: GraphSocketService,
                 private _graphManager: GraphManager,
-                private _masterSocket: MasterSocketService,
+                private _masterStorage: MasterStorageService,
                 private _router: Router,
                 private _auth0: Auth0Service) {
         this.popupRenameComponentFactory =
@@ -104,6 +104,7 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
                     console.error(joinMessage.error);
                 } else {
                     this._joinStorage.setRoom(joinMessage.roomId);
+                    this._masterStorage.requestMasterMessage();
                 }
             });
 
@@ -111,7 +112,7 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
             this._graphManager.graphFromSocket(graphMessage.graph);
         });
 
-        this._masterSocket.masterSocket$
+        this._masterStorage.masterMessages$
             .subscribe(masterMessage => {
                 this.graphSocketService.canSend = masterMessage.isMaster;
             });

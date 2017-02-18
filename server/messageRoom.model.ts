@@ -80,11 +80,13 @@ export class MessageRoom {
     }
 
     public sendMessageToRoom(roomId: string, user: ws, message: Message<any>): void {
+        console.log(`[${(new Date()).toLocaleTimeString()}]: ${message.type}`);
         this.rooms.get(roomId).users
             .forEach(client => client != user && client.send(JSON.stringify(message)));
     }
 
     public returnMessage(user: ws, message: Message<any>): void {
+        console.log(`[${(new Date()).toLocaleTimeString()}]: ${message.type}`);
         user.send(JSON.stringify(message));
     }
 
@@ -132,6 +134,7 @@ export class MessageRoom {
             type: 'roomInfo',
             roomId: null
         };
+        console.log(`[${(new Date()).toLocaleTimeString()}]: ${roomInfoMessage.type}`);
         user.send(JSON.stringify(roomInfoMessage));
     }
 
