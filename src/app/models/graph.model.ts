@@ -146,6 +146,9 @@ export class Graph {
     }
 
     public addEdge(from: NodeId, to: NodeId, label: EdgeLabel, weight: number = 1): this {
+        if (this.hasEdge(from, to)) {
+            throw new Error(`Graph already has edge from ${from} to ${to}`);
+        }
         this._edges.push({
             id: this._edgeIdGenerator.getNext(),
             from,

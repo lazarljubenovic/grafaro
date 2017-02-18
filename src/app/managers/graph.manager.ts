@@ -200,7 +200,11 @@ export class GraphManager {
     }
 
     public linkNodes(nodeA: string, nodeB: string) {
-        this._graph.addEdge(nodeA, nodeB, this.suggestNewEdgeName());
+        try {
+            this._graph.addEdge(nodeA, nodeB, this.suggestNewEdgeName());
+        } catch (e) {
+            alert(e);
+        }
         this.emit();
     }
 
