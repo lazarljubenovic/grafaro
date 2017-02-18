@@ -26,6 +26,8 @@ export class GraphEdgeOptionsTransformPipe implements PipeTransform {
                 roundness: .3,
                 type: 'curvedCW',
             };
+        } else {
+            options.smooth = false;
         }
         return options;
     }
