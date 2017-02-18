@@ -9,16 +9,12 @@ import {MarkdownService} from './shared/markdown.service';
 import {EmojiService} from './shared/emoji.service';
 import {GraphOptionsService} from './graph-options.service';
 import {RoomBrowserModule} from './project-browser/room-browser.module';
-import {RouterModule} from '@angular/router';
-import {ProjectViewComponent} from './project-view/project-view.component';
-import {RoomBrowserComponent} from './project-browser/room-browser.component';
 import {FourOhFourModule} from './four-oh-four/four-oh-four.module';
-import {FourOhFourComponent} from './four-oh-four/four-oh-four.component';
 import {AuthHttp, AuthConfig} from 'angular2-jwt';
 import {LoginPageModule} from './login-page/login-page.module';
-import {LoginPageComponent} from './login-page/login-page.component';
 import {NotifyService} from './algorithm/notify.service';
 import {GraphManager} from './managers/graph.manager';
+import {RoutesModule} from './routes/routes.module';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     return new AuthHttp(new AuthConfig({}), http, options);
@@ -37,24 +33,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
         RoomBrowserModule,
         FourOhFourModule,
         LoginPageModule,
-        RouterModule.forRoot([
-            {
-                path: '',
-                component: RoomBrowserComponent,
-            },
-            {
-                path: 'login',
-                component: LoginPageComponent,
-            },
-            {
-                path: 'room/:id',
-                component: ProjectViewComponent,
-            },
-            {
-                path: '**',
-                component: FourOhFourComponent,
-            },
-        ]),
+        RoutesModule,
     ],
     providers: [
         MarkdownService,
