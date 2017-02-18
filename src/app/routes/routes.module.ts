@@ -6,6 +6,7 @@ import {RoomBrowserComponent} from '../project-browser/room-browser.component';
 import {RouterModule, Routes} from '@angular/router';
 import {AuthGuardService} from './auth-guard.service';
 import {Auth0Service} from '../core/auth0.service';
+import {MockAuthGuardService} from './mock-auth-guard.service';
 
 const routes: Routes = [
     {
@@ -34,7 +35,11 @@ const routes: Routes = [
     ],
     providers: [
         Auth0Service,
-        AuthGuardService,
+        {
+            provide: AuthGuardService,
+            // todo change this for production! add factory!
+            useClass: MockAuthGuardService,
+        }
     ],
     exports: [
         RouterModule,
