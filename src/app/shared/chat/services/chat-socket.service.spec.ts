@@ -1,16 +1,16 @@
 /* tslint:disable:no-unused-variable */
 import {TestBed, inject} from '@angular/core/testing';
-import {ChatService} from './chat.service';
+import {ChatSocketService} from './chat-socket.service';
 
 // TODO
-xdescribe('Service: ChatService', () => {
+xdescribe('Service: ChatSocketService', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
-            providers: [ChatService]
+            providers: [ChatSocketService]
         });
     });
 
-    it('should ...', inject([ChatService], (service: ChatService) => {
+    it('should ...', inject([ChatSocketService], (service: ChatSocketService) => {
         expect(service).toBeTruthy();
     }));
 });

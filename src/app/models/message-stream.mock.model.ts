@@ -5,35 +5,7 @@ import {RoomInfoMessage} from '../project-browser/room-info.interface';
 import {JoinMessageInfo} from '../project-browser/join.service';
 import {GraphMessage} from '../project-view/graph-socket.service';
 import {MasterMessage} from '../project-view/master-socket.service';
-import {ChatMessageInfo} from '../shared/chat/chat-message-info.interface';
 
-const dummyMessages: ChatMessageInfo[] = [
-    {
-        timeStamp: new Date(),
-        senderName: `Lazar Ljubenović`,
-        message: `Hello World!`,
-    },
-    {
-        timeStamp: new Date(),
-        senderName: `Mihajlo Ilijić`,
-        message: `Hello World! **bold** _italic_ ~~strike~~`,
-    },
-    {
-        timeStamp: new Date(),
-        senderName: `Lazar Ljubenović`,
-        message: `Hello World! [link](www.google.com)`,
-    },
-    {
-        timeStamp: new Date(),
-        senderName: `Mihajlo Ilijić`,
-        message: `Hello World! :) :* ;) :(`,
-    },
-    {
-        timeStamp: new Date(),
-        senderName: `Lazar Ljubenović`,
-        message: `Hello World! :joy: :heart: :sob: :+1:`,
-    },
-];
 const dummyRooms: RoomInfoMessage = {
     info: [
         {
@@ -152,15 +124,6 @@ export class MockMessageStream extends AbstractMessageStream {
         });
 
         return this._message$;
-    }
-
-    public createChatMessages() {
-        dummyMessages.forEach(message =>
-            (<ReplaySubject<Message<any>>>this._message$).next({
-                roomId: '123456',
-                type: 'chat',
-                payload: message
-            }));
     }
 
     public returnJoin() {

@@ -15,6 +15,8 @@ export class WebSocketService {
 
     private messageBuffer: Message<any>[] = [];
 
+    public socketStatus = new ReplaySubject<boolean>(1); // true if WebSocket.OPEN
+
     public constructor() {
         this.messages = new ReplaySubject<Message<any>>(5);
     }
@@ -31,7 +33,7 @@ export class WebSocketService {
         } else if (this.ws.readyState == WebSocket.OPEN) {
             this.ws.send(JSON.stringify(messageToSend));
         } else if (type == 'join') {
-            (<MockMessageStream>this.stream).createChatMessages();
+            // (<MockMessageStream>this.stream).createChatMessages();
             (<MockMessageStream>this.stream).returnJoin();
             (<MockMessageStream>this.stream).createGraph();
         }
@@ -41,6 +43,7 @@ export class WebSocketService {
         this.ws = new WebSocket(url);
         this.ws.onopen = (event) => {
             console.log('Socket open');
+            this.socketStatus.next(true);
             this.messageBuffer.forEach(message => {
                 console.log('sending', message);
                 this.ws.send(JSON.stringify(message));
@@ -51,6 +54,7 @@ export class WebSocketService {
         };
         this.ws.onclose = (event) => {
             console.log('Socket closed');
+            this.socketStatus.next(false);
             this.messageBuffer.forEach(message => {
                 this.send(message, message.type);
             });
