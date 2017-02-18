@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
-import {Graph, GraphJson} from '../models/graph.model';
+import {Graph, GraphJson, GraphEdge} from '../models/graph.model';
 import {ClickPosition} from '../project-view/toolbar/toolbar.component';
 import {ToolbarService} from '../project-view/toolbar/toolbar.service';
 import {suggestNextName} from '../utils/name-suggester';
@@ -120,6 +120,10 @@ export class GraphManager {
         return this._graph.getEdgeLabel(edgeId);
     }
 
+    public getEdgeByNodes(from: string, to: string): GraphEdge {
+        return this._graph.getEdgeByNodes(from, to);
+    }
+
     private existsNodeWithLabel(nodeLabel: string): boolean {
         const nodeId: string = this._graph.getNodeId(nodeLabel);
         return this._graph.hasNodeId(nodeId);
@@ -199,9 +203,9 @@ export class GraphManager {
         this.emit();
     }
 
-    public linkNodes(nodeA: string, nodeB: string) {
+    public linkNodes(nodeA: string, nodeB: string, weight: number = 1) {
         try {
-            this._graph.addEdge(nodeA, nodeB, this.suggestNewEdgeName());
+            this._graph.addEdge(nodeA, nodeB, this.suggestNewEdgeName(), weight);
         } catch (e) {
             alert(e);
         }

@@ -133,6 +133,14 @@ export class Graph {
         return this;
     }
 
+    public getEdge(edgeId: EdgeId): GraphEdge {
+        return this._edges.find(edge => edge.id == edgeId);
+    }
+
+    public getEdgeByNodes(from: NodeId, to: NodeId): GraphEdge {
+        return this._edges.find(edge => edge.from == from && edge.to == to);
+    }
+
     public hasEdge(from: NodeId, to: NodeId): boolean {
         return this._edges.find(edge => edge.from == from && edge.to == to) != null;
     }
@@ -258,10 +266,6 @@ export class Graph {
         });
 
         return matrix;
-    }
-
-    public getEdge(edgeId: EdgeId): GraphEdge {
-        return this._edges.find(edge => edge.id == edgeId);
     }
 
 }

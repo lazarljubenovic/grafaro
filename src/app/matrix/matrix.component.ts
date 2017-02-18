@@ -8,11 +8,21 @@ import {GraphManager} from '../managers/graph.manager';
 })
 export class MatrixComponent implements OnInit {
 
-    public data: number[][] = [[0, 1], [1, 0]];
+    public data: number[][] = [[]];
 
     public labels: string[] = [];
 
     public highlightedIndexes: number[] = [-1, -1];
+
+    public isEditWeightMode: boolean = false;
+
+    public trackByIndex(index: number, item: any): number {
+        return index;
+    }
+
+    public toggleEditWeightMode() {
+        this.isEditWeightMode = !this.isEditWeightMode;
+    }
 
     public highlight(row: number, column: number): void {
         this.highlightedIndexes = [row, column];
@@ -22,11 +32,11 @@ export class MatrixComponent implements OnInit {
         this.graphManager.addNodeOnRandomPlace();
     }
 
-    public removeNode(): void {
-        this.graphManager.removeNode(this.graphManager.getNodeId(this.labels.pop()));
+    public log() {
+        console.log('tick');
     }
 
-    public connectNode(row: number, column: number) {
+    public toggleEdge(row: number, column: number): void {
         const nodeA = this.graphManager.getNodeId(this.labels[row]);
         const nodeB = this.graphManager.getNodeId(this.labels[column]);
 
@@ -35,6 +45,30 @@ export class MatrixComponent implements OnInit {
         } else {
             this.graphManager.unlinkNodes(nodeA, nodeB);
         }
+    }
+
+    public setWeight(row: number, column: number, weight: number): void {
+        const nodeA = this.graphManager.getNodeId(this.labels[row]);
+        const nodeB = this.graphManager.getNodeId(this.labels[column]);
+
+        const previousValue = this.data[row][column];
+
+        if (previousValue == 0) {
+            if (weight == 0 || weight == null) {
+                return;
+            } else {
+                this.graphManager.linkNodes(nodeA, nodeB, weight);
+            }
+        } else {
+            if (weight == 0 || weight == null) {
+                this.graphManager.unlinkNodes(nodeA, nodeB);
+            } else {
+                const edgeId = this.graphManager.getEdgeByNodes(nodeA, nodeB).id;
+                this.graphManager.changeEdgeWeight(edgeId, weight);
+            }
+        }
+
+
     }
 
     constructor(private graphManager: GraphManager) {
