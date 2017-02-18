@@ -1,23 +1,24 @@
-import {Component, OnInit} from '@angular/core';
-import {Observable} from 'rxjs';
-import {JoinSocketService} from './join.service';
+import {Component, OnInit, OnDestroy} from '@angular/core';
+import {Observable, Subscription} from 'rxjs';
 import {RoomInfoSocketService} from './room-info.service';
 import {RoomInfo} from './room-info.interface';
 import {Router} from '@angular/router';
+import {JoinStorageService} from '../shared/join-service/join-storage.service';
 
 @Component({
     selector: 'grf-room-browser',
     templateUrl: 'room-browser.component.html',
     styleUrls: ['room-browser.component.scss']
 })
-export class RoomBrowserComponent implements OnInit {
+export class RoomBrowserComponent implements OnInit, OnDestroy {
 
+    private _joinSubscription: Subscription;
     /**
      * Stream of room info.
      */
     public roomsInfo$: Observable<RoomInfo[]>;
 
-    constructor(private _joinService: JoinSocketService,
+    constructor(private _joinStorage: JoinStorageService,
                 private _roomInfoSocket: RoomInfoSocketService,
                 private _router: Router) {
     }
@@ -26,18 +27,20 @@ export class RoomBrowserComponent implements OnInit {
      * Subscribe to Join and RoomInfo sockets.
      */
     ngOnInit() {
-        // This is happening only when new joinMessage is received
-        this._joinService
-            .joinSocket$
+        // Subscribe to incoming Join messages
+        this._joinSubscription = this._joinStorage
+            .joinMessages$
             .subscribe(joinMessage => {
                 // On error, change route to 404
                 if (joinMessage.error != '') {
                     this._router.navigate(['/error']);
+                    this._joinStorage.setRoom('');
                     console.log('TODO: better error handling');
                     console.error(joinMessage.error);
                 } else {
+                    // todo remove this maybe? it's already happening in ProjectViewComponent
                     const roomId = joinMessage.roomId;
-                    this._joinService.setRoom(roomId);
+                    this._joinStorage.setRoom(roomId);
                     this._router.navigate(['/room', roomId]);
                 }
             });
@@ -48,11 +51,15 @@ export class RoomBrowserComponent implements OnInit {
             });
     }
 
+    ngOnDestroy(): void {
+        this._joinSubscription.unsubscribe();
+    }
+
     /**
      * Send server request for new room creation.
      */
     public createNewRoom(): void {
-        this._joinService.newRoom();
+        this._joinStorage.newRoom();
     }
 
 }

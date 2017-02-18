@@ -4,28 +4,31 @@ import {
     ComponentFactoryResolver,
     ViewChild,
     ViewContainerRef,
-    ComponentFactory
+    ComponentFactory,
+    OnDestroy
 } from '@angular/core';
 import {GraphOptionsService} from '../graph-options.service';
 import {PopupRenameComponent} from './popup-rename/popup-rename.component';
 import {ToastService} from '../toast/toast.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {JoinSocketService} from '../project-browser/join.service';
 import {GraphSocketService} from './graph-socket.service';
 import {GraphManager} from '../managers/graph.manager';
 import {MasterSocketService} from './master-socket.service';
 import {GraphTemplateService} from './graph-template.service';
-import {Observable} from 'rxjs';
+import {Observable, Subscription} from 'rxjs';
 import {GraphPath} from '../user-interface/file-list/file-list.service';
 import {Auth0Service} from '../core/auth0.service';
 import {GraphFolder} from '../user-interface/file-list/file-list.interface';
+import {JoinStorageService} from '../shared/join-service/join-storage.service';
 
 @Component({
     selector: 'grf-user-interface',
     templateUrl: 'project-view.component.html',
     styleUrls: ['project-view.component.scss'],
 })
-export class ProjectViewComponent implements OnInit {
+export class ProjectViewComponent implements OnInit, OnDestroy {
+    // todo rename this to RoomViewComponent
+    private _joinSubscription: Subscription;
 
     private _displayName: string;
 
@@ -73,7 +76,7 @@ export class ProjectViewComponent implements OnInit {
                 private toastService: ToastService,
                 private _graphTemplateService: GraphTemplateService,
                 private activeRoute: ActivatedRoute,
-                private _joinService: JoinSocketService,
+                private _joinStorage: JoinStorageService,
                 private graphSocketService: GraphSocketService,
                 private _graphManager: GraphManager,
                 private _masterSocket: MasterSocketService,
@@ -85,20 +88,24 @@ export class ProjectViewComponent implements OnInit {
     }
 
     ngOnInit() {
-        this._joinService.joinSocket$
+        // debugger;
+        // Send request to join the room.
+        const roomId = this.activeRoute.snapshot.params['id'];
+        this._joinStorage.joinRoom(roomId);
+
+        // Subscribe on incoming Join messages for post-join things
+        this._joinSubscription = this._joinStorage.joinMessages$
             .subscribe(joinMessage => {
                 // On error, change route to 404
                 if (joinMessage.error != '') {
                     this._router.navigate(['/error']);
+                    this._joinStorage.setRoom('');
                     console.log('TODO: better error handling');
                     console.error(joinMessage.error);
                 } else {
-                    this._joinService.setRoom(joinMessage.roomId);
+                    this._joinStorage.setRoom(joinMessage.roomId);
                 }
             });
-
-        const roomId = this.activeRoute.snapshot.params['id'];
-        this._joinService.joinRoom(roomId);
 
         this.graphSocketService.graphSocket$.subscribe(graphMessage => {
             this._graphManager.graphFromSocket(graphMessage.graph);
@@ -127,6 +134,12 @@ export class ProjectViewComponent implements OnInit {
         this._auth0.user$.subscribe(user => {
             this._displayName = user.displayName;
         });
+    }
+
+
+    ngOnDestroy(): void {
+        // todo add room leave message here
+        this._joinSubscription.unsubscribe();
     }
 
 }

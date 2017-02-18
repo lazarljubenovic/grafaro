@@ -28,6 +28,7 @@ import {AlgorithmPickerModule} from './algorithm-picker/algorithm-picker.module'
 import {ControlsModule} from './controls/controls.module';
 import {GraphTemplateService} from './graph-template.service';
 import {Auth0Service} from '../core/auth0.service';
+import {JoinStorageService} from '../shared/join-service/join-storage.service';
 
 @NgModule({
     imports: [
@@ -65,6 +66,7 @@ import {Auth0Service} from '../core/auth0.service';
         MasterSocketService,
         GraphTemplateService,
         Auth0Service,
+        JoinStorageService,
     ],
     exports: [
         ProjectViewComponent,

@@ -7,10 +7,10 @@ import {ProjectCardComponent} from './room-card/room-card.component';
 import {JdenticonModule} from '../jdenticon/jdenticon.module';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {UtilPipesModule} from '../util-pipes/util-pipes.module';
-import {JoinSocketService} from './join.service';
 import {RoomInfoSocketService} from './room-info.service';
 import {WebSocketService} from '../websocket.service';
 import {MasterSocketService} from '../project-view/master-socket.service';
+import {JoinStorageService} from '../shared/join-service/join-storage.service';
 
 @NgModule({
     imports: [
@@ -27,9 +27,9 @@ import {MasterSocketService} from '../project-view/master-socket.service';
         ProjectCardComponent,
     ],
     providers: [
-        JoinSocketService,
-        RoomInfoSocketService,
         WebSocketService,
+        JoinStorageService,
+        RoomInfoSocketService,
         MasterSocketService,
     ],
 })

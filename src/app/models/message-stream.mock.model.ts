@@ -2,7 +2,6 @@ import {AbstractMessageStream} from './message-stream.abstract.model';
 import {ReplaySubject} from 'rxjs';
 import {Message} from '../message';
 import {RoomInfoMessage} from '../project-browser/room-info.interface';
-import {JoinMessageInfo} from '../project-browser/join.service';
 import {GraphMessage} from '../project-view/graph-socket.service';
 import {MasterMessage} from '../project-view/master-socket.service';
 
@@ -23,10 +22,6 @@ const dummyRooms: RoomInfoMessage = {
             userCount: 0
         }
     ]
-};
-const dummyJoinMessage: JoinMessageInfo = {
-    roomId: '123456',
-    error: '',
 };
 const dummMasterMessage: MasterMessage = {
     isMaster: true,
@@ -127,11 +122,6 @@ export class MockMessageStream extends AbstractMessageStream {
     }
 
     public returnJoin() {
-        (<ReplaySubject<Message<any>>>this._message$).next({
-            roomId: '123456',
-            payload: dummyJoinMessage,
-            type: 'join'
-        });
         (<ReplaySubject<Message<any>>>this._message$).next({
             roomId: '123456',
             payload: dummMasterMessage,

@@ -34,7 +34,7 @@ export class WebSocketService {
             this.ws.send(JSON.stringify(messageToSend));
         } else if (type == 'join') {
             // (<MockMessageStream>this.stream).createChatMessages();
-            (<MockMessageStream>this.stream).returnJoin();
+            // (<MockMessageStream>this.stream).returnJoin();
             (<MockMessageStream>this.stream).createGraph();
         }
     }
