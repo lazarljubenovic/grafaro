@@ -20,6 +20,7 @@ import {GraphFolder} from '../user-interface/file-list/file-list.interface';
 import {JoinStorageService} from '../shared/join-service/join-storage.service';
 import {MasterStorageService} from '../shared/master-service/master-storage.service';
 import {GraphStorageService} from './services/graph-socket/graph-storage.service';
+import {LeaveStorageService} from './services/leave-socket/leave-storage.service';
 
 @Component({
     selector: 'grf-user-interface',
@@ -81,7 +82,9 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
                 private _graphManager: GraphManager,
                 private _masterStorage: MasterStorageService,
                 private _router: Router,
-                private _auth0: Auth0Service) {
+                private _auth0: Auth0Service,
+                private _leaveStorage: LeaveStorageService
+    ) {
         this.popupRenameComponentFactory =
             componentFactoryResolver.resolveComponentFactory(PopupRenameComponent);
 
@@ -138,9 +141,9 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
 
 
     ngOnDestroy(): void {
-        // todo add room leave message here
         // todo properly unsubscribe from all subscriptions
         this._joinSubscription.unsubscribe();
+        this._leaveStorage.leave();
     }
 
 }

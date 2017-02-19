@@ -29,6 +29,7 @@ import {Auth0Service} from '../core/auth0.service';
 import {JoinStorageService} from '../shared/join-service/join-storage.service';
 import {MasterStorageService} from '../shared/master-service/master-storage.service';
 import {GraphStorageService} from './services/graph-socket/graph-storage.service';
+import {LeaveStorageService} from './services/leave-socket/leave-storage.service';
 
 @NgModule({
     imports: [
@@ -59,6 +60,7 @@ import {GraphStorageService} from './services/graph-socket/graph-storage.service
         WebSocketService,
         MasterStorageService,
         GraphStorageService,
+        LeaveStorageService,
         RoomEditService,
         ToolbarService,
         GraphManager,

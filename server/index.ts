@@ -132,6 +132,14 @@ wss.on('connection', ws => {
                 break;
             case 'graph-request':
                 messageRooms.sendGraphMessage(ws, roomId);
+                break;
+            case 'leave':
+                if (roomId) {
+                    messageRooms.removeUserFromRoom(roomId, ws);
+                    lobby.push(ws);
+                    lobby.forEach(user => messageRooms.sendRoomsInfo(user));
+                }
+                break;
             default:
                 console.log('TODO: New type?', messageObj.type);
                 break;
