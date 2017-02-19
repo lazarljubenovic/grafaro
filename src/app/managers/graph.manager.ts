@@ -71,36 +71,52 @@ export class GraphManager {
                 });
         });
 
-        _toolbarService.changeWeightNode$.subscribe(x => {
-            const label = this.getNodeLabel(x.node);
-            const newWeightString: string = prompt(`New weight for node ${label}?`);
-            let newWeight: number;
-            try {
-                newWeight = parseInt(newWeightString, 10);
-            } catch (e) {
-                alert(`Rename unsuccessful. Weight has to be a number.`);
-            }
-            try {
-                this.changeNodeWeight(x.node, newWeight);
-            } catch (e) {
-                alert(`Rename unsuccessful. ${e}`);
-            }
+        _toolbarService.changeWeightNode$.subscribe(action => {
+            const label = this.getNodeLabel(action.node);
+
+            const {left, top} = document.querySelector('vis-network').getBoundingClientRect();
+            const x = left + action.position.x;
+            const y = top + action.position.y;
+            const direction = 'up';
+
+            this._popupRename.prompt(x, y, direction, label, `New weight for`, `node`)
+                .then(newWeightString => {
+                    let newWeight: number;
+                    newWeight = parseInt(newWeightString, 10);
+                    if (Number.isNaN(newWeight)) {
+                        alert(`Rename unsuccessful. Weight has to be a number.`);
+                        return;
+                    }
+                    try {
+                        this.changeNodeWeight(action.node, newWeight);
+                    } catch (e) {
+                        alert(`Rename unsuccessful. ${e}`);
+                    }
+                });
         });
 
-        _toolbarService.changeWeightEdge$.subscribe(x => {
-            const label = this.getEdgeLabel(x.edge);
-            const newWeightString: string = prompt(`New weight for edge ${label}?`);
-            let newWeight: number;
-            try {
-                newWeight = parseInt(newWeightString, 10);
-            } catch (e) {
-                alert(`Rename unsuccessful. Weight has to be a number.`);
-            }
-            try {
-                this.changeEdgeWeight(x.edge, newWeight);
-            } catch (e) {
-                alert(`Rename unsuccessful. ${e}`);
-            }
+        _toolbarService.changeWeightEdge$.subscribe(action => {
+            const label = this.getEdgeLabel(action.edge);
+
+            const {left, top} = document.querySelector('vis-network').getBoundingClientRect();
+            const x = left + action.position.x;
+            const y = top + action.position.y;
+            const direction = 'up';
+
+            this._popupRename.prompt(x, y, direction, label, `New weight for`, `edge`)
+                .then(newWeightString => {
+                    let newWeight: number;
+                    newWeight = parseInt(newWeightString, 10);
+                    if (Number.isNaN(newWeight)) {
+                        alert(`Rename unsuccessful. Weight has to be a number.`);
+                        return;
+                    }
+                    try {
+                        this.changeEdgeWeight(action.edge, newWeight);
+                    } catch (e) {
+                        alert(`Rename unsuccessful. ${e}`);
+                    }
+                });
         });
 
         _toolbarService.removeEdge$.subscribe(x => {
