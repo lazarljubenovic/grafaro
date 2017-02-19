@@ -20,8 +20,8 @@ export class MatrixComponent implements OnInit {
         return index;
     }
 
-    public toggleEditWeightMode() {
-        this.isEditWeightMode = !this.isEditWeightMode;
+    public setEditWeightMode(val: boolean): void {
+        this.isEditWeightMode = val;
     }
 
     public highlight(row: number, column: number): void {

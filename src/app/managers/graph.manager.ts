@@ -4,6 +4,8 @@ import {Graph, GraphJson, GraphEdge} from '../models/graph.model';
 import {ClickPosition} from '../project-view/toolbar/toolbar.component';
 import {ToolbarService} from '../project-view/toolbar/toolbar.service';
 import {suggestNextName} from '../utils/name-suggester';
+import {PopupRenameService} from '../project-view/popup-rename/popup-rename.service';
+import {ToastService} from '../toast/toast.service';
 
 @Injectable()
 export class GraphManager {
@@ -12,83 +14,107 @@ export class GraphManager {
 
     public graph$: BehaviorSubject<Graph>;
 
-    constructor(private _toolbarService: ToolbarService) {
+    constructor(private _toolbarService: ToolbarService,
+                private popup: PopupRenameService,
+                private toast: ToastService) {
         this.graph$ = new BehaviorSubject(this._graph);
 
         _toolbarService.addNode$.subscribe(x => {
             this.addNode(x.position);
         });
 
-        _toolbarService.removeNode$.subscribe(x => {
-            this.removeNode(x);
+        _toolbarService.removeNode$.subscribe(action => {
+            this.removeNode(action);
         });
 
         _toolbarService.linkNodes$.subscribe(x => {
             this.linkNodes(x[0], x[1]);
         });
 
-        _toolbarService.renameNode$.subscribe(x => {
-            const id: string = x.node;
+        _toolbarService.renameNode$.subscribe(action => {
+            const id: string = action.node;
             const oldLabel: string = this.getNodeLabel(id);
-            // const popupRenameComponent =
-            //     this.viewContainerRef.createComponent(this.popupRenameComponentFactory);
-            // popupRenameComponent.instance.x = 80 + action.position.x;
-            // popupRenameComponent.instance.y = 80 + action.position.y;
-            // popupRenameComponent.instance.direction = 'up';
-            // popupRenameComponent.instance.previousValue = oldLabel;
-            // popupRenameComponent.changeDetectorRef.detectChanges();
-            const newLabel = prompt(`New label for node ${oldLabel}?`);
-            // popupRenameComponent.instance.name.subscribe(newLabel => {
-            try {
-                this.renameNode(oldLabel, newLabel);
-            } catch (e) {
-                alert(`Rename unsuccessful. ${e}`);
-                // this.toastService.display(`Rename unsuccessful. ${e}`, this.toastOutlet);
-            }
-            // popupRenameComponent.destroy();
+
+            const {left, top} = document.querySelector('vis-network').getBoundingClientRect();
+            const x = left + action.position.x;
+            const y = top + action.position.y;
+            const direction = 'up';
+
+            this.popup.prompt(x, y, direction, oldLabel, 'Rename', 'node')
+                .then(newLabel => {
+                    try {
+                        this.renameNode(oldLabel, newLabel);
+                    } catch (e) {
+                        this.toast.display(`Rename unsuccessful. ${e}`);
+                    }
+                });
         });
 
-        _toolbarService.changeWeightNode$.subscribe(x => {
-            const label = this.getNodeLabel(x.node);
-            const newWeightString: string = prompt(`New weight for node ${label}?`);
-            let newWeight: number;
-            try {
-                newWeight = parseInt(newWeightString, 10);
-            } catch (e) {
-                alert(`Rename unsuccessful. Weight has to be a number.`);
-            }
-            try {
-                this.changeNodeWeight(x.node, newWeight);
-            } catch (e) {
-                alert(`Rename unsuccessful. ${e}`);
-            }
-        });
-
-        _toolbarService.renameEdge$.subscribe(x => {
-            const id: string = x.edge;
+        _toolbarService.renameEdge$.subscribe(action => {
+            const id: string = action.edge;
             const oldLabel: string = this.getEdgeLabel(id);
-            const newLabel = prompt(`New label for edge ${oldLabel}?`);
-            try {
-                this.renameEdge(oldLabel, newLabel);
-            } catch (e) {
-                alert(`Rename unsuccessful. ${e}`);
-            }
+
+            const {left, top} = document.querySelector('vis-network').getBoundingClientRect();
+            const x = left + action.position.x;
+            const y = top + action.position.y;
+            const direction = 'up';
+
+            this.popup.prompt(x, y, direction, oldLabel, 'Rename', 'edge')
+                .then(newLabel => {
+                    try {
+                        this.renameEdge(oldLabel, newLabel);
+                    } catch (e) {
+                        this.toast.display(`Rename unsuccessful. ${e}`);
+                    }
+                });
         });
 
-        _toolbarService.changeWeightEdge$.subscribe(x => {
-            const label = this.getEdgeLabel(x.edge);
-            const newWeightString: string = prompt(`New weight for edge ${label}?`);
-            let newWeight: number;
-            try {
-                newWeight = parseInt(newWeightString, 10);
-            } catch (e) {
-                alert(`Rename unsuccessful. Weight has to be a number.`);
-            }
-            try {
-                this.changeEdgeWeight(x.edge, newWeight);
-            } catch (e) {
-                alert(`Rename unsuccessful. ${e}`);
-            }
+        _toolbarService.changeWeightNode$.subscribe(action => {
+            const label = this.getNodeLabel(action.node);
+
+            const {left, top} = document.querySelector('vis-network').getBoundingClientRect();
+            const x = left + action.position.x;
+            const y = top + action.position.y;
+            const direction = 'up';
+
+            this.popup.prompt(x, y, direction, label, `New weight for`, `node`)
+                .then(newWeightString => {
+                    let newWeight: number;
+                    newWeight = parseInt(newWeightString, 10);
+                    if (Number.isNaN(newWeight)) {
+                        this.toast.display(`Rename unsuccessful. Weight has to be a number.`);
+                        return;
+                    }
+                    try {
+                        this.changeNodeWeight(action.node, newWeight);
+                    } catch (e) {
+                        this.toast.display(`Weight change unsuccessful. ${e}`);
+                    }
+                });
+        });
+
+        _toolbarService.changeWeightEdge$.subscribe(action => {
+            const label = this.getEdgeLabel(action.edge);
+
+            const {left, top} = document.querySelector('vis-network').getBoundingClientRect();
+            const x = left + action.position.x;
+            const y = top + action.position.y;
+            const direction = 'up';
+
+            this.popup.prompt(x, y, direction, label, `New weight for`, `edge`)
+                .then(newWeightString => {
+                    let newWeight: number;
+                    newWeight = parseInt(newWeightString, 10);
+                    if (Number.isNaN(newWeight)) {
+                        this.toast.display(`Rename unsuccessful. Weight has to be a number.`);
+                        return;
+                    }
+                    try {
+                        this.changeEdgeWeight(action.edge, newWeight);
+                    } catch (e) {
+                        this.toast.display(`Weight change unsuccessful. ${e}`);
+                    }
+                });
         });
 
         _toolbarService.removeEdge$.subscribe(x => {

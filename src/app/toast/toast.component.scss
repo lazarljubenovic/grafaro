@@ -9,6 +9,7 @@ $padding: 2ex 2em;
   position: fixed;
   width: 100vw;
   bottom: $bottom-margin;
+  pointer-events: none;
 
   div {
     display: block;

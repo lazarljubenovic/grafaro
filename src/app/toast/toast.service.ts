@@ -1,9 +1,10 @@
 import {
     Injectable,
     ComponentFactoryResolver,
-    ViewContainerRef,
-    Inject,
-    ComponentRef
+    ComponentRef,
+    ComponentFactory,
+    Injector,
+    ApplicationRef
 } from '@angular/core';
 import {ReplaySubject, Subscription} from 'rxjs';
 import {ToastComponent} from './toast.component';
@@ -12,6 +13,8 @@ import {Queue} from '../data-structures/queue';
 @Injectable()
 export class ToastService {
 
+    private toastCmpFactory: ComponentFactory<ToastComponent>;
+
     public message$: ReplaySubject<string> = new ReplaySubject<string>(1);
 
     private _componentRefs = new Queue<{
@@ -19,17 +22,20 @@ export class ToastService {
         subscription: Subscription,
     }>();
 
-    public display(message: string, viewContainerRef: ViewContainerRef): void {
-        const toastComponentFactory =
-            this.componentFactoryResolver.resolveComponentFactory(ToastComponent);
-        const toastComponentRef = viewContainerRef.createComponent(toastComponentFactory);
-        toastComponentRef.instance.message$ = this.message$;
+    public display(message: string): void {
+        const toastCmp = this.toastCmpFactory.create(this.injector);
+
+        toastCmp.instance.message$ = this.message$;
         this.message$.next(message);
-        const subscription = this.message$.delay(5000).subscribe(() => {
+
+        document.body.appendChild(toastCmp.location.nativeElement);
+        this.applicationRef.attachView(toastCmp.hostView);
+
+        const subscription = this.message$.delay(3200).subscribe(() => {
             this.destroy();
         });
         this._componentRefs.enqueue({
-            component: toastComponentRef,
+            component: toastCmp,
             subscription,
         });
     }
@@ -40,8 +46,11 @@ export class ToastService {
         item.component.destroy();
     }
 
-    constructor(@Inject(ComponentFactoryResolver)
-                public componentFactoryResolver: ComponentFactoryResolver) {
+    constructor(private cfr: ComponentFactoryResolver,
+                private injector: Injector,
+                private applicationRef: ApplicationRef) {
+
+        this.toastCmpFactory = this.cfr.resolveComponentFactory(ToastComponent);
     }
 
 }

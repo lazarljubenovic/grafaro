@@ -18,7 +18,38 @@
 $size: 30px;
 
 .buttons {
-  padding: 1em;
+  display: flex;
+  font-family: $font;
+  width: 100%;
+  margin-bottom: 1em;
+
+  span {
+    margin-right: .5em;
+  }
+
+  .group {
+
+    button {
+      outline: none;
+      border: none;
+      font-family: $font;
+      text-transform: uppercase;
+      padding: 1ex 2ex;
+      border-radius: 3px;
+      background-color: mix(white, black, 86%);
+      cursor: pointer;
+      color: $black;
+
+      &:not(:last-child) {
+        margin-right: 1ex;
+      }
+
+      &.selected {
+        background-color: get-color('primary');
+        @include z-depth-1;
+      }
+    }
+  }
 }
 
 .matrix {
