@@ -15,8 +15,8 @@ export class GraphManager {
     public graph$: BehaviorSubject<Graph>;
 
     constructor(private _toolbarService: ToolbarService,
-                private _popupRename: PopupRenameService,
-                private toastService: ToastService) {
+                private popup: PopupRenameService,
+                private toast: ToastService) {
         this.graph$ = new BehaviorSubject(this._graph);
 
         _toolbarService.addNode$.subscribe(x => {
@@ -40,13 +40,12 @@ export class GraphManager {
             const y = top + action.position.y;
             const direction = 'up';
 
-            this._popupRename.prompt(x, y, direction, oldLabel, 'Rename', 'node')
+            this.popup.prompt(x, y, direction, oldLabel, 'Rename', 'node')
                 .then(newLabel => {
                     try {
                         this.renameNode(oldLabel, newLabel);
                     } catch (e) {
-                        alert(`Rename unsuccessful. ${e}`);
-                        // this.toastService.display(`Rename unsuccessful. ${e}`, this.toastOutlet);
+                        this.toast.display(`Rename unsuccessful. ${e}`);
                     }
                 });
         });
@@ -60,13 +59,12 @@ export class GraphManager {
             const y = top + action.position.y;
             const direction = 'up';
 
-            this._popupRename.prompt(x, y, direction, oldLabel, 'Rename', 'edge')
+            this.popup.prompt(x, y, direction, oldLabel, 'Rename', 'edge')
                 .then(newLabel => {
                     try {
                         this.renameEdge(oldLabel, newLabel);
                     } catch (e) {
-                        alert(`Rename unsuccessful. ${e}`);
-                        // this.toastService.display(`Rename unsuccessful. ${e}`, this.toastOutlet);
+                        this.toast.display(`Rename unsuccessful. ${e}`);
                     }
                 });
         });
@@ -79,18 +77,18 @@ export class GraphManager {
             const y = top + action.position.y;
             const direction = 'up';
 
-            this._popupRename.prompt(x, y, direction, label, `New weight for`, `node`)
+            this.popup.prompt(x, y, direction, label, `New weight for`, `node`)
                 .then(newWeightString => {
                     let newWeight: number;
                     newWeight = parseInt(newWeightString, 10);
                     if (Number.isNaN(newWeight)) {
-                        alert(`Rename unsuccessful. Weight has to be a number.`);
+                        this.toast.display(`Rename unsuccessful. Weight has to be a number.`);
                         return;
                     }
                     try {
                         this.changeNodeWeight(action.node, newWeight);
                     } catch (e) {
-                        alert(`Rename unsuccessful. ${e}`);
+                        this.toast.display(`Weight change unsuccessful. ${e}`);
                     }
                 });
         });
@@ -103,18 +101,18 @@ export class GraphManager {
             const y = top + action.position.y;
             const direction = 'up';
 
-            this._popupRename.prompt(x, y, direction, label, `New weight for`, `edge`)
+            this.popup.prompt(x, y, direction, label, `New weight for`, `edge`)
                 .then(newWeightString => {
                     let newWeight: number;
                     newWeight = parseInt(newWeightString, 10);
                     if (Number.isNaN(newWeight)) {
-                        alert(`Rename unsuccessful. Weight has to be a number.`);
+                        this.toast.display(`Rename unsuccessful. Weight has to be a number.`);
                         return;
                     }
                     try {
                         this.changeEdgeWeight(action.edge, newWeight);
                     } catch (e) {
-                        alert(`Rename unsuccessful. ${e}`);
+                        this.toast.display(`Weight change unsuccessful. ${e}`);
                     }
                 });
         });
