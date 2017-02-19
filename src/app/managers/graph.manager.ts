@@ -23,8 +23,8 @@ export class GraphManager {
             this.addNode(x.position);
         });
 
-        _toolbarService.removeNode$.subscribe(x => {
-            this.removeNode(x);
+        _toolbarService.removeNode$.subscribe(action => {
+            this.removeNode(action);
         });
 
         _toolbarService.linkNodes$.subscribe(x => {
