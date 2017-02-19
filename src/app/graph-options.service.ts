@@ -1,14 +1,14 @@
 import {Injectable} from '@angular/core';
 import {VisNgNetworkOptions} from '@lazarljubenovic/vis-ng/core';
 import * as NestedProperty from 'nested-property';
-import {Subject} from 'rxjs';
+import {ReplaySubject} from 'rxjs';
 
 @Injectable()
 export class GraphOptionsService {
 
     private _options: VisNgNetworkOptions = {};
 
-    public optionsChange$ = new Subject<VisNgNetworkOptions>();
+    public optionsChange$ = new ReplaySubject<VisNgNetworkOptions>(1);
 
     public get options(): VisNgNetworkOptions {
         return this._options;
