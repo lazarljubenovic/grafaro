@@ -4,6 +4,8 @@ import {Graph, GraphJson, GraphEdge} from '../models/graph.model';
 import {ClickPosition} from '../project-view/toolbar/toolbar.component';
 import {ToolbarService} from '../project-view/toolbar/toolbar.service';
 import {suggestNextName} from '../utils/name-suggester';
+import {PopupRenameService} from '../project-view/popup-rename/popup-rename.service';
+import {ToastService} from '../toast/toast.service';
 
 @Injectable()
 export class GraphManager {
@@ -12,7 +14,9 @@ export class GraphManager {
 
     public graph$: BehaviorSubject<Graph>;
 
-    constructor(private _toolbarService: ToolbarService) {
+    constructor(private _toolbarService: ToolbarService,
+                private _popupRename: PopupRenameService,
+                private toastService: ToastService) {
         this.graph$ = new BehaviorSubject(this._graph);
 
         _toolbarService.addNode$.subscribe(x => {
@@ -27,25 +31,24 @@ export class GraphManager {
             this.linkNodes(x[0], x[1]);
         });
 
-        _toolbarService.renameNode$.subscribe(x => {
-            const id: string = x.node;
+        _toolbarService.renameNode$.subscribe(action => {
+            const id: string = action.node;
             const oldLabel: string = this.getNodeLabel(id);
-            // const popupRenameComponent =
-            //     this.viewContainerRef.createComponent(this.popupRenameComponentFactory);
-            // popupRenameComponent.instance.x = 80 + action.position.x;
-            // popupRenameComponent.instance.y = 80 + action.position.y;
-            // popupRenameComponent.instance.direction = 'up';
-            // popupRenameComponent.instance.previousValue = oldLabel;
-            // popupRenameComponent.changeDetectorRef.detectChanges();
-            const newLabel = prompt(`New label for node ${oldLabel}?`);
-            // popupRenameComponent.instance.name.subscribe(newLabel => {
-            try {
-                this.renameNode(oldLabel, newLabel);
-            } catch (e) {
-                alert(`Rename unsuccessful. ${e}`);
-                // this.toastService.display(`Rename unsuccessful. ${e}`, this.toastOutlet);
-            }
-            // popupRenameComponent.destroy();
+
+            const {left, top} = document.querySelector('vis-network').getBoundingClientRect();
+            const x = left + action.position.x;
+            const y = top + action.position.y;
+            const direction = 'up';
+
+            this._popupRename.prompt(x, y, direction, oldLabel)
+                .then(newLabel => {
+                    try {
+                        this.renameNode(oldLabel, newLabel);
+                    } catch (e) {
+                        alert(`Rename unsuccessful. ${e}`);
+                        // this.toastService.display(`Rename unsuccessful. ${e}`, this.toastOutlet);
+                    }
+                });
         });
 
         _toolbarService.changeWeightNode$.subscribe(x => {

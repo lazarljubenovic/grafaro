@@ -10,6 +10,7 @@ import {
     AnnotationDecoratorNodeRuleWithText,
     AnnotationDecoratorEdgeRuleWithText
 } from '../algorithms/algorithm-base';
+import {PopupRenameService} from '../project-view/popup-rename/popup-rename.service';
 
 export interface GrfGraphNodeAnnotationOptions {
     position: string; // 'n' | 'e' | 'w' | 's' | 'ne' | 'nw' | 'se' | 'sw';
@@ -67,6 +68,7 @@ export interface GrfGraphEdgeOptions {
     providers: [
         ColorThemeService,
         AlgorithmStateManager,
+        PopupRenameService,
     ],
 })
 export class GraphModule {
