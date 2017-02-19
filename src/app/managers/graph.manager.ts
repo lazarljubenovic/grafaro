@@ -40,7 +40,7 @@ export class GraphManager {
             const y = top + action.position.y;
             const direction = 'up';
 
-            this._popupRename.prompt(x, y, direction, oldLabel, true)
+            this._popupRename.prompt(x, y, direction, oldLabel, 'Rename', 'node')
                 .then(newLabel => {
                     try {
                         this.renameNode(oldLabel, newLabel);
@@ -60,7 +60,7 @@ export class GraphManager {
             const y = top + action.position.y;
             const direction = 'up';
 
-            this._popupRename.prompt(x, y, direction, oldLabel, false)
+            this._popupRename.prompt(x, y, direction, oldLabel, 'Rename', 'edge')
                 .then(newLabel => {
                     try {
                         this.renameEdge(oldLabel, newLabel);

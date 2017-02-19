@@ -23,14 +23,15 @@ export class PopupRenameService {
     }
 
     public prompt(x: number, y: number, direction: string,
-                  previousLabel: string, isNode: boolean = true) {
+                  previousLabel: string, action: string, noun: string) {
         this.popupRenameComponent = this.popupRenameComponentFactory.create(this._injector);
 
         this.popupRenameComponent.instance.x = x;
         this.popupRenameComponent.instance.y = y;
         this.popupRenameComponent.instance.direction = direction;
         this.popupRenameComponent.instance.previousValue = previousLabel;
-        // this.popupRenameComponent.changeDetectorRef.detectChanges();
+        this.popupRenameComponent.instance.action = action;
+        this.popupRenameComponent.instance.noun = noun;
 
         document.body.appendChild(this.popupRenameComponent.location.nativeElement);
         this.applicationRef.attachView(this.popupRenameComponent.hostView);
