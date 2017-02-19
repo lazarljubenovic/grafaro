@@ -22,7 +22,8 @@ export class PopupRenameService {
             componentFactoryResolver.resolveComponentFactory(PopupRenameComponent);
     }
 
-    public prompt(x: number, y: number, direction: string, previousLabel: string) {
+    public prompt(x: number, y: number, direction: string,
+                  previousLabel: string, isNode: boolean = true) {
         this.popupRenameComponent = this.popupRenameComponentFactory.create(this._injector);
 
         this.popupRenameComponent.instance.x = x;

@@ -4,7 +4,7 @@
 >
   <div class="inner">
     <label>
-      <span class="text">Rename node <span
+      <span class="text">Rename <template [ngIf]="isNode">node</template><template [ngIf]="!isNode">edge</template> <span
         class="node-name">{{previousValue}}</span>:</span>
       <input #input type="text"
              (keypress)="onKeyPress($event.key)"

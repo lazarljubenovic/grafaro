@@ -19,6 +19,7 @@ export class PopupRenameComponent implements OnInit {
     public y: number = 0;
     @HostBinding('class') public direction: string = 'up';
     public previousValue: string;
+    public isNode: boolean;
 
     @ViewChild('input')
     public inputElementRef: ElementRef;

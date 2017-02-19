@@ -40,10 +40,30 @@ export class GraphManager {
             const y = top + action.position.y;
             const direction = 'up';
 
-            this._popupRename.prompt(x, y, direction, oldLabel)
+            this._popupRename.prompt(x, y, direction, oldLabel, true)
                 .then(newLabel => {
                     try {
                         this.renameNode(oldLabel, newLabel);
+                    } catch (e) {
+                        alert(`Rename unsuccessful. ${e}`);
+                        // this.toastService.display(`Rename unsuccessful. ${e}`, this.toastOutlet);
+                    }
+                });
+        });
+
+        _toolbarService.renameEdge$.subscribe(action => {
+            const id: string = action.edge;
+            const oldLabel: string = this.getEdgeLabel(id);
+
+            const {left, top} = document.querySelector('vis-network').getBoundingClientRect();
+            const x = left + action.position.x;
+            const y = top + action.position.y;
+            const direction = 'up';
+
+            this._popupRename.prompt(x, y, direction, oldLabel, false)
+                .then(newLabel => {
+                    try {
+                        this.renameEdge(oldLabel, newLabel);
                     } catch (e) {
                         alert(`Rename unsuccessful. ${e}`);
                         // this.toastService.display(`Rename unsuccessful. ${e}`, this.toastOutlet);
@@ -62,17 +82,6 @@ export class GraphManager {
             }
             try {
                 this.changeNodeWeight(x.node, newWeight);
-            } catch (e) {
-                alert(`Rename unsuccessful. ${e}`);
-            }
-        });
-
-        _toolbarService.renameEdge$.subscribe(x => {
-            const id: string = x.edge;
-            const oldLabel: string = this.getEdgeLabel(id);
-            const newLabel = prompt(`New label for edge ${oldLabel}?`);
-            try {
-                this.renameEdge(oldLabel, newLabel);
             } catch (e) {
                 alert(`Rename unsuccessful. ${e}`);
             }
