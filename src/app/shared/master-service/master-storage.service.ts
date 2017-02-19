@@ -46,7 +46,6 @@ export class MasterStorageService {
                 this._messageSubscription.unsubscribe();
             }
             this._messageSubscription = this._masterSource.masterSocket$.subscribe(message => {
-                console.log('incoming master messages', message);
                 this.masterMessages$.next(message);
             });
 
@@ -66,6 +65,10 @@ export class MasterStorageService {
         } else {
             this._wasRequested = true;
         }
+    }
+
+    public restartStorage() {
+        this._masterSource.masterSocket$.next({isMaster: false});
     }
 
 }

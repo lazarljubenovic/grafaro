@@ -91,6 +91,7 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        console.log('ng on init project view');
         // Subscribe on incoming Join messages for post-join things
         this._joinSubscription = this._joinStorage.joinMessages$
             .subscribe(joinMessage => {
@@ -111,6 +112,7 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
         this._joinStorage.joinRoom(roomId);
 
         this._graphStorageService.graphMessages$.subscribe(graphMessage => {
+            // console.log('graph storage subscription', graphMessage);
             this._graphManager.graphFromSocket(graphMessage.graph);
         });
 
@@ -143,6 +145,7 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
     ngOnDestroy(): void {
         // todo properly unsubscribe from all subscriptions
         this._joinSubscription.unsubscribe();
+        this._masterStorage.restartStorage();
         this._leaveStorage.leave();
     }
 
