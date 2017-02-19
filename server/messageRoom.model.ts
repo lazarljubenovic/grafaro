@@ -45,11 +45,6 @@ export class MessageRoom {
             console.log('User joined the room', roomId);
             this.sendJoinMessage(user, roomId);
 
-            const graph = this.rooms.get(roomId).graph;
-            const graphMessage: GraphMessage = {
-                graph,
-            };
-
             const algorithm = this.rooms.get(roomId).algorithm;
             const algorithmMessage: AlgorithmMessage = {
                 info: algorithm
@@ -57,7 +52,6 @@ export class MessageRoom {
 
             const roomInfo: RoomEdit = this.getRoomEdit(roomId);
 
-            this.sendMessage(user, 'graph', graphMessage, roomId);
             this.sendMessage(user, 'algorithm', algorithmMessage, roomId);
             this.sendMessage(user, 'roomEdit', roomInfo, roomId);
         } catch (exception) {
@@ -183,6 +177,14 @@ export class MessageRoom {
 
     public setRoomState(stateIndex: number, roomId: string): void {
         this.rooms.get(roomId).stateIndex = stateIndex;
+    }
+
+    public sendGraphMessage(ws: ws, roomId: string): void {
+        const graph: GraphMessage = {
+            graph: this.rooms.get(roomId).graph,
+        };
+
+        this.sendMessage(ws, 'graph', graph, roomId);
     }
 
     private constructor() {

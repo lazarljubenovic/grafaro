@@ -14,7 +14,6 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ToastModule} from '../toast/toast.module';
 import {AlgorithmModule} from '../algorithm/algorithm.module';
 import {UserInterfaceModule} from '../user-interface/user-interface.module';
-import {GraphSocketService} from './graph-socket.service';
 import {SaveDialogComponent} from './save-dialog/save-dialog.component';
 import {LoadDialogComponent} from './load-dialog/load-dialog.component';
 import {RoomEditService} from './room-edit.service';
@@ -29,6 +28,7 @@ import {GraphTemplateService} from './graph-template.service';
 import {Auth0Service} from '../core/auth0.service';
 import {JoinStorageService} from '../shared/join-service/join-storage.service';
 import {MasterStorageService} from '../shared/master-service/master-storage.service';
+import {GraphStorageService} from './services/graph-socket/graph-storage.service';
 
 @NgModule({
     imports: [
@@ -58,7 +58,7 @@ import {MasterStorageService} from '../shared/master-service/master-storage.serv
     providers: [
         WebSocketService,
         MasterStorageService,
-        GraphSocketService,
+        GraphStorageService,
         RoomEditService,
         ToolbarService,
         GraphManager,

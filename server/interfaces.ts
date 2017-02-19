@@ -117,7 +117,7 @@ export const defaultGraph: Graph = {
         },
         {
             id: 'node-2',
-            label: 'C',
+            label: 'CC',
             position: {x: 100, y: 100},
             weight: 1,
         },

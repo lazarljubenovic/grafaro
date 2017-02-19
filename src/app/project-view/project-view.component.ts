@@ -11,7 +11,6 @@ import {GraphOptionsService} from '../graph-options.service';
 import {PopupRenameComponent} from './popup-rename/popup-rename.component';
 import {ToastService} from '../toast/toast.service';
 import {ActivatedRoute, Router} from '@angular/router';
-import {GraphSocketService} from './graph-socket.service';
 import {GraphManager} from '../managers/graph.manager';
 import {GraphTemplateService} from './graph-template.service';
 import {Observable, Subscription} from 'rxjs';
@@ -20,6 +19,7 @@ import {Auth0Service} from '../core/auth0.service';
 import {GraphFolder} from '../user-interface/file-list/file-list.interface';
 import {JoinStorageService} from '../shared/join-service/join-storage.service';
 import {MasterStorageService} from '../shared/master-service/master-storage.service';
+import {GraphStorageService} from './services/graph-socket/graph-storage.service';
 
 @Component({
     selector: 'grf-user-interface',
@@ -77,7 +77,7 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
                 private _graphTemplateService: GraphTemplateService,
                 private activeRoute: ActivatedRoute,
                 private _joinStorage: JoinStorageService,
-                private graphSocketService: GraphSocketService,
+                private _graphStorageService: GraphStorageService,
                 private _graphManager: GraphManager,
                 private _masterStorage: MasterStorageService,
                 private _router: Router,
@@ -88,11 +88,6 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        // debugger;
-        // Send request to join the room.
-        const roomId = this.activeRoute.snapshot.params['id'];
-        this._joinStorage.joinRoom(roomId);
-
         // Subscribe on incoming Join messages for post-join things
         this._joinSubscription = this._joinStorage.joinMessages$
             .subscribe(joinMessage => {
@@ -100,25 +95,29 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
                 if (joinMessage.error != '') {
                     this._router.navigate(['/error']);
                     this._joinStorage.setRoom('');
-                    console.log('TODO: better error handling');
                     console.error(joinMessage.error);
                 } else {
                     this._joinStorage.setRoom(joinMessage.roomId);
                     this._masterStorage.requestMasterMessage();
+                    this._graphStorageService.requestGraphMessage();
                 }
             });
 
-        this.graphSocketService.graphSocket$.subscribe(graphMessage => {
+        // Send request to join the room.
+        const roomId = this.activeRoute.snapshot.params['id'];
+        this._joinStorage.joinRoom(roomId);
+
+        this._graphStorageService.graphMessages$.subscribe(graphMessage => {
             this._graphManager.graphFromSocket(graphMessage.graph);
         });
 
         this._masterStorage.masterMessages$
             .subscribe(masterMessage => {
-                this.graphSocketService.canSend = masterMessage.isMaster;
+                this._graphStorageService.canSend = masterMessage.isMaster;
             });
 
         this._graphManager.graph$.subscribe(graph => {
-            this.graphSocketService.send(graph.writeJson());
+            this._graphStorageService.send(graph.writeJson());
         });
 
         // Initial settings
@@ -140,6 +139,7 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
 
     ngOnDestroy(): void {
         // todo add room leave message here
+        // todo properly unsubscribe from all subscriptions
         this._joinSubscription.unsubscribe();
     }
 

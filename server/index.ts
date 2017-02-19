@@ -130,6 +130,8 @@ wss.on('connection', ws => {
                 // todo check if there is a roomId
                 messageRooms.sendMasterMessage(ws, roomId);
                 break;
+            case 'graph-request':
+                messageRooms.sendGraphMessage(ws, roomId);
             default:
                 console.log('TODO: New type?', messageObj.type);
                 break;
