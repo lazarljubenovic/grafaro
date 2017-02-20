@@ -7,13 +7,11 @@ import {
     ComponentFactory,
     OnDestroy
 } from '@angular/core';
-import {GraphOptionsService} from '../graph-options.service';
 import {PopupRenameComponent} from './popup-rename/popup-rename.component';
-import {ToastService} from '../toast/toast.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {GraphManager} from '../managers/graph.manager';
 import {GraphTemplateService} from './graph-template.service';
-import {Observable, Subscription} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import {GraphPath} from '../user-interface/file-list/file-list.service';
 import {Auth0Service} from '../core/auth0.service';
 import {GraphFolder} from '../user-interface/file-list/file-list.interface';
@@ -28,8 +26,9 @@ import {LeaveStorageService} from './services/leave-socket/leave-storage.service
     styleUrls: ['project-view.component.scss'],
 })
 export class ProjectViewComponent implements OnInit, OnDestroy {
-    // todo rename this to RoomViewComponent
-    private _joinSubscription: Subscription;
+// todo rename this to RoomViewComponent
+
+    private _destroySubject = new Subject<boolean>();
 
     private _displayName: string;
 
@@ -72,9 +71,7 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
         this.isLoadDialogOpen = !this.isLoadDialogOpen;
     }
 
-    constructor(private graphOptionsService: GraphOptionsService,
-                componentFactoryResolver: ComponentFactoryResolver,
-                private toastService: ToastService,
+    constructor(componentFactoryResolver: ComponentFactoryResolver,
                 private _graphTemplateService: GraphTemplateService,
                 private activeRoute: ActivatedRoute,
                 private _joinStorage: JoinStorageService,
@@ -83,8 +80,7 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
                 private _masterStorage: MasterStorageService,
                 private _router: Router,
                 private _auth0: Auth0Service,
-                private _leaveStorage: LeaveStorageService
-    ) {
+                private _leaveStorage: LeaveStorageService) {
         this.popupRenameComponentFactory =
             componentFactoryResolver.resolveComponentFactory(PopupRenameComponent);
 
@@ -93,7 +89,8 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
     ngOnInit() {
         console.log('ng on init project view');
         // Subscribe on incoming Join messages for post-join things
-        this._joinSubscription = this._joinStorage.joinMessages$
+        this._joinStorage.joinMessages$
+            .takeUntil(this._destroySubject)
             .subscribe(joinMessage => {
                 // On error, change route to 404
                 if (joinMessage.error != '') {
@@ -111,24 +108,29 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
         const roomId = this.activeRoute.snapshot.params['id'];
         this._joinStorage.joinRoom(roomId);
 
-        this._graphStorageService.graphMessages$.subscribe(graphMessage => {
-            // console.log('graph storage subscription', graphMessage);
-            this._graphManager.graphFromSocket(graphMessage.graph);
-        });
+        this._graphStorageService.graphMessages$
+            .takeUntil(this._destroySubject)
+            .subscribe(graphMessage => {
+                // console.log('graph storage subscription', graphMessage);
+                this._graphManager.graphFromSocket(graphMessage.graph);
+            });
 
         this._masterStorage.masterMessages$
+            .takeUntil(this._destroySubject)
             .subscribe(masterMessage => {
                 this._graphStorageService.canSend = masterMessage.isMaster;
             });
 
-        this._graphManager.graph$.subscribe(graph => {
-            this._graphStorageService.send(graph.writeJson());
-        });
+        this._graphManager.graph$
+            .takeUntil(this._destroySubject)
+            .subscribe(graph => {
+                this._graphStorageService.send(graph.writeJson());
+            });
 
-        // Initial settings
-        this.graphOptionsService.setOptions([
-            {name: 'physics.enabled', value: false},
-        ]);
+        // // Initial settings
+        // this.graphOptionsService.setOptions([
+        //     {name: 'physics.enabled', value: false},
+        // ]);
 
         this.graphTemplate$ = this._graphTemplateService.getGraphsInfo();
         this.currentUserTemplate$ = this.graphTemplate$.map(templates => {
@@ -136,17 +138,25 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
             return ind == -1 ? {name: this._displayName, graph: []} : templates[ind];
         });
 
-        this._auth0.user$.subscribe(user => {
-            this._displayName = user.displayName;
-        });
+        this._auth0.user$
+            .takeUntil(this._destroySubject)
+            .subscribe(user => {
+                this._displayName = user.displayName;
+            });
     }
 
 
-    ngOnDestroy(): void {
-        // todo properly unsubscribe from all subscriptions
-        this._joinSubscription.unsubscribe();
+    ngOnDestroy() {
         this._masterStorage.restartStorage();
         this._leaveStorage.leave();
+        this._graphStorageService.restartGraph();
+        this._destroySubject.next(true);
+        this._destroySubject.unsubscribe();
     }
+
+    // ngOnDestroy(): void {
+    //     this._joinSubscription.unsubscribe();
+    //     this._masterStorage.restartStorage();
+    // }
 
 }

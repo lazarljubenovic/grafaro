@@ -116,7 +116,7 @@ export class ToolbarService {
 
         this.actions$
             .subscribe(values => {
-                console.log('actions$', values);
+                // do nothing
             });
 
         // Alt. solutions from Gitter: http://pastebin.com/ZpeSDwpJ

@@ -1,4 +1,4 @@
-import {Component, OnInit, EventEmitter, ViewChild} from '@angular/core';
+import {Component, OnInit, EventEmitter, ViewChild, OnDestroy} from '@angular/core';
 import {VisNgNetworkOptions, VisNgNetworkEventArgument} from '@lazarljubenovic/vis-ng/core';
 import {GrfGraphEdgeOptions, GrfGraphNodeOptions} from './graph.module';
 import * as deepAssign from 'deep-assign';
@@ -9,13 +9,16 @@ import {AlgorithmStateManager} from '../algorithms/state-manager';
 import {getPointAtRatio} from '../utils/get-point-at-ratio';
 import {getLineAngle} from '../utils/line-angle';
 import {movePoint} from '../utils/move-point';
+import {Subject} from 'rxjs';
 
 @Component({
     selector: 'grf-graph',
     templateUrl: './graph.component.html',
     styleUrls: ['./graph.component.scss'],
 })
-export class GraphComponent implements OnInit {
+export class GraphComponent implements OnInit, OnDestroy {
+
+    private _destroySubject = new Subject<boolean>();
 
     @ViewChild('network') public visNetworkComponentInstance: VisNetworkComponent;
 
@@ -45,6 +48,9 @@ export class GraphComponent implements OnInit {
         },
         interaction: {
             selectConnectedEdges: false,
+        },
+        physics: {
+            enabled: false,
         },
     };
 
@@ -83,16 +89,25 @@ export class GraphComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.graphOptionsService.optionsChange$.subscribe(options => {
-            this._globalOptions = options;
-            this.updateResultingOptions();
-        });
+        this.graphOptionsService.optionsChange$
+            .takeUntil(this._destroySubject)
+            .subscribe(options => {
+                this._globalOptions = options;
+                this.updateResultingOptions();
+            });
 
-        this._stateManager.state$.subscribe(state => {
-            const normalizedState = this._stateManager.getNormalizedState();
-            this.nodes = normalizedState.nodes;
-            this.edges = <any>normalizedState.edges;
-        });
+        this._stateManager.state$
+            .takeUntil(this._destroySubject)
+            .subscribe(state => {
+                const normalizedState = this._stateManager.getNormalizedState();
+                this.nodes = normalizedState.nodes;
+                this.edges = <any>normalizedState.edges;
+            });
+    }
+
+    ngOnDestroy() {
+        this._destroySubject.next(true);
+        this._destroySubject.unsubscribe();
     }
 
     public dragging(event: VisNgNetworkEventArgument): void {

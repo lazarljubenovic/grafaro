@@ -2,7 +2,7 @@ import {AlgorithmBase, AlgorithmState} from './algorithm-base';
 import {ReplaySubject, Observable, BehaviorSubject} from 'rxjs';
 import {Graph} from '../models/graph.model';
 import {GraphManager} from '../managers/graph.manager';
-import {Optional} from '@angular/core';
+import {Optional, Injectable} from '@angular/core';
 import {NormalizedState} from './normalized-state.model';
 import {AlgorithmManager, AlgorithmWithOptions} from '../managers/algorithm.manager';
 
@@ -14,6 +14,7 @@ export interface StateManagerObject {
     isFirst: boolean;
 }
 
+@Injectable()
 export class AlgorithmStateManager {
 
     /**

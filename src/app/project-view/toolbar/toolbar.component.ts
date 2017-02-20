@@ -1,4 +1,4 @@
-import {Component, OnInit, Output, EventEmitter, Inject, forwardRef} from '@angular/core';
+import {Component, Output, EventEmitter, Inject, forwardRef, OnDestroy} from '@angular/core';
 import {ToolbarService} from './toolbar.service';
 
 export interface ClickPosition {
@@ -21,7 +21,7 @@ export enum Actions {
     templateUrl: './toolbar.component.html',
     styleUrls: ['./toolbar.component.scss'],
 })
-export class ToolbarComponent implements OnInit {
+export class ToolbarComponent implements OnDestroy {
 
     public currentSelected: number = 0;
 
@@ -74,7 +74,8 @@ export class ToolbarComponent implements OnInit {
     constructor(@Inject(forwardRef(() => ToolbarService)) private _toolbarService: ToolbarService) {
     }
 
-    ngOnInit() {
+    ngOnDestroy() {
+        this._toolbarService.chooseTool$.next(Actions.select);
     }
 
 }

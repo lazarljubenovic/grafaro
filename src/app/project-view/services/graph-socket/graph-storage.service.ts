@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {GraphJson} from '../../../models/graph.model';
+import {GraphJson, Graph} from '../../../models/graph.model';
 import {GraphSocketInterface, GraphMessage} from './graph-socket';
 import {Subscription, ReplaySubject} from 'rxjs';
 import {WebSocketService} from '../../../websocket.service';
@@ -85,6 +85,17 @@ export class GraphStorageService {
         } else {
             this._requestBuffer = true;
         }
+    }
+
+    /**
+     * Restore graph to just single node.
+     * I have 0 idea why it won't accept empty graph, so just let it be like this.
+     * @public
+     */
+    public restartGraph(): void {
+        let graph = new Graph();
+        graph.addNode('A', {x: 0, y: 0});
+        this.graphMessages$.next({graph: graph.writeJson()});
     }
 
 }

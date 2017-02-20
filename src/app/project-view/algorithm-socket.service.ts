@@ -12,6 +12,7 @@ export class AlgorithmSocketService {
     public algorithmSocket$: Observable<AlgorithmMessage>;
     public canSend: boolean = false;
 
+    // todo add master socket DI
     constructor(private _webSocketService: WebSocketService) {
         this.algorithmSocket$ = this._webSocketService.subscribeTo('algorithm');
     }

@@ -67,6 +67,9 @@ export class MasterStorageService {
         }
     }
 
+    /**
+     * Revert to default master status.
+     */
     public restartStorage() {
         this._masterSource.masterSocket$.next({isMaster: false});
     }
