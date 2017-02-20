@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, ViewChild, ElementRef} from '@angular/core';
+import {Component, OnInit, Input, ViewChild, ElementRef, HostBinding} from '@angular/core';
 import {RoomEditService} from '../../project-view/room-edit.service';
 import {Auth0Service} from '../../core/auth0.service';
 import {Observable} from 'rxjs';
@@ -15,6 +15,7 @@ export class HeaderComponent implements OnInit {
     @Input() public projectTitle: string = 'Untitled';
     @Input() public projectDescription: string = `Project Untitled doesn't have a description.`;
 
+    @HostBinding('class.project-view-mode')
     @Input() public isProjectViewMode: boolean = false;
 
     @Input() public isProjectTitleEditable: boolean = true;
@@ -92,6 +93,10 @@ export class HeaderComponent implements OnInit {
 
     public discardDescription() {
         this.isDescriptionInEditMode = false;
+    }
+
+    public discardName() {
+        this.isNameInEditMode = false;
     }
 
     private updateNameDescription() {

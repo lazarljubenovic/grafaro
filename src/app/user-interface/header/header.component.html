@@ -60,7 +60,7 @@
 
 </ng-container>
 
-<div *ngIf="displayName != ''">
+<div id="username-info" *ngIf="displayName != ''">
   <div class="col display-name" *ngIf="!isNameInEditMode">
     <span class="text">{{displayName}}</span>
     <span class="icon edit"
@@ -71,19 +71,17 @@
   </div>
 
   <div class="col display-name" *ngIf="isNameInEditMode">
-    <input #nameInput type="text" [(ngModel)]="newName" (keyup.esc)="discardName()"
+    <input #nameInput type="text" [(ngModel)]="newName"
+           (keyup.esc)="discardName()"
            (keyup.enter)="submitName()">
-    <span class="icon edit"
-          (click)="submitName()"
-    >
-          <i class="fa fa-check"></i>
-        </span>
+    <span class="icon edit" (click)="submitName()"><i class="fa fa-check"></i></span>
   </div>
+
+  <span class="icon"><i class="fa fa-sign-out" (click)="logout()"></i></span>
 
   <div id="profile-image">
     <grf-jdenticon [plaintext]="displayName"></grf-jdenticon>
   </div>
-  <i class="fa fa-sign-out" (click)="logout()"></i>
 </div>
 
 <ng-container *ngIf="!isProjectViewMode">
