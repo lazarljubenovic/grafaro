@@ -19,6 +19,7 @@ import {JoinStorageService} from '../shared/join-service/join-storage.service';
 import {MasterStorageService} from '../shared/master-service/master-storage.service';
 import {GraphStorageService} from './services/graph-socket/graph-storage.service';
 import {LeaveStorageService} from './services/leave-socket/leave-storage.service';
+import {AlgorithmStorageService} from './services/algorithm-socket/algorithm-storage.service';
 
 @Component({
     selector: 'grf-user-interface',
@@ -80,7 +81,9 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
                 private _masterStorage: MasterStorageService,
                 private _router: Router,
                 private _auth0: Auth0Service,
-                private _leaveStorage: LeaveStorageService) {
+                private _leaveStorage: LeaveStorageService,
+                private _algorithmStorage: AlgorithmStorageService,
+    ) {
         this.popupRenameComponentFactory =
             componentFactoryResolver.resolveComponentFactory(PopupRenameComponent);
 
@@ -101,6 +104,7 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
                     this._joinStorage.setRoom(joinMessage.roomId);
                     this._masterStorage.requestMasterMessage();
                     this._graphStorageService.requestGraphMessage();
+                    this._algorithmStorage.requestAlgorithmWithOptions();
                 }
             });
 
@@ -111,7 +115,6 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
         this._graphStorageService.graphMessages$
             .takeUntil(this._destroySubject)
             .subscribe(graphMessage => {
-                // console.log('graph storage subscription', graphMessage);
                 this._graphManager.graphFromSocket(graphMessage.graph);
             });
 
@@ -126,11 +129,6 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
             .subscribe(graph => {
                 this._graphStorageService.send(graph.writeJson());
             });
-
-        // // Initial settings
-        // this.graphOptionsService.setOptions([
-        //     {name: 'physics.enabled', value: false},
-        // ]);
 
         this.graphTemplate$ = this._graphTemplateService.getGraphsInfo();
         this.currentUserTemplate$ = this.graphTemplate$.map(templates => {
@@ -150,13 +148,9 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
         this._masterStorage.restartStorage();
         this._leaveStorage.leave();
         this._graphStorageService.restartGraph();
+        this._algorithmStorage.restartAlgorithmWithOptions();
         this._destroySubject.next(true);
         this._destroySubject.unsubscribe();
     }
-
-    // ngOnDestroy(): void {
-    //     this._joinSubscription.unsubscribe();
-    //     this._masterStorage.restartStorage();
-    // }
 
 }

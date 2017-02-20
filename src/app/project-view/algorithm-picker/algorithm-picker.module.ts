@@ -4,7 +4,7 @@ import {AlgorithmPickerComponent} from './algorithm-picker.component';
 import {GraphManager} from '../../managers/graph.manager';
 import {AlgorithmManager} from '../../managers/algorithm.manager';
 import {ReactiveFormsModule, FormsModule} from '@angular/forms';
-import {AlgorithmSocketService} from '../algorithm-socket.service';
+import {AlgorithmStorageService} from '../services/algorithm-socket/algorithm-storage.service';
 
 @NgModule({
     imports: [
@@ -18,7 +18,7 @@ import {AlgorithmSocketService} from '../algorithm-socket.service';
     providers: [
         GraphManager,
         AlgorithmManager,
-        AlgorithmSocketService,
+        AlgorithmStorageService,
     ],
     exports: [
         AlgorithmPickerComponent,

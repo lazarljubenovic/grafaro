@@ -78,8 +78,22 @@ export class Graph {
     }
 
     public readJson(json: GraphJson): this {
-        this._nodes = json.nodes;
-        this._edges = json.edges;
+        // todo deep copy this
+        this._nodes = [];
+        this._edges = [];
+        json.nodes.forEach(node => this._nodes.push({
+            id: node.id,
+            label: node.label,
+            position: node.position,
+            weight: node.weight,
+        }));
+        json.edges.forEach(edge => this._edges.push({
+            id: edge.id,
+            label: edge.label,
+            from: edge.from,
+            to: edge.to,
+            weight: edge.weight,
+        }));
         this.setNodeIdGeneratorId(json.nextNodeId);
         this.setEdgeIdGeneratorId(json.nextEdgeId);
         this.emitNodeLabelChange();

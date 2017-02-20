@@ -45,14 +45,10 @@ export class MessageRoom {
             console.log('User joined the room', roomId);
             this.sendJoinMessage(user, roomId);
 
-            const algorithm = this.rooms.get(roomId).algorithm;
-            const algorithmMessage: AlgorithmMessage = {
-                info: algorithm
-            };
+
 
             const roomInfo: RoomEdit = this.getRoomEdit(roomId);
 
-            this.sendMessage(user, 'algorithm', algorithmMessage, roomId);
             this.sendMessage(user, 'roomEdit', roomInfo, roomId);
         } catch (exception) {
             console.log(`Room ${roomId} not found.`);
@@ -185,6 +181,15 @@ export class MessageRoom {
         };
 
         this.sendMessage(ws, 'graph', graph, roomId);
+    }
+
+    public sendRoomAlgorithm(user: ws, roomId: string): void {
+        const algorithm = this.rooms.get(roomId).algorithm;
+        const algorithmMessage: AlgorithmMessage = {
+            info: algorithm
+        };
+
+        this.sendMessage(user, 'algorithm', algorithmMessage, roomId);
     }
 
     private constructor() {

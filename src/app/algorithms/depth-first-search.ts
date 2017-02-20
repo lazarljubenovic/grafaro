@@ -92,7 +92,8 @@ export class DepthFirstSearchAlgorithm extends AlgorithmBase {
 
     evaluateStatesFor(graph: Graph, root: string): State[] {
         if (!graph.hasNodeId(root)) {
-            throw new Error(`Node with id ${root} (root) doesn't exist on graph!`);
+            // throw new Error(`Node with id ${root} (root) doesn't exist on graph!`);
+            return [];
         }
 
         let states: State[] = [];

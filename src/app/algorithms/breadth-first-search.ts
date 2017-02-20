@@ -92,7 +92,8 @@ export class BreadthFirstSearchAlgorithm extends AlgorithmBase {
 
     public evaluateStatesFor(graph: Graph, root: string): State[] {
         if (!graph.hasNodeId(root)) {
-            throw new Error(`Node with id ${root} (root) doesn't exist on graph!`);
+            return [];
+            // throw new Error(`Node with id ${root} (root) doesn't exist on graph!`);
         }
 
         let states: State[] = [];

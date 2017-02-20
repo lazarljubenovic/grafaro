@@ -133,6 +133,9 @@ wss.on('connection', ws => {
             case 'graph-request':
                 messageRooms.sendGraphMessage(ws, roomId);
                 break;
+            case 'algorithm-request':
+                messageRooms.sendRoomAlgorithm(ws, roomId);
+                break;
             case 'leave':
                 if (roomId) {
                     messageRooms.removeUserFromRoom(roomId, ws);

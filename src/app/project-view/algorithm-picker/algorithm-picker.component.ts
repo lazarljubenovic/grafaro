@@ -2,9 +2,10 @@ import {Component, OnInit, OnDestroy} from '@angular/core';
 import {FormGroup, FormBuilder} from '@angular/forms';
 import {GraphManager} from '../../managers/graph.manager';
 import {AlgorithmManager} from '../../managers/algorithm.manager';
-import {AlgorithmSocketService, AlgorithmMessage} from '../algorithm-socket.service';
 import {MasterStorageService} from '../../shared/master-service/master-storage.service';
 import {Subject} from 'rxjs';
+import {AlgorithmStorageService} from '../services/algorithm-socket/algorithm-storage.service';
+import {AlgorithmMessage} from '../services/algorithm-socket/algorithm-socket';
 
 export interface FormOptions {
     options: {
@@ -33,7 +34,7 @@ export class AlgorithmPickerComponent implements OnInit, OnDestroy {
     constructor(private formBuilder: FormBuilder,
                 private _graphManager: GraphManager,
                 private _algorithmManager: AlgorithmManager,
-                private _algorithmSocket: AlgorithmSocketService,
+                private _algorithmStorage: AlgorithmStorageService,
                 private _masterStorage: MasterStorageService) {
     }
 
@@ -48,10 +49,10 @@ export class AlgorithmPickerComponent implements OnInit, OnDestroy {
             .takeUntil(this._destroySubject)
             .subscribe(form => {
                 this._algorithmManager.setAndEmit(form);
-                this._algorithmSocket.send(form);
+                this._algorithmStorage.send(form);
             });
 
-        this._algorithmSocket.algorithmSocket$
+        this._algorithmStorage.algorithmMessages$
             .takeUntil(this._destroySubject)
             .subscribe((message: AlgorithmMessage) => {
                 this.form.patchValue(message.info);
@@ -60,11 +61,12 @@ export class AlgorithmPickerComponent implements OnInit, OnDestroy {
         this._masterStorage.masterMessages$
             .takeUntil(this._destroySubject)
             .subscribe(master => {
-                this._algorithmSocket.canSend = master.isMaster;
+                this._algorithmStorage.canSend = master.isMaster;
             });
     }
 
     ngOnDestroy() {
+        this._algorithmStorage.restartAlgorithmWithOptions();
         this._destroySubject.next(true);
         this._destroySubject.unsubscribe();
     }
