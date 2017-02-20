@@ -1,0 +1,36 @@
+@startuml
+ditaa(--no-separations, --no-shadows)
+
+Osnovna arhitektura aplikacije Grafaro
+
+        +------------------+
+        |       cBLU       |
+        |      Server      |
+        |                  |
+        +---------+--------+
+        |   cGRE  |  cGRE  |
+        |  Socket |  HTTP  |
+        |         |        |
+        +---------+--------+
+        |       cPNK       |
+        |      Client      |
+        |                  |
+        +------------------+
+
+Ili...
+
+        +---------+
+        |   cBLU  |
+        | Server  |
+        |         |
+        +---------+
+        |   cGRE  |
+        | Proxy   |
+        |         |
+        +---------+
+        |   cPNK  |
+        | Client  |
+        |         |
+        +---------+
+
+@enduml
