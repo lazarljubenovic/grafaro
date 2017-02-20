@@ -18,6 +18,10 @@ $header-usable-space: $header-height - 2 * $header-margin;
   z-index: 10;
 }
 
+:host:not(.project-view-mode) {
+  justify-content: space-between;
+}
+
 #logo {
   height: $header-usable-space;
   width: $header-usable-space;
@@ -49,50 +53,55 @@ $header-usable-space: $header-height - 2 * $header-margin;
     display: flex;
     flex-direction: column;
     justify-content: center;
+  }
+}
 
-    .col {
-      display: flex;
-      align-items: center;
+#username-info {
+  display: flex;
+  align-items: center;
+}
 
-      &.project-title {
-        font-size: 1em;
+.col {
+  display: flex;
+  align-items: center;
 
-        .text {
-          font-weight: 300;
-          margin-left: -.08em;
-        }
-      }
+  &.project-title {
+    font-size: 1em;
 
-      &.project-description {
-        font-size: 0.6em;
-
-        .text {
-          font-style: italic;
-          font-weight: 500;
-        }
-      }
-
-      .icon {
-        display: inline-flex;
-        justify-content: center;
-        align-items: center;
-        margin-left: .8em;
-        border-radius: 50%;
-        width: 1.33em;
-        height: 1.33em;
-        font-size: .8em;
-
-        &:hover {
-          background-color: rgba(white, .12);
-          color: $white;
-          cursor: pointer;
-        }
-
-        i {
-          display: inline-block;
-        }
-      }
+    .text {
+      font-weight: 300;
+      margin-left: -.08em;
     }
+  }
+
+  &.project-description {
+    font-size: 0.6em;
+
+    .text {
+      font-style: italic;
+      font-weight: 500;
+    }
+  }
+}
+
+.icon {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: .8em;
+  border-radius: 50%;
+  width: 1.33em;
+  height: 1.33em;
+  font-size: .8em;
+
+  &:hover {
+    background-color: rgba(white, .12);
+    color: $white;
+    cursor: pointer;
+  }
+
+  i {
+    display: inline-block;
   }
 }
 
@@ -131,10 +140,6 @@ $header-usable-space: $header-height - 2 * $header-margin;
 #profile-image {
   height: $header-usable-space;
   width: $header-usable-space;
-  background-color: rgba(white, .2);
-  margin-left: 2 * $header-margin;
-}
-
-.fa-sign-out {
-  color: red;
+  background-color: white;
+  margin-left: $header-margin;
 }
