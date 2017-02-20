@@ -24,6 +24,10 @@ $header-usable-space: $header-height - 2 * $header-margin;
   margin-right: 2 * $header-margin;
   background-image: url('./assets/logo.svg');
   background-size: cover;
+
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 #current-project-info {

@@ -3,6 +3,7 @@ import {RoomEditService} from '../../project-view/room-edit.service';
 import {Auth0Service} from '../../core/auth0.service';
 import {Observable} from 'rxjs';
 import {MasterStorageService} from '../../shared/master-service/master-storage.service';
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'grf-header',
@@ -109,9 +110,17 @@ export class HeaderComponent implements OnInit {
         this.auth0.logout();
     }
 
+    public toHome(): void {
+        if (this.isProjectViewMode) {
+            this._router.navigate(['/']);
+            this.isProjectViewMode = false;
+        }
+    }
+
     constructor(private roomEditService: RoomEditService,
                 private _masterSocket: MasterStorageService,
-                private auth0: Auth0Service) {
+                private auth0: Auth0Service,
+                private _router: Router) {
     }
 
     ngOnInit() {
