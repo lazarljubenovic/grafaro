@@ -61,20 +61,35 @@
 </ng-container>
 
 <div id="username-info" *ngIf="displayName != ''">
-  <div class="col display-name" *ngIf="!isNameInEditMode">
-    <span class="text">{{displayName}}</span>
-    <span class="icon edit"
-          (click)="openNameEditMode()"
-    >
+
+  <div class="username-and-master-or-slave">
+    <div class="col display-name" *ngIf="!isNameInEditMode">
+      <span class="text">{{displayName}}</span>
+      <span class="icon edit"
+            (click)="openNameEditMode()"
+      >
           <i class="fa fa-pencil"></i>
         </span>
-  </div>
+    </div>
 
-  <div class="col display-name" *ngIf="isNameInEditMode">
-    <input #nameInput type="text" [(ngModel)]="newName"
-           (keyup.esc)="discardName()"
-           (keyup.enter)="submitName()">
-    <span class="icon edit" (click)="submitName()"><i class="fa fa-check"></i></span>
+    <div class="col display-name" *ngIf="isNameInEditMode">
+      <input #nameInput type="text" [(ngModel)]="newName"
+             (keyup.esc)="discardName()"
+             (keyup.enter)="submitName()">
+      <span class="icon edit" (click)="submitName()"><i class="fa fa-check"></i></span>
+    </div>
+
+    <ng-container *ngIf="isProjectViewMode">
+      <div class="master-or-slave" *ngIf="isMaster$ | async">
+        <span class="icon not-clickable"><i class="fa fa-user-circle-o"></i></span>
+        <span class="text">Master user</span>
+      </div>
+
+      <div class="master-or-slave" *ngIf="!(isMaster$ | async)">
+        <span class="icon not-clickable"><i class="fa fa-user-o"></i></span>
+        <span class="text">Normal user</span>
+      </div>
+    </ng-container>
   </div>
 
   <span class="icon"><i class="fa fa-sign-out" (click)="logout()"></i></span>

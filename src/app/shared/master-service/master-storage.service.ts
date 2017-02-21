@@ -14,18 +14,21 @@ export class MasterStorageService {
      * @private
      */
     private _masterSource: MasterSocketInterface;
+
     /**
      * Subscription of incoming messages.
      * @type {Subscription}
      * @private
      */
     private _messageSubscription: Subscription;
+
     /**
      * Stream of master messages coming from producers.
      * @type {ReplaySubject<MasterMessage>}
      * @public
      */
     public masterMessages$: ReplaySubject<MasterMessage>;
+
     /**
      * Buffer of a sort to prevent early requests.
      * @type {boolean}
