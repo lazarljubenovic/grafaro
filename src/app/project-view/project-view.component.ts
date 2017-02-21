@@ -2,8 +2,6 @@ import {
     Component,
     OnInit,
     ComponentFactoryResolver,
-    ViewChild,
-    ViewContainerRef,
     ComponentFactory,
     OnDestroy
 } from '@angular/core';
@@ -20,6 +18,7 @@ import {MasterStorageService} from '../shared/master-service/master-storage.serv
 import {GraphStorageService} from './services/graph-socket/graph-storage.service';
 import {LeaveStorageService} from './services/leave-socket/leave-storage.service';
 import {AlgorithmStorageService} from './services/algorithm-socket/algorithm-storage.service';
+import {ToastService} from '../toast/toast.service';
 
 @Component({
     selector: 'grf-user-interface',
@@ -39,13 +38,9 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
     public isSaveDialogOpen: boolean = false;
     public isLoadDialogOpen: boolean = false;
 
-    @ViewChild('renamePopupOutlet', {read: ViewContainerRef})
-    public viewContainerRef: ViewContainerRef;
-
-    @ViewChild('toastOutlet', {read: ViewContainerRef})
-    public toastOutlet: ViewContainerRef;
-
     public popupRenameComponentFactory: ComponentFactory<PopupRenameComponent>;
+
+    private isMaster: boolean;
 
     public save(path: GraphPath) {
         const graphJson = this._graphManager.graph$.getValue().writeJson();
@@ -57,6 +52,10 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
     }
 
     public load(path: GraphPath): void {
+        if (!this.isMaster) {
+            this.toast.display(`Only Master can load a graph.`);
+            return;
+        }
         this._graphTemplateService.getGraph(path.folder, path.filename)
             .subscribe(graphJson => {
                 this._graphManager.graphFromSocket(graphJson);
@@ -83,10 +82,10 @@ export class ProjectViewComponent implements OnInit, OnDestroy {
                 private _auth0: Auth0Service,
                 private _leaveStorage: LeaveStorageService,
                 private _algorithmStorage: AlgorithmStorageService,
-    ) {
+                private toast: ToastService) {
         this.popupRenameComponentFactory =
             componentFactoryResolver.resolveComponentFactory(PopupRenameComponent);
-
+        _masterStorage.masterMessages$.subscribe(msg => this.isMaster = msg.isMaster);
     }
 
     ngOnInit() {
