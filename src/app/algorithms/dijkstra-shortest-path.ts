@@ -221,12 +221,11 @@ export class DijkstraShortestPathAlgorithm extends AlgorithmBase {
                         u,
                         neighborEdges,
                         edge: edge.id,
+                        alt,
                         root
                     }));
 
                     if (alt < distance.get(edge.to)) {
-
-                        distance.set(edge.to, alt);
                         states.push(new State({
                             graph,
                             lineNumber: 21,
@@ -240,10 +239,24 @@ export class DijkstraShortestPathAlgorithm extends AlgorithmBase {
                             root
                         }));
 
-                        previous.set(edge.to, u);
+                        distance.set(edge.to, alt);
                         states.push(new State({
                             graph,
                             lineNumber: 22,
+                            Q,
+                            distance,
+                            previous,
+                            u,
+                            neighborEdges,
+                            edge: edge.id,
+                            alt,
+                            root
+                        }));
+
+                        previous.set(edge.to, u);
+                        states.push(new State({
+                            graph,
+                            lineNumber: 23,
                             Q,
                             distance,
                             previous,
