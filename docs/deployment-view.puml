@@ -1,0 +1,22 @@
+@startuml
+skinparam shadowing false
+
+database "DB\n{Mongo}" as db
+
+node "Server Side {NodeJS}" as ss {
+  [Server]
+}
+
+node "Client Side {Browser}" as cs {
+  [Proxy]
+  [Client]
+  Proxy <-> Client
+}
+
+db <--> ss : <<Mongoose>>
+ss --> cs
+
+Server -- Proxy : <<message>>
+Server -- Proxy : <<REST>>
+
+@enduml

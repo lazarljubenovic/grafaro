@@ -1,0 +1,40 @@
+@startuml
+skinparam shadowing false
+
+:User:
+:Logged:
+:Master:
+:Slave:
+
+User <|-- Logged
+Logged <|-- Master
+Logged <|-- Slave
+
+User -- (Log in)
+
+Logged -- (View rooms)
+
+(View rooms) --> (Create room)
+(View rooms) --> (Join room)
+
+Logged -- (Leave room)
+
+Master -- (Move\n node)
+Master -- (Add\n node)
+Master -- (Remove\n node)
+Master -- (Add\n edge)
+Master -- (Remove\n edge)
+Master -- (Change\n node\n weight)
+Master -- (Change\n edge\n weight)
+Master -- (Change\n algorithm)
+Master -- (Change\n root)
+Master -- (Load\n graph)
+Master -- (Save\n graph)
+Slave -- (Save\n graph)
+
+(Change\n edge\n weight) <.. (through\n toolbar) : <<extends>>
+(Change\n edge\n weight) <.. (through\n matrix) : <<extends>>
+
+Logged -- (Send\n chat\n messages)
+
+@enduml

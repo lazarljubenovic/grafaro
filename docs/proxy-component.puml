@@ -1,0 +1,17 @@
+@startuml
+
+[Proxy Component] as proxy
+
+interface RESTful as rest
+interface "Publish/Subscribe" as msgs
+
+proxy -up- rest : <<HTTP>>
+proxy -up- msgs : <<WebSocket>>
+
+proxy -down- GraphStorage
+proxy -down- AlgorithmStorage
+proxy -down- ...
+proxy -down- GraphTemplateStorage
+proxy -down- MasterStorage
+
+@enduml

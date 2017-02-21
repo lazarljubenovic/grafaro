@@ -1,0 +1,31 @@
+@startuml
+
+interface ProxyInterfaces
+
+note right of ProxyInterfaces : Veza sa proksi slojem\n(sa Storage Interface)
+
+frame "Client Component" {
+  [Model]
+
+
+
+  Model -up- ProxyInterfaces
+
+  Model -down- GraphManager
+  Model -down- AlgorithmManager
+  Model -down- StoreManager
+
+  [Controller]
+
+  Controller <-up-> GraphManager
+  Controller <-up-> AlgorithmManager
+  Controller <-up-> StoreManager
+
+  [View]
+
+  View <-left- Controller : <<Angular Components>>
+  View -left-> Controller : <<Angular Components>>
+}
+
+
+@enduml
