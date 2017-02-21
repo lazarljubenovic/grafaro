@@ -19,6 +19,7 @@ Pored ova dva modela, u bazi se ne čuva ništa više, jer nema razloga za tako 
 
 * Algoritmi su direktno vezani za front-end deo aplikacije i ne dobijaju se od servera.
 * Sobe za rad se brišu nakon napuštanja poslednjeg korisnika, a samim tim i cela razmena chat poruka.
+
 ### Šema baze
 
 Kao mapper je korišćena biblioteka Mongoose. U nastavku je dat izgled šeme grafa i šeme korisnika. Napomenimo još jednom da se grafovi čuvaju kao niz koji je atribut šeme korisnika.
