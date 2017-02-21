@@ -10,6 +10,10 @@ Osnovni arhitekturni obrazac je slojeviti (_layered_) obrazac u 3 sloja. Slojevi
 2. **Proxy sloj** -- međusloj koji predstavlja posrednika između klijenta i servera
 3. **Klijentski sloj** -- sloj u kome je implementirana komplenta biznis logika aplikacije
 
+Pregled slojeva je dat na sledećem dijagramu:
+
+![Slojeviti obrazac](img/layered.png)
+
 Pored ovog osnovnog obrasca, u projektovanju aplikacije su primenjena i još dva obrasca: **publish--subscribe** za razmenu poruka između klijenata i **MVC** na klijentskom sloju aplikacije koji će biti zasebno objašnjeni u ostatku dokumenta.
 
 ### Serverski sloj
