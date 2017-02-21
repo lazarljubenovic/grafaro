@@ -47,14 +47,6 @@ databaseRoutes.get('/user', (req, res) => {
         .catch(error => res.json({error: error}));
 });
 
-databaseRoutes.delete('/user', (req, res) => {
-    console.log('Deleting all users...');
-    User.find()
-        .remove()
-        .then((result) => res.json({status: 'success'}))
-        .catch((error) => res.json({error}));
-});
-
 function createNewUser(socialId: string, success: Function, error: Function) {
     let newUser = new User({
         graph: [],
@@ -91,6 +83,7 @@ databaseRoutes.get('/user/:id', (req, res) => {
         .catch(error => res.json({error: error}));
 });
 
+
 databaseRoutes.put('/user', (req, res) => {
     let socialId: string = req.body['data'].socialId;
 
@@ -109,15 +102,6 @@ databaseRoutes.post('/user/:id', (req, res) => {
     User.findByIdAndUpdate(id, {$set: {displayName: user.displayName}})
         .then(() => res.json({status: 'success'}))
         .catch(error => res.json({error}));
-});
-
-databaseRoutes.delete('/user/:id', (req, res) => {
-    const id: string = req.params['id'];
-
-    console.log('Removing user', id);
-    User.findByIdAndRemove(id)
-        .then(() => res.json({status: 'success'}))
-        .catch((error) => res.json({error}));
 });
 
 databaseRoutes.put('/graph', (req, res) => {
