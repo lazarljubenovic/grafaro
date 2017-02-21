@@ -1,6 +1,6 @@
 # Arhitekturni obrasci aplikacije Grafaro
 
-U ovom dokumentu će biti objašnjeni upotrebljeni obrasci u projektovanju aplikacije Grafaro.
+U ovom dokumentu će biti objašnjeni upotrebljeni obrasci u projektovanju aplikacije Grafaro. Takođe će biti dat i pregled osnovnih komponenti kroz pogled implementacije (_implementation view_) sistema.
 
 ## Slojeviti obrazac
 
@@ -25,7 +25,7 @@ Komponenta sa temama ima zadatak da čuva sve korisnike koji su trenutno ulogova
 
 Pregled serverskih komponenti i odgovarajućih interfejsa je dat na sledećem dijagramu:
 
-DIJAGRAM OVDE
+![Dijagram komponente servera](img/server-component.png)
 
 ### Proxy sloj
 
@@ -37,7 +37,7 @@ Ovaj sloj služi za _hvatanje_ poruka i REST zahteva ka serveru i odlučivanje k
 
 Proxy sloj je predstavljen na sledećem dijagramu:
 
-DIJAGRAM OVDE
+![Dijagram proxy komponente](img/proxy-component.png)
 
 ### Klijentski sloj
 
@@ -47,7 +47,7 @@ Kako je već rečeno, klijentski sloj je baziran na **MVC** arhitekturnom obrasc
 
 Pregled klijentskog sloja je dat na sledećem dijagramu:
  
-DIJAGRAM OVDE
+![Dijagram klijentske komponente](img/client-component.png)
 
 ## Publish--subscribe
 
