@@ -6,6 +6,7 @@ import {ToolbarService} from '../project-view/toolbar/toolbar.service';
 import {suggestNextName} from '../utils/name-suggester';
 import {PopupRenameService} from '../project-view/popup-rename/popup-rename.service';
 import {ToastService} from '../toast/toast.service';
+import {MasterStorageService} from '../shared/master-service/master-storage.service';
 
 @Injectable()
 export class GraphManager {
@@ -14,24 +15,48 @@ export class GraphManager {
 
     public graph$: BehaviorSubject<Graph>;
 
+    private isMaster: boolean;
+
     constructor(private _toolbarService: ToolbarService,
                 private popup: PopupRenameService,
-                private toast: ToastService) {
+                private toast: ToastService,
+                private masterStorageService: MasterStorageService) {
         this.graph$ = new BehaviorSubject(this._graph);
 
-        _toolbarService.addNode$.subscribe(x => {
-            this.addNode(x.position);
+        masterStorageService.masterMessages$.subscribe(message => {
+            this.isMaster = message.isMaster;
+        });
+
+        _toolbarService.addNode$.subscribe(action => {
+            if (this.isMaster) {
+                this.addNode(action.position);
+            } else {
+                this.toast.display(`Only Master can add a node.`);
+            }
         });
 
         _toolbarService.removeNode$.subscribe(action => {
-            this.removeNode(action);
+            if (this.isMaster) {
+                this.removeNode(action);
+            } else {
+                this.toast.display(`Only Master can remove a node.`);
+            }
         });
 
         _toolbarService.linkNodes$.subscribe(x => {
-            this.linkNodes(x[0], x[1]);
+            if (this.isMaster) {
+                this.linkNodes(x[0], x[1]);
+            } else {
+                this.toast.display(`Only Master can link nodes.`);
+            }
         });
 
         _toolbarService.renameNode$.subscribe(action => {
+            if (!this.isMaster) {
+               this.toast.display(`Only Master can rename a node.`);
+               return;
+            }
+
             const id: string = action.node;
             const oldLabel: string = this.getNodeLabel(id);
 
@@ -51,6 +76,11 @@ export class GraphManager {
         });
 
         _toolbarService.renameEdge$.subscribe(action => {
+            if (!this.isMaster) {
+                this.toast.display(`Only Master can rename an edge`);
+                return;
+            }
+
             const id: string = action.edge;
             const oldLabel: string = this.getEdgeLabel(id);
 
@@ -70,6 +100,11 @@ export class GraphManager {
         });
 
         _toolbarService.changeWeightNode$.subscribe(action => {
+            if (!this.isMaster) {
+                this.toast.display(`Only Master can change node weight`);
+                return;
+            }
+
             const label = this.getNodeLabel(action.node);
 
             const {left, top} = document.querySelector('vis-network').getBoundingClientRect();
@@ -94,6 +129,11 @@ export class GraphManager {
         });
 
         _toolbarService.changeWeightEdge$.subscribe(action => {
+            if (!this.isMaster) {
+                this.toast.display(`Only Master can change edge weight`);
+                return;
+            }
+
             const label = this.getEdgeLabel(action.edge);
 
             const {left, top} = document.querySelector('vis-network').getBoundingClientRect();
@@ -118,10 +158,18 @@ export class GraphManager {
         });
 
         _toolbarService.removeEdge$.subscribe(x => {
+            if (!this.isMaster) {
+                this.toast.display(`Only Master can remove an edge`);
+                return;
+            }
             this.removeEdge(x);
         });
 
         _toolbarService.moveNode$.subscribe(x => {
+            if (!this.isMaster) {
+                this.toast.display(`Only Master can move a node.`);
+                return;
+            }
             this.moveNode(x.nodeId, x.position);
         });
     }
