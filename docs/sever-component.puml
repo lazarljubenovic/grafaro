@@ -1,0 +1,20 @@
+@startuml
+
+frame "Server" {
+  [REST] as rest
+  [Topic]
+}
+
+interface RESTful as oldrest
+interface Messages as msgs
+
+oldrest -up- rest
+
+msgs -up- Topic
+
+
+database DB
+
+rest <.right.> DB : <<connect>>
+
+@enduml
