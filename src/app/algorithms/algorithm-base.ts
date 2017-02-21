@@ -29,7 +29,7 @@ export abstract class AlgorithmState {
      * Filled with decorators.
      * @internal
      */
-    public _exportFunctions: Map<string, {params: string[], fn: Function}>;
+        public _exportFunctions: Map<string, {params: string[], fn: Function}>;
 
     /**
      * Filled with decorators.
