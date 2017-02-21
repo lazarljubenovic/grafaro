@@ -1,0 +1,106 @@
+@startuml
+
+class AlgorithmBase {
+  {abstract} +name: string
+  {abstract} +abbr: string
+  {abstract} +code: string
+  {abstract} +trackedVariables: string[]
+  + states: AlgorithmState[]
+  {abstract} +evaluateStatesFor(graph: Graph, rootId: string): AlgorithmState[]
+  +getCodeJson(): CodeJson
+  +normalize(state: AlgorithmState): NormalizedState
+}
+
+note left of AlgorithmBase : Izvedene klase \nimplementiraju sve \napstraktne atribute \ni metode (navedena je \nsamo glavna metoda)
+
+
+class AlgorithmState {
+  -<<filled by decorators>> colorRules: ColorDecoratorParameter
+  -<<filled by decorators>> annotationRules: AnnotationDecoratorParameter
+  -<<filled by decorators>> exportFunctions: Map<string, {params: string[], fn: Function}>
+  -<<filled by decorators>> kinds: Map<string, string>
+  +graphJson: GraphJson
+  +lineNumber: number
+  +getColorForNodeLabel(nodeLabel: string): GrfColor
+  +getColorForEdgeLabel(edgeLabel: string): GrfColor
+  +getAnnotationsForNodeLabel(nodeLabel: string)
+  +getAnnotationsForEdgeLabel(edgeLabel: string)
+  +getDebugData(): DebugData[]
+}
+
+package BreadthFirstSearch <<Folder>> {
+  class BreadthFirstSearchAlgorithm extends AlgorithmBase {
+    +evaluateStatesFor(graph: Graph, rootId: string): AlgorithmState[]
+    ~states: State;
+  }
+
+  class BreadthFirstSearch.State extends AlgorithmState {
+    @TrackedVar('node') public currentNode: string;
+    @TrackedVar('node') public neighbors: string[];
+    @TrackedVar('node') public neighbor: string;
+    @TrackedVar('node') public visited: string[];
+    @TrackedVar('node') public solution: string[];
+    @TrackedVar('node') public queue: string[];
+    @TrackedVar('node') public root: string;
+  }
+}
+
+package DepthFirstSearch <<Folder>> {
+  class DepthFirstSearchAlgorithm extends AlgorithmBase {
+    +evaluateStatesFor(graph: Graph, rootId: string): AlgorithmState[]
+    ~states: State;
+  }
+
+  class DepthFirstSearch.State extends AlgorithmState {
+    @TrackedVar('node') public currentNode: string;
+    @TrackedVar('node') public neighbors: string[];
+    @TrackedVar('node') public neighbor: string;
+    @TrackedVar('node') public visited: string[];
+    @TrackedVar('node') public solution: string[];
+    @TrackedVar('node') public stack: string[];
+    @TrackedVar('node') public root: string;
+  }
+}
+
+package DijkstraShortestPath <<Folder>> {
+  class DijkstraShortestPathAlgorithm extends AlgorithmBase {
+    +evaluateStatesFor(graph: Graph, rootId: string): AlgorithmState[]
+    ~states: State;
+  }
+
+  class DijkstraShortestPath.State extends AlgorithmState {
+    @TrackedVar('node') public root: string;
+    @TrackedVar('node') public Q: string[];
+    @TrackedVar('node-number') public distance: string[][];
+    @TrackedVar('node-node') public previous: string[][];
+    @TrackedVar('node') public u: string;
+    @TrackedVar('edge') public neighborEdges: string[];
+    @TrackedVar('edge') public edge: string[];
+    @TrackedVar('number') public alt: number;
+  }
+}
+
+package PrimMinimalSpanningTree <<Folder>> {
+  class PrimMinimalSpanningTreeAlgorithm extends AlgorithmBase {
+    +evaluateStatesFor(graph: Graph, rootId: string): AlgorithmState[]
+    ~states: State;
+  }
+
+  class PrimMinimalSpanningTree extends AlgorithmState {
+    @TrackedVar('node') public root: string;
+    @TrackedVar('node-number') public C: string[][];
+    @TrackedVar('node-edge') public E: string[][];
+    @TrackedVar('node-edge') public F: string[][];
+    @TrackedVar('node') public Q: string[];
+    @TrackedVar('node') public v: string;
+    @TrackedVar('node') public w: string;
+    @TrackedVar('edge') public edge: string;
+  }
+}
+
+class AlgorithmState {
+}
+
+
+
+@enduml
