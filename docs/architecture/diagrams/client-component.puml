@@ -9,7 +9,6 @@ frame "Client Component" {
 
 
 
-  Model -up- ProxyInterfaces
 
   Model -down- GraphManager
   Model -down- AlgorithmManager
@@ -17,6 +16,7 @@ frame "Client Component" {
 
   [Controller]
 
+  Controller -- ProxyInterfaces
   Controller <-up-> GraphManager
   Controller <-up-> AlgorithmManager
   Controller <-up-> StoreManager
