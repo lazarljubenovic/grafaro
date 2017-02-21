@@ -79,6 +79,7 @@ export class State extends AlgorithmState {
     @TrackedVar('node') public Q: string[];
     @TrackedVar('node') public v: string;
     @TrackedVar('node') public w: string;
+    @TrackedVar('edge') public edge: string;
 
     constructor(o: CreateNewStateObject) {
         super(o.graph, o.lineNumber);
@@ -86,6 +87,7 @@ export class State extends AlgorithmState {
         this.root = getLabelIfDefined(o.graph, o.root);
         this.v = getLabelIfDefined(o.graph, o.v);
         this.w = getLabelIfDefined(o.graph, o.w);
+        this.edge = o.edge ? o.graph.getEdgeLabel(o.edge) : <any>o.edge;
 
         if (o.C) {
             this.C = Array.from(o.C)
@@ -120,8 +122,8 @@ export class State extends AlgorithmState {
 }
 
 interface CreateNewStateObject {
-    graph?: Graph;
-    lineNumber?: number;
+    graph: Graph;
+    lineNumber: number;
     root?: string;
     C?: Map<string, number>;
     E?: Map<string, string>;
@@ -129,7 +131,9 @@ interface CreateNewStateObject {
     Q?: Set<string>;
     v?: string;
     w?: string;
+    edge?: string;
 }
+
 
 export class PrimMinimalSpanningTreeAlgorithm extends AlgorithmBase {
     name: string = `Prim's minimal spanning tree`;
@@ -161,13 +165,14 @@ export class PrimMinimalSpanningTreeAlgorithm extends AlgorithmBase {
   }
   return F;
 }`;
+
     trackedVariables: string[] = [
-        'C', 'E', 'F', 'Q', 'root', 'v', 'w',
+        'C', 'E', 'F', 'Q', 'root', 'v', 'w', 'edge'
     ];
 
     evaluateStatesFor(graph: Graph, root: string): AlgorithmState[] {
         let states: State[] = [];
-        states.push(new State({graph, lineNumber: 1, root}));
+        states.push(new State({graph, lineNumber: 1}));
 
         let C = new Map<string, number>();
         let E = new Map<string, string>();
@@ -179,40 +184,96 @@ export class PrimMinimalSpanningTreeAlgorithm extends AlgorithmBase {
             E.set(id, null);
         });
 
-        states.push(new State({graph, lineNumber: 7, root, C, E}));
+        states.push(new State({graph, lineNumber: 8, root, C, E}));
 
         let F = new Map<string, string>();
         let Q = new Set(orderedNodeIds);
 
-        states.push(new State({graph, lineNumber: 9, root, C, E, F, Q}));
+        states.push(new State({graph, lineNumber: 11, root, C, E, F, Q}));
 
         while (Q.size > 0) {
+            states.push(new State({graph, lineNumber: 12, root, C, E, F, Q}));
+
             const distance = Array.from(C).filter(kv => Q.has(kv[0]));
             const v = Min(new Map(distance), (a, b) => a[1] > b[1] ? 1 : -1)[0];
-            states.push(new State({graph, lineNumber: 9, root, C, E, F, Q, v}));
+            states.push(new State({graph, lineNumber: 13, root, C, E, F, Q, v}));
+
             Q.delete(v);
-            states.push(new State({graph, lineNumber: 9, root, C, E, F, Q, v}));
+            states.push(new State({graph, lineNumber: 14, root, C, E, F, Q, v}));
 
             F.set(v, null);
-            states.push(new State({graph, lineNumber: 9, root, C, E, F, Q, v}));
+            states.push(new State({graph, lineNumber: 15, root, C, E, F, Q, v}));
+
             if (E.get(v) != null) {
+                states.push(new State({graph, lineNumber: 16, root, C, E, F, Q, v}));
+
                 F.set(v, E.get(v));
-                states.push(new State({graph, lineNumber: 9, root, C, E, F, Q, v}));
             }
-            states.push(new State({graph, lineNumber: 9, root, C, E, F, Q, v}));
+            states.push(new State({graph, lineNumber: 18, root, C, E, F, Q, v}));
 
             graph.getSources(v).forEach(edge => {
+                states.push(new State({graph, lineNumber: 19, root, C, E, F, Q, v, edge: edge.id}));
+
                 const w = edge.to;
-                states.push(new State({graph, lineNumber: 9, root, C, E, F, Q, v, w}));
+                states.push(new State({
+                    graph,
+                    lineNumber: 20,
+                    root,
+                    C,
+                    E,
+                    F,
+                    Q,
+                    v,
+                    w,
+                    edge: edge.id
+                }));
+
                 if (Q.has(w) && edge.weight < C.get(w)) {
+                    states.push(new State({
+                        graph,
+                        lineNumber: 21,
+                        root,
+                        C,
+                        E,
+                        F,
+                        Q,
+                        v,
+                        w,
+                        edge: edge.id
+                    }));
+
                     C.set(w, edge.weight);
+                    states.push(new State({
+                        graph,
+                        lineNumber: 22,
+                        root,
+                        C,
+                        E,
+                        F,
+                        Q,
+                        v,
+                        w,
+                        edge: edge.id
+                    }));
+
                     E.set(w, edge.id);
-                    states.push(new State({graph, lineNumber: 9, root, C, E, F, Q, v, w}));
                 }
+                states.push(new State({
+                    graph,
+                    lineNumber: 18,
+                    root,
+                    C,
+                    E,
+                    F,
+                    Q,
+                    v,
+                    w,
+                    edge: edge.id
+                }));
             });
-            states.push(new State({graph, lineNumber: 9, root, C, E, F, Q, v}));
+            states.push(new State({graph, lineNumber: 11, root, C, E, F, Q, v}));
         }
-        states.push(new State({graph, lineNumber: 9, root, C, E, F, Q}));
+        states.push(new State({graph, lineNumber: 26, root, C, E, F, Q}));
         this.states = states;
         return states;
     }
