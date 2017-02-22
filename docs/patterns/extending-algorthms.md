@@ -8,25 +8,25 @@ Za definiciju novog algoritma je neophodno izvesti klase `AlgorithmBase` i `Algo
 
 ### Klasa `AlgorithmBase`
 
-Klasa `AlgorithmBase` je osnova algoritma. U izvedenoj klasi treba definisati sledeće.
+Klasa `AlgorithmBase` je osnova algoritma. Izvedena klasa, pored implementiranja svih apstraktnih metoda i svojstava, treba da ima dekorator `@Algorithm`.
 
-#### `name`
+#### Naziv algorithma (`name`)
 
-Atribut `name` tipa string predstavlja ime algoritma. Ovo ime će biti iskorišćeno za prikaz u komponenti za izbor algoritma.
+Atribut `name` tipa string navodi se u dekoratoru `@Algorithm` i predstavlja ime algoritma. Ovo ime će biti iskorišćeno za prikaz u komponenti za izbor algoritma.
 
-#### `abbr`
+#### Jedinstveni identifikator algoritma (`abbr`)
 
-Atribut `abbr` tipa string je identifikator algoritma i mora biti jedinstven u celoj aplikaciji. Po konvenciji je ovo skraćenica imena algoritma. Ne prikazuje se krajnjem korisniku ali se koristi kao HTML identifikator u listi opcija.
+Atribut `abbr` tipa string navodi se u dekoratoru `@Algorithm` i to je identifikator algoritma i mora biti jedinstven u celoj aplikaciji. Po konvenciji je ovo skraćenica imena algoritma. Ne prikazuje se krajnjem korisniku ali se koristi kao HTML identifikator u listi opcija.
 
-#### `code`
+#### Izvorni kod za prikaz (`code`)
 
 Atribut `code` je string koji predstavlja izgled koda koji će se prikazati krajnjem korisniku i koji će koristik koristiti radi razumevanja rada algoritma, kao i za praćenje trenutne pozicije izvršenja. Ovaj kod se **ne** pokreće, ali se provlači kroz lekser (zbog bojenja kod), pa se stoga mora raditi o validnom EcmaScript kodu.
 
-#### `trackedVariables`
+#### Niz promenljivih koje se prate (`trackedVariables`)
 
 Atribut `trackedVariables` je niz stringova u kome se navode imena promenljivih, i to onakva kakva su definisana u atributu `code`. Ove promenljive će biti _praćene_, odnosno biće prikazane u tabeli ispod grafa gde će krajnji korisnik moći da vizuelno pogleda sadržaj memorijskih lokacija u tekućem stanju.
 
-#### `evaluateStatesFor`
+#### Funkcija za evaluaciju algoritma (`evaluateStatesFor`)
 
 Funkcija `evaluateStatesFor` prima parametar tipa `Graph` i `rootId`, a vraća niz čiji su elementi tipa `AlgoritmState`. Ovo je "srž" algoritma tj. ovde treba definisati sam tok izvršenja. Umesto klasične implementacije gde je izlaz neka vrednost, niz, ili stablo, izlaz iz funkcije treba da bude niz stanja. Ovo su stanja kroz koja će korisnik prolaziti. Tip `AlgoritmState` ne treba koristiti direktno (radi se o apstraktnoj klasi), već se od dizajnera algoritma očekuje da tu klasu izvede i napravi svoju ličnu predstavu stanja.
 
@@ -38,7 +38,7 @@ Implementacija ove klase se svodi na listu atributa i njihovom semantičkom opis
 
 #### Tip (`TrackedVar`)
 
-Tip se definiše dekoratorom atributa `TrackedVar`. Ovo je fabrika-dekorator i prima jedan od sledećih stringova: `node`, `edge`, `node-number`, `node-node` i `number` (mada je i ova lista lako proširljiva u okviru `DebugTableComponent` klase, gde treba definisati dodatne CSS stilove za novododatu klasu). Ovime se generičkim stringovima dodaljuje semantičko značenje u vezi s grafom, a sama implementacija klase ostaje jednostavna jer se radi o stringovima, pa dizajner algoritma ne mora da vodi računa o tipovima podatka dok manipuliše stanjem.
+Tip se definiše dekoratorom atributa `TrackedVar`. Ovo je fabrika-dekorator i prima jedan od sledećih stringova: `node`, `edge`, `node-number`, `node-node` i `number` (mada je i ova lista lako proširljiva u okviru `DebugTableComponent` klase, gde treba definisati dodatne CSS stilove za novododatu klasu). Ovime se generičkim stringovima dodeljuje semantičko značenje u vezi s grafom, a sama implementacija klase ostaje jednostavna jer se radi o stringovima, pa dizajner algoritma ne mora da vodi računa o tipovima podataka dok manipuliše stanjem.
 
 #### Boja (`Color`)
 
@@ -80,6 +80,6 @@ Slično, `font` se koristi kao [`font` svojstvo HTML5 kanvasa](https://developer
 
 ## Registrovanje algoritma
 
-Kako bi se algoritam našao među algoritmima koji su ponuđeni krajnjem korisniku, neophodno je registrovati ga. Ovo se obavlja dodavanjem klase u niz. 
+Kako bi se algoritam našao među algoritmima koji su ponuđeni krajnjem korisniku, neophodno je registrovati ga. Ovo se obavlja prosleđivanjem niza klasa (a **ne** njihovih instanci!) statičkoj metodi `forRoot` modula `ProjectView` prilikom njegove registracije u glavni modul Angular aplikacije (`AppModule`).
 
-TODO: Dovršavam ovo kad ga implementiram.
+
