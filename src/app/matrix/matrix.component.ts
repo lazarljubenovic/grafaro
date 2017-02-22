@@ -1,6 +1,8 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {GraphManager} from '../managers/graph.manager';
 import {Subject} from 'rxjs';
+import {MasterStorageService} from '../shared/master-service/master-storage.service';
+import {ToastService} from '../toast/toast.service';
 
 @Component({
     selector: 'grf-matrix',
@@ -15,30 +17,36 @@ export class MatrixComponent implements OnInit, OnDestroy {
      * @private
      */
     private _destroySubject: Subject<boolean> = new Subject();
+
     /**
      * Matrix representation of graph.
      * @type {number[][]}
      * @public
      */
     public data: number[][] = [[]];
+
     /**
      * Labels of nodes.
      * @type {string[]}
      * @public
      */
     public labels: string[] = [];
+
     /**
      * Index of highlighted node in data.
      * @type {[number,number]}
      * @public
      */
     public highlightedIndexes: number[] = [-1, -1];
+
     /**
      * Switch for edit modes.
      * @type {boolean}
      * @public
      */
     public isEditWeightMode: boolean = false;
+
+    private isMaster: boolean;
 
     /**
      * Angular necessity used for iterating in *ngFor
@@ -79,19 +87,16 @@ export class MatrixComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * todo
-     */
-    public log() {
-        console.log('tick');
-    }
-
-    /**
      * Connects two nodes through matrix.
      * @param row
      * @param column
      * @public
      */
     public toggleEdge(row: number, column: number): void {
+        if (!this.isMaster) {
+            return this.toast.display(`Only Master can manipulate graph`);
+        }
+
         const from = this.graphManager.getNodeId(this.labels[row]);
         const to = this.graphManager.getNodeId(this.labels[column]);
 
@@ -110,6 +115,10 @@ export class MatrixComponent implements OnInit, OnDestroy {
      * @public
      */
     public setWeight(row: number, column: number, weight: number): void {
+        if (!this.isMaster) {
+            return this.toast.display(`Only Master can manipulate graph`);
+        }
+
         const from = this.graphManager.getNodeId(this.labels[row]);
         const to = this.graphManager.getNodeId(this.labels[column]);
 
@@ -129,11 +138,11 @@ export class MatrixComponent implements OnInit, OnDestroy {
                 this.graphManager.changeEdgeWeight(edgeId, weight);
             }
         }
-
-
     }
 
-    constructor(private graphManager: GraphManager) {
+    constructor(private graphManager: GraphManager,
+                private _masterStorage: MasterStorageService,
+                private toast: ToastService) {
     }
 
     /**
@@ -149,6 +158,10 @@ export class MatrixComponent implements OnInit, OnDestroy {
                 this.data = matrix;
                 this.labels = graph.nodes.map(node => node.label);
             });
+
+        this._masterStorage.masterMessages$
+            .takeUntil(this._destroySubject)
+            .subscribe(masterMessage => this.isMaster = masterMessage.isMaster);
     }
 
     /**

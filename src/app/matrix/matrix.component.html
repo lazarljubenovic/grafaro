@@ -18,7 +18,8 @@
 
         <input *ngIf="!(rowInd == 0 || colInd == 0 || !isEditWeightMode)"
                type="number"
-               [ngModel]="cell + 0"
+               [disabled]="!isMaster"
+               [ngModel]="cell"
                (ngModelChange)="setWeight(rowInd - 1, colInd - 1, $event)">
 
       </td>
