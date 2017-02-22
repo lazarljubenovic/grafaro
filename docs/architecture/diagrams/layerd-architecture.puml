@@ -1,0 +1,16 @@
+@startuml
+ditaa(--no-separations, --no-shadows)
++---------------+
+|      cEEE     |
+|    Server     |
+|               |
++---------------+
+|      c333     |
+|    Proxy      |
+|               |
++---------------+
+|     c999      |
+|   Client      |
+|               |
++---------------+
+@enduml

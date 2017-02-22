@@ -14,9 +14,9 @@ node "Client Side {Browser}" as cs {
 }
 
 db <--> ss : <<Mongoose>>
-ss --> cs
+ss -up-> cs : <<serve bundle>>
 
-Server -- Proxy : <<message>>
-Server -- Proxy : <<REST>>
+Server <--> Proxy : <<message>>
+Server <--> Proxy : <<REST>>
 
 @enduml

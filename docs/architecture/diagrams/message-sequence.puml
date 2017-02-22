@@ -1,0 +1,94 @@
+@startuml
+
+participant Controlers as c
+participant Proxy as p
+participant WebSocketService as ws
+participant Server as s
+
+group User starts the app
+ws -> s : onCreate()
+s -> ws : Message<RoomInfo>
+ws -> p : RoomInfo
+p -> c : RoomInfo
+end
+
+newpage
+
+group User creates the room
+c -> p : createNewRoom()
+p -> ws : send('create')
+ws -> s : send(create new room)
+s -> ws : Message<RoomId>
+ws -> p : RoomId
+p -> c : RoomId
+end
+
+group User joins the room
+c -> p : joinRoom(roomId)
+p -> ws : send('join', roomId)
+ws -> s : send(join to roomId)
+s -> ws : Message<JoinMessage>
+ws -> p : JoinMessage
+p -> c : JoinMessage
+
+c -> p : requestMaster()
+p -> ws : send('master-request')
+ws -> s : send(master for roomId)
+s -> ws : Message<MasterMessage>
+ws -> p : MasterMessage
+p -> c : MasterMessage
+
+c -> p : requestGraph()
+p -> ws : send('graph-request')
+ws -> s : send(graph-request for roomId)
+s -> ws : Message<GraphMessage>
+ws -> p : GraphMessage
+p -> c : GraphMessage
+
+c -> p : requestAlgorithm()
+p -> ws : send('algorithm-request')
+ws -> s : send(algorithm-request for roomId)
+s -> ws : Message<AlgorithmMessage>
+ws -> p : AlgorithmMessage
+p -> c : AlgorithmMessage
+
+c -> p : requestRoomEdit()
+p -> ws : send('roomEdit-request')
+ws -> s : send(roomEdit-request for roomId)
+s -> ws : Message<RoomEdit>
+ws -> p : RoomEdit
+p -> c : RoomEdit
+
+end
+
+newpage
+
+group Model change
+c -> p : <<model changed>>
+p -> ws : send(model-message, roomId)
+ws -> s : send(model-message)
+s ->] : broadcast(roomId, message)
+activate s
+deactivate s
+
+group Server disconnected
+c -> p : <<model changed>>
+end
+end
+
+newpage
+
+group User leaves the room
+c -> p : leaveRoom()
+p -> ws : send('leave')
+p -> p : restoreState()
+ws -> s : send(leave user from roomId)
+s -> s : removeUser(user, roomId)
+end
+
+group Socket close
+ws -> s : onClose()
+s -> s : findAndRemoveUser()
+end
+
+@enduml
