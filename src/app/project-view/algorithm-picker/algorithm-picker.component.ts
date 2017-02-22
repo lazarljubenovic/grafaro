@@ -2,7 +2,6 @@ import {Component, OnInit, OnDestroy} from '@angular/core';
 import {FormGroup, FormBuilder} from '@angular/forms';
 import {GraphManager} from '../../managers/graph.manager';
 import {AlgorithmManager} from '../../managers/algorithm.manager';
-import {MasterStorageService} from '../../shared/master-service/master-storage.service';
 import {Subject} from 'rxjs';
 import {AlgorithmStorageService} from '../services/algorithm-socket/algorithm-storage.service';
 import {AlgorithmMessage} from '../services/algorithm-socket/algorithm-socket';
@@ -34,8 +33,7 @@ export class AlgorithmPickerComponent implements OnInit, OnDestroy {
     constructor(private formBuilder: FormBuilder,
                 private _graphManager: GraphManager,
                 private _algorithmManager: AlgorithmManager,
-                private _algorithmStorage: AlgorithmStorageService,
-                private _masterStorage: MasterStorageService) {
+                private _algorithmStorage: AlgorithmStorageService) {
     }
 
     ngOnInit() {
@@ -56,12 +54,6 @@ export class AlgorithmPickerComponent implements OnInit, OnDestroy {
             .takeUntil(this._destroySubject)
             .subscribe((message: AlgorithmMessage) => {
                 this.form.patchValue(message.info);
-            });
-
-        this._masterStorage.masterMessages$
-            .takeUntil(this._destroySubject)
-            .subscribe(master => {
-                this._algorithmStorage.canSend = master.isMaster;
             });
     }
 
