@@ -4,8 +4,8 @@ U ovom dokumentu će biti predstavljen logički pogled aplikacije Grafaro.
 
 Kako je reč o Angular aplikaciji, biće predstavljena hijerarhija komponenti, sa odgovarajućim `input` i `ouptput` propertijima.
 Takođe će biti predstavljen i pogled na klase modela i biti opisan način njihovog funkcionisanja, kao i mogućnosti proširenja kod klasa koje definišu algoritam.
-Biće prikaz i opisan način dotoka podataka u kontrolerske komponente, kao i način funkcionisanja Proxy komponente.
-Na kraju dokumenta će biti opisan način funkcionisanja serverske komponente za prijem i rutiranje poruka.
+Biće prikazan i opisan način dotoka podataka u kontrolerske komponente, kao i način funkcionisanja Proxy komponente.
+Na kraju dokumenta će biti prikazan osnovni logički pogled na serversku komponentu.
 
 ## Hijerarhija komponenti
 
@@ -23,3 +23,33 @@ Dijagram hijerarhije komponenti:
 
 Sa dijagrama se vidi da je ulazna komponenta `AppComponent` koja sadrži samo `RouterOutlet`.
 Takođe se može uočiti da centralni deo aplikacije predstavlja `RoomViewComponent` koja enkapsulira skoro komplentu funkcionalnost kroz odgovarajuće komponente korisničkog interfejsa.
+
+## Pogled na klase modela
+
+Komponentu modela čine tri klase: `GraphManager`, `AlgorithmManager` i `StateManager` koje su zadužene, redom, za čuvanje trenutnog modela grafa, čuvanje trenutno odabranog algoritma i odgovarajućih opcija i izračunavanje trenutnog stanja na osnovu datog grafa i algoritma.
+Ovde je bitno napomenuti da su ove tri klase singltoni i da su dostupni kroz Angularov dependency injection (DI) frejmvork (o kome se može pročitati više u dokumentu vezanom za obrasce, [di-pattern](../patterns/di-pattern.md)).
+Grafički je DI prikazan kao obična relacija zavisnosti sa stereotipom `DI`.
+Dijagram predstavlja zavisnosti pojedinih kontrolerskih klasa u odnosu na modele, sa detaljnim prikazom modela.
+
+![Dijagrama klasa modela](img/model-view.png)
+
+Kada govorimo o klasa modela, potrebno je predstaviti i reprezentaciju grafa kroz klasu `Graph`, koja je dostupna kroz tok Observabla klase `GraphManager`, kao i ostale bitne interfejse i klase za njeno funkcionisanje:
+ 
+![Dijagrama klase grafa](img/graph.png)
+
+## Klasa algoritama
+
+Zbog sličnosti sa temom, opis klase algoritama i njihova mogućnost proširenja je data u posebnom dokumentu, [extending-algorithms.md](../patterns/extending-algorthms.md).
+
+## Proxy sloj
+
+Pogled na hijerarhiju klasa Proxy sloja je dat u dokumentu [proxy-pattern.md](../patterns/proxy.md).
+Ovde je bitno napomenuti samo da klase Proxy sloja su u vezi sa klasama kontrolera i da kontroleri dobijaju ulazne podatke na osnovu kojih vrše promene modela baš od strane ovih klasa.
+Preko klasa Proxy sloja teče kontrolisana razmena poruka koja omogućava rad aplikacije u slučaju otkaza servera.
+
+## Pogled serverskog dela
+
+Logički pogled servera će biti dat kroz dijagram singlton klase za čuvanje i manipulacijom nad sobama i soba.
+Pored ovih klasa, na serveru postoji i niz soketa koji predstavljaju pojedinačnog korisnika trenutno povezanog na server, ali zbog prirode UML dijagrama, nije moguće prikazati ovu statičku promenljivu lepo.
+
+![Dijagram servera](img/server-side.png)

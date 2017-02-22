@@ -28,6 +28,6 @@ Naredni dijagrami prikazuju sekvence toka razmene poruka u različitim slučajev
 
 ![Sekvenca napuštanja sobe i prekida konekcije](img/leave-seq.png)
 
-## Observables ovde
+## Procesni tok komponente ToolbarComponent
 
-
+Zbog čitljivosti dokumenta i sličnosti teme sa dokumentom koji opisuje korišćene projektne obrasce, procesni tok komponente `ToolbarComponent` je dat u zasebnom dokumentu, [observable-toolbar.md](../patterns/observables-toolbar.md).

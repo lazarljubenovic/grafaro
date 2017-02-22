@@ -1,0 +1,45 @@
+@startuml
+
+class Room {
+    - _users: Set<ws>;
+    - _master: ws;
+    - _graph: Graph;
+    - _algorithm: any;
+    - _name: string;
+    - _description: string;
+    - _stateIndex: number;
+    + constructor(roomId)
+    + addUser(user)
+    + removeUser(user)
+}
+
+class MessageRoom <<singleton>> {
+    - static _instance
+    + static getInstance()
+    - getNextRoomId()
+    + createNewRoom()
+    + addUserToRoom(roomId, user)
+    + removeUserFromRoom(roomId, user)
+    + sendMessageToRoom(roomId, user, message)
+    + returnMessage(user, message)
+    + sendMessage(user, type, payload, roomId)
+    + userHasRoom(user)
+    + getRooms()
+    + sendRoomsInfo(user)
+    + setRoomGraph(roomId, graph)
+    + setRoomAlgorithm(roomId, algorithm)
+    + getRoomMaster(roomId)
+    + getRoomEdit(roomId)
+    + setRoomEdit(roomId, roomEdit)
+    + sendJoinMessage(ws, roomId, error = '')
+    + sendMasterMessage(ws, roomId)
+    + setRoomState(stateIndex, roomId)
+    + sendGraphMessage(ws, roomId)
+    + sendRoomAlgorithm(user, roomId)
+    - constructor()
+}
+
+MessageRoom "0..*" *-- Room
+
+
+@enduml

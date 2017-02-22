@@ -1,0 +1,93 @@
+@startuml
+
+package Model {
+  class StateManager <<injectable>> {
+    - _combine$
+    -_graph
+    -_rootId
+    -_isPlaying$
+    -_clock$
+    -_algorithm
+    -_currentStateIndex
+    -_state$
+    -_getTotalNumberOfStates()
+    -_isFirst()
+    -_isLast()
+    -_fixCurrentStateIndex()
+    -_emitState()
+    +getNormalizedState()
+    +goToFirst()
+    +goToLast()
+    +goToPrevious()
+    +goToNext()
+    +play()
+    +pause()
+    +goTo(stateIndex: number)
+    +getAlgorithm()
+  }
+  class GraphManager <<injectable>> {
+    -_graph
+    -isMaster
+    +graph$
+    - existsNodeWithLabel(nodeLabel)
+    - existsEdgeWithLabel(edgeLabel)
+    + emit()
+    + getNodeId(nodeLabel)
+    + getEdgeId(edgeLabel)
+    + getNodeLabel(nodeId)
+    + getEdgeLabel(edgeId)
+    + getEdgeByNodes(from, to)
+    + suggestNewNodeName()
+    + suggestNewEdgeName()
+    + addNode(position)
+    + addNodeOnRandomPlace()
+    + removeNode(nodeId)
+    + renameNode(oldNodeLabel, newNodeLabel)
+    + changeNodeWeight(nodeId, newWeight)
+    + renameEdge(oldEdgeLabel, newEdgeLabel)
+    + changeEdgeWeight(edgeId newWeight)
+    + linkNodes(nodeA, nodeB, weight = 1)
+    + linkNodesByLabel(labelA, labelB)
+    + unlinkNodes(nodeA, nodeB)
+    + unlinkNodesByLabel(labelA, labelB)
+    + removeEdge(edgeId)
+    + setPosition(nodeLabel, position)
+    + moveNode(nodeId, position)
+    + graphFromSocket(graphJson)
+  }
+
+  class AlgorithmManager <<injcetable>> {
+    -algorithmFactory
+    -_algorithmWithOptions
+    +algorithmWithOptions$
+    +setAndEmit(formOptions)
+  }
+}
+
+package Controler {
+  class AlgorithmPickerComponent <<component>>
+  class ControlsComponent <<component>>
+  class ToolbarComponent <<component>>
+  class GraphComponent <<component>>
+  class AlgorithmComponent <<component>>
+  class DebugTableComponent <<component>>
+  class GraphComponent <<component>>
+  class MatrixComponent <<component>>
+}
+
+class ToolbarService <<injectable>>
+
+StateManager ..> "graph$" GraphManager : <<DI>>
+StateManager ..> "algorithm$" AlgorithmManager : <<DI>>
+
+AlgorithmPickerComponent ..> "graph$" GraphManager : <<DI>>
+AlgorithmPickerComponent ..> "algorithm$" AlgorithmManager : <<DI>>
+MatrixComponent ..> "graph$" GraphManager : <<DI>>
+ToolbarService ..> GraphManager : <<DI>>
+ToolbarComponent ..> ToolbarService : <<DI>>
+GraphComponent ..> "state$" StateManager : <<DI>>
+ControlsComponent ..> StateManager : <<DI>>
+DebugTableComponent ..> StateManager : <<DI>>
+AlgorithmComponent ..> StateManager : <<DI>>
+
+@enduml
