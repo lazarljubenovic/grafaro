@@ -1,0 +1,132 @@
+@startuml
+
+package AppComponent {
+}
+package RouterOutlet {
+}
+together {
+  package RoomBrowserComponent {
+  }
+  package HeaderComponent {
+  }
+  package RoomCardComponent  {
+  }
+  package JdenticonComponent {
+  }
+}
+package RoomViewComponent {
+}
+package LoginPageComponent {
+}
+package FourOhFourComponent {
+}
+package SidebarComponent {
+}
+package AlgorithmComponent {
+}
+package AlgorithmPickerComponent {
+}
+package MatrixComponent {
+}
+package ChatComponent {
+}
+package ChatMessageComponent {
+}
+package TabComponent {
+}
+package TabsComponent {
+}
+package GraphComponent {
+}
+package VisNetwork {
+}
+package VisNetworkNode {
+}
+package VisNetworkEdge {
+}
+package ControlsComponent {
+}
+package DebugTableComponent {
+}
+package DebugValueComponent {
+}
+package ArrayOfNodesComponent {
+}
+package NodeComponent {
+}
+package ToolbarComponent {
+}
+package DialogComponent {
+}
+package SaveDialogComponent {
+}
+package LoadDialogComponent {
+}
+package FileListComponent {
+}
+package FolderComponent {
+}
+package FileComponent {
+}
+package ToastComponent {
+}
+package PopupComponent {
+}
+
+AppComponent --> RouterOutlet
+
+RouterOutlet ..|> RoomBrowserComponent : <<empty route>>
+RouterOutlet ..|> FourOhFourComponent : <<wildcard route>>
+RouterOutlet ..|> LoginPageComponent : <<login route>>
+RouterOutlet ..|> RoomViewComponent : <<room with id route>>
+
+RoomBrowserComponent ..> "isProjectViewMode" HeaderComponent
+RoomBrowserComponent ..> "roomInfo" RoomCardComponent
+RoomCardComponent ..> "plainText"  JdenticonComponent
+
+HeaderComponent ..> "plainText" JdenticonComponent
+
+RoomViewComponent ..> "isProjectViewMode" HeaderComponent
+RoomViewComponent ..> SidebarComponent
+RoomViewComponent "graphClick, graphNodeDragEnd" ..> GraphComponent
+RoomViewComponent ..> ControlsComponent
+RoomViewComponent ..> DebugTableComponent
+RoomViewComponent "load, save" ..> ToolbarComponent
+RoomViewComponent "close" ..> DialogComponent
+DialogComponent "saveGraph" ..> "folder" SaveDialogComponent : <<wraps>>
+DialogComponent "loadGraph" ..> "folders" LoadDialogComponent : <<wraps>>
+
+SidebarComponent ..> "initialTabIndex" TabsComponent
+
+MatrixComponent ..|> ToastComponent : <<instantiate>>
+ToolbarComponent ..|> ToastComponent : <<instantiate>>
+ControlsComponent ..|> ToastComponent : <<instantiate>>
+
+TabsComponent ..> "tabTitle" TabComponent : <<wraps>>
+TabComponent ..> ChatComponent : <<wraps>>
+TabComponent ..> MatrixComponent : <<wraps>>
+TabComponent ..> AlgorithmPickerComponent : <<wraps>>
+TabComponent ..> AlgorithmComponent : <<wraps>>
+
+ChatComponent ..|> "info" ChatMessageComponent
+ChatMessageComponent ..> "plainText" JdenticonComponent
+
+GraphComponent "graphClick, graphDragEnd, graphDragging, graphAfterDrawing" ..> "options" VisNetwork
+GraphComponent ..|> PopupComponent : <<instantiate>>
+GraphComponent ..|> ToastComponent : <<instantiate>>
+VisNetwork ..> "options" VisNetworkNode : <<wraps>>
+VisNetwork ..> "options" VisNetworkEdge : <<wraps>>
+
+DebugTableComponent ..> "data" DebugValueComponent
+DebugValueComponent ..> "data" NodeComponent
+DebugValueComponent ..> "data" ArrayOfNodesComponent
+ArrayOfNodesComponent .left.> "data" NodeComponent
+
+SaveDialogComponent "fileSelect" ..> FileListComponent
+FileListComponent ..> "name" FolderComponent : <<wraps>>
+FolderComponent ..> "lastChange, id" FileComponent : <<wraps>>
+
+LoadDialogComponent "fileSelect" ..> FileListComponent
+
+
+@enduml
