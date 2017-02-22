@@ -1,6 +1,6 @@
 import {NgModule, ModuleWithProviders, OpaqueToken} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {ProjectViewComponent} from './project-view.component';
+import {RoomViewComponent} from './room-view.component';
 import {GraphModule} from '../graph/graph.module';
 import {ToolbarComponent} from './toolbar/toolbar.component';
 import {SidebarComponent} from './sidebar/sidebar.component';
@@ -56,7 +56,7 @@ export const AVAILABLE_ALGORITHMS_TOKEN = new OpaqueToken('available_algorithms'
         ControlsModule,
     ],
     declarations: [
-        ProjectViewComponent,
+        RoomViewComponent,
         ToolbarComponent,
         SidebarComponent,
         PopupRenameComponent,
@@ -78,16 +78,16 @@ export const AVAILABLE_ALGORITHMS_TOKEN = new OpaqueToken('available_algorithms'
         JoinStorageService,
     ],
     exports: [
-        ProjectViewComponent,
+        RoomViewComponent,
     ],
     entryComponents: [
         PopupRenameComponent,
     ]
 })
-export class ProjectViewModel {
+export class RoomViewModule {
     static forRoot(algorithms: any[]): ModuleWithProviders {
         return {
-            ngModule: ProjectViewModel,
+            ngModule: RoomViewModule,
             providers: [
                 {
                     provide: 'availableAlgorithms',

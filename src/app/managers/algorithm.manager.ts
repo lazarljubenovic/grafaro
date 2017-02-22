@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {AlgorithmBase} from '../algorithms/algorithm-base';
 import {BehaviorSubject} from 'rxjs';
-import {FormOptions} from '../project-view/algorithm-picker/algorithm-picker.component';
+import {FormOptions} from '../room-view/algorithm-picker/algorithm-picker.component';
 import {BreadthFirstSearchAlgorithm} from '../algorithms/breadth-first-search';
 import {AlgorithmFactory} from '../algorithms/algorithm-factory';
 

@@ -1,5 +1,5 @@
 import {Component, OnInit, Input, ViewChild, ElementRef, HostBinding} from '@angular/core';
-import {RoomEditService} from '../../project-view/room-edit.service';
+import {RoomEditService} from '../../room-view/room-edit.service';
 import {Auth0Service} from '../../core/auth0.service';
 import {Observable} from 'rxjs';
 import {MasterStorageService} from '../../shared/master-service/master-storage.service';

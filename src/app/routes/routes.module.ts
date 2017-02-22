@@ -1,8 +1,8 @@
 import {NgModule} from '@angular/core';
 import {FourOhFourComponent} from '../four-oh-four/four-oh-four.component';
-import {ProjectViewComponent} from '../project-view/project-view.component';
+import {RoomViewComponent} from '../room-view/room-view.component';
 import {LoginPageComponent} from '../login-page/login-page.component';
-import {RoomBrowserComponent} from '../project-browser/room-browser.component';
+import {RoomBrowserComponent} from '../room-browser/room-browser.component';
 import {RouterModule, Routes} from '@angular/router';
 import {AuthGuardService} from './auth-guard.service';
 import {Auth0Service} from '../core/auth0.service';
@@ -20,7 +20,7 @@ const routes: Routes = [
     },
     {
         path: 'room/:id',
-        component: ProjectViewComponent,
+        component: RoomViewComponent,
         canActivate: [AuthGuardService]
     },
     {

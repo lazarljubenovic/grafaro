@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
 import {Graph, GraphJson, GraphEdge} from '../models/graph.model';
-import {ClickPosition} from '../project-view/toolbar/toolbar.component';
-import {ToolbarService} from '../project-view/toolbar/toolbar.service';
+import {ClickPosition} from '../room-view/toolbar/toolbar.component';
+import {ToolbarService} from '../room-view/toolbar/toolbar.service';
 import {suggestNextName} from '../utils/name-suggester';
-import {PopupRenameService} from '../project-view/popup-rename/popup-rename.service';
+import {PopupRenameService} from '../room-view/popup-rename/popup-rename.service';
 import {ToastService} from '../toast/toast.service';
 import {MasterStorageService} from '../shared/master-service/master-storage.service';
 

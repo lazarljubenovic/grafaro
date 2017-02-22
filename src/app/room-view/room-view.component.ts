@@ -21,11 +21,11 @@ import {AlgorithmStorageService} from './services/algorithm-socket/algorithm-sto
 import {ToastService} from '../toast/toast.service';
 
 @Component({
-    selector: 'grf-user-interface',
-    templateUrl: 'project-view.component.html',
-    styleUrls: ['project-view.component.scss'],
+    selector: 'grf-room-view',
+    templateUrl: 'room-view.component.html',
+    styleUrls: ['room-view.component.scss'],
 })
-export class ProjectViewComponent implements OnInit, OnDestroy {
+export class RoomViewComponent implements OnInit, OnDestroy {
 // todo rename this to RoomViewComponent
 
     private _destroySubject = new Subject<boolean>();

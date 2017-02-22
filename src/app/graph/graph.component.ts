@@ -4,7 +4,7 @@ import {GrfGraphEdgeOptions, GrfGraphNodeOptions} from './graph.module';
 import * as deepAssign from 'deep-assign';
 import {GraphOptionsService} from '../graph-options.service';
 import {VisNetworkComponent} from '@lazarljubenovic/vis-ng/core/vis-network/vis-network.component';
-import {ToolbarService} from '../project-view/toolbar/toolbar.service';
+import {ToolbarService} from '../room-view/toolbar/toolbar.service';
 import {AlgorithmStateManager} from '../algorithms/state-manager';
 import {getPointAtRatio} from '../utils/get-point-at-ratio';
 import {getLineAngle} from '../utils/line-angle';
