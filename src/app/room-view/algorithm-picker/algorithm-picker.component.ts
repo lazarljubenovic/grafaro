@@ -66,10 +66,7 @@ export class AlgorithmPickerComponent implements OnInit, OnDestroy {
 
         this._masterStorage.masterMessages$
             .takeUntil(this._destroySubject)
-            .subscribe(message => {
-                this.isMaster = message.isMaster;
-                this._algorithmStorage.canSend = message.isMaster;
-            });
+            .subscribe(message => this.isMaster = message.isMaster);
     }
 
     ngOnDestroy() {

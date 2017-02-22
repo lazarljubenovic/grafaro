@@ -5,16 +5,17 @@ import {AlgorithmSocketInterface, AlgorithmMessage} from './algorithm-socket';
 import {AlgorithmSocketService} from './algorithm-socket.service';
 import {MockAlgorithmSocketService} from './mock-algorithm-socket.service';
 import {FormOptions} from '../../algorithm-picker/algorithm-picker.component';
+import {MasterStorageService} from '../../../shared/master-service/master-storage.service';
 
 @Injectable()
 export class AlgorithmStorageService {
 
     /**
      * Determine if outgoing algorithm with options message should be blocked.
-     * @public
+     * @private
      * @type {boolean}
      */
-    public canSend: boolean = false;
+    private _canSend: boolean = false;
     /**
      * Algorithm with options message producer.
      * @type {GraphSocketInterface}
@@ -40,7 +41,8 @@ export class AlgorithmStorageService {
      */
     public algorithmMessages$: ReplaySubject<AlgorithmMessage>;
 
-    constructor(private _webSocketService: WebSocketService) {
+    constructor(private _webSocketService: WebSocketService,
+                private _masterStorage: MasterStorageService) {
         this.algorithmMessages$ = new ReplaySubject(1);
 
         this._webSocketService.socketStatus.subscribe(status => {
@@ -55,14 +57,16 @@ export class AlgorithmStorageService {
             }
             this._messageSubscription = this._algorithmSource.algorithmSocket$
                 .subscribe(message => {
-                this.algorithmMessages$.next(message);
-            });
+                    this.algorithmMessages$.next(message);
+                });
 
             if (this._requestBuffer) {
                 this._requestBuffer = false;
                 this._algorithmSource.requestAlgorithmWithOptions();
             }
         });
+
+        this._masterStorage.masterMessages$.subscribe(message => this._canSend = message.isMaster);
     }
 
     /**
@@ -71,7 +75,7 @@ export class AlgorithmStorageService {
      * @public
      */
     public send(info: FormOptions): void {
-        if (this.canSend) {
+        if (this._canSend) {
             this._algorithmSource.send(info);
         }
     }
