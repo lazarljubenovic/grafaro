@@ -1,22 +1,29 @@
 <form novalidate [formGroup]="form">
 
-  <div class="algorithm">
-    <span class="title">Algorithm</span>
-    <div class="options">
-      <label *ngFor="let alg of _availableAlgorithms">
-        <input type="radio" [value]="alg._abbr" formControlName="algorithm">
-        <span>{{alg._name}}</span>
-      </label>
-    </div>
-  </div>
+  <span *ngIf="!isMaster" class="warning">Only master can change algorithms and its options.</span>
 
-  <div class="root" formGroupName="options">
-    <span class="title">Root node</span>
-    <div class="options">
-      <label *ngFor="let label of nodeLabels">
-        <input type="radio" [value]="label" formControlName="root">
-        <span>{{label}}</span>
-      </label>
+  <ng-container *ngIf="isMaster">
+
+    <div class="algorithm">
+      <span class="title">Algorithm</span>
+      <div class="options">
+        <label *ngFor="let alg of _availableAlgorithms">
+          <input type="radio" [value]="alg._abbr" formControlName="algorithm">
+          <span>{{alg._name}}</span>
+        </label>
+      </div>
     </div>
-  </div>
+
+    <div class="root" formGroupName="options">
+      <span class="title">Root node</span>
+      <div class="options">
+        <label *ngFor="let label of nodeLabels">
+          <input type="radio" [value]="label" formControlName="root">
+          <span>{{label}}</span>
+        </label>
+      </div>
+    </div>
+
+  </ng-container>
+
 </form>

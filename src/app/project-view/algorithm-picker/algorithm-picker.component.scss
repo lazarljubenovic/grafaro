@@ -63,3 +63,12 @@ form {
     }
   }
 }
+
+.warning {
+  font-size: .86em;
+  display: inline-block;
+  background-color: #ddd;
+  color: $black;
+  padding: 1ex 1em;
+  border-radius: 3px;
+}

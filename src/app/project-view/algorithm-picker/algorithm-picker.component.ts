@@ -21,6 +21,8 @@ export interface FormOptions {
 })
 export class AlgorithmPickerComponent implements OnInit, OnDestroy {
 
+    private isMaster: boolean;
+
     private _destroySubject = new Subject<boolean>();
     public form: FormGroup = this.formBuilder.group({
         algorithm: 'bfs',
@@ -64,8 +66,9 @@ export class AlgorithmPickerComponent implements OnInit, OnDestroy {
 
         this._masterStorage.masterMessages$
             .takeUntil(this._destroySubject)
-            .subscribe(master => {
-                this._algorithmStorage.canSend = master.isMaster;
+            .subscribe(message => {
+                this.isMaster = message.isMaster;
+                this._algorithmStorage.canSend = message.isMaster;
             });
     }
 
