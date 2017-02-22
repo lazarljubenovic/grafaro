@@ -1,0 +1,78 @@
+@startuml
+
+class IdGenerator {
+    -_id
+    -_prefix
+    +constructor(prefix, initValue = 0)
+    +getNext()
+    +set id(value)
+    +get id():
+}
+
+interface GraphNodePosition {
+    x: number
+    y: number
+}
+
+interface GraphNode {
+  id: NodeId
+  label: NodeLabel
+  weight: number
+  position: GraphNodePosition
+}
+
+interface GraphEdge {
+  id: EdgeId
+  label: EdgeLabel
+  from: NodeId
+  to: NodeId
+  weight: number
+}
+
+interface GraphJson {
+  nodes: GraphNode[]
+  edges: GraphEdge[]
+  nextNodeId: number
+  nextEdgeId: number
+}
+
+class Graph {
+  - _nodeIdGenerator: IdGenerator = new IdGenerator('node')
+  - _edgeIdGenerator: IdGenerator = new IdGenerator('edge')
+  ..
+  +constructor()
+  + get nodes()
+  + get edges()
+  + setNodeIdGeneratorId(value)
+  + setEdgeIdGeneratorId(value)
+  + writeJson()
+  + readJson(json)
+  + hasNodeId(nodeId)
+  + getNodeId(nodeLabel)
+  + getNodeLabel(nodeId)
+  + addNode(label, position, weight = 1)
+  + removeNode(nodeId)
+  + getEdge(edgeId)
+  + getEdgeByNodes(from, to)
+  + hasEdge(from, to)
+  + hasOppositeEdge(from, to)
+  + hasEdgeId(edgeId)
+  + addEdge(from, to, label, weight)
+  + addUndirectedEdge(from, to, label, weight)
+  + removeEdge(from, to)
+  + getEdgeLabel(edgeId)
+  + getEdgeId(edgeLabel)
+  + getEdgeWeight(edgeId)
+  + changeNodeLabel(nodeId, newLabel)
+  + changeEdgeLabel(edgeId, newLabel)
+  + changeNodeWeight(nodeId, newWeight)
+  + changeEdgeWeight(edgeId, newWeight)
+  + getSources(nodeId)
+  + getSinks(nodeId)
+  + getMatrix()
+}
+
+Graph "0..*" *-- GraphNode
+Graph "0..*" *-- GraphEdge
+
+@enduml
