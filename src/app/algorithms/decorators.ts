@@ -3,6 +3,14 @@ import {DebugDataValueKind} from './debug-data.interface';
 import {GrfColor} from '../graph/graph.module';
 
 
+export function Algorithm(param: {name: string, abbr: string}) {
+    return function (target: any) {
+        target._name = param.name;
+        target._abbr = param.abbr;
+        target._isRegistered = true;
+    };
+}
+
 export function TrackedVar(kind: DebugDataValueKind) {
     return function (target: AlgorithmState, key: string) {
         if (!target._kinds) {
@@ -11,7 +19,6 @@ export function TrackedVar(kind: DebugDataValueKind) {
         target._kinds.set(key, kind);
     };
 }
-
 
 export type ColorDecoratorFunction = (state: AlgorithmState, label: string) => (GrfColor | null);
 

@@ -2,7 +2,7 @@ import {GrfColor} from '../graph/graph.module';
 import {Graph} from '../models/graph.model';
 import {Stack} from '../data-structures/stack';
 import {AlgorithmState, AlgorithmBase} from './algorithm-base';
-import {TrackedVar, Color} from './decorators';
+import {TrackedVar, Color, Algorithm} from './decorators';
 import {getLabelIfDefined} from './utils';
 
 
@@ -60,13 +60,10 @@ interface CreateNewStateObject {
     neighbor?: string;
 }
 
+@Algorithm({name: 'Depth First Search', abbr: 'dfs'})
 export class DepthFirstSearchAlgorithm extends AlgorithmBase {
 
     public states: State[];
-
-    public name: string = 'Depth First Search';
-
-    public abbr: string = 'dfs';
 
     public trackedVariables: string[] = [
         'neighbors', 'visited', 'solution', 'stack', 'root', 'neighbor', 'currentNode'

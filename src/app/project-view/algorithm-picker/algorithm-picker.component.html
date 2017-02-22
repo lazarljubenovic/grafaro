@@ -3,21 +3,9 @@
   <div class="algorithm">
     <span class="title">Algorithm</span>
     <div class="options">
-      <label>
-        <input type="radio" value="bfs" formControlName="algorithm">
-        <span>Breadth First Search</span>
-      </label>
-      <label>
-        <input type="radio" value="dfs" formControlName="algorithm">
-        <span>Depth First Search</span>
-      </label>
-      <label>
-        <input type="radio" value="dsp" formControlName="algorithm">
-        <span>Dijkstra Shortest Path</span>
-      </label>
-      <label>
-        <input type="radio" value="pmst" formControlName="algorithm">
-        <span>Prim's minimal spanning tree</span>
+      <label *ngFor="let alg of _availableAlgorithms">
+        <input type="radio" [value]="alg._abbr" formControlName="algorithm">
+        <span>{{alg._name}}</span>
       </label>
     </div>
   </div>

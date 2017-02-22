@@ -2,7 +2,7 @@ import {Queue} from '../data-structures/queue';
 import {GrfColor} from '../graph/graph.module';
 import {Graph} from '../models/graph.model';
 import {AlgorithmBase, AlgorithmState} from './algorithm-base';
-import {TrackedVar, Color} from './decorators';
+import {TrackedVar, Color, Algorithm} from './decorators';
 import {getLabelIfDefined} from './utils';
 
 
@@ -60,13 +60,10 @@ interface CreateNewStateObject {
     neighbor?: string;
 }
 
+@Algorithm({name: 'Breadth First Search', abbr: 'bfs'})
 export class BreadthFirstSearchAlgorithm extends AlgorithmBase {
 
     public states: State[];
-
-    public abbr: string = 'bfs';
-
-    public name: string = 'Breadth First Search';
 
     public trackedVariables: string[] = [
         'root', 'solution', 'queue', 'visited', 'neighbors', 'currentNode', 'neighbor',

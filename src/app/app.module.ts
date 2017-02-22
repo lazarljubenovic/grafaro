@@ -15,6 +15,7 @@ import {LoginPageModule} from './login-page/login-page.module';
 import {NotifyService} from './algorithm/notify.service';
 import {GraphManager} from './managers/graph.manager';
 import {RoutesModule} from './routes/routes.module';
+import {ALGORITHMS} from './algorithms/index';
 
 export function authHttpServiceFactory(http: Http, options: RequestOptions) {
     return new AuthHttp(new AuthConfig({}), http, options);
@@ -29,7 +30,7 @@ export function authHttpServiceFactory(http: Http, options: RequestOptions) {
         FormsModule,
         HttpModule,
         StepperModule,
-        ProjectViewModel,
+        ProjectViewModel.forRoot(ALGORITHMS),
         RoomBrowserModule,
         FourOhFourModule,
         LoginPageModule,
