@@ -14,7 +14,7 @@ export class ColorEnumPipe implements PipeTransform {
                 case GrfColor.ACCENT:
                     return 'accent';
                 case GrfColor.DIMMED:
-                    return 'foreground';
+                    return 'dimmed';
                 case GrfColor.DEFAULT:
                     return 'default';
                 case GrfColor.PRIMARY:

@@ -25,6 +25,10 @@ $marble-size: 18px;
         font-size: 12px;
         @include all-background-colors;
 
+        &.dimmed {
+          background-color: #999;
+        }
+
         .inner {
           display: inline-block;
         }
