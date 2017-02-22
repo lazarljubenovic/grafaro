@@ -3,6 +3,7 @@ import {AlgorithmStateManager} from '../../algorithms/state-manager';
 import {StateSocketService} from './state-socket.service';
 import {MasterStorageService} from '../../shared/master-service/master-storage.service';
 import {Subject} from 'rxjs';
+import {ToastService} from '../../toast/toast.service';
 
 @Component({
     selector: 'grf-controls',
@@ -18,12 +19,14 @@ export class ControlsComponent implements OnInit, OnDestroy {
      * @private
      */
     private _destroySubject = new Subject<boolean>();
+
     /**
      * Current state number.
      * @type {number}
      * @public
      */
     public current: number;
+
     /**
      * Total state number.
      * @type {number}
@@ -31,51 +34,78 @@ export class ControlsComponent implements OnInit, OnDestroy {
      */
     public total: number;
 
+    private isMaster: boolean;
+
     /**
      * Increment state number.
      */
     public onNext(): void {
-        this._stateManager.goToNext();
+        if (this.isMaster) {
+            this._stateManager.goToNext();
+        } else {
+            this.toast.display(`Only Master can navigate through states.`);
+        }
     }
 
     /**
      * Decrement state number.
      */
     public onPrev(): void {
-        this._stateManager.goToPrevious();
+        if (this.isMaster) {
+            this._stateManager.goToPrevious();
+        } else {
+            this.toast.display(`Only Master can navigate through states.`);
+        }
     }
 
     /**
      * Fast forward to the first state.
      */
     public onFirst(): void {
-        this._stateManager.goToFirst();
+        if (this.isMaster) {
+            this._stateManager.goToFirst();
+        } else {
+            this.toast.display(`Only Master can navigate through states.`);
+        }
     }
 
     /**
      * Fast forward to the last state.
      */
     public onLast(): void {
-        this._stateManager.goToLast();
+        if (this.isMaster) {
+            this._stateManager.goToLast();
+        } else {
+            this.toast.display(`Only Master can navigate through states.`);
+        }
     }
 
     /**
      * Go from first to the last state automatically.
      */
     public play(): void {
-        this._stateManager.play();
+        if (this.isMaster) {
+            this._stateManager.play();
+        } else {
+            this.toast.display(`Only Master can navigate through states.`);
+        }
     }
 
     /**
      * Pause automatically state changing.
      */
     public pause(): void {
-        this._stateManager.pause();
+        if (this.isMaster) {
+            this._stateManager.pause();
+        } else {
+            this.toast.display(`Only Master can navigate through states.`);
+        }
     }
 
     constructor(private _stateManager: AlgorithmStateManager,
                 private _stateSocket: StateSocketService,
-                private _masterStorage: MasterStorageService) {
+                private _masterStorage: MasterStorageService,
+                private toast: ToastService) {
     }
 
     /**
@@ -99,7 +129,10 @@ export class ControlsComponent implements OnInit, OnDestroy {
 
         this._masterStorage.masterMessages$
             .takeUntil(this._destroySubject)
-            .subscribe(masterMessage => this._stateSocket.canSend = masterMessage.isMaster);
+            .subscribe(masterMessage => {
+                this.isMaster = masterMessage.isMaster;
+                this._stateSocket.canSend = masterMessage.isMaster;
+            });
 
         this._stateSocket.stateSocket$
             .takeUntil(this._destroySubject)
