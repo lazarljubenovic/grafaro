@@ -177,7 +177,7 @@ export class Graph {
      * @param value
      */
     public setNodeIdGeneratorId(value: number): void {
-        this._nodeIdGenerator.id = value;
+        this._nodeIdGenerator = new IdGenerator(`node`, value);
     }
 
     /**
@@ -185,7 +185,7 @@ export class Graph {
      * @param value
      */
     public setEdgeIdGeneratorId(value: number): void {
-        this._edgeIdGenerator.id = value;
+        this._edgeIdGenerator = new IdGenerator(`edge`, value);
     }
 
     /**

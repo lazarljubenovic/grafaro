@@ -1,4 +1,6 @@
 import {Graph} from './graph.model';
+
+
 describe(`Graph`, () => {
 
     it(`should add node`, () => {
@@ -93,6 +95,29 @@ describe(`Graph`, () => {
             .addEdge('node-0', 'node-1', 'a');
         expect(graph.hasEdge('node-0', 'node-1')).toBe(true);
         expect(graph.hasEdge('node-1', 'node-0')).toBe(false);
+    });
+
+    it(`should set a new node's unique id`, () => {
+        const graph = new Graph();
+        graph.addNode('a', {x: 0, y: 0});
+        expect(graph.getNodeId('a')).toBe('node-0');
+        graph.setNodeIdGeneratorId(10);
+        graph.addNode('b', {x: 0, y: 0});
+        expect(graph.getNodeId('a')).toBe('node-0');
+        expect(graph.getNodeId('b')).toBe('node-10');
+    });
+
+    it(`should set a new edge's unique id`, () => {
+        const graph = new Graph()
+            .addNode('A', {x: 0, y: 0})
+            .addNode('B', {x: 0, y: 0})
+            .addNode('C', {x: 0, y: 0})
+            .addNode('D', {x: 0, y: 0})
+            .addEdge('node-0', 'node-1', 'a');
+        expect(graph.getEdgeId('a')).toBe('edge-0');
+        graph.setEdgeIdGeneratorId(3);
+        graph.addEdge('node-2', 'node-3', 'b');
+        expect(graph.getEdgeId('b')).toBe('edge-3');
     });
 
     const graph = new Graph();
