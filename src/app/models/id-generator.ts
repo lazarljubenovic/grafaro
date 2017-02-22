@@ -34,16 +34,6 @@ export class IdGenerator {
     }
 
     /**
-     * Sets the ID. If not used carefully, it can lead to non-unique IDs.
-     * Next call to `getNext()` will have this ID (and all subsequent calls will be incremented
-     * from there).
-     * @param value The new ID.
-     */
-    public set id(value: number) {
-        this._id = value;
-    }
-
-    /**
      * Gets the current ID. You probably don't need this.
      * @returns {number} The current ID.
      */

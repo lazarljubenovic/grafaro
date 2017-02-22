@@ -17,23 +17,14 @@ describe(`IdGenerator`, () => {
         expect(generator.getNext()).toBe(`a-7`);
     });
 
-    it(`should set the counter in the middle`, () => {
+    it(`should get only the current id (unprefixed)`, () => {
         const generator = new IdGenerator(`a`);
+        expect(generator.id).toBe(0);
         expect(generator.getNext()).toBe(`a-0`);
-        expect(generator.getNext()).toBe(`a-1`);
-        generator.id = 10;
-        expect(generator.getNext()).toBe(`a-10`);
-        expect(generator.getNext()).toBe(`a-11`);
-    });
+        expect(generator.id).toBe(1);
 
-    it(`should set the counter in the middle even though it means repeating`, () => {
-        const generator = new IdGenerator(`a`);
-        expect(generator.getNext()).toBe(`a-0`);
-        expect(generator.getNext()).toBe(`a-1`);
-        expect(generator.getNext()).toBe(`a-2`);
-        generator.id = 1;
-        expect(generator.getNext()).toBe(`a-1`);
-        expect(generator.getNext()).toBe(`a-2`);
+        const generator2 = new IdGenerator(`b`, 10);
+        expect(generator2.id).toBe(10);
     });
 
 });
