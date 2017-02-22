@@ -1,4 +1,4 @@
-import {NgModule} from '@angular/core';
+import {NgModule, ModuleWithProviders, OpaqueToken} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ProjectViewComponent} from './project-view.component';
 import {GraphModule} from '../graph/graph.module';
@@ -30,6 +30,13 @@ import {JoinStorageService} from '../shared/join-service/join-storage.service';
 import {MasterStorageService} from '../shared/master-service/master-storage.service';
 import {GraphStorageService} from './services/graph-socket/graph-storage.service';
 import {LeaveStorageService} from './services/leave-socket/leave-storage.service';
+
+export const AVAILABLE_ALGORITHMS_TOKEN = new OpaqueToken('available_algorithms');
+
+// export function algorithmsFactory(algorithms: any[]): any {
+//     console.log(algorithms);
+//     return algorithms;
+// }
 
 @NgModule({
     imports: [
@@ -78,4 +85,15 @@ import {LeaveStorageService} from './services/leave-socket/leave-storage.service
     ]
 })
 export class ProjectViewModel {
+    static forRoot(algorithms: any[]): ModuleWithProviders {
+        return {
+            ngModule: ProjectViewModel,
+            providers: [
+                {
+                    provide: 'availableAlgorithms',
+                    useValue: algorithms,
+                },
+            ],
+        };
+    }
 }

@@ -178,8 +178,18 @@ export type CodeJson = CodeJsonElement[][];
 
 export abstract class AlgorithmBase {
 
-    public abstract name: string;
-    public abstract abbr: string;
+    /**
+     * Filled through decorators.
+     */
+    public static _name: string;
+
+    /**
+     * Filled through decorators.
+     */
+    public static _abbr: string;
+
+    /** Filled through decorators */
+    public static _isAlgorithms: boolean;
 
     public states: AlgorithmState[] = [];
 

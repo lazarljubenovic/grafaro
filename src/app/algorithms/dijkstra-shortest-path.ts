@@ -7,7 +7,7 @@ import {
     Color,
     NodeWeightAnnotationFunction,
     Annotations,
-    EdgeWeightAnnotationFunction
+    EdgeWeightAnnotationFunction, Algorithm
 } from './decorators';
 import {getLabelIfDefined} from './utils';
 
@@ -112,13 +112,10 @@ interface CreateNewStateObject {
     root?: string;
 }
 
+@Algorithm({name: 'Dijkstra Shortest Path', abbr: 'dsp'})
 export class DijkstraShortestPathAlgorithm extends AlgorithmBase {
 
     public states: AlgorithmState[];
-
-    public name: string = 'Dijkstra Shortest Path';
-
-    public abbr: string = 'dsp';
 
     public code: string = `function DijkstraShortestPath(graph, root) {
   let Q = new Set();

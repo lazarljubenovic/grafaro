@@ -6,7 +6,7 @@ import {
     Color,
     EdgeWeightAnnotationFunction,
     NodeWeightAnnotationFunction,
-    Annotations
+    Annotations, Algorithm
 } from './decorators';
 import {getLabelIfDefined} from './utils';
 import {GrfColor} from '../graph/graph.module';
@@ -134,10 +134,9 @@ interface CreateNewStateObject {
     edge?: string;
 }
 
-
+@Algorithm({name: 'Prim\'s minimal spanning tree', abbr: 'pmst'})
 export class PrimMinimalSpanningTreeAlgorithm extends AlgorithmBase {
-    name: string = `Prim's minimal spanning tree`;
-    abbr: string = 'pmst';
+
     code: string = `function PrimsAlgorithm(graph, root) {
   let C = new Map();
   let E = new Map();

@@ -1,4 +1,4 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
+import {Component, OnInit, OnDestroy, Inject} from '@angular/core';
 import {FormGroup, FormBuilder} from '@angular/forms';
 import {GraphManager} from '../../managers/graph.manager';
 import {AlgorithmManager} from '../../managers/algorithm.manager';
@@ -33,7 +33,11 @@ export class AlgorithmPickerComponent implements OnInit, OnDestroy {
     constructor(private formBuilder: FormBuilder,
                 private _graphManager: GraphManager,
                 private _algorithmManager: AlgorithmManager,
-                private _algorithmStorage: AlgorithmStorageService) {
+                private _algorithmStorage: AlgorithmStorageService,
+                @Inject('availableAlgorithms') public _availableAlgorithms: any) {
+        if (_availableAlgorithms.some((alg: any) => alg._isRegistered == false)) {
+            throw new Error(`All algorithms must be decorated with @Algorithm decorator`);
+        }
     }
 
     ngOnInit() {
