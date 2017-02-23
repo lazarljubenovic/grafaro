@@ -43,7 +43,7 @@ Zbog sličnosti sa temom, opis klase algoritama i njihova mogućnost proširenja
 
 ## Proxy sloj
 
-Pogled na hijerarhiju klasa Proxy sloja je dat u dokumentu [proxy-pattern.md](../patterns/proxy.md).
+Pogled na hijerarhiju klasa Proxy sloja je dat u dokumentu sa kompletnim pregledom projektnih obrazaca, [patterns.md](../patterns/patterns.md).
 Ovde je bitno napomenuti samo da klase Proxy sloja su u vezi sa klasama kontrolera i da kontroleri dobijaju ulazne podatke na osnovu kojih vrše promene modela baš od strane ovih klasa.
 Preko klasa Proxy sloja teče kontrolisana razmena poruka koja omogućava rad aplikacije u slučaju otkaza servera.
 
