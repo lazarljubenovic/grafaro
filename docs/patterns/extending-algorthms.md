@@ -1,6 +1,6 @@
 # Dodavanje novih algoritama
 
-Grafaro pruža mogućnost dodavanja novih algoritama u aplikaciju.  
+Ovaj dokument objašnjava mogućnost dodavanja novih algoritama u aplikaciju Grafaro, kao i opis samog načina dodavanja algoritama.
 
 ## Definisanje algoritma
 
@@ -81,5 +81,3 @@ Slično, `font` se koristi kao [`font` svojstvo HTML5 kanvasa](https://developer
 ## Registrovanje algoritma
 
 Kako bi se algoritam našao među algoritmima koji su ponuđeni krajnjem korisniku, neophodno je registrovati ga. Ovo se obavlja prosleđivanjem niza klasa (a **ne** njihovih instanci!) statičkoj metodi `forRoot` modula `ProjectView` prilikom njegove registracije u glavni modul Angular aplikacije (`AppModule`).
-
-

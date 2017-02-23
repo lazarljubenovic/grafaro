@@ -1,0 +1,14 @@
+@startuml
+
+class AlgorithmFactory {
+  + createAlgorithm(string): AlgorithmBase
+}
+
+class AlgorithmPicker "_algorithmFactory" *-up- AlgorithmFactory
+
+class DijsktraShortestPath <.. AlgorithmFactory
+class BreathFirstSearch <.. AlgorithmFactory
+class DepthFirstSearch <.. AlgorithmFactory
+class PrimMinimalSpanningTree <.. AlgorithmFactory
+
+@enduml

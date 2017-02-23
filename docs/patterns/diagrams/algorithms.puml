@@ -1,5 +1,9 @@
 @startuml
 
+class StateManager {
+  + getNormalizedState()
+}
+
 class AlgorithmBase {
   {abstract} +name: string
   {abstract} +abbr: string
@@ -100,6 +104,8 @@ package PrimMinimalSpanningTree <<Folder>> {
 
 class AlgorithmState {
 }
+
+StateManager o--> "_algorithm" AlgorithmBase
 
 
 

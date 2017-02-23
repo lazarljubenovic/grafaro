@@ -12,7 +12,7 @@ RxJS u osnovi jeste obrazac Observable, ali je i više od toga.
 > 
 > _(citat sa [zvaničnog sajta](http://reactivex.io/))_
 
-Srž RX-a je skup operatora kojima se događaji mogu transformisati. Najbolji način za opisivanje operatora koje nudi RxJS jeste primena **vremenskih linija** i **perli**. Perle predstavljaju događaja, a linija tok podataka (_stream_). Uspravnom crtom se označava razvršetak toka. Iksićem se označava da je došlo do greške. Umesto dijagrama se često koriste i ASCII dijagrami.
+Srž Rx-a je skup operatora kojima se događaji mogu transformisati. Najbolji način za opisivanje operatora koje nudi RxJS jeste primena **vremenskih linija** i **perli**. Perle predstavljaju događaja, a linija tok podataka (_stream_). Uspravnom crtom se označava razvršetak toka. Iksićem se označava da je došlo do greške. Umesto dijagrama se često koriste i ASCII dijagrami.
 
 Promenljivima koje su tipa `Observable` (ili srodnjih tipova kao što su `Subject` i njegovi derivati) tradicionalno se dodaje sufiks `$`.
 

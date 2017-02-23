@@ -1,0 +1,48 @@
+@startuml
+
+class GraphStorage <<injecetable>> {
+  - _canSend: boolean
+  - _graphSource: GraphSocketInterface
+  - _messageSubscription: Subscription
+  - _requestBuffer: boolean
+  + graphMessages$: ReplaySubject<GraphMessage>
+  + send(graph: GraphJson)
+  + requestGraphmessage()
+  + restartGraph()
+}
+
+abstract class GraphSocketInterface {
+  + graphSocket$: ReplaySubject<GraphMessage>>
+  + {abstract} requestGraphmessage()
+  + {abstract} send(graph: GraphJson)
+}
+
+class GraphSocket <<injecetable>> extends GraphSocketInterface {
+  + requestGraphmessage()
+  + send(graph: GraphJson)
+}
+
+class MockGraphSocket <<injecetable>> extends GraphSocketInterface {
+  - _dummyGraph: GraphMessage
+  + requestGraphmessage()
+  + send(graph: GraphJson)
+}
+
+class RoomViewComponent <<component>> {
+}
+
+class WebSocketService <<injecetable>> {
+  + isConnected$: ReplaySubject<boolean>
+  + send(message, type)
+  + subscribeTo(type)
+}
+
+GraphSocket ..> WebSocketService : <<DI>>
+GraphStorage ..> WebSocketService : <<DI>>
+GraphStorage ..|> GraphSocket
+GraphStorage ..|> MockGraphSocket
+
+RoomViewComponent ..> "graphMessages$" GraphStorage : <<DI>>
+
+
+@enduml

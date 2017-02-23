@@ -5,7 +5,7 @@
 >
 > Umesto toga, treba da samo iskažeš potrebu: "Hoću da pijem nešto uz ručak". Onda ćemo se postarati da ti damo nešto za piće kad budeš seo da jedeš.
 
-Umesto da su objekti ti koji prave zavisnosti, i umesto da se od fabrike traži da se kreira jedan od njih, zavisnosti se sa spoljne strane prosleđuju objektu. Time postaju "tuđi problem". Taj "tuđin" može da bude ili objekat uz graf zavisnosti, ili ubrzigavač zavinosti (_injetor_), odnosno frejmvork koji kreira graf zavinosti.
+Umesto da su objekti ti koji prave zavisnosti, i umesto da se od fabrike traži da se kreira jedan od njih, zavisnosti se sa spoljne strane prosleđuju objektu. Time postaju "tuđi problem". Taj "tuđin" može da bude ili objekat uz graf zavisnosti, ili ubrzigavač zavinosti (_injector_), odnosno frejmvork koji kreira graf zavinosti.
 
 ## DI u Angularu
 
@@ -55,9 +55,9 @@ static forRoot(algorithms): ModuleWithProviders {
 }
 ```
 
-Ovde se ubrizgavanje vrši pomoću stringa: token kojim se "traži" zavinost je string `availableAlgorithms`, a vrenodst koja se provajduje je `algorithms` (argument statičke metode).
+Ovde se ubrizgavanje vrši pomoću stringa: token kojim se "traži" zavinost je string `availableAlgorithms`, a vrednost koja se provajduje je `algorithms` (argument statičke metode).
 
-U glavnom modulu `AppModule` se modul `RoomViewModule` sada importuje uz poz njegove `forRoot` metode, čime se provajduje i proizvoljan niz.
+U glavnom modulu `AppModule` se modul `RoomViewModule` sada importuje uz poziv njegove `forRoot` metode, čime se provajduje i proizvoljan niz.
 
 ```
 export const ALGORITHMS = [
