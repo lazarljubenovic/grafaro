@@ -1,6 +1,5 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {AlgorithmStateManager} from '../../algorithms/state-manager';
-import {StateSocketService} from './services/state-socket/state-socket.service';
 import {MasterStorageService} from '../../shared/master-service/master-storage.service';
 import {Subject} from 'rxjs';
 import {ToastService} from '../../toast/toast.service';
