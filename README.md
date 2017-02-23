@@ -39,11 +39,17 @@ Open `localhost:4200` in browser.
 For full set of features (collaboration and persistance), run the server as well.
 
 ```
-npm run ts:build
-npm run serve
+yarn ts:build
+yarn serve
 ```
 
 You might need to refresh the page if you run server after starting Angular.
+
+### Generating docs
+
+```
+yarn compodoc
+```
 
 ---
 
