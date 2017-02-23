@@ -19,6 +19,7 @@ import {GraphStorageService} from './services/graph-socket/graph-storage.service
 import {LeaveStorageService} from './services/leave-socket/leave-storage.service';
 import {AlgorithmStorageService} from './services/algorithm-socket/algorithm-storage.service';
 import {ToastService} from '../toast/toast.service';
+import {StateStorageService} from './controls/services/state-socket/state-storage.service';
 
 @Component({
     selector: 'grf-room-view',
@@ -82,14 +83,15 @@ export class RoomViewComponent implements OnInit, OnDestroy {
                 private _auth0: Auth0Service,
                 private _leaveStorage: LeaveStorageService,
                 private _algorithmStorage: AlgorithmStorageService,
-                private toast: ToastService) {
+                private toast: ToastService,
+                private _stateStorage: StateStorageService
+    ) {
         this.popupRenameComponentFactory =
             componentFactoryResolver.resolveComponentFactory(PopupRenameComponent);
         _masterStorage.masterMessages$.subscribe(msg => this.isMaster = msg.isMaster);
     }
 
     ngOnInit() {
-        console.log('ng on init project view');
         // Subscribe on incoming Join messages for post-join things
         this._joinStorage.joinMessages$
             .takeUntil(this._destroySubject)
@@ -104,6 +106,7 @@ export class RoomViewComponent implements OnInit, OnDestroy {
                     this._masterStorage.requestMasterMessage();
                     this._graphStorageService.requestGraphMessage();
                     this._algorithmStorage.requestAlgorithmWithOptions();
+                    this._stateStorage.requestStateMessage();
                 }
             });
 
@@ -148,6 +151,7 @@ export class RoomViewComponent implements OnInit, OnDestroy {
         this._leaveStorage.leave();
         this._graphStorageService.restartGraph();
         this._algorithmStorage.restartAlgorithmWithOptions();
+        this._stateStorage.restartState();
         this._destroySubject.next(true);
         this._destroySubject.unsubscribe();
     }

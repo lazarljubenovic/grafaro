@@ -8,7 +8,7 @@ import {
     JoinMessage,
     MasterMessage,
     GraphMessage,
-    AlgorithmMessage
+    AlgorithmMessage, StateMessage
 } from './interfaces';
 import {Room} from './room.model';
 
@@ -190,6 +190,15 @@ export class MessageRoom {
         };
 
         this.sendMessage(user, 'algorithm', algorithmMessage, roomId);
+    }
+
+    public sendRoomState(user: ws, roomId: string): void {
+        // const stateMessage: StateMessage = {
+        //     stateIndex: this.rooms.get(roomId).stateIndex,
+        // };
+        const stateIndex: number = this.rooms.get(roomId).stateIndex;
+
+        this.sendMessage(user, 'state', {stateIndex}, roomId);
     }
 
     private constructor() {

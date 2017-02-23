@@ -18,7 +18,7 @@ export class UserService extends GrafaroHttpService {
     };
     private _mockUserStream: BehaviorSubject<Profile> = new BehaviorSubject({
         _id: '1234',
-        displayName: 'Isus',
+        displayName: 'Test user',
         socialId: '12345',
     });
 

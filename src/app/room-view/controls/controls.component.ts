@@ -1,9 +1,10 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import {AlgorithmStateManager} from '../../algorithms/state-manager';
-import {StateSocketService} from './state-socket.service';
+import {StateSocketService} from './services/state-socket/state-socket.service';
 import {MasterStorageService} from '../../shared/master-service/master-storage.service';
 import {Subject} from 'rxjs';
 import {ToastService} from '../../toast/toast.service';
+import {StateStorageService} from './services/state-socket/state-storage.service';
 
 @Component({
     selector: 'grf-controls',
@@ -103,7 +104,7 @@ export class ControlsComponent implements OnInit, OnDestroy {
     }
 
     constructor(private _stateManager: AlgorithmStateManager,
-                private _stateSocket: StateSocketService,
+                private _stateStorage: StateStorageService,
                 private _masterStorage: MasterStorageService,
                 private toast: ToastService) {
     }
@@ -119,7 +120,7 @@ export class ControlsComponent implements OnInit, OnDestroy {
 
                 if (this.current != state.index) {
                     this.current = state.index;
-                    this._stateSocket.send(this.current);
+                    this._stateStorage.send(this.current);
                 }
                 if (this.total != state.total) {
                     this.total = state.total;
@@ -131,10 +132,9 @@ export class ControlsComponent implements OnInit, OnDestroy {
             .takeUntil(this._destroySubject)
             .subscribe(masterMessage => {
                 this.isMaster = masterMessage.isMaster;
-                this._stateSocket.canSend = masterMessage.isMaster;
             });
 
-        this._stateSocket.stateSocket$
+        this._stateStorage.stateMessage$
             .takeUntil(this._destroySubject)
             .subscribe(stateMessage => {
                 if (this.current != stateMessage.stateIndex) {

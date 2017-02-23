@@ -8,7 +8,7 @@ export class Room {
     private _algorithm: any;
     private _name: string;
     private _description: string;
-    private _stateIndex: number;
+    private _stateIndex: number = 0;
 
     constructor(roomId: string) {
         this._users = new Set();

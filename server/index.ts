@@ -119,7 +119,7 @@ wss.on('connection', ws => {
                 messageRooms.sendMessageToRoom(roomId, ws, messageObj);
                 break;
             case 'state':
-                let stateIndex: number = messageObj.payload;
+                let stateIndex: number = messageObj.payload.stateIndex;
                 messageRooms.setRoomState(stateIndex, roomId);
                 messageRooms.sendMessageToRoom(roomId, ws, messageObj);
                 break;
@@ -142,6 +142,9 @@ wss.on('connection', ws => {
                     lobby.push(ws);
                     lobby.forEach(user => messageRooms.sendRoomsInfo(user));
                 }
+                break;
+            case 'state-request':
+                messageRooms.sendRoomState(ws, roomId);
                 break;
             default:
                 console.log('TODO: New type?', messageObj.type);
