@@ -7,4 +7,4 @@ Ovaj dokument predstavlja indeks foldera sa kompletnom dokumentacijom radi laše
 
 Arhitekturna dokumentacija se nalazi u folderu `architecture`. Indeks foldera je u dokumentu [architecture/index.md](architecture/index.md).
 
-Dokumenti o projektnim obrascima se nalaze u folderu `pattenrs`. Indeks foldera je u dokumentu [patterns/index.md](patterns/index.md).
+Dokumenti o projektnim obrascima se nalaze u folderu `patterns`. Indeks foldera je u dokumentu [patterns/index.md](patterns/index.md).
